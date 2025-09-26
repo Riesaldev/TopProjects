@@ -50,10 +50,10 @@ export const loginUser = async (req: Request, res: Response) => {
       }
     });
 
-  } catch (e) {
+  } catch (e: unknown) {
     console.error('[loginUser] error:', e);
     // Si ya viene con httpStatus (lanzado por generateErrorUtil), re-lanzamos tal cual.
-    if (e && typeof e === 'object' && 'httpStatus' in (e as any)) {
+    if (e && typeof e === 'object' && 'httpStatus' in e) {
       throw e;
     }
     // Error inesperado

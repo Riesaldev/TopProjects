@@ -22,6 +22,7 @@ import {
   startPasswordRecovery,
   resetPassword,
   getUsersByName,
+  getMe,
 } from '@/controllers/users/index.ts';
 // Las rutas sensibles requieren estar autenticado mediante authUser
 
@@ -42,7 +43,7 @@ usersRouter.post('/password/recover', authLimiter, zodValidator(startPasswordRec
 usersRouter.post('/password/reset', zodValidator(resetPasswordSchema), resetPassword);
 
 // Rutas específicas deben ir ANTES de rutas con parámetros genéricos
-usersRouter.get('/me', authUser);
+usersRouter.get('/me', authUser, getMe);
 usersRouter.get('/by-name/:username', authUser, getUsersByName);
 
 // Perfil de usuario / listado

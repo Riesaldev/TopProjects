@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { Swords } from 'lucide-react';
 
 const Header = () => {
+  // TODO: Reemplazar por estado global de autenticación real.
   const [isLoggedIn] = useState(false);
-  const user = { name: 'Player' };
+  const user = { name: 'Player' } as const;
   return (
     <header className="bg-gray-800 border-b border-gray-600 p-4">
       <div className="flex items-center justify-between">

@@ -27,7 +27,7 @@ export const saveImage: SaveImageFn = async (image) => {
     // 3) Obtenemos el buffer y validamos que pueda ser interpretado como imagen
     const buffer = 'data' in image ? image.data : image.file.data;
     // Validación ligera de tipo: intentamos leer metadatos; si falla, no es imagen válida
-    let sharpImage = sharp(buffer);
+    const sharpImage = sharp(buffer);
     try { await sharpImage.metadata(); }
     catch { return generateErrorUtil(400, 'Archivo de imagen inválido'); }
 

@@ -14,7 +14,7 @@ export const getUsersByName = async (req: Request, res: Response) => {
       return generateErrorUtil(404, 'Usuario no encontrado');
     }
     res.json({ status: 'ok', data: user });
-  } catch (e) {
+  } catch {
     generateErrorUtil(500, 'Error al obtener usuario por nombre');
   }
 };

@@ -9,12 +9,13 @@ import ErrorPage from '@/pages/ErrorPage.tsx';
 import ForgotPass from '@/pages/ForgotPass';
 import Profile from '@/pages/ProfiePage';
 import { Toaster } from 'react-hot-toast';
-import { PlayersProvider } from '@/context/PlayersContext';
+// Eliminamos PlayersProvider local para evitar provider anidado duplicado.
+// El provider global ya envuelve a <App /> en main.tsx.
 
 
 function App() {
   return (
-    <PlayersProvider>
+    <>
       <Header />
       <Toaster
         position='top-center'
@@ -35,7 +36,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
       </Routes>
       <Footer />
-    </PlayersProvider>
+    </>
   )
 }
 

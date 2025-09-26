@@ -9,6 +9,7 @@ import { startPasswordRecovery } from "./startPasswordRecovery.ts";
 import { updateAvatar } from "./updateAvatar.ts";
 import { updateUser } from "./updateUser.ts";
 import { getUsersByName } from "./getUsersByName.ts";
+import { getMe } from './getMe.ts';
 //Importamos las funciones de los controladoras de la gstión de usuarios
 //Exportamos las funciones controladoras
 export {
@@ -23,4 +24,5 @@ export {
   updateAvatar,
   updateUser,
   getUsersByName,
+  getMe,
 };

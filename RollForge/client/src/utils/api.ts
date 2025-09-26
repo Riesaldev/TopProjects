@@ -87,3 +87,18 @@ export function postForm<T = unknown>(path: string, form: FormData, options?: Om
   // Don't set Content-Type; browser will set correct boundary
   return request<T>(path, { ...options, method: 'POST', body: form });
 }
+
+// --- Auth / Recovery helpers ---
+export function recoverPassword(email: string) {
+  return postJson<{ status: string; message?: string }>(
+    '/api/users/password/recover',
+    { email }
+  );
+}
+
+export function resetPassword(email: string, code: string, newPassword: string) {
+  return postJson<{ status: string }>(
+    '/api/users/password/reset',
+    { email, code, newPassword }
+  );
+}

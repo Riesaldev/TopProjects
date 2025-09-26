@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import generateErrorUtil from '@/utils/generateErrorUtil.ts';
 import { idParamSchema, updateCampaignSchema as schema } from '@/schemas/campaign.ts';
-import { getCampaignById, updateCampaignModel } from '@/models/campains/index.ts';
+import { getCampaignById, updateCampaignModel } from '@/models/campaigns/index.ts';
 // No usamos pool directamente en el controlador; delegamos en el modelo
 
 export const updateCampaign = async (req: Request, res: Response) => {

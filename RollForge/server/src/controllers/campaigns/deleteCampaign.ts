@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import generateErrorUtil from '@/utils/generateErrorUtil.ts';
-import { deleteCampaignModel, getCampaignById, campaignHasReferences } from '@/models/campains/index.ts';
+import { deleteCampaignModel, getCampaignById, campaignHasReferences } from '@/models/campaigns/index.ts';
 
 export const deleteCampaign = async (req: Request, res: Response) => {
   try {

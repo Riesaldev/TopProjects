@@ -15,12 +15,12 @@ export const getPublicByUsername = async (username: string): Promise<PublicUser 
     'SELECT id, username, email, IFNULL(avatar, NULL) AS avatar FROM users WHERE username = ? LIMIT 1',
     [username]
   );
-  const row = rows[0] as any;
+  const row = rows[0];
   if (!row) return null;
   return {
-    id: row.id,
-    username: row.username,
-    email: row.email,
-    avatar: row.avatar ?? null,
+    id: Number(row.id),
+    username: String(row.username),
+    email: String(row.email),
+    avatar: (row as Record<string, unknown>).avatar ? String((row as Record<string, unknown>).avatar) : null,
   };
 };

@@ -11,6 +11,7 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
+    "types": ["vitest", "node"],
     "baseUrl": "./",
     "paths": {
       "@/*": [

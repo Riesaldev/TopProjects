@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import generateErrorUtil from '@/utils/generateErrorUtil.ts';
-import { listCampaignsModel } from '@/models/campains/index.ts';
+import { listCampaignsModel } from '@/models/campaigns/index.ts';
 
 export const listCampaigns = async (_req: Request, res: Response) => {
   try {

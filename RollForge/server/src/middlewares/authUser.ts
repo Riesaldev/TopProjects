@@ -41,15 +41,17 @@ export const authUser = async (req: Request, res: Response, next: NextFunction) 
         email: tokenInfo.email,
       };
       next();
-    } catch (error: any) {
-      // Si algo falla (token caducado/formato incorrecto), respondemos 401 con mensaje más específico
-      if (error?.name === 'TokenExpiredError') {
-        console.warn('[authUser] token expirado');
-        return next(generateErrorUtil(401, 'Token expirado'));
-      }
-      if (error?.name === 'JsonWebTokenError') {
-        console.warn('[authUser] token inválido (firma)');
-        return next(generateErrorUtil(401, 'Token inválido'));
+    } catch (error: unknown) {
+      if (typeof error === 'object' && error !== null) {
+        const name = (error as { name?: string }).name;
+        if (name === 'TokenExpiredError') {
+          console.warn('[authUser] token expirado');
+          return next(generateErrorUtil(401, 'Token expirado'));
+        }
+        if (name === 'JsonWebTokenError') {
+          console.warn('[authUser] token inválido (firma)');
+          return next(generateErrorUtil(401, 'Token inválido'));
+        }
       }
       console.error('[authUser] error verificando token:', error);
       return next(generateErrorUtil(401, 'Token no válido'));

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import generateErrorUtil from '@/utils/generateErrorUtil.ts';
 import { createCampaignSchema } from '@/schemas/campaign.ts';
-import { createCampaignModel } from '@/models/campains/index.ts';
+import { createCampaignModel } from '@/models/campaigns/index.ts';
 
 
 

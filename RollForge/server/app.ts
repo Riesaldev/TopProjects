@@ -12,13 +12,13 @@ import { UPLOADS_DIR_PATH } from '@/config/paths.ts';
 
 //importamos rutas
 import usersRouter from '@/routes/users.ts';
-import campainsRouter from '@/routes/campains.ts';
 import campaignsRouter from '@/routes/campaigns.ts';
 import pjsRouter from '@/routes/pjs.ts';
-import resoursesRouter from '@/routes/resourses.ts';
 import resourcesRouter from '@/routes/resources.ts';
+import diagnosticsRouter from '@/routes/diagnostics.ts';
 import { errorHandler, notFound } from '@/middlewares/index.ts';
 import tokensRouter from '@/routes/tokens.ts';
+import { scheduleRecoveryCodesCleanup } from '@/jobs/cleanupRecoveryCodes.ts';
 
 // sin uso de rutas locales aquí
 
@@ -72,15 +72,19 @@ app.use('/uploads', express.static(UPLOADS_DIR_PATH, {
 app.use('/api/users', usersRouter);
 // Montamos tanto las rutas nuevas (corregidas) como las antiguas para no romper clientes existentes
 app.use('/api/campaigns', campaignsRouter);
-app.use('/api/campains', campainsRouter);
 app.use('/api/pjs', pjsRouter);
 app.use('/api/resources', resourcesRouter);
-app.use('/api/resourses', resoursesRouter);
+app.use('/api/diagnostics', diagnosticsRouter);
 app.use('/api/tokens', tokensRouter);
 
 // Define la ruta del archivo raiz
 app.get('/', (_req, res) => {
   res.json({ status: 'ok', message: 'RollForge API' });
+});
+
+// Endpoint de salud simple (sin dependencias de BD) para monitoreo / tests
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
 
 // Manejo del request favicon.ico
@@ -93,6 +97,23 @@ app.use(notFound);
 app.use(errorHandler);
 
 //Indicamos al servidor que escuche peticiones en un puerto específico
+// Programamos job de limpieza de códigos de recuperación expirados (no crítico si falla)
+scheduleRecoveryCodesCleanup();
 app.listen(Number(PORT), () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
+  // Logging de configuración (no secretos) para diagnóstico rápido
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, MAIL_FROM, RECOVERY_CODE_MINUTES, RECOVERY_EMAIL_WINDOW_MS, RECOVERY_EMAIL_MAX } = process.env;
+  const emailMode = (!SMTP_HOST || !SMTP_PORT) ? 'dev-console' : 'smtp';
+  console.log('[startup] email', {
+    mode: emailMode,
+    host: SMTP_HOST || null,
+    port: SMTP_PORT || null,
+    authUserPresent: !!SMTP_USER,
+    from: MAIL_FROM || null,
+  });
+  console.log('[startup] recovery', {
+    codeMinutes: RECOVERY_CODE_MINUTES || '15',
+    windowMs: RECOVERY_EMAIL_WINDOW_MS || '600000',
+    maxPerWindow: RECOVERY_EMAIL_MAX || '5'
+  });
 });
