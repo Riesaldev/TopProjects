@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Deshabilitar turbopack temporalmente para evitar errores
+  webpack: ( config, { isServer } ) => {
+    return config;
+  },
 };
 
 export default nextConfig;
