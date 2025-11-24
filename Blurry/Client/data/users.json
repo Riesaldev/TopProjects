@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "nombre": "Juan Pérez",
+    "email": "juan@example.com",
+    "avatar": "/avatars/juan.jpg",
+    "bio": "Desarrollador apasionado por la tecnología",
+    "interests": "programación, música, viajes",
+    "ubicacion": "Madrid, España",
+    "codigoPostal": "28001",
+    "tokens": 150,
+    "ratingPromedio": 4.5,
+    "genero": "masculino",
+    "edad": 28,
+    "actividad": "activo",
+    "estado": "conectado",
+    "rol": "usuario"
+  },
+  {
+    "id": 2,
+    "nombre": "María García",
+    "email": "maria@example.com",
+    "avatar": "/avatars/maria.jpg",
+    "bio": "Diseñadora UX/UI con amor por las interfaces intuitivas",
+    "interests": "diseño, arte, fotografía",
+    "ubicacion": "Barcelona, España",
+    "codigoPostal": "08001",
+    "tokens": 200,
+    "ratingPromedio": 4.8,
+    "genero": "femenino",
+    "edad": 25,
+    "actividad": "activo",
+    "estado": "ausente",
+    "rol": "usuario"
+  },
+  {
+    "id": 3,
+    "nombre": "Carlos López",
+    "email": "carlos@example.com",
+    "avatar": "/avatars/carlos.jpg",
+    "bio": "Administrador de sistemas y entusiasta de Linux",
+    "interests": "tecnología, gaming, deportes",
+    "ubicacion": "Valencia, España",
+    "codigoPostal": "46001",
+    "tokens": 75,
+    "ratingPromedio": 4.2,
+    "genero": "masculino",
+    "edad": 32,
+    "actividad": "inactivo",
+    "estado": "desconectado",
+    "rol": "admin"
+  }
+]

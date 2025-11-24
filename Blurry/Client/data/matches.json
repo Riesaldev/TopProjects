@@ -1,0 +1,23 @@
+[
+  {
+    "id": "match_001",
+    "usuarios": ["usuario123", "usuario456"],
+    "fecha": "2025-07-30T14:00:00Z",
+    "estado": "activo",
+    "compatibilidad": 85
+  },
+  {
+    "id": "match_002",
+    "usuarios": ["usuario789", "usuario101"],
+    "fecha": "2025-07-29T16:30:00Z",
+    "estado": "completado",
+    "compatibilidad": 92
+  },
+  {
+    "id": "match_003",
+    "usuarios": ["usuario112", "usuario131"],
+    "fecha": "2025-07-28T11:15:00Z",
+    "estado": "pendiente",
+    "compatibilidad": 78
+  }
+]
