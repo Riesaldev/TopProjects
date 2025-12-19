@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LocalTaste - Exploración de Productos</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&amp;family=Noto+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2bee7c",
+                        "primary-dark": "#25d06b",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102218",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a2e22",
+                        "text-main": "#0d1b13",
+                        "text-secondary": "#4c9a6c",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for sidebar */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .icon-filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 font-display transition-colors duration-200">
+<!-- Top Navigation Bar -->
+<nav class="sticky top-0 z-50 w-full bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-sm border-b border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<!-- Logo -->
+<div class="flex items-center gap-2 cursor-pointer">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">agriculture</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-text-main dark:text-white">LocalTaste</h1>
+</div>
+<!-- Desktop Menu -->
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Inicio</a>
+<a class="text-sm font-bold text-primary" href="#">Explorar</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Productores</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Blog</a>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex h-10 px-6 items-center justify-center rounded-xl bg-primary hover:bg-primary-dark transition-colors text-text-main font-bold text-sm">
+                        Registrarse
+                    </button>
+<button class="p-2 rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] hover:bg-primary/20 transition-colors text-text-main dark:text-white group">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] hover:bg-primary/20 transition-colors text-text-main dark:text-white">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Page Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Page Heading -->
+<div class="mb-8">
+<h2 class="text-4xl font-black tracking-tighter text-text-main dark:text-white mb-2">
+                Explora Productos Locales
+            </h2>
+<p class="text-lg text-text-secondary dark:text-gray-400 max-w-2xl">
+                Encuentra alimentos frescos y apoya a los productores de tu comunidad. Desde la granja directamente a tu mesa.
+            </p>
+</div>
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- Sidebar Filters -->
+<aside class="w-full lg:w-72 flex-shrink-0 space-y-8">
+<!-- Filter by Producer (Reusing TextField style) -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032]">
+<label class="block mb-3">
+<span class="text-base font-bold text-text-main dark:text-white">Buscar Productor</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 rounded-xl border border-[#cfe7d9] dark:border-[#2a4032] bg-background-light dark:bg-background-dark px-4 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-text-secondary" placeholder="Ej. Granja El Sol..." type="text"/>
+<div class="absolute right-3 top-3 text-text-secondary">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+</div>
+</div>
+<!-- Categories Filter -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-base font-bold text-text-main dark:text-white">Categorías</h3>
+<button class="text-xs font-medium text-primary hover:underline">Limpiar</button>
+</div>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-[#cfe7d9] checked:border-primary checked:bg-primary transition-all" type="checkbox"/>
+<span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</span>
+</div>
+<span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">Frutas y Verduras</span>
+<span class="ml-auto text-xs text-gray-400 bg-background-light dark:bg-background-dark px-2 py-1 rounded-full">24</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-[#cfe7d9] checked:border-primary checked:bg-primary transition-all" type="checkbox"/>
+<span class="absolute text-text-main opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</span>
+</div>
+<span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">Lácteos y Huevos</span>
+<span class="ml-auto text-xs text-gray-400 bg-background-light dark:bg-background-dark px-2 py-1 rounded-full">12</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-[#cfe7d9] checked:border-primary checked:bg-primary transition-all" type="checkbox"/>
+<span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</span>
+</div>
+<span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">Panadería Artesanal</span>
+<span class="ml-auto text-xs text-gray-400 bg-background-light dark:bg-background-dark px-2 py-1 rounded-full">8</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-[#cfe7d9] checked:border-primary checked:bg-primary transition-all" type="checkbox"/>
+<span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</span>
+</div>
+<span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">Carnes y Embutidos</span>
+<span class="ml-auto text-xs text-gray-400 bg-background-light dark:bg-background-dark px-2 py-1 rounded-full">5</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative flex items-center">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border border-[#cfe7d9] checked:border-primary checked:bg-primary transition-all" type="checkbox"/>
+<span class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+<span class="material-symbols-outlined text-sm font-bold">check</span>
+</span>
+</div>
+<span class="text-sm text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">Miel y Mermeladas</span>
+<span class="ml-auto text-xs text-gray-400 bg-background-light dark:bg-background-dark px-2 py-1 rounded-full">18</span>
+</label>
+</div>
+</div>
+<!-- Price Filter -->
+<div class="bg-surface-light dark:bg-surface-dark p-5 rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032]">
+<h3 class="text-base font-bold text-text-main dark:text-white mb-4">Rango de Precio</h3>
+<div class="flex items-center gap-4">
+<div class="relative flex-1">
+<span class="absolute left-3 top-2.5 text-text-secondary text-xs">$</span>
+<input class="w-full h-9 pl-6 pr-2 rounded-lg border border-[#cfe7d9] dark:border-[#2a4032] bg-background-light dark:bg-background-dark text-sm focus:ring-1 focus:ring-primary outline-none" type="number" value="0"/>
+</div>
+<span class="text-text-secondary">-</span>
+<div class="relative flex-1">
+<span class="absolute left-3 top-2.5 text-text-secondary text-xs">$</span>
+<input class="w-full h-9 pl-6 pr-2 rounded-lg border border-[#cfe7d9] dark:border-[#2a4032] bg-background-light dark:bg-background-dark text-sm focus:ring-1 focus:ring-primary outline-none" type="number" value="50"/>
+</div>
+</div>
+<input class="w-full mt-4 accent-primary h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" type="range"/>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 min-w-0">
+<!-- Main Search Bar -->
+<div class="mb-6">
+<div class="flex w-full items-center rounded-2xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] p-2 shadow-sm focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all">
+<div class="flex items-center justify-center pl-4 pr-2 text-primary">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-text-main dark:text-white placeholder:text-text-secondary focus:ring-0 text-base h-10" placeholder="Buscar manzanas, miel, queso artesanal..."/>
+<button class="bg-primary hover:bg-primary-dark text-text-main font-bold py-2 px-6 rounded-xl transition-colors hidden sm:block">
+                            Buscar
+                        </button>
+</div>
+</div>
+<!-- Chips / Quick Filters -->
+<div class="flex gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+<button class="flex-shrink-0 px-4 py-2 rounded-xl bg-primary text-text-main text-sm font-bold shadow-sm ring-1 ring-primary/50">
+                        Todos
+                    </button>
+<button class="flex-shrink-0 px-4 py-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] hover:border-primary text-text-main dark:text-gray-300 text-sm font-medium transition-all">
+                        🌱 Orgánico
+                    </button>
+<button class="flex-shrink-0 px-4 py-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] hover:border-primary text-text-main dark:text-gray-300 text-sm font-medium transition-all">
+                        🧀 Sin Lactosa
+                    </button>
+<button class="flex-shrink-0 px-4 py-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] hover:border-primary text-text-main dark:text-gray-300 text-sm font-medium transition-all">
+                        🥖 Sin Gluten
+                    </button>
+<button class="flex-shrink-0 px-4 py-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] hover:border-primary text-text-main dark:text-gray-300 text-sm font-medium transition-all">
+                        🥑 Vegano
+                    </button>
+<button class="flex-shrink-0 px-4 py-2 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] hover:border-primary text-text-main dark:text-gray-300 text-sm font-medium transition-all">
+                        ⭐ Mejor Valorados
+                    </button>
+</div>
+<!-- Results Info & Sorting -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+<p class="text-sm text-text-secondary font-medium">Mostrando <span class="text-text-main dark:text-white font-bold">12</span> de <span class="text-text-main dark:text-white font-bold">48</span> productos</p>
+<div class="flex items-center gap-2">
+<span class="text-sm text-text-secondary">Ordenar por:</span>
+<select class="bg-surface-light dark:bg-surface-dark border-none text-sm font-bold text-text-main dark:text-white rounded-lg focus:ring-0 cursor-pointer py-1 pl-2 pr-8">
+<option>Relevancia</option>
+<option>Precio: Menor a Mayor</option>
+<option>Precio: Mayor a Menor</option>
+<option>Recién Cosechado</option>
+</select>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032] overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<img alt="Manzanas rojas frescas apiladas en una cesta de madera bajo luz natural" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Fresh red apples in a basket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwVBxTdlyYXSJfYrNyaUCI7N_VKZD6A93cXfO71rpEPiLGpJiuXdO5Ur5OcjIP1XbR9oTmOnPmB3CP1Y79dztpaZaysgCTWej5tfq16B6zkrmggTHdflPfFX1RWyR7Y1DI-8-qkKaI5BfUYMX-q6gte84kckaSTnROCRNljPa73pxp1Cj17m-3VH0rwiTOFNpo-CVeB230PprFX93lUnPyXkW4ao1bI6w-z-3X_KdnZa5fi0XRFsxZwhY2uRYUbl-tOgLNyCFYmINj"/>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-black/50 text-gray-500 hover:text-red-500 hover:bg-white transition-all backdrop-blur-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 bg-primary/90 backdrop-blur-sm px-2 py-1 rounded-lg">
+<span class="text-xs font-bold text-text-main">Cosecha de Hoy</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">Manzanas Royal Gala</h3>
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined text-sm icon-filled">star</span>
+<span class="text-xs font-bold text-text-main dark:text-gray-300">4.8</span>
+</div>
+</div>
+<p class="text-sm text-primary font-medium mb-2 hover:underline cursor-pointer flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">storefront</span>
+                                Huerto San José
+                            </p>
+<p class="text-sm text-text-secondary dark:text-gray-400 line-clamp-2 mb-4">
+                                Dulces, crujientes y cultivadas sin pesticidas. Perfectas para meriendas escolares.
+                            </p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex flex-col">
+<span class="text-xs text-text-secondary line-through">$3.00</span>
+<span class="text-lg font-bold text-text-main dark:text-white">$2.50 <span class="text-xs font-normal text-text-secondary">/ kg</span></span>
+</div>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] text-text-main hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032] overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<img alt="Queso artesanal redondo sobre tabla de madera con hierbas" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Artisanal cheese wheel on wood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv6RnFVy9sj30IOaCIJo0ZXod40WWb98HtRQrKUUcZ_d2eBh8De53wp_-TaJ2fHvXfs_PnETwjUVZLMwneIlHMLQdQEj1wJZTKUBeteM9NNLFMgOz5qICdNa8TPJ8mzJbK-Sdq9WOPAPSrh4PloOS4sj4du16BFprnaLJmGeEdFadAleSRc-ImlHu4AfM1igyQHCN3dsF6Ld54-eDhLjR-HBsteAcEaM3ksk39WT4CjlamXHsC3ffz_rQqQoR3knBhG8FhjfhVVr8r"/>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-black/50 text-gray-500 hover:text-red-500 hover:bg-white transition-all backdrop-blur-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">Queso de Cabra Fresco</h3>
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined text-sm icon-filled">star</span>
+<span class="text-xs font-bold text-text-main dark:text-gray-300">5.0</span>
+</div>
+</div>
+<p class="text-sm text-primary font-medium mb-2 hover:underline cursor-pointer flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">storefront</span>
+                                Lácteos La Sierra
+                            </p>
+<p class="text-sm text-text-secondary dark:text-gray-400 line-clamp-2 mb-4">
+                                Elaborado esta mañana con leche de cabras de pastoreo libre. Sabor suave y cremoso.
+                            </p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex flex-col">
+<span class="text-lg font-bold text-text-main dark:text-white">$8.00 <span class="text-xs font-normal text-text-secondary">/ ud</span></span>
+</div>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] text-text-main hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032] overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<img alt="Galletas artesanales con chispas de chocolate en una bandeja de hornear" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Freshly baked cookies" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkClYs2De31IdJO_83ytde1cm174uq9fQMAjlr0d1LpUT9IYrzk1qZu_ukPl05MzDyP4Xho1I638CF7KbUtm05hdBd8r_B0FfTtwIgJw4_OEU1K3BTUTPCgUIsOEt8Z5fpjb4ZI__-X3igH98f4zlj8gsowtry2QlS0-aSoTveU7Y77HLlp0ZgS6oCZ6YRxImKOxXBF3tgtVIvuLbvNxSk2zDappPZ1V1ogHh_nlRQHCwM6S6St7u2kBiy6BSfkN4xE5XZ319glLvQ"/>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-black/50 text-gray-500 hover:text-red-500 hover:bg-white transition-all backdrop-blur-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">Galletas de Avena</h3>
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined text-sm icon-filled">star</span>
+<span class="text-xs font-bold text-text-main dark:text-gray-300">4.5</span>
+</div>
+</div>
+<p class="text-sm text-primary font-medium mb-2 hover:underline cursor-pointer flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">storefront</span>
+                                Panadería El Trigo
+                            </p>
+<p class="text-sm text-text-secondary dark:text-gray-400 line-clamp-2 mb-4">
+                                Sin conservantes, hechas con miel local y avena orgánica. Paquete de 12 unidades.
+                            </p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex flex-col">
+<span class="text-lg font-bold text-text-main dark:text-white">$4.50 <span class="text-xs font-normal text-text-secondary">/ pqte</span></span>
+</div>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] text-text-main hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032] overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<img alt="Tarro de miel dorada con un cucharón de miel de madera al lado" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Golden honey jar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8PCeB8TT31_MZRt7pf1p2fnn9Ax-T3wRyp4y1AND1mZsNsw5FilK1Ood_sbORmTubSkAoGccSxdOS7YL7pYnYXpX9tmz3RJ0913IWKXvRuB3H0c34h-zLuLo6PrcGyLfbQWGVwF3wz-ftT21FUaWTiE5dm1YNC8Cey0RyYl_a1_9RqxFsDPQsclzONlIVX-oLepEKLBrLbZAffd9OVsGD7K9sUDhYZRebuDUdPvTmjmV8HH6ae6CjD1epOdeo3PNSnGOLYRkTPoah"/>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-black/50 text-gray-500 hover:text-red-500 hover:bg-white transition-all backdrop-blur-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 bg-surface-light/90 dark:bg-surface-dark/90 text-primary border border-primary/20 backdrop-blur-sm px-2 py-1 rounded-lg">
+<span class="text-xs font-bold">Pocos en stock</span>
+</div>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">Miel de Flores Silvestres</h3>
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined text-sm icon-filled">star</span>
+<span class="text-xs font-bold text-text-main dark:text-gray-300">4.9</span>
+</div>
+</div>
+<p class="text-sm text-primary font-medium mb-2 hover:underline cursor-pointer flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">storefront</span>
+                                Apícola Del Valle
+                            </p>
+<p class="text-sm text-text-secondary dark:text-gray-400 line-clamp-2 mb-4">
+                                Miel cruda y sin filtrar, cosechada de colmenas locales. 500g.
+                            </p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex flex-col">
+<span class="text-lg font-bold text-text-main dark:text-white">$9.50 <span class="text-xs font-normal text-text-secondary">/ frasco</span></span>
+</div>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] text-text-main hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032] overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<img alt="Ramo de espinacas frescas verdes sobre una mesa" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Fresh green spinach bunch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtakF4S6EK5sgcEG-pv7EBiCJeTb97n5MOZsj51-wKPwFni8lvRo0Fh8k4ujiFHlFFImmN1BDSjpN8oYwGmGKyrsG0gwG6v8EMK8ii7g5gpOD9FeL8H2YwYlMJXCw8EjMNqfj89aFXnDV9z5S4VgD6ZpdeNoU71dJl_QwxY9y18EV9B-MSE9hocEDOPmYCxMSnNfqhPIYfOvOJCLvG4LHkevkPxNJleeX59D0tBbtLNWcbjo50_WlaioocmnVSgXZdk3xlv9qdGtGe"/>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-black/50 text-gray-500 hover:text-red-500 hover:bg-white transition-all backdrop-blur-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">Espinaca Orgánica</h3>
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined text-sm icon-filled">star</span>
+<span class="text-xs font-bold text-text-main dark:text-gray-300">4.7</span>
+</div>
+</div>
+<p class="text-sm text-primary font-medium mb-2 hover:underline cursor-pointer flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">storefront</span>
+                                Granja Verde
+                            </p>
+<p class="text-sm text-text-secondary dark:text-gray-400 line-clamp-2 mb-4">
+                                Hojas tiernas y lavadas, listas para ensalada. 100% orgánicas certificadas.
+                            </p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex flex-col">
+<span class="text-xs text-text-secondary line-through">$2.00</span>
+<span class="text-lg font-bold text-text-main dark:text-white">$1.80 <span class="text-xs font-normal text-text-secondary">/ mazo</span></span>
+</div>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] text-text-main hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group relative flex flex-col bg-surface-light dark:bg-surface-dark rounded-2xl border border-[#e7f3ec] dark:border-[#2a4032] overflow-hidden hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+<div class="relative h-48 w-full overflow-hidden">
+<img alt="Cesta de huevos marrones frescos de granja sobre paja" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Basket of fresh farm eggs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdSL8X1dBjJB22OAybGvNIZgoDM1HuwycRgX_vAIywx2jo4I8A8LluuFQmUDA0EVy9mbw8ukerOZWYGCVqhH5kF2nN_nkSCT3iZfwgbrIMcEhKY5Zt1SMO3PwaQ1DSVcYbQc_G3kAvfjlkXpLXp76jrDwwL8OBNZc2zU5eApB3rGKIcLDPnMTXEwZ3svNVJK0iTHOfPKjkhbUeuih0DZ-o8Q6fPY3xGj1A0UWtcwOtcWLnAGiMhy7O5aDWYZL-oTe1-J7rzoXEZCcs"/>
+<button class="absolute top-3 right-3 p-2 rounded-full bg-white/80 dark:bg-black/50 text-gray-500 hover:text-red-500 hover:bg-white transition-all backdrop-blur-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="p-4 flex flex-col flex-1">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-lg font-bold text-text-main dark:text-white leading-tight">Huevos de Campo</h3>
+<div class="flex items-center gap-1 text-yellow-500">
+<span class="material-symbols-outlined text-sm icon-filled">star</span>
+<span class="text-xs font-bold text-text-main dark:text-gray-300">4.9</span>
+</div>
+</div>
+<p class="text-sm text-primary font-medium mb-2 hover:underline cursor-pointer flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">storefront</span>
+                                Granja El Amanecer
+                            </p>
+<p class="text-sm text-text-secondary dark:text-gray-400 line-clamp-2 mb-4">
+                                Huevos de gallinas libres, alimentadas con granos naturales. Docena.
+                            </p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-[#e7f3ec] dark:border-[#2a4032]">
+<div class="flex flex-col">
+<span class="text-lg font-bold text-text-main dark:text-white">$4.20 <span class="text-xs font-normal text-text-secondary">/ doz</span></span>
+</div>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-[#e7f3ec] dark:bg-[#2a4032] text-text-main hover:bg-primary hover:text-black transition-all">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center mt-12 gap-2">
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] text-text-main hover:border-primary transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined text-sm">arrow_back_ios_new</span>
+</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-primary text-text-main font-bold">1</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] text-text-main hover:border-primary transition-colors">2</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] text-text-main hover:border-primary transition-colors">3</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] text-text-main hover:border-primary transition-colors">...</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7f3ec] dark:border-[#2a4032] text-text-main hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</main>
+</div>
+</div>
+<!-- Footer Simple -->
+<footer class="bg-surface-light dark:bg-surface-dark border-t border-[#e7f3ec] dark:border-[#2a4032] mt-16 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-text-secondary dark:text-gray-500 text-sm">
+<p>© 2024 LocalTaste. Conectando comunidades.</p>
+</div>
+</footer>
+</body></html>

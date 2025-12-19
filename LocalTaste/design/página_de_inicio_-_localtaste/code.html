@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LocalTaste - Del campo a tu mesa</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2bee7c",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102218",
+                        "text-main": "#0d1b13",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 antialiased overflow-x-hidden">
+<div class="relative flex flex-col min-h-screen w-full">
+<!-- Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-[#e7f3ec] dark:border-gray-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur">
+<div class="px-4 md:px-10 py-3 flex items-center justify-between max-w-[1440px] mx-auto w-full">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-text-main dark:text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-4xl">agriculture</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">LocalTaste</h2>
+</div>
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Mercado</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Suscripciones</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Productores</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Nuestra Misión</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 md:gap-8 items-center">
+<label class="hidden lg:flex flex-col min-w-40 h-10 max-w-64 relative group">
+<div class="flex w-full flex-1 items-stretch rounded-xl h-full bg-[#e7f3ec] dark:bg-gray-800 focus-within:ring-2 ring-primary/50 transition-all">
+<div class="text-[#4c9a6c] flex items-center justify-center pl-4">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</div>
+<input class="w-full bg-transparent border-none text-text-main dark:text-white placeholder:text-[#4c9a6c] px-4 focus:ring-0 text-base font-normal leading-normal h-full" placeholder="Buscar productos..."/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary hover:bg-primary/90 transition-colors text-text-main text-sm font-bold">
+<span class="truncate">Registrarse</span>
+</button>
+<button class="hidden sm:flex items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#e7f3ec] dark:bg-gray-800 dark:text-white hover:bg-[#dcece2] dark:hover:bg-gray-700 transition-colors text-text-main text-sm font-bold">
+<span class="truncate">Iniciar Sesión</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<section class="w-full px-4 md:px-10 py-6 md:py-10 flex justify-center">
+<div class="w-full max-w-[1280px]">
+<div class="rounded-xl overflow-hidden relative min-h-[560px] flex flex-col items-center justify-center p-8 md:p-16 text-center gap-8 bg-cover bg-center" data-alt="Fresh vegetables and fruits at a vibrant farmers market" style='background-image: linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuDhG_VU2DKYXIxC8gsMdbnhJlRn5y7nTcRtWFMELSYy9NMO5vzyE0v0FefzUlyUdRxewFc7hKLKPckJHFRPVlpEbH98cpF5dsd3VtSM321CyQJu5kZPqWdcPl5J4tPcNzCwgNgAtOvWx-_gL2qR4nfrVmyy97cLt2YtEf9DemUPjkJLKUtofZ1aujl3jFhRCnvUFRg6qVlxXzbw9gsuYg3QKhdiQ2-Axi8dKBPrpaK6wAfHVZziCxVdQwv5Pd3IDeyc_ZSGUasVmwSC");'>
+<div class="flex flex-col gap-4 max-w-3xl animate-fade-in-up">
+<h1 class="text-white text-4xl md:text-6xl font-black leading-[1.1] tracking-tight drop-shadow-sm">
+                            Del campo a tu mesa,<br/> sin intermediarios
+                        </h1>
+<h2 class="text-white/90 text-lg md:text-xl font-medium leading-relaxed drop-shadow-sm max-w-2xl mx-auto">
+                            Apoya a los productores locales y disfruta de alimentos frescos y de temporada. Personaliza tu cesta semanal o compra a la carta.
+                        </h2>
+</div>
+<div class="flex flex-wrap gap-4 justify-center w-full mt-4">
+<button class="flex items-center justify-center rounded-xl h-12 px-8 bg-primary hover:bg-[#25d36d] transition-transform active:scale-95 text-text-main text-base font-bold shadow-lg shadow-primary/25">
+                            Explorar Mercado
+                        </button>
+<button class="flex items-center justify-center rounded-xl h-12 px-8 bg-white/90 hover:bg-white backdrop-blur transition-transform active:scale-95 text-text-main text-base font-bold shadow-lg">
+                            Suscribirse y Ahorrar
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Features / How it works -->
+<section class="w-full px-4 md:px-40 py-16 flex justify-center bg-white dark:bg-white/5">
+<div class="flex flex-col max-w-[960px] w-full gap-10">
+<div class="text-center md:text-left">
+<h2 class="text-text-main dark:text-white text-3xl font-bold leading-tight tracking-tight">Cómo funciona LocalTaste</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-2">Tres simples pasos para comer mejor y apoyar a tu comunidad.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Step 1 -->
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-background-light dark:bg-gray-800 border border-[#cfe7d9] dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">storefront</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-lg font-bold text-text-main dark:text-white">Elige a tus Productores</h3>
+<p class="text-[#4c9a6c] dark:text-gray-300 text-sm leading-relaxed">Navega por perfiles de granjas locales cercanas a ti y selecciona tus favoritos.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-background-light dark:bg-gray-800 border border-[#cfe7d9] dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">shopping_basket</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-lg font-bold text-text-main dark:text-white">Personaliza tu Cesta</h3>
+<p class="text-[#4c9a6c] dark:text-gray-300 text-sm leading-relaxed">Mezcla y combina productos o elige una cesta sorpresa de temporada cada semana.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-background-light dark:bg-gray-800 border border-[#cfe7d9] dark:border-gray-700 hover:shadow-lg transition-shadow duration-300">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]">local_shipping</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-lg font-bold text-text-main dark:text-white">Recibe en tu Puerta</h3>
+<p class="text-[#4c9a6c] dark:text-gray-300 text-sm leading-relaxed">Entregas semanales flexibles y ecológicas directamente desde la granja a tu hogar.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Spotlight Grid -->
+<section class="w-full px-4 md:px-40 py-16 flex justify-center">
+<div class="flex flex-col max-w-[1100px] w-full gap-8">
+<div class="flex justify-between items-end px-2">
+<div>
+<h2 class="text-text-main dark:text-white text-3xl font-bold leading-tight tracking-tight">Productos Frescos de Temporada</h2>
+<p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">Cosechados ayer, entregados hoy.</p>
+</div>
+<a class="text-primary font-bold text-sm hover:underline flex items-center gap-1" href="#">
+                        Ver todo <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Product Card 1 -->
+<div class="group flex flex-col bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#e7f3ec] dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Fresh organic vegetables in a wooden basket" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhP_bx3GsNsUgbOwOE97ikFpoDH__Ls_XQ9TVYIRTvktM4JN-fwN0_rZY8a1kJ3R7i1w74HNf5Y02B0iDWzNNXeqslkgWIw97tjCt3v8DfqzBd5_u0LySILq6zKvFihifYiXog8gMHs-3soSvvORe0zTvi1N_gYJO4s5KzjHlDJ_AIhDMHi0Q_nEe0ckZIFXzwQ62sbaOLoVx_yXPlyMr_efG-NQJBJOXGbWsPGvCoMPc_hneigl9i_gB29_7DDOIoiBkh7yh1uX7e"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 px-2 py-1 rounded-md text-xs font-bold text-text-main dark:text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-600">eco</span> Orgánico
+                            </div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<div class="text-xs text-gray-500 dark:text-gray-400">Granja El Roble</div>
+<h3 class="font-bold text-text-main dark:text-white text-lg">Cesta de Verduras Mix</h3>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="font-bold text-lg text-primary">$24.99</span>
+<button class="w-8 h-8 rounded-full bg-[#e7f3ec] dark:bg-gray-700 text-text-main dark:text-white flex items-center justify-center hover:bg-primary hover:text-black transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="group flex flex-col bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#e7f3ec] dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Fresh carrots with green tops on rustic surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbpSzg-HjC3P4Phgmk9Ib1Pvy8MWAewLDgnf8glG14eiLQM33zlYyytOojOFE2PycRjFdVNdgy5oDsRWEHCe-8bOIoGka_WwCcnvJH2GEiUBw1J-TyIAOR4d10gXtL7NkdEt0xjViBPFDw3TJb2U93mW7P6DGwOY5JZrM-V2dMMgycwFDasl_jL9Jza7ZCIkJM6wwG2pBiYmFL-He9e1x53ttTvpAOFtSjp9CQpDFEihppto5U2Cs1Sr3_p1_zRbROunlLgTU6YGdz"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 px-2 py-1 rounded-md text-xs font-bold text-text-main dark:text-white">
+                                Km 0
+                            </div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<div class="text-xs text-gray-500 dark:text-gray-400">Huerta Santa Ana</div>
+<h3 class="font-bold text-text-main dark:text-white text-lg">Zanahorias de Manojo</h3>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="font-bold text-lg text-primary">$3.50</span>
+<button class="w-8 h-8 rounded-full bg-[#e7f3ec] dark:bg-gray-700 text-text-main dark:text-white flex items-center justify-center hover:bg-primary hover:text-black transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="group flex flex-col bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#e7f3ec] dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A box of fresh strawberries" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWo6_B_7JuYbYdlEkpgCbxvTrGZn9DowwlaBuXJ6y3O-Fe2XHi-1KCkBnnhyqQXKxGGCLZmWONytc9JmsFkpVS9CXZ0RUfMvbe_KLsRoAEI8wfwrKgcU9nVrTaiRhDWxfvfl3LG62TMqG3iWEAzrlFUfu7s-cl6sg1atblyYZjSNyEfkvrZ_18PH8EabNBzUnT_MyDqcA1Kj9duENjWYIHb_xg2AVyNWeqS8Fk-rnS8l_IKUHYT3Dtuov1FWMWelFGUnLAP10lwAjI"/>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<div class="text-xs text-gray-500 dark:text-gray-400">Frutos del Valle</div>
+<h3 class="font-bold text-text-main dark:text-white text-lg">Fresas Dulces (500g)</h3>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="font-bold text-lg text-primary">$6.00</span>
+<button class="w-8 h-8 rounded-full bg-[#e7f3ec] dark:bg-gray-700 text-text-main dark:text-white flex items-center justify-center hover:bg-primary hover:text-black transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="group flex flex-col bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-[#e7f3ec] dark:border-gray-700 hover:shadow-xl transition-all duration-300">
+<div class="relative h-48 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Round artisanal cheese wheel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6qEDY9X9n-piSqeitivK3i9qXJ3ANZQOaRof5z9f4J7DWE1OFkQP3kRwExPZXa1_cB7gALM1B9bOUK78bl2HYSpR62daS-VhvUNMrLSoPOIltOoMXdHnvLp8wvUiz5X2ViRaFN1fAWXMyRpGzGcqXUZIBLM_CBxlxTyPpJtxXc93vXguwjtHtbDbacaQAhmsPU2_Ynq095e6x_BuU7iTMw-3ECaVrd2-5dE7YJixRLKCnNbPDULBT48PszNkNdKvPwZzILCgOGOrN"/>
+<div class="absolute top-3 left-3 bg-white/90 dark:bg-black/80 px-2 py-1 rounded-md text-xs font-bold text-text-main dark:text-white">
+                                Artesanal
+                            </div>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-1">
+<div class="text-xs text-gray-500 dark:text-gray-400">Lácteos La Sierra</div>
+<h3 class="font-bold text-text-main dark:text-white text-lg">Queso de Cabra Curado</h3>
+<div class="flex items-center justify-between mt-auto pt-2">
+<span class="font-bold text-lg text-primary">$12.50</span>
+<button class="w-8 h-8 rounded-full bg-[#e7f3ec] dark:bg-gray-700 text-text-main dark:text-white flex items-center justify-center hover:bg-primary hover:text-black transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Producer Spotlight -->
+<section class="w-full px-4 md:px-40 py-16 bg-[#2bee7c]/10 dark:bg-primary/5 flex justify-center">
+<div class="flex flex-col md:flex-row items-center gap-12 max-w-[1100px] w-full">
+<div class="w-full md:w-1/2 relative">
+<div class="absolute -top-4 -left-4 w-full h-full border-2 border-primary rounded-2xl z-0 hidden md:block"></div>
+<img class="rounded-2xl shadow-xl w-full h-[400px] object-cover relative z-10" data-alt="Portrait of a smiling farmer holding fresh vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_xcFqTLo7kFPtGo0yatePk9tVIuusxCO4XCkmmQTw4XdiFzZBxsS_5KSNSxUbm22obBYv7w30roj_gg2h_wjQkcB-Ys-uXPhRiL9WmgScJaAfpQDzxZgsOwOUE2OvxrGk43GH7qJKZKy-ajYG5svkO8vtMrc2j-fIf4sy4VQE_ey-IV3fr9rksPs3a_W_SOQuTvn_zzhuP24vlxDyJ0Y0cQj--JLu1RWUi057dPARsH6lbmmyadGqfWvK7DyGSu01SQqxGAKh5Pry"/>
+</div>
+<div class="w-full md:w-1/2 flex flex-col gap-6">
+<div class="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm">
+<span class="material-symbols-outlined text-lg">verified</span>
+                        Productor Destacado
+                    </div>
+<h2 class="text-3xl md:text-4xl font-bold text-text-main dark:text-white leading-tight">
+                        Conoce a la Familia Rodríguez
+                    </h2>
+<p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                        Desde hace tres generaciones, la familia Rodríguez cultiva hortalizas orgánicas en el valle. Su compromiso con la agricultura regenerativa no solo produce alimentos más sabrosos, sino que restaura la salud del suelo local.
+                    </p>
+<div class="flex gap-4 pt-2">
+<div class="flex flex-col gap-1">
+<span class="font-bold text-2xl text-text-main dark:text-white">15+</span>
+<span class="text-sm text-gray-500">Años cultivando</span>
+</div>
+<div class="w-px bg-gray-300 dark:bg-gray-700 h-full mx-2"></div>
+<div class="flex flex-col gap-1">
+<span class="font-bold text-2xl text-text-main dark:text-white">100%</span>
+<span class="text-sm text-gray-500">Libre de pesticidas</span>
+</div>
+</div>
+<button class="self-start mt-4 text-text-main font-bold border-b-2 border-primary pb-1 hover:text-primary transition-colors">
+                        Ver productos de esta granja
+                    </button>
+</div>
+</div>
+</section>
+<!-- Testimonials -->
+<section class="w-full px-4 md:px-40 py-20 flex justify-center">
+<div class="max-w-[1100px] w-full flex flex-col items-center gap-12">
+<h2 class="text-3xl font-bold text-text-main dark:text-white text-center">Lo que dice nuestra comunidad</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+<!-- Review 1 -->
+<div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
+<span class="material-symbols-outlined absolute top-6 right-6 text-gray-200 dark:text-gray-600 text-4xl">format_quote</span>
+<div class="flex gap-1 text-yellow-400 mb-4">
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+</div>
+<p class="text-gray-600 dark:text-gray-300 mb-6 relative z-10">"La calidad de las verduras es increíble, nada que ver con lo que encuentras en el supermercado. Y me encanta saber a quién estoy ayudando."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXp-kzA4lCHBoUq2dxXfBemeGyW4kPFNwh5l96i73rgqPA_UK74Mmt3GPBHGKFcqLjW5RZxY1nH3ffp3EZVnATJpj3BlCkVot9O-yoizCWbBGhkNLeiAsuOzJB6rNuI54irszAo57_FSyXva_q1z177iusv4Q5fMEjs30LdISBJRD7q61dSxPRpS-FmbdrnrL9Ei4RRrxRV0z-h14KRt0sQ_MhvFpOc9cHMs3SgbnRO3Q2ZBvcqjTNy_n_1Q0hn12XPlfaAG4i9Vo0"/>
+</div>
+<div>
+<h4 class="font-bold text-sm text-text-main dark:text-white">Ana García</h4>
+<span class="text-xs text-gray-400">Madrid, ES</span>
+</div>
+</div>
+</div>
+<!-- Review 2 -->
+<div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
+<span class="material-symbols-outlined absolute top-6 right-6 text-gray-200 dark:text-gray-600 text-4xl">format_quote</span>
+<div class="flex gap-1 text-yellow-400 mb-4">
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star_half</span>
+</div>
+<p class="text-gray-600 dark:text-gray-300 mb-6 relative z-10">"Me suscribí a la cesta semanal sorpresa y se ha convertido en mi momento favorito de la semana. ¡Muy recomendado!"</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcZHr5-2bi3YqnuCX4thZv46sAPI6PQ4i2SmY2U-TCDRbAfVW3VKmcYa3yKXv0noWobnRcyK2iHzHSngVsr-3z1M87b3j7aDS9LAfcswybTIzMAuIQIm_qP9iAoOvAz7wwSMmpH_Jfwg7mg1USEdDnt5YYKMjuH07TSvf_imwvT5m_XJHA9TLeXNiOVD22CnQZg3v9lLDXRaRUifkrzASTHlb2aXEF_DY3TkF0w6CY4fz_FiVd7kX5n1PaoWy7tSUK9AinCozX36qC"/>
+</div>
+<div>
+<h4 class="font-bold text-sm text-text-main dark:text-white">Carlos M.</h4>
+<span class="text-xs text-gray-400">Valencia, ES</span>
+</div>
+</div>
+</div>
+<!-- Review 3 -->
+<div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 relative">
+<span class="material-symbols-outlined absolute top-6 right-6 text-gray-200 dark:text-gray-600 text-4xl">format_quote</span>
+<div class="flex gap-1 text-yellow-400 mb-4">
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+<span class="material-symbols-outlined text-[20px] fill-current">star</span>
+</div>
+<p class="text-gray-600 dark:text-gray-300 mb-6 relative z-10">"La plataforma es súper fácil de usar. Poder elegir productos de varias granjas en un solo pedido es genial."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu9Mqdw7RIZ90m8bvgRmlsio1pp2GechZPS7GmA9Bg3bpTt5bwTjHD06HpRlsA97V0xxd-ajNtEQdOLiDn9z3WhD4A6OzXm-Y-FYDob3dLscYtfWE1N3ZWY6T0aO5nvVT57HJXPSHmb5C2XGE6rzgUk6q2N9ho7aTZxtJTiLrw4aBpd4bvaND5x5ThZDjFrH7v4pqHkzg3vhSOxot7ZvjYM3ifibS7lQsG0DvaKjP3QAsRTqPri10aPApS9Kr0ZmEmBMPfyVAlRp4w"/>
+</div>
+<div>
+<h4 class="font-bold text-sm text-text-main dark:text-white">Elena R.</h4>
+<span class="text-xs text-gray-400">Barcelona, ES</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA -->
+<section class="w-full px-4 md:px-10 py-16 bg-background-dark text-white">
+<div class="max-w-[960px] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+<div class="flex flex-col gap-4 flex-1">
+<h2 class="text-3xl font-bold">Únete al movimiento de comida real</h2>
+<p class="text-gray-300">Recibe noticias de temporada, recetas exclusivas y ofertas de productores locales directamente en tu correo.</p>
+</div>
+<div class="flex-1 w-full max-w-md">
+<form class="flex flex-col sm:flex-row gap-3">
+<input class="flex-1 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-gray-400 px-4 py-3 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Tu correo electrónico" type="email"/>
+<button class="bg-primary hover:bg-[#25d36d] text-text-main font-bold rounded-xl px-6 py-3 transition-colors whitespace-nowrap" type="button">
+                            Suscribirme
+                        </button>
+</form>
+<p class="text-xs text-gray-500 mt-3">Respetamos tu privacidad. Date de baja cuando quieras.</p>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-background-light dark:bg-background-dark border-t border-[#e7f3ec] dark:border-gray-800 pt-16 pb-8 px-4 md:px-10">
+<div class="max-w-[1280px] mx-auto flex flex-col gap-12">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+<div class="col-span-2 md:col-span-1 flex flex-col gap-4">
+<div class="flex items-center gap-2 text-text-main dark:text-white">
+<span class="material-symbols-outlined text-3xl text-primary">agriculture</span>
+<span class="text-xl font-bold">LocalTaste</span>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm">Conectando comunidades a través de comida real y sostenible.</p>
+<div class="flex gap-4 mt-2">
+<a class="text-gray-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-gray-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-text-main dark:text-white">Mercado</h4>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Frutas y Verduras</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Lácteos y Huevos</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Carne y Pescado</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Despensa</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-text-main dark:text-white">Compañía</h4>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Sobre Nosotros</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Productores</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Blog</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Trabaja con nosotros</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="font-bold text-text-main dark:text-white">Ayuda</h4>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Centro de Ayuda</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Envíos y Devoluciones</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Términos y Condiciones</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-primary text-sm" href="#">Privacidad</a>
+</div>
+</div>
+<div class="border-t border-[#e7f3ec] dark:border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+<p>© 2023 LocalTaste Marketplace. Todos los derechos reservados.</p>
+<div class="flex gap-6">
+<span>Hecho con <span class="text-red-500">♥</span> localmente</span>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nuestra Misión - LocalTaste</title>
+<!-- Fonts and Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2bee7c",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#102218",
+                        "text-dark": "#0d1b13",
+                        "text-light": "#e7f3ec",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "Noto Sans", "sans-serif"],
+                        "body": ["Noto Sans", "Work Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#e7f3ec] bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-6 py-3 lg:px-10">
+<div class="flex items-center gap-4 text-text-dark dark:text-white">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">eco</span>
+</div>
+<h2 class="text-text-dark dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">LocalTaste</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-text-dark dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Inicio</a>
+<a class="text-text-dark dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Mercado</a>
+<a class="text-text-dark dark:text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Productores</a>
+<a class="text-text-dark dark:text-white text-sm font-medium leading-normal text-primary" href="#">Misión</a>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary hover:bg-primary/90 transition-colors text-text-dark text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Iniciar Sesión</span>
+</button>
+</div>
+<div class="md:hidden text-text-dark dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="layout-container flex h-full grow flex-col items-center">
+<!-- Hero Section -->
+<div class="w-full max-w-[1280px] p-4 lg:p-8">
+<div class="relative flex min-h-[500px] flex-col gap-6 overflow-hidden rounded-xl bg-cover bg-center bg-no-repeat p-8 items-center justify-center text-center shadow-lg" data-alt="Farmer hands holding fresh soil and vegetables" style='background-image: linear-gradient(rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuCDsmfe7wL1dNW4WYjHEX2vpyu0U2Gwl8KsT5_ClVOl2Wp224jG6h18b1QRGnIvR08j6j4nhv5vec3nk-czTpdLt6hCxZTBeysA8tTuYzbboMOZiazq8dzDVwLPp6_cw-NmTWvH3PTy6CTmK6dAGrt4eerrwrZY5iAP3LxH49vP6U-HogWu6VpKrGQhg7XzlMxQRW6dSkeRPmtvvJgYpLUE4jXIlRnlbo4ilMDT9LKLsDsHcTK-RBD45qlLGEz1hu9aiNK-TvVlyU68");'>
+<div class="max-w-[800px] flex flex-col gap-4 animate-fade-in-up">
+<span class="text-primary font-bold uppercase tracking-wider text-sm md:text-base bg-black/20 backdrop-blur-sm px-3 py-1 rounded-full w-fit mx-auto">Nuestra Promesa</span>
+<h1 class="text-white text-4xl md:text-6xl font-black leading-tight tracking-[-0.033em]">
+                            Nuestra Misión:<br/>Reconectar con la Tierra
+                        </h1>
+<h2 class="text-gray-100 text-lg md:text-xl font-normal leading-relaxed max-w-[600px] mx-auto">
+                            Conectando consumidores conscientes con productores locales apasionados para construir un futuro más fresco, justo y sostenible para todos.
+                        </h2>
+</div>
+<button class="mt-4 flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-primary hover:bg-primary/90 text-text-dark text-base font-bold leading-normal tracking-[0.015em] transition-all transform hover:scale-105 shadow-lg shadow-primary/30">
+<span class="truncate">Leer nuestra historia</span>
+</button>
+</div>
+</div>
+<!-- Intro Text Section -->
+<div class="w-full max-w-[960px] px-6 py-16 md:py-24 flex flex-col items-center text-center">
+<div class="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-3xl">favorite</span>
+</div>
+<h2 class="text-text-dark dark:text-white text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-6">El Corazón de LocalTaste</h2>
+<p class="text-gray-600 dark:text-gray-300 text-lg md:text-xl font-normal leading-relaxed max-w-[720px]">
+                    Nuestra misión es empoderar a los productores locales y llevar comida real a tu mesa. Creemos firmemente en un futuro donde la logística alimentaria es <span class="text-primary font-bold">cero residuos</span>, <span class="text-primary font-bold">hiper-local</span> y <span class="text-primary font-bold">justa</span> para todos los involucrados en la cadena.
+                </p>
+</div>
+<!-- Vision Split Section -->
+<div class="w-full bg-white dark:bg-background-dark py-16 md:py-24 border-y border-[#e7f3ec] dark:border-gray-800">
+<div class="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="order-2 md:order-1 relative rounded-2xl overflow-hidden shadow-xl aspect-square md:aspect-auto md:h-[500px]">
+<img alt="Fresh market vegetables display" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" data-alt="Colorful fresh vegetables at a local market" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATDT7KjC_hNYzEwoKl4RgrQpz59Q0_bCuqULRT5tPwMtQGfO4CI6bEie0UGqAUATVJv4iVqr3mu3g7mAURyyu_lyhXzymf6XoixQUXsbN-h5nU4yHenhUEMpvcFkV14JC8qoCN0qPTJyeq2EM1yQWarQhhIac4rV9tlxBiyDB-jvYlTJzf7TFih7QApHWhT_i3a5Qt1PUBirHrn9rciio14z1w9nWWtQayHGkipwcJ2-gvOB5ubLMIzGLKvzqIVxIlaGUW5qURKm-S"/>
+</div>
+<div class="order-1 md:order-2 flex flex-col gap-6">
+<h3 class="text-primary font-bold uppercase tracking-wider text-sm">Nuestra Visión</h3>
+<h2 class="text-text-dark dark:text-white text-3xl md:text-5xl font-black leading-tight">Un sistema alimentario transparente</h2>
+<p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                            Imaginamos un mundo donde sabes exactamente de dónde viene tu comida. No más etiquetas confusas ni viajes de miles de kilómetros.
+                        </p>
+<ul class="flex flex-col gap-4 mt-2">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-text-dark dark:text-gray-200 font-medium">Precios justos para quien cultiva</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-text-dark dark:text-gray-200 font-medium">Frescura garantizada (cosechado ayer)</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-text-dark dark:text-gray-200 font-medium">Impacto ambiental reducido</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Values Grid Section -->
+<div class="w-full max-w-[1280px] px-6 py-16 md:py-24">
+<div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+<div class="max-w-[600px]">
+<h2 class="text-text-dark dark:text-white text-3xl md:text-5xl font-black leading-tight mb-4">Nuestros Valores</h2>
+<p class="text-gray-600 dark:text-gray-300 text-lg">Los pilares que sostienen cada entrega y cada relación en nuestra plataforma.</p>
+</div>
+<button class="hidden md:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-text-dark text-base font-bold transition-colors">
+<span class="truncate">Conoce a nuestros productores</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="group flex flex-col gap-4 rounded-2xl border border-[#cfe7d9] dark:border-gray-700 bg-white dark:bg-[#1a2e22] p-8 transition-all hover:shadow-lg hover:-translate-y-1">
+<div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-text-dark transition-colors">
+<span class="material-symbols-outlined text-3xl">handshake</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-text-dark dark:text-white text-xl font-bold leading-tight">Apoyo Local</h3>
+<p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
+                                Comercio justo para los agricultores, asegurando que reciban el valor que merecen por su duro trabajo y dedicación a la tierra.
+                            </p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group flex flex-col gap-4 rounded-2xl border border-[#cfe7d9] dark:border-gray-700 bg-white dark:bg-[#1a2e22] p-8 transition-all hover:shadow-lg hover:-translate-y-1">
+<div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-text-dark transition-colors">
+<span class="material-symbols-outlined text-3xl">eco</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-text-dark dark:text-white text-xl font-bold leading-tight">Sostenibilidad</h3>
+<p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
+                                Reducción drástica de la huella de carbono mediante cadenas de suministro cortas, eficientes y empaques mínimos.
+                            </p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group flex flex-col gap-4 rounded-2xl border border-[#cfe7d9] dark:border-gray-700 bg-white dark:bg-[#1a2e22] p-8 transition-all hover:shadow-lg hover:-translate-y-1">
+<div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-text-dark transition-colors">
+<span class="material-symbols-outlined text-3xl">groups</span>
+</div>
+<div class="flex flex-col gap-2">
+<h3 class="text-text-dark dark:text-white text-xl font-bold leading-tight">Comunidad</h3>
+<p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
+                                Conoce exactamente quién cultivó tu comida. Fomentamos relaciones reales y fortalecemos la economía de tu zona.
+                            </p>
+</div>
+</div>
+</div>
+<div class="mt-8 md:hidden flex justify-center">
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-text-dark text-base font-bold transition-colors">
+<span class="truncate">Conoce a nuestros productores</span>
+</button>
+</div>
+</div>
+<!-- Quote Section -->
+<div class="w-full bg-background-dark text-white py-20 px-6">
+<div class="max-w-[800px] mx-auto text-center flex flex-col gap-8">
+<span class="material-symbols-outlined text-primary text-5xl opacity-50">format_quote</span>
+<h3 class="text-2xl md:text-4xl font-display font-medium leading-relaxed italic">
+                        "No vendemos solo alimentos, entregamos salud, confianza y un pedazo de nuestra tierra en cada caja. LocalTaste ha transformado cómo nos conectamos con nuestros vecinos."
+                    </h3>
+<div class="flex items-center justify-center gap-4 mt-4">
+<img alt="Portrait of Maria, a local producer" class="w-16 h-16 rounded-full object-cover border-2 border-primary" data-alt="Smiling portrait of a female farmer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCClWdwt2XeeeoUpCEcYNiRYlRsq6bPTFd_URZ1UeEQgNomDGfDg6Ai4p0p3VpHC3jRLC80f77GFjdnIe5WifT2moxiO36Kl-iYCLAZX__wWV7W1BWhCKc5yKxK4xxP4AzxL7yxhXZEhK7TbsMnSd_EUcHUqdO4u5r2LJsN2PokgYrdwK7DU0xnSRSjzhkmgHg_b2MaPh0pKiSomWIhZmL0u7-HUh0sPWmrrInYepkp3vaClb9tJCsZXJNs-NDGnB9R2V8ERDusf_kN"/>
+<div class="text-left">
+<p class="text-white font-bold text-lg">María González</p>
+<p class="text-primary text-sm">Productora Orgánica, Finca El Roble</p>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Section -->
+<div class="w-full max-w-[1280px] px-6 py-20">
+<div class="relative overflow-hidden rounded-3xl bg-primary/10 dark:bg-white/5 p-10 md:p-20 text-center border border-primary/20">
+<!-- Background decoration -->
+<div class="absolute -top-20 -left-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col items-center gap-6 max-w-[700px] mx-auto">
+<h2 class="text-text-dark dark:text-white text-3xl md:text-5xl font-black leading-tight">Únete al movimiento de comida real</h2>
+<p class="text-gray-600 dark:text-gray-300 text-lg mb-4">
+                            Empieza hoy a disfrutar de productos frescos mientras apoyas a tu comunidad. Tu primera cesta te está esperando.
+                        </p>
+<div class="flex flex-col sm:flex-row gap-4 w-full justify-center">
+<button class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-text-dark text-base font-bold transition-all shadow-lg hover:shadow-primary/40">
+                                Explorar Mercado
+                            </button>
+<button class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-xl h-12 px-6 bg-white dark:bg-transparent border border-gray-300 dark:border-gray-600 hover:border-primary text-text-dark dark:text-white text-base font-bold transition-all">
+                                Soy Productor
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Simple) -->
+<footer class="w-full border-t border-[#e7f3ec] dark:border-gray-800 bg-white dark:bg-background-dark py-10 px-6 lg:px-10">
+<div class="max-w-[1280px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 text-text-dark dark:text-white">
+<span class="material-symbols-outlined text-primary text-2xl">eco</span>
+<span class="font-bold text-lg">LocalTaste</span>
+</div>
+<div class="text-sm text-gray-500 dark:text-gray-400">
+                    © 2023 LocalTaste. Todos los derechos reservados.
+                </div>
+</div>
+</footer>
+</div>
+</body></html>
