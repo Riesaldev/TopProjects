@@ -15,22 +15,40 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 
 ### Frontend
 
-- **Next.js 13** con **React**
-- **TailwindCSS** para diseño
-- **Framer Motion** para animaciones
+- **Next.js 16** con **React**
+- **TailwindCSS** para diseño responsivo
+- **Framer Motion** para animaciones fluidas
 - **Stripe.js** para integración de pagos
+- **Zustand** para gestión de estado global
+- **React Query** para cache y sincronización de datos
 
 ### Backend
 
 - **NestJS** con **TypeORM**
 - **PostgreSQL** como base de datos relacional
 - **Redis** para cache de productos y sesiones
+- **Socket.io** para notificaciones en tiempo real
 - **JWT** + **OAuth** para autenticación
-- **Stripe API** para pagos y suscripciones
+- **Stripe API** para pagos y suscripciones recurrentes
 
-### Base de Datos
+### Base de Datos y Almacenamiento
 
 - **PostgreSQL** con tablas relacionales
+- **Redis** para cache y sesiones
+- **AWS S3** / **Cloudinary** para gestión de imágenes de productos
+
+### Búsqueda y Analytics
+
+- **Elasticsearch** / **Algolia** para búsqueda full-text de productos
+- **Google Analytics** para métricas de comportamiento
+- **Mixpanel** para tracking de eventos específicos
+
+### Monitoreo y Seguridad
+
+- **Sentry** para tracking de errores en producción
+- **JWT** + **OAuth 2.0** para autenticación segura
+- **Helmet.js** para seguridad de headers HTTP
+- **Rate Limiting** para protección contra ataques
 
 ## 🗄️ Esquema de Base de Datos
 
