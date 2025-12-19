@@ -16,39 +16,37 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 ### Frontend
 
 - **Next.js 16** con **React**
-- **TailwindCSS** para diseño responsivo
-- **Framer Motion** para animaciones fluidas
+- **TailwindCSS** para diseño responsivo y animaciones CSS
+- **CSS View Transitions API** para transiciones fluidas entre páginas
 - **Stripe.js** para integración de pagos
-- **Zustand** para gestión de estado global
-- **React Query** para cache y sincronización de datos
+- **React Query** para gestión de estado del servidor y cache
+- **React Context API** para estado global del cliente (auth, cart)
 
 ### Backend
 
-- **NestJS** con **TypeORM**
-- **PostgreSQL** como base de datos relacional
-- **Redis** para cache de productos y sesiones
+- **Node.js** con **Express.js**
+- **Prisma** como ORM (más simple que TypeORM)
+- **MySQL** como base de datos relacional
 - **Socket.io** para notificaciones en tiempo real
-- **JWT** + **OAuth** para autenticación
+- **JWT** para autenticación stateless
 - **Stripe API** para pagos y suscripciones recurrentes
 
 ### Base de Datos y Almacenamiento
 
-- **PostgreSQL** con tablas relacionales
-- **Redis** para cache y sesiones
-- **AWS S3** / **Cloudinary** para gestión de imágenes de productos
+- **MySQL** con tablas relacionales
+- **Cloudinary** para gestión de imágenes (setup más simple que S3)
 
 ### Búsqueda y Analytics
 
-- **Elasticsearch** / **Algolia** para búsqueda full-text de productos
-- **Google Analytics** para métricas de comportamiento
-- **Mixpanel** para tracking de eventos específicos
+- **MySQL FULLTEXT search** + **React filters** para búsqueda de productos
+- **Google Analytics 4** para métricas web y eventos personalizados
 
 ### Monitoreo y Seguridad
 
-- **Sentry** para tracking de errores en producción
-- **JWT** + **OAuth 2.0** para autenticación segura
-- **Helmet.js** para seguridad de headers HTTP
-- **Rate Limiting** para protección contra ataques
+- **Vercel Analytics** (si se usa Vercel) o **console logs + PM2** para monitoreo básico
+- **JWT** para autenticación stateless
+- **Helmet.js** para seguridad de headers HTTP básica
+- **Express rate limiting** para protección básica contra spam
 
 ## 🗄️ Esquema de Base de Datos
 
@@ -57,11 +55,25 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID (PK) | Identificador único |
-| name | String | Nombre del usuario |
-| email | String | Correo electrónico |
+| name | String | Nombre completo del usuario |
+| email | String (Unique) | Correo electrónico |
+| phone | String | Teléfono de contacto |
 | role | Enum (consumer, producer, admin) | Rol del usuario |
 | password_hash | String | Hash de contraseña |
+| profile_image | String | URL de imagen de perfil |
+| is_active | Boolean | Usuario activo/inactivo |
 | created_at | Timestamp | Fecha de registro |
+| updated_at | Timestamp | Última actualización |
+
+### Tabla: categories
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| name | String | Nombre de la categoría |
+| description | String | Descripción de la categoría |
+| image | String | URL de imagen representativa |
+| is_active | Boolean | Categoría activa |
 
 ### Tabla: products
 
@@ -69,12 +81,52 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 |-------|------|-------------|
 | id | UUID (PK) | Identificador único |
 | producer_id | UUID (FK → users) | Productor propietario |
+| category_id | UUID (FK → categories) | Categoría del producto |
 | name | String | Nombre del producto |
-| description | String | Descripción |
-| price | Decimal | Precio |
+| description | Text | Descripción detallada |
+| price | Decimal(10,2) | Precio por unidad |
+| unit | String | Unidad (kg, litros, unidad) |
 | stock | Integer | Stock disponible |
-| category | String | Categoría del producto |
+| images | JSON | Array de URLs de imágenes |
+| origin | String | Origen/ubicación del producto |
+| is_active | Boolean | Producto activo/inactivo |
 | created_at | Timestamp | Fecha de creación |
+| updated_at | Timestamp | Última actualización |
+
+### Tabla: addresses
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| user_id | UUID (FK → users) | Usuario propietario |
+| street | String | Dirección |
+| city | String | Ciudad |
+| postal_code | String | Código postal |
+| province | String | Provincia |
+| is_default | Boolean | Dirección por defecto |
+
+### Tabla: orders
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| user_id | UUID (FK → users) | Usuario que realiza el pedido |
+| address_id | UUID (FK → addresses) | Dirección de entrega |
+| total | Decimal(10,2) | Total del pedido |
+| status | Enum (pending, confirmed, shipped, delivered, canceled) | Estado |
+| stripe_payment_id | String | ID de pago de Stripe |
+| created_at | Timestamp | Fecha del pedido |
+| delivered_at | Timestamp | Fecha de entrega |
+
+### Tabla: order_items
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| order_id | UUID (FK → orders) | Pedido |
+| product_id | UUID (FK → products) | Producto |
+| quantity | Integer | Cantidad |
+| unit_price | Decimal(10,2) | Precio unitario al momento del pedido |
 
 ### Tabla: subscriptions
 
@@ -82,56 +134,109 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 |-------|------|-------------|
 | id | UUID (PK) | Identificador único |
 | user_id | UUID (FK → users) | Usuario suscriptor |
-| products | JSON | Lista de productos incluidos |
+| address_id | UUID (FK → addresses) | Dirección de entrega |
 | frequency | Enum (weekly, biweekly, monthly) | Frecuencia |
-| status | Enum (active, paused, canceled) | Estado de la suscripción |
+| status | Enum (active, paused, canceled) | Estado |
+| next_delivery | Date | Fecha de próxima entrega |
+| stripe_subscription_id | String | ID suscripción Stripe |
+| created_at | Timestamp | Fecha de creación |
+
+### Tabla: subscription_items
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| subscription_id | UUID (FK → subscriptions) | Suscripción |
+| product_id | UUID (FK → products) | Producto |
+| quantity | Integer | Cantidad por entrega |
+
+### Tabla: reviews
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| user_id | UUID (FK → users) | Usuario que reseña |
+| product_id | UUID (FK → products) | Producto reseñado |
+| order_id | UUID (FK → orders) | Pedido asociado |
+| rating | Integer | Calificación (1-5) |
+| comment | Text | Comentario |
+| is_approved | Boolean | Reseña aprobada |
+| created_at | Timestamp | Fecha de la reseña |
+
+### Tabla: notifications
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID (PK) | Identificador único |
+| user_id | UUID (FK → users) | Usuario destinatario |
+| type | Enum (order, subscription, review, system) | Tipo |
+| title | String | Título de la notificación |
+| message | Text | Mensaje |
+| is_read | Boolean | Notificación leída |
 | created_at | Timestamp | Fecha de creación |
 
 ## 🔧 Funcionalidades Principales
 
-### 1. Marketplace
+### 1. Marketplace y Catálogo
 
-- Catálogo de productos locales.
-- Búsqueda y filtros por categoría y productor.
-- Ficha de producto con detalles y valoraciones.
+- **Exploración de productos**: Catálogo responsive con imágenes y descripciones detalladas
+- **Búsqueda avanzada**: Filtros por categoría, productor, precio y ubicación
+- **Ficha de producto**: Detalles completos, galería de imágenes, información del productor
+- **Sistema de valoraciones**: Reseñas y calificaciones de 1-5 estrellas por usuarios verificados
+- **Productores destacados**: Perfiles de productores con sus especialidades y ubicación
 
-### 2. Suscripciones
+### 2. Sistema de Pedidos
 
-- Creación de cestas personalizadas.
-- Configuración de frecuencia de entrega.
-- Pausar, cancelar o modificar suscripciones.
+- **Carrito de compras**: Gestión de productos, cantidades y cálculo automático
+- **Gestión de direcciones**: Múltiples direcciones de entrega por usuario
+- **Confirmación de pedidos**: Estado en tiempo real (pendiente, confirmado, enviado, entregado)
+- **Historial de compras**: Tracking completo de pedidos anteriores
+- **Notificaciones**: Alertas automáticas sobre estado de pedidos
 
-### 3. Gestión de Productores
+### 3. Suscripciones Personalizadas
 
-- Dashboard para gestionar inventario.
-- Reportes de ventas e ingresos.
-- Notificaciones de pedidos.
+- **Cestas personalizadas**: Selección libre de productos por suscripción
+- **Configuración flexible**: Frecuencia (semanal, quincenal, mensual) y cantidad
+- **Gestión de suscripciones**: Pausar, modificar, cancelar o cambiar productos
+- **Entrega programada**: Cálculo automático de fechas de próximas entregas
+- **Facturación recurrente**: Integración completa con Stripe para pagos automáticos
 
-### 4. Pagos y Entregas
+### 4. Dashboard del Productor
 
-- Pagos seguros con Stripe.
-- Gestión de facturación.
-- Integración con servicios de logística (opcional).
+- **Gestión de inventario**: Alta/baja de productos, actualización de stock y precios
+- **Panel de pedidos**: Vista centralizada de pedidos pendientes y confirmaciones
+- **Notificaciones en tiempo real**: Alertas instantáneas de nuevos pedidos vía Socket.io
+- **Reportes de ventas**: Estadísticas de ingresos, productos más vendidos y tendencias
+- **Gestión de perfil**: Información del productor, especialidades y ubicación
 
-## 🚀 Entregables por Fases
+### 5. Sistema de Usuarios y Autenticación
 
-### Fase 1: MVP (3 semanas)
+- **Registro multi-rol**: Consumidores, productores y administradores
+- **Autenticación segura**: JWT stateless con renovación automática
+- **Perfiles personalizados**: Información completa, foto de perfil y preferencias
+- **Gestión de direcciones**: CRUD completo de direcciones de entrega
+- **Seguridad**: Rate limiting, headers seguros y validación de inputs
 
-- [ ] Catálogo básico de productos
-- [ ] Registro de usuarios (consumidor/productor)
-- [ ] Sistema de pedidos simples
-- [ ] Pagos con Stripe
+### 6. Pagos y Facturación
 
-### Fase 2: Funcionalidades Avanzadas (2 semanas)
+- **Pagos seguros**: Integración completa con Stripe (tarjetas, Apple Pay, Google Pay)
+- **Suscripciones recurrentes**: Gestión automática de cobros periódicos
+- **Historial de pagos**: Seguimiento de todas las transacciones
+- **Gestión de fallos**: Retry automático y notificaciones por pagos fallidos
+- **Facturación**: Generación automática de recibos y facturas
 
-- [ ] Suscripciones recurrentes
-- [ ] Dashboard para productores
-- [ ] Reportes básicos
-- [ ] Valoraciones de productos
+### 7. Administración y Moderación
 
-### Fase 3: Mejoras (1 semana)
+- **Panel de administración**: Gestión completa de usuarios, productos y categorías
+- **Moderación de reseñas**: Sistema de aprobación para valoraciones y comentarios
+- **Gestión de usuarios**: Activar/desactivar cuentas y gestión de roles
+- **Reportes globales**: Métricas del marketplace, usuarios activos y ventas
+- **Monitoreo**: Análisis de uso con Google Analytics 4
 
-- [ ] Integración logística
-- [ ] Recomendaciones personalizadas
-- [ ] Gamificación de consumo local
-- [ ] Exportación de reportes
+### 8. Notificaciones y Comunicación
+
+- **Sistema de notificaciones**: Hub centralizado para todas las alertas
+- **Notificaciones en tiempo real**: WebSockets para updates instantáneos
+- **Comunicación por email**: Confirmaciones, recordatorios y actualizaciones
+- **Centro de notificaciones**: Historial completo con estado leído/no leído
+- **Preferencias**: Control granular de tipos de notificaciones por usuario
