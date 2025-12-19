@@ -17,9 +17,14 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 
 - **Next.js 16** con **React**
 - **TailwindCSS** para diseño responsivo y animaciones CSS
-- **CSS View Transitions API** para transiciones fluidas entre páginas
-- **Stripe.js** para integración de pagos
+- **Stripe.js** + **React Stripe.js** para integración de pagos
 - **React Query** para gestión de estado del servidor y cache
+- **React Hook Form** + **Zod** para formularios y validación
+- **Socket.io Client** para notificaciones en tiempo real
+- **JWT** + **JS Cookie** para autenticación stateless
+- **Lucide React** para iconos
+- **Date-fns** para manejo de fechas
+- **Sonner** para notificaciones toast
 - **React Context API** para estado global del cliente (auth, cart)
 
 ### Backend
