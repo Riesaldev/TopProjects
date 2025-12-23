@@ -7,45 +7,45 @@ const Header = ( { } ) => {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
-            <a href="/" className="flex items-center space-x-2">
+          <div className="flex items-center hover:scale-120 transition-transform duration-300">
+            <a href="/" className="flex items-center space-x-4">
               <img
                 src="./FarmTractor.svg"
                 alt="Logo LocalTaste"
-                className="w-8 h-8"
+                className="w-12 h-12"
               />
-              <h1 className="text-xl font-bold text-gray-900">LocalTaste</h1>
+              <h1 className="text-2xl font-bold text-gray-900">LocalTaste</h1>
             </a>
           </div>
 
           {/* Navigation and Search */}
-          <div className="flex items-center flex-1 justify-center space-x-8">
+          <div className="flex items-center justify-center space-x-24">
             {/* Navigation */}
-            <nav className="hidden md:flex space-x-8">
-              <a href="/mercado" className="text-gray-700 hover:text-primary font-medium transition-colors">
+            <nav className="hidden md:flex space-x-18 brightness-60">
+              <a href="/mercado" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Mercado
               </a>
-              <a href="/suscripciones" className="text-gray-700 hover:text-primary font-medium transition-colors">
+              <a href="/suscripciones" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Suscripciones
               </a>
-              <a href="/productores" className="text-gray-700 hover:text-primary font-medium transition-colors">
+              <a href="/productores" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Productores
               </a>
-              <a href="/mision" className="text-gray-700 hover:text-primary font-medium transition-colors">
+              <a href="/mision" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Nuestra Misión
               </a>
             </nav>
 
             {/* Search */}
-            <div className="hidden sm:block ml-16">
-              <div className="relative">
+            <div className="hidden sm:block ml-12">
+              <div className="relative text-green-800 focus-within:text-green-800">
                 <input
                   type="text"
                   placeholder="Buscar productos..."
-                  className="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  className="w-72 pl-14 pr-4 py-2 bg-[#2BEE7C]/10 focus:bg-[#2BEE7C]/25 rounded-full focus:outline-none focus:ring-2 focus:ring-green-800 "
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-5 w-5 text-green-800 brightness-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
@@ -54,12 +54,12 @@ const Header = ( { } ) => {
           </div>
 
           {/* Auth buttons */}
-          <div className="flex items-center space-x-8">
-            <button className="px-4 py-1 text-primary border border-primary rounded-full hover:bg-primary hover:text-white font-medium transition-colors cursor-pointer">
-              Login
-            </button>
-            <button className="px-4 py-1 text-primary border border-primary rounded-full hover:bg-primary hover:text-white font-medium transition-colors">
+          <div className="flex items-center space-x-4">
+            <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-sm rounded-full hover:bg-primary hover:text-[#1fa356] hover:bg-[#2BEE7C]/10 cursor-pointer transition-all duration-500">
               Registrarse
+            </button>
+            <button className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-sm text-[#1fa356] bg-[#2BEE7C]/10 hover:text-black rounded-full hover:bg-primary hover:text-primary cursor-pointer transition-all duration-500">
+              Iniciar Sesión
             </button>
           </div>
         </div>

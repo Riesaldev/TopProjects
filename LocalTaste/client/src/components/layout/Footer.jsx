@@ -1,0 +1,59 @@
+
+
+const Footer = ( { } ) => {
+  return (
+    <footer className="w-full bg-background-light dark:bg-background-dark border-t border-[#e7f3ec] dark:border-gray-800 pt-16 pb-8 px-4 md:px-10">
+      <div className="max-w-7xl mx-auto flex flex-col gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
+            {/* Logo */}
+            <div className="flex items-center hover:scale-120 transition-transform duration-300">
+              <a href="/" className="flex items-center space-x-2">
+                <img
+                  src="./FarmTractor.svg"
+                  alt="Logo LocalTaste"
+                  className="w-8 h-8"
+                />
+                <h1 className="text-xl font-bold text-gray-900">LocalTaste</h1>
+              </a>
+            </div>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">Conectando comunidades a través de alimentos reales y sostenibles de cercania.</p>
+            <div className="flex gap-4 mt-2">
+              <a className="text-gray-400 hover:text-primary transition-colors" href="#"><span className="material-symbols-outlined">insta</span></a>
+              <a className="text-gray-400 hover:text-primary transition-colors" href="#"><span className="material-symbols-outlined">email</span></a>
+            </div>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="font-bold text-text-main ">Mercado</h4>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Frutas y Verduras</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Lácteos y Huevos</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Carne y Pescado</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Despensa</a>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="font-bold text-text-main ">Compañía</h4>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Sobre Nosotros</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Productores</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Blog</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Trabaja con nosotros</a>
+          </div>
+          <div className="flex flex-col gap-4">
+            <h4 className="font-bold text-text-main ">Ayuda</h4>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Centro de Ayuda</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Envíos y Devoluciones</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Términos y Condiciones</a>
+            <a className="text-gray-500 dark:text-gray-400 hover:text-[#2BEE7C] hover:scale-105 text-sm" href="#">Privacidad</a>
+          </div>
+        </div>
+        <div className="border-t border-[#e7f3ec] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+          <p>© 2025 LocalTaste Marketplace. Todos los derechos reservados.</p>
+          <div className="flex gap-6">
+            <span>Hecho con <span className="text-red-500">♥</span> localmente</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+export default Footer
