@@ -3,6 +3,7 @@ import Footer from '@/components/layout/Footer';
 import Hero from '@/components/layout/Hero';
 import HowItWorks from '@/components/layout/HowItWorks';
 import ProductSpotlight from '@/components/layout/ProductSpotlight';
+import TopProducers from '@/components/layout/TopProducers';
 
 export default function Home () {
   return (
@@ -11,6 +12,7 @@ export default function Home () {
       <Hero />
       <HowItWorks />
       <ProductSpotlight />
+      <TopProducers />
       <Footer />
     </main>
   );

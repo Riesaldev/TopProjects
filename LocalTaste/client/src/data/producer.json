@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "verified": true,
+    "name": "La Familia Rodríguez",
+    "description": "Desde hace tres generaciones, la familia Rodríguez cultiva hortalizas orgánicas en el valle. Su compromiso con la agricultura regenerativa no solo produce alimentos más sabrosos, sino que restaura la salud del suelo local.",
+    "yearsActive": 15,
+    "perCentageCaracteristic": "100%",
+    "caracteristic": "Libre de pesticidas",
+    "image": "/producer.png"
+  },
+  {
+    "id": 2,
+    "verified": true,
+    "name": "Agroecológicos El Buen Campo",
+    "description": "Especializados en frutas tropicales, Agroecológicos El Buen Campo utiliza prácticas sostenibles para cultivar mangos, piñas y papayas. Su enfoque en la biodiversidad ayuda a conservar las especies nativas y a mantener el equilibrio ecológico.",
+    "yearsActive": 10,
+    "perCentageCaracteristic": "95%",
+    "caracteristic": "Cultivo sostenible"
+  },
+  {
+    "id": 3,
+    "verified": false,
+    "name": "Hortalizas La Esperanza",
+    "description": "Hortalizas La Esperanza se dedica a la producción de verduras frescas utilizando técnicas de permacultura. Su enfoque holístico no solo mejora la calidad de sus productos, sino que también promueve la salud del ecosistema local.",
+    "yearsActive": 8,
+    "perCentageCaracteristic": "90%",
+    "caracteristic": "Permacultura",
+    "image": "/producer.jpg"
+  }
+]
