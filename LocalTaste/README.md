@@ -88,11 +88,12 @@ LocalTaste es un marketplace que conecta consumidores con productores locales de
 | producer_id | UUID (FK → users) | Productor propietario |
 | category_id | UUID (FK → categories) | Categoría del producto |
 | name | String | Nombre del producto |
+| tipe | String | Tipo de producto (fruta, verdura, lácteo, etc.) |
 | description | Text | Descripción detallada |
 | price | Decimal(10,2) | Precio por unidad |
 | unit | String | Unidad (kg, litros, unidad) |
 | stock | Integer | Stock disponible |
-| images | JSON | Array de URLs de imágenes |
+| image | String | URL de imagen representativa |
 | origin | String | Origen/ubicación del producto |
 | is_active | Boolean | Producto activo/inactivo |
 | created_at | Timestamp | Fecha de creación |

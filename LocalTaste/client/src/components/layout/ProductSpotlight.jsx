@@ -1,4 +1,6 @@
+
 import ProductCard from "../ui/ProductCard";
+import products from '../../data/products.json';
 
 
 export default function ProductSpotlight () {
@@ -12,13 +14,15 @@ export default function ProductSpotlight () {
           </div>
           <a className="text-[#2BEE7C] font-bold text-sm hover:underline flex items-center gap-1" href="#">
             Ver todo
-            <img src="/arrow.svg" alt="Arrow Right" className="w-4 h-4" />
+            <img src="/Arrow.svg" alt="Arrow Right" className="w-4 h-4" />
           </a>
         </div>
         <div className="">
           {/* carousel de productos */}
-          <div className="flex gap-4 overflow-x-auto pb-4">
-            <ProductCard />
+          <div className="flex overflow-x-auto pb-4 px-8 justify-around">
+            {products.map( product => (
+              <ProductCard key={product.id} product={product} alt={product.name} />
+            ) )}
           </div>
         </div>
       </div>

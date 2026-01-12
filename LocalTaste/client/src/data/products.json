@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Product Name",
+    "price": 19.99,
+    "type": "Category",
+    "ubication": "Location",
+    "image": "/hero1.avif"
+  },
+  {
+    "id": 2,
+    "name": "Another Product",
+    "price": 29.99,
+    "type": "Another Category",
+    "ubication": "Another Location",
+    "image": "/hero2.avif"
+  },
+  {
+    "id": 3,
+    "name": "Third Product",
+    "price": 39.99,
+    "type": "Third Category",
+    "ubication": "Third Location",
+    "image": "/hero3.avif"
+  },
+  {
+    "id": 4,
+    "name": "Fourth Product",
+    "price": 49.99,
+    "type": "Fourth Category",
+    "ubication": "Fourth Location",
+    "image": "/hero.avif"
+  }
+]
