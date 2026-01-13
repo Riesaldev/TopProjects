@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Ana García",
+    "location": "Madrid, ES",
+    "photo": "/user1.png",
+    "testimonial": "La calidad de las verduras es increíble, nada que ver con lo que encuentras en el supermercado. Y me encanta saber a quién estoy ayudando.",
+    "rating": 5
+  },
+  {
+    "id": 2,
+    "name": "Carlos M.",
+    "location": "Valencia, ES",
+    "photo": "/user2.png",
+    "testimonial": "Me suscribí a la cesta semanal sorpresa y se ha convertido en mi momento favorito de la semana. ¡Muy recomendado!",
+    "rating": 4.5
+  },
+  {
+    "id": 3,
+    "name": "Elena R.",
+    "location": "Barcelona, ES",
+    "photo": "/user3.png",
+    "testimonial": "La plataforma es súper fácil de usar. Poder elegir productos de varias granjas en un solo pedido es genial.",
+    "rating": 5
+  }
+]

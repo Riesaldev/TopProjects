@@ -4,6 +4,8 @@ import Hero from '@/components/layout/Hero';
 import HowItWorks from '@/components/layout/HowItWorks';
 import ProductSpotlight from '@/components/layout/ProductSpotlight';
 import TopProducers from '@/components/layout/TopProducers';
+import Testimonials from '@/components/layout/Testimonials';
+import Newsletter from '@/components/layout/Newsletter';
 
 export default function Home () {
   return (
@@ -13,6 +15,8 @@ export default function Home () {
       <HowItWorks />
       <ProductSpotlight />
       <TopProducers />
+      <Testimonials />
+      <Newsletter />
       <Footer />
     </main>
   );

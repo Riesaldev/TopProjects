@@ -55,10 +55,10 @@ const Header = ( { } ) => {
 
           {/* Auth buttons */}
           <div className="flex items-center space-x-4">
-            <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-sm rounded-full hover:bg-primary hover:text-[#1fa356] hover:bg-[#2BEE7C]/10 cursor-pointer transition-all duration-500">
+            <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-sm rounded-full hover:text-[#1fa356] hover:bg-[#2BEE7C]/10 cursor-pointer transition-all duration-500" type="button">
               Registrarse
             </button>
-            <button className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-sm text-[#1fa356] bg-[#2BEE7C]/10 hover:text-black rounded-full hover:bg-primary hover:text-primary cursor-pointer transition-all duration-500">
+            <button className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-sm text-[#1fa356] bg-[#2BEE7C]/10 hover:text-black rounded-full over:text-primary cursor-pointer transition-all duration-500" type="button">
               Iniciar Sesión
             </button>
           </div>
