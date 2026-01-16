@@ -22,17 +22,17 @@ const Header = ( { } ) => {
           <div className="flex items-center justify-center space-x-24">
             {/* Navigation */}
             <nav className="hidden md:flex space-x-18 brightness-60">
-              <a href="/mercado" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
-                Mercado
+              <a href="/mision" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
+                Nuestra Misión
               </a>
-              <a href="/suscripciones" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
-                Suscripciones
+              <a href="/productos" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
+                Productos
               </a>
               <a href="/productores" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Productores
               </a>
-              <a href="/mision" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
-                Nuestra Misión
+              <a href="/favoritos" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
+                Favoritos
               </a>
             </nav>
 
@@ -61,7 +61,7 @@ const Header = ( { } ) => {
               Registrarse
             </a>
             <a className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-sm text-[#1fa356] bg-[#2BEE7C]/10 hover:text-black rounded-full active:scale-95 cursor-pointer transition-all duration-500"
-              href="/auth/login"
+              href="/auth/loggin"
             >
               Iniciar Sesión
             </a>

@@ -1,12 +1,11 @@
 
-'use client';
+"use client";
 
 import Header from '@/components/layout/auth/Header';
 import BrandingImage from '@/components/ui/auth/BrandingImage';
-import RegisterForm from '@/components/auth/register/RegisterForm';
+import LogginForm from '@/components/auth/loggin/LogginForm';
 
-export default function Register () {
-
+export default function Loggin () {
   return (
     <main className="overflow-x-hidden antialiased min-h-screen flex flex-col">
       {/* Main Container */}
@@ -18,9 +17,11 @@ export default function Register () {
           {/* Left Side: Image/Branding */}
           <BrandingImage />
           {/* Right Side: Form */}
-          <RegisterForm />
+          <div className="w-full lg:w-7/12 xl:w-1/2 flex flex-col justify-center items-center p-4 py-8 lg:p-12">
+            <LogginForm />
+          </div>
         </div>
       </div>
-    </main >
+    </main>
   );
 }
