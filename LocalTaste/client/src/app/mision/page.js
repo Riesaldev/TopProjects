@@ -31,8 +31,12 @@ export default function MisionPage () {
                 Conectando consumidores conscientes con productores locales apasionados para construir un futuro más fresco, justo y sostenible para todos.
               </h2>
             </div>
-            <button className="mt-8 flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-[#27fc8e] hover:bg-primary/90 text-base font-bold leading-normal tracking-[0.015em] transition-all transform hover:scale-105 shadow-lg shadow-primary/30 z-5">
-              <span className="truncate">Leer nuestra historia</span>
+            <button className="mt-8 flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-[#27fc8e] hover:bg-primary/90 text-base font-bold leading-normal tracking-[0.015em] transition-all transform hover:scale-105 shadow-lg shadow-primary/30 z-5"
+              role="link"
+            >
+              <a className="truncate"
+                href="/history"
+              >Leer nuestra historia</a>
             </button>
           </div>
         </div>
