@@ -11,14 +11,14 @@ export default function MisionPage () {
       {/* Main Content */}
       <main className="flex h-full grow flex-col items-center bg-gray-100">
         {/* Hero Section */}
-        <div className="w-full max-w-7xl p-4 lg:p-8">
-          <div className="relative flex min-h-125 flex-col gap-6 overflow-hidden rounded-xlp-8 items-center justify-center text-center shadow-lg" data-alt="Farmer hands holding fresh soil and vegetables">
-            <div>
+        <div className="w-full max-w-8xl p-4 lg:p-8">
+          <div className="relative flex min-h-125  flex-col gap-8 overflow-hidden rounded-2xl items-center justify-center text-center shadow-lg" data-alt="Farmer hands holding fresh soil and vegetables">
+            <div className="absolute inset-0 h-full w-full overflow-hidden">
               <Image
                 src="/hero-mis.png"
                 alt="Farmer hands holding fresh soil and vegetables"
                 width={1200}
-                height={500}
+                height={800}
                 className="absolute inset-0 h-full w-full object-cover brightness-60 z-0"
               />
             </div>
@@ -31,13 +31,13 @@ export default function MisionPage () {
                 Conectando consumidores conscientes con productores locales apasionados para construir un futuro más fresco, justo y sostenible para todos.
               </h2>
             </div>
-            <button className="mt-4 flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-[#27fc8e] hover:bg-primary/90 text-base font-bold leading-normal tracking-[0.015em] transition-all transform hover:scale-105 shadow-lg shadow-primary/30 z-5">
+            <button className="mt-8 flex cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-8 bg-[#27fc8e] hover:bg-primary/90 text-base font-bold leading-normal tracking-[0.015em] transition-all transform hover:scale-105 shadow-lg shadow-primary/30 z-5">
               <span className="truncate">Leer nuestra historia</span>
             </button>
           </div>
         </div>
         {/* Intro Text Section */}
-        <div className="w-full max-w-full px-6 py-16 md:py-24 flex flex-col items-center text-center bg-gray-100">
+        <div className="w-full max-w-full px-6 py-8 md:py-8 flex flex-col items-center text-center bg-gray-100">
           <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full">
             <span className="text-3xl bg-gray-200 rounded-full h-12 w-12 items-center justify-center flex"><Image src="/favorite.svg" alt="Favorite icon" width={26} height={26} /></span>
           </div>
@@ -87,13 +87,13 @@ export default function MisionPage () {
               <h2 className="text-3xl md:text-5xl font-black mb-4">Nuestros Valores</h2>
               <p className="text-gray-600 text-lg">Los pilares que sostienen cada entrega y cada relación en nuestra plataforma.</p>
             </div>
-            <button className="hidden md:flex min-w-21 cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-base font-bold transition-colors">
-              <span className="truncate bg-[#27fc8e] rounded-4xl px-4 py-2">Conoce a nuestros productores</span>
+            <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-bs rounded-full hover:text-[#1fa356] hover:bg-green-100 active:scale-95 shadow-md shadow-green-900 cursor-pointer transition-all duration-75">
+              Conoce a nuestros productores
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1 */}
-            <div className="flex relative flex-col w-72 gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400">
+            <div className="flex relative flex-col w-72 gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400 cursor-none">
               <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                 <span className="flex items-center justify-center bg-green-300/30 rounded-full w-10 h-10">
                   <img src="/Favorite.svg" alt="Heart Icon" className="w-6 h-6" />
@@ -107,7 +107,7 @@ export default function MisionPage () {
               </div>
             </div>
             {/* Card 2 */}
-            <div className="flex relative flex-col w-72 gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400">
+            <div className="flex relative flex-col w-72 gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400 cursor-none">
               <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                 <span className="flex items-center justify-center bg-green-300/30 rounded-full w-10 h-10">
                   <img src="/leaf.svg" alt="Leaf Icon" className="w-8 h-8" />
@@ -121,7 +121,7 @@ export default function MisionPage () {
               </div>
             </div>
             {/* Card 3 */}
-            <div className="flex relative flex-col w-72 gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400">
+            <div className="flex relative flex-col w-72 gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400 cursor-none">
               <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                 <span className="flex items-center justify-center bg-green-300/30 rounded-full w-10 h-10">
                   <img src="/Community.svg" alt="Community Icon" className="w-6 h-6" />
@@ -134,11 +134,6 @@ export default function MisionPage () {
                 </p>
               </div>
             </div>
-          </div>
-          <div className="mt-8 md:hidden flex justify-center">
-            <button className="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-primary hover:bg-primary/90 text-text-dark text-base font-bold transition-colors">
-              <span className="truncate">Conoce a nuestros productores</span>
-            </button>
           </div>
         </div>
         {/* Quote Section */}
@@ -165,7 +160,7 @@ export default function MisionPage () {
           </div>
         </div>
         {/* CTA Section */}
-        <div className="w-full max-w-7xl px-6 py-20 bg-gray-50">
+        <div className="w-full max-w-8xl px-6 py-20 bg-gray-50">
           <div className="relative overflow-hidden rounded-3xl p-10 md:p-20 text-center border bg-[#27fc8e]/20 border-[#27fc8e]/30 shadow-lg">
             {/* Background decoration */}
             <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full blur-3xl pointer-events-none bg-[#27fc8e]/30"></div>
@@ -176,10 +171,10 @@ export default function MisionPage () {
                 Empieza hoy a disfrutar de productos frescos mientras apoyas a tu comunidad. Tu primera cesta te está esperando.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-                <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-bs rounded-full hover:text-[#1fa356] hover:bg-green-50 active:scale-95 cursor-pointer transition-all duration-500">
+                <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-bs rounded-full hover:text-[#1fa356] hover:bg-green-100 active:scale-95 shadow-md shadow-green-900 cursor-pointer transition-all duration-75">
                   Explorar Mercado
                 </button>
-                <button className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-base text-[#1fa356] bg-green-100 hover:text-black rounded-full active:scale-95 cursor-pointer transition-all duration-500">
+                <button className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-base text-[#1fa356] bg-green-100 hover:text-black rounded-full active:scale-95 shadow-md shadow-green-900  cursor-pointer transition-all duration-75">
                   Soy Productor
                 </button>
               </div>
