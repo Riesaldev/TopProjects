@@ -11,7 +11,7 @@ export default function MisionPage () {
       {/* Main Content */}
       <main className="flex h-full grow flex-col items-center bg-gray-100">
         {/* Hero Section */}
-        <div className="w-full max-w-8xl p-4 lg:p-8">
+        <section className="w-full max-w-8xl p-4 lg:p-8">
           <div className="relative flex min-h-125  flex-col gap-8 overflow-hidden rounded-2xl items-center justify-center text-center shadow-lg" data-alt="Farmer hands holding fresh soil and vegetables">
             <div className="absolute inset-0 h-full w-full overflow-hidden">
               <Image
@@ -39,9 +39,9 @@ export default function MisionPage () {
               >Leer nuestra historia</a>
             </button>
           </div>
-        </div>
+        </section>
         {/* Intro Text Section */}
-        <div className="w-full max-w-full px-6 py-8 md:py-8 flex flex-col items-center text-center bg-gray-100">
+        <section className="w-full max-w-full px-6 py-8 md:py-8 flex flex-col items-center text-center bg-gray-100">
           <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full">
             <span className="text-3xl bg-gray-200 rounded-full h-12 w-12 items-center justify-center flex"><Image src="/favorite.svg" alt="Favorite icon" width={26} height={26} /></span>
           </div>
@@ -49,9 +49,9 @@ export default function MisionPage () {
           <p className="text-gray-600 text-lg md:text-xl font-normal leading-relaxed max-w-150">
             Nuestra misión es empoderar a los productores locales y llevar comida real a tu mesa. Creemos firmemente en un futuro donde la logística alimentaria es <span className="font-bold text-[#27fc8e]">cero residuos</span>, <span className="font-bold text-[#27fc8e]">hiper-local</span> y <span className="font-bold text-[#27fc8e]">justa</span> para todos los involucrados en la cadena.
           </p>
-        </div>
+        </section>
         {/* Vision Split Section */}
-        <div className="w-full bg-white py-16 md:py-24 border-y border-[#e7f3ec]">
+        <section className="w-full bg-white py-16 md:py-24 border-y border-[#e7f3ec]">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1 relative rounded-2xl overflow-hidden shadow-xl aspect-square md:aspect-auto md:h-125">
               <Image
@@ -83,9 +83,9 @@ export default function MisionPage () {
               </ul>
             </div>
           </div>
-        </div>
+        </section>
         {/* Values Grid Section */}
-        <div className="w-full max-w-7xl px-6 py-16 md:py-24 bg-gray-100">
+        <section className="w-full max-w-7xl px-6 py-16 md:py-24 bg-gray-100">
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
             <div className="max-w-150">
               <h2 className="text-3xl md:text-5xl font-black mb-4">Nuestros Valores</h2>
@@ -139,9 +139,9 @@ export default function MisionPage () {
               </div>
             </div>
           </div>
-        </div>
+        </section>
         {/* Quote Section */}
-        <div className="w-full bg-green-950 py-20 px-6">
+        <section className="w-full bg-green-950 py-20 px-6">
           <div className="max-w-200 mx-auto text-center flex flex-col gap-8">
             <span className="text-5xl opacity-50 items-center justify-around flex"><Image src="/Quotes.svg" alt="Quote Icon" width={40} height={40} /></span>
             <h3 className="text-2xl text-green-50 md:text-4xl font-display font-medium italic">
@@ -162,9 +162,9 @@ export default function MisionPage () {
               </div>
             </div>
           </div>
-        </div>
+        </section>
         {/* CTA Section */}
-        <div className="w-full max-w-8xl px-6 py-20 bg-gray-50">
+        <section className="w-full max-w-8xl px-6 py-20 bg-gray-50">
           <div className="relative overflow-hidden rounded-3xl p-10 md:p-20 text-center border bg-[#27fc8e]/20 border-[#27fc8e]/30 shadow-lg">
             {/* Background decoration */}
             <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full blur-3xl pointer-events-none bg-[#27fc8e]/30"></div>
@@ -184,7 +184,7 @@ export default function MisionPage () {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
       <Footer />
     </>
