@@ -91,9 +91,6 @@ export default function MisionPage () {
               <h2 className="text-3xl md:text-5xl font-black mb-4">Nuestros Valores</h2>
               <p className="text-gray-600 text-lg">Los pilares que sostienen cada entrega y cada relación en nuestra plataforma.</p>
             </div>
-            <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-bs rounded-full hover:text-[#1fa356] hover:bg-green-100 active:scale-95 shadow-md shadow-green-900 cursor-pointer transition-all duration-75">
-              Conoce a nuestros productores
-            </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Card 1 */}
@@ -175,12 +172,12 @@ export default function MisionPage () {
                 Empieza hoy a disfrutar de productos frescos mientras apoyas a tu comunidad. Tu primera cesta te está esperando.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-                <button className="px-4 py-2 bg-[#2BEE7C] font-bold text-bs rounded-full hover:text-[#1fa356] hover:bg-green-100 active:scale-95 shadow-md shadow-green-900 cursor-pointer transition-all duration-75">
+                <a href="/products" className="px-4 py-2 bg-[#2BEE7C] font-bold text-bs rounded-full hover:text-[#1fa356] hover:bg-green-100 active:scale-95 shadow-md shadow-green-900 cursor-pointer transition-all duration-75">
                   Explorar Mercado
-                </button>
-                <button className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-base text-[#1fa356] bg-green-100 hover:text-black rounded-full active:scale-95 shadow-md shadow-green-900  cursor-pointer transition-all duration-75">
-                  Soy Productor
-                </button>
+                </a>
+                <a href="/producers" className="px-4 py-2 hover:bg-[#2BEE7C] font-bold  text-base text-[#1fa356] bg-green-100 hover:text-black rounded-full active:scale-95 shadow-md shadow-green-900  cursor-pointer transition-all duration-75">
+                  Descubre Productores
+                </a>
               </div>
             </div>
           </div>
