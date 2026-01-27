@@ -43,7 +43,7 @@ export default function ProducerCard ( { producer } ) {
         />
       </div>
       <div className="w-full md:w-1/2 flex flex-col gap-6">
-        <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm min-h-[24px]">
+        <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm min-h-6">
           {verified && (
             <>
               <img src="/verified.svg" alt="Verified Icon" height={20} width={20} />
@@ -51,20 +51,20 @@ export default function ProducerCard ( { producer } ) {
           )}
           Productor Destacado
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold text-text-main leading-tight min-h-[88px]">
+        <h2 className="text-3xl md:text-4xl font-bold text-text-main leading-tight min-h-22">
           Conoce a {name}
         </h2>
-        <p className="text-gray-600 text-lg leading-relaxed min-h-[168px] line-clamp-6">
+        <p className="text-gray-600 text-lg leading-relaxed min-h-42 line-clamp-6">
           {description}
         </p>
         <div className="flex gap-4 pt-2">
           <div className="flex flex-col gap-1">
-            <span className="font-bold text-2xl text-text-main">{yearsActive}+</span>
+            <span className="font-bold text-2xl">{yearsActive}+</span>
             <span className="text-sm text-gray-500">Años cultivando</span>
           </div>
           <div className="w-px bg-gray-300 h-full mx-2"></div>
           <div className="flex flex-col gap-1">
-            <span className="font-bold text-2xl text-text-main">{perCentageCaracteristic}</span>
+            <span className="font-bold text-2xl">{perCentageCaracteristic}</span>
             <span className="text-sm text-gray-500">{caracteristic}</span>
           </div>
         </div>

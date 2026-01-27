@@ -1,6 +1,7 @@
 "use client";
 import Image from 'next/image';
 
+// Componente de Tarjeta de Producto favoritos para la Página Principal
 export default function ProductCard ( { product } ) {
   // Validación y valores por defecto para datos de la base de datos
   if ( !product )
@@ -21,7 +22,7 @@ export default function ProductCard ( { product } ) {
     if ( id )
     {
       console.log( 'Añadir al carrito:', { id, name, price } );
-      // Aquí conectarás con la lógica de carrito/API
+      // Aquí conectar con la lógica de carrito/API
     }
   };
 
@@ -35,7 +36,7 @@ export default function ProductCard ( { product } ) {
           className="object-cover"
           sizes="208px"
           onError={( e ) => {
-            e.target.src = '/hero.avif'; // Imagen fallback
+            e.target.src = '/hero.avif';
           }}
         />
         <span className="bg-white px-2 py-1 rounded-md text-xs font-semibold absolute top-2 left-2 shadow-md">

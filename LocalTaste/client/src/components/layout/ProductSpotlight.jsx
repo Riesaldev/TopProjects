@@ -1,5 +1,5 @@
 
-import ProductCard from "../ui/ProductCard";
+import ProductCard from "../ui/SpotlightCard";
 import products from '../../data/products.json';
 
 
