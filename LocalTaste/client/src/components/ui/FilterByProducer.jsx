@@ -1,25 +1,24 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
-export default function FilterByProducer ( { onProducerSearchChange } ) {
-  const [ searchTerm, setSearchTerm ] = useState( '' );
+export default function FilterByProducer({ onProducerSearchChange }) {
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Debouncing: espera 300ms después de que el usuario deje de escribir
-  useEffect( () => {
-    const timer = setTimeout( () => {
-      if ( onProducerSearchChange )
-      {
-        onProducerSearchChange( searchTerm );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (onProducerSearchChange) {
+        onProducerSearchChange(searchTerm);
       }
-    }, 300 );
+    }, 300);
 
-    return () => clearTimeout( timer );
-  }, [ searchTerm, onProducerSearchChange ] );
+    return () => clearTimeout(timer);
+  }, [searchTerm, onProducerSearchChange]);
 
-  const handleSearchChange = ( e ) => {
-    setSearchTerm( e.target.value );
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   return (

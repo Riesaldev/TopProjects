@@ -14,7 +14,7 @@ import productsData from "@/data/products.json";
 import { useProductFilters } from "@/hooks/useProductFilters";
 import { usePagination } from "@/hooks/usePagination";
 
-export default function ProductsPage () {
+export default function ProductsPage() {
   const ITEMS_PER_PAGE = 4;
 
   // Usar hooks personalizados para filtrado y paginación
@@ -26,13 +26,13 @@ export default function ProductsPage () {
     handleSortChange,
     handleCategoryChange,
     handlePriceRangeChange
-  } = useProductFilters( productsData );
+  } = useProductFilters(productsData);
 
   const {
     currentPage,
     paginatedItems: paginatedProducts,
     handlePageChange
-  } = usePagination( filteredAndSortedProducts, ITEMS_PER_PAGE );
+  } = usePagination(filteredAndSortedProducts, ITEMS_PER_PAGE);
 
   return (
     <>
@@ -69,12 +69,12 @@ export default function ProductsPage () {
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 row-auto justify-around mb-8 gap-3">
               {paginatedProducts.length > 0 ? (
-                paginatedProducts.map( ( product ) => (
+                paginatedProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                   />
-                ) )
+                ))
               ) : (
                 <div className="col-span-full text-center py-12">
                   <p className="text-gray-500 text-lg">

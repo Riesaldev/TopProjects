@@ -3,19 +3,18 @@
 import { useState } from 'react';
 import productsData from "@/data/products.json";
 
-export default function InfoAndSorting ( { filteredProducts, onSortChange } ) {
-  const [ sortOption, setSortOption ] = useState( 'relevancia' );
+export default function InfoAndSorting({ filteredProducts, onSortChange }) {
+  const [sortOption, setSortOption] = useState('relevancia');
 
   const totalProducts = productsData.length;
   const displayedCount = filteredProducts ? filteredProducts.length : 0;
 
-  const handleSortChange = ( e ) => {
+  const handleSortChange = (e) => {
     const value = e.target.value;
-    setSortOption( value );
+    setSortOption(value);
 
-    if ( onSortChange )
-    {
-      onSortChange( value );
+    if (onSortChange) {
+      onSortChange(value);
     }
   };
 
