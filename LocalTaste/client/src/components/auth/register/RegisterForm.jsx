@@ -3,11 +3,13 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 import SocialIcons from '@/components/layout/auth/SocialIcons';
+import { useFormInput } from '@/hooks/useFormInput';
+import { usePasswordToggle } from '@/hooks/usePasswordToggle';
 
 export default function RegisterForm () {
   const [ role, setRole ] = useState( 'consumidor' );
-  const [ showPassword, setShowPassword ] = useState( false );
-  const [ formData, setFormData ] = useState( {
+  const [ showPassword, togglePassword ] = usePasswordToggle();
+  const [ formData, handleInputChange ] = useFormInput( {
     name: '',
     email: '',
     businessName: '',
@@ -16,15 +18,6 @@ export default function RegisterForm () {
     confirmPassword: '',
     acceptTerms: false
   } );
-
-  { /* Manejadores de eventos */ }
-  const handleInputChange = ( e ) => {
-    const { name, value, type, checked } = e.target;
-    setFormData( prev => ( {
-      ...prev,
-      [ name ]: type === 'checkbox' ? checked : value
-    } ) );
-  };
 
   { /* Manejador de envío del formulario */ }
   const handleSubmit = ( e ) => {
@@ -191,7 +184,7 @@ export default function RegisterForm () {
                 <button
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   type="button"
-                  onClick={() => setShowPassword( !showPassword )}
+                  onClick={togglePassword}
                 >
                   {showPassword ? (
                     <Image src="/ShowOff.svg" alt="hide password" width="24" height="24" />

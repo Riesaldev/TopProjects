@@ -1,11 +1,9 @@
 "use client";
 
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useCategoryFilter } from '@/hooks/useCategoryFilter';
 
 export default function FilterByCategory ( { onCategoryChange, productsData = [] } ) {
-  const [ selectedCategories, setSelectedCategories ] = useState( [] );
-
   // Definir categorías con mapeo de tipos
   const categoryMapping = {
     'Frutas y Verduras': [ 'Fruta', 'Verdura' ],
@@ -15,42 +13,12 @@ export default function FilterByCategory ( { onCategoryChange, productsData = []
     'Miel y Mermeladas': [ 'Miel', 'Mermelada' ]
   };
 
-  // Calcular cantidad de productos por categoría
-  const getCategoryCount = ( categoryTypes ) => {
-    return productsData.filter( product =>
-      categoryTypes.includes( product.type )
-    ).length;
-  };
-
-  // Manejar cambio de checkbox
-  const handleCategoryToggle = ( category ) => {
-    let updatedCategories;
-
-    if ( selectedCategories.includes( category ) )
-    {
-      updatedCategories = selectedCategories.filter( cat => cat !== category );
-    } else
-    {
-      updatedCategories = [ ...selectedCategories, category ];
-    }
-
-    setSelectedCategories( updatedCategories );
-  };
-
-  // Limpiar todos los filtros
-  const handleClearAll = () => {
-    setSelectedCategories( [] );
-  };
-
-  // Notificar al componente padre cuando cambian las categorías seleccionadas
-  useEffect( () => {
-    if ( onCategoryChange )
-    {
-      // Obtener todos los tipos de productos correspondientes a las categorías seleccionadas
-      const selectedTypes = selectedCategories.flatMap( category => categoryMapping[ category ] || [] );
-      onCategoryChange( selectedTypes );
-    }
-  }, [ selectedCategories ] );
+  const {
+    selectedCategories,
+    handleCategoryToggle,
+    handleClearAll,
+    getCategoryCount
+  } = useCategoryFilter( categoryMapping, productsData, onCategoryChange );
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 
 export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
@@ -34,8 +34,8 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
 
   return (
     <>
-      <div className="mb-6">
-        <div className="flex w-full items-center rounded-2xl border border-green-300 bg-green-50 p-2 shadow-sm transition-all">
+      <div className="mb-6 items-center justify-around flex gap-6">
+        <div className="flex w-1/2 items-center rounded-2xl border border-green-300 bg-green-50 p-2 shadow-sm transition-all">
           <div className="flex items-center justify-center pl-4 pr-2">
             <span className="flex items-center justify-center w-10 h-10 bg-green-700 rounded-xl">
               <Image src="/lupa.svg" alt="search icon" width={24} height={24} />
@@ -60,7 +60,7 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
         </div>
       </div>
       {/* Chips / Quick Filters */}
-      <div className="flex gap-4 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex gap-4 mb-8 ml-8 overflow-x-auto pb-2 scrollbar-hide">
         <button
           className={`shrink-0 px-4 py-2 rounded-full border border-green-300 text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'todos'
             ? 'bg-green-400 text-green-950 font-bold'

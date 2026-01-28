@@ -1,120 +1,45 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { usePriceRange } from '@/hooks/usePriceRange';
 
 export default function FilterByPrice ( { onPriceRangeChange, productsData = [] } ) {
-  // Calcular el rango de precios de los productos
-  const calculatePriceRange = () => {
-    if ( productsData.length === 0 )
-    {
-      return { min: 0, max: 100 };
-    }
-
-    const prices = productsData.map( product => product.price );
-    return {
-      min: Math.floor( Math.min( ...prices ) ),
-      max: Math.ceil( Math.max( ...prices ) )
-    };
-  };
-
-  const priceRange = calculatePriceRange();
-
-  const [ minPrice, setMinPrice ] = useState( priceRange.min );
-  const [ maxPrice, setMaxPrice ] = useState( priceRange.max );
-  const [ minInputValue, setMinInputValue ] = useState( priceRange.min.toFixed( 2 ) );
-  const [ maxInputValue, setMaxInputValue ] = useState( priceRange.max.toFixed( 2 ) );
+  const {
+    minPrice,
+    maxPrice,
+    minInputValue,
+    maxInputValue,
+    priceRange,
+    handleMinPriceChange,
+    handleMaxPriceChange,
+    handleMinPriceBlur,
+    handleMaxPriceBlur,
+    updatePriceRange
+  } = usePriceRange( productsData );
 
   // Actualizar valores cuando cambien los productos
   useEffect( () => {
-    const newRange = calculatePriceRange();
-    setMinPrice( newRange.min );
-    setMaxPrice( newRange.max );
-    setMinInputValue( newRange.min.toFixed( 2 ) );
-    setMaxInputValue( newRange.max.toFixed( 2 ) );
-  }, [ productsData ] );
+    updatePriceRange();
+  }, [ productsData, updatePriceRange ] );
 
-  // Notificar al padre cuando cambie el rango de precios
+  // Notificar al padre cuando cambie el rango de precios con debounce
   useEffect( () => {
     const timer = setTimeout( () => {
       if ( onPriceRangeChange )
       {
         onPriceRangeChange( { min: minPrice, max: maxPrice } );
       }
-    }, 300 ); // Debounce de 300ms
+    }, 300 );
 
     return () => clearTimeout( timer );
   }, [ minPrice, maxPrice, onPriceRangeChange ] );
 
-  const handleMinPriceChange = ( e ) => {
-    const inputValue = e.target.value;
-    setMinInputValue( inputValue );
-
-    // Solo actualizar el precio si es un número válido
-    if ( inputValue !== '' && !isNaN( inputValue ) )
-    {
-      const value = parseFloat( inputValue );
-      const newMin = Math.max( priceRange.min, Math.min( value, maxPrice - 0.01 ) );
-      setMinPrice( newMin );
-    }
-  };
-
-  const handleMinPriceBlur = () => {
-    // Al perder el foco, validar y formatear
-    if ( minInputValue === '' || isNaN( minInputValue ) )
-    {
-      setMinInputValue( minPrice.toFixed( 2 ) );
-    } else
-    {
-      const value = parseFloat( minInputValue );
-      const newMin = Math.max( priceRange.min, Math.min( value, maxPrice - 0.01 ) );
-      setMinPrice( newMin );
-      setMinInputValue( newMin.toFixed( 2 ) );
-    }
-  };
-
-  const handleMaxPriceChange = ( e ) => {
-    const inputValue = e.target.value;
-    setMaxInputValue( inputValue );
-
-    // Solo actualizar el precio si es un número válido
-    if ( inputValue !== '' && !isNaN( inputValue ) )
-    {
-      const value = parseFloat( inputValue );
-      const newMax = Math.min( priceRange.max, Math.max( value, minPrice + 0.01 ) );
-      setMaxPrice( newMax );
-    }
-  };
-
-  const handleMaxPriceBlur = () => {
-    // Al perder el foco, validar y formatear
-    if ( maxInputValue === '' || isNaN( maxInputValue ) )
-    {
-      setMaxInputValue( maxPrice.toFixed( 2 ) );
-    } else
-    {
-      const value = parseFloat( maxInputValue );
-      const newMax = Math.min( priceRange.max, Math.max( value, minPrice + 0.01 ) );
-      setMaxPrice( newMax );
-      setMaxInputValue( newMax.toFixed( 2 ) );
-    }
-  };
-
   const handleMinSliderChange = ( e ) => {
-    const value = parseFloat( e.target.value );
-    if ( value <= maxPrice - 0.01 )
-    {
-      setMinPrice( value );
-      setMinInputValue( value.toFixed( 2 ) );
-    }
+    handleMinPriceChange( e );
   };
 
   const handleMaxSliderChange = ( e ) => {
-    const value = parseFloat( e.target.value );
-    if ( value >= minPrice + 0.01 )
-    {
-      setMaxPrice( value );
-      setMaxInputValue( value.toFixed( 2 ) );
-    }
+    handleMaxPriceChange( e );
   };
 
   // Calcular porcentajes para el rango visual

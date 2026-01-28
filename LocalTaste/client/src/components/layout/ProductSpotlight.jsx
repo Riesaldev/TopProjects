@@ -1,6 +1,6 @@
 
 import ProductCard from "../ui/SpotlightCard";
-import products from '../../data/products.json';
+import products from '../../data/productsMain.json';
 
 
 export default function ProductSpotlight () {

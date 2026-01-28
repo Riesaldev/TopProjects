@@ -1,20 +1,12 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { usePasswordToggle } from '@/hooks/usePasswordToggle';
 
 export default function LogginForm () {
   const [ email, setEmail ] = useState( '' );
   const [ password, setPassword ] = useState( '' );
-  const [ showPassword, setShowPassword ] = useState( false );
-
-  { /* Manejadores de eventos */ }
-  const handleInputChange = ( e ) => {
-    const { name, value, type, checked } = e.target;
-    setFormData( prev => ( {
-      ...prev,
-      [ name ]: type === 'checkbox' ? checked : value
-    } ) );
-  };
+  const [ showPassword, togglePassword ] = usePasswordToggle();
 
   const handleSubmit = ( e ) => {
     e.preventDefault();
@@ -65,7 +57,7 @@ export default function LogginForm () {
                   <button
                     className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     type="button"
-                    onClick={() => setShowPassword( !showPassword )}
+                    onClick={togglePassword}
                   >
                     {showPassword ? (
                       <Image src="/ShowOff.svg" alt="hide password" width="24" height="24" />
