@@ -31,9 +31,9 @@ export default function ProductsPage () {
     if ( searchTerm.trim() )
     {
       filtered = filtered.filter( product =>
-        product.name.toLowerCase().includes( searchTerm.toLowerCase() ) ||
-        product.description.toLowerCase().includes( searchTerm.toLowerCase() ) ||
-        product.productor.toLowerCase().includes( searchTerm.toLowerCase() )
+        ( product.name?.toLowerCase() || '' ).includes( searchTerm.toLowerCase() ) ||
+        ( product.description?.toLowerCase() || '' ).includes( searchTerm.toLowerCase() ) ||
+        ( product.productor?.toLowerCase() || '' ).includes( searchTerm.toLowerCase() )
       );
     }
 
@@ -41,7 +41,7 @@ export default function ProductsPage () {
     if ( producerSearchTerm.trim() )
     {
       filtered = filtered.filter( product =>
-        product.productor.toLowerCase().includes( producerSearchTerm.toLowerCase() )
+        ( product.productor?.toLowerCase() || '' ).includes( producerSearchTerm.toLowerCase() )
       );
     }
 
@@ -49,7 +49,7 @@ export default function ProductsPage () {
     if ( selectedCategoryTypes.length > 0 )
     {
       filtered = filtered.filter( product =>
-        selectedCategoryTypes.includes( product.type )
+        product.type && selectedCategoryTypes.includes( product.type )
       );
     }
 
@@ -68,20 +68,20 @@ export default function ProductsPage () {
       {
         case 'organico':
           filtered = filtered.filter( product =>
-            product.description.toLowerCase().includes( 'orgánico' ) ||
-            product.description.toLowerCase().includes( 'ecológico' ) ||
-            product.description.toLowerCase().includes( 'natural' )
+            ( product.description?.toLowerCase() || '' ).includes( 'orgánico' ) ||
+            ( product.description?.toLowerCase() || '' ).includes( 'ecológico' ) ||
+            ( product.description?.toLowerCase() || '' ).includes( 'natural' )
           );
           break;
         case 'sin-lactosa':
           filtered = filtered.filter( product =>
             product.type !== 'Lácteo' ||
-            product.description.toLowerCase().includes( 'sin lactosa' )
+            ( product.description?.toLowerCase() || '' ).includes( 'sin lactosa' )
           );
           break;
         case 'sin-gluten':
           filtered = filtered.filter( product =>
-            product.description.toLowerCase().includes( 'sin gluten' ) ||
+            ( product.description?.toLowerCase() || '' ).includes( 'sin gluten' ) ||
             product.type === 'Fruta' ||
             product.type === 'Verdura'
           );
@@ -90,11 +90,11 @@ export default function ProductsPage () {
           filtered = filtered.filter( product =>
             product.type !== 'Lácteo' &&
             product.type !== 'Carne' &&
-            !product.description.toLowerCase().includes( 'huevo' )
+            !( product.description?.toLowerCase() || '' ).includes( 'huevo' )
           );
           break;
         case 'mejor-valorados':
-          filtered = filtered.filter( product => product.stars >= 4.5 );
+          filtered = filtered.filter( product => ( product.stars || 0 ) >= 4.5 );
           break;
         default:
           break;
@@ -106,17 +106,18 @@ export default function ProductsPage () {
     switch ( sortOption )
     {
       case 'precio-asc':
-        sorted.sort( ( a, b ) => a.price - b.price );
+        sorted.sort( ( a, b ) => ( a.price || 0 ) - ( b.price || 0 ) );
         break;
       case 'precio-desc':
-        sorted.sort( ( a, b ) => b.price - a.price );
+        sorted.sort( ( a, b ) => ( b.price || 0 ) - ( a.price || 0 ) );
         break;
       case 'recien-cosechado':
         sorted.sort( ( a, b ) => {
           const getFreshnessScore = ( product ) => {
             if ( !product.popupInfo ) return 0;
-            if ( product.popupInfo.toLowerCase().includes( 'cosechad' ) ) return 3;
-            if ( product.popupInfo.toLowerCase().includes( 'edición limitada' ) ) return 2;
+            const info = product.popupInfo.toLowerCase();
+            if ( info.includes( 'cosechad' ) ) return 3;
+            if ( info.includes( 'edición limitada' ) ) return 2;
             return 1;
           };
 
@@ -125,18 +126,21 @@ export default function ProductsPage () {
 
           if ( scoreB === scoreA )
           {
-            return b.stars - a.stars;
+            return ( b.stars || 0 ) - ( a.stars || 0 );
           }
           return scoreB - scoreA;
         } );
         break;
       case 'mejor-valorados':
         sorted.sort( ( a, b ) => {
-          if ( b.stars !== a.stars )
+          const starsA = a.stars || 0;
+          const starsB = b.stars || 0;
+
+          if ( starsB !== starsA )
           {
-            return b.stars - a.stars;
+            return starsB - starsA;
           }
-          return a.price - b.price;
+          return ( a.price || 0 ) - ( b.price || 0 );
         } );
         break;
       case 'ofertas':
@@ -151,18 +155,18 @@ export default function ProductsPage () {
             return discountB - discountA;
           }
 
-          return b.stars - a.stars;
+          return ( b.stars || 0 ) - ( a.stars || 0 );
         } );
         break;
       case 'popularidad':
         sorted.sort( ( a, b ) => {
           if ( a.like && !b.like ) return -1;
           if ( !a.like && b.like ) return 1;
-          return b.stars - a.stars;
+          return ( b.stars || 0 ) - ( a.stars || 0 );
         } );
         break;
       case 'alfabetico':
-        sorted.sort( ( a, b ) => a.name.localeCompare( b.name, 'es' ) );
+        sorted.sort( ( a, b ) => ( a.name || '' ).localeCompare( b.name || '', 'es' ) );
         break;
       case 'relevancia':
       default:
@@ -171,7 +175,7 @@ export default function ProductsPage () {
             let score = 0;
             if ( product.popupInfo ) score += 3;
             if ( product.ofert ) score += 2.5;
-            score += ( product.stars / 5 ) * 2;
+            score += ( ( product.stars || 0 ) / 5 ) * 2;
             if ( product.like ) score += 1.5;
             return score;
           };
@@ -185,7 +189,7 @@ export default function ProductsPage () {
   }, [ searchTerm, producerSearchTerm, currentFilter, sortOption, selectedCategoryTypes, priceRange ] );
 
   // Productos paginados
-  const itemsPerPage = 3;
+  const itemsPerPage = 4;
   const paginatedProducts = useMemo( () => {
     const startIndex = ( currentPage - 1 ) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
