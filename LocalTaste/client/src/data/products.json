@@ -52,7 +52,7 @@
     "name": "Miel de Flores Silvestres",
     "like": true,
     "popupInfo": "Edición Limitada",
-    "productor": "Apicultores Unidos",
+    "productor": "Granja El Campo",
     "type": "Miel",
     "description": "Miel de flores silvestres de alta calidad, perfecta para endulzar y acompañar tus comidas.",
     "stars": 4.9,
@@ -91,7 +91,7 @@
     "divisa": "€",
     "price": 1.50,
     "unit": "unidad",
-    "image": "/yogurt.png",
+    "image": null,
     "ofert": false,
     "before": null
   },
@@ -107,7 +107,7 @@
     "divisa": "€",
     "price": 2.50,
     "unit": "barra",
-    "image": "/bread.png",
+    "image": null,
     "ofert": true,
     "before": 2.80
   },
@@ -123,8 +123,23 @@
     "divisa": "€",
     "price": 8.99,
     "unit": "litro",
-    "image": "/olive_oil.png",
+    "image": null,
     "ofert": false,
     "before": null
-  }
+  },
+  {
+    "id": 9,
+    "name": null,
+    "like": false,
+    "popupInfo": null,
+    "productor": null,
+    "type": null,
+    "description": null,
+    "stars": 0,
+    "divisa": "€",
+    "price": 0,
+    "unit": null,
+    "image": null,
+    "ofert": false,
+    "before": null }
 ]
