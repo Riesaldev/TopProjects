@@ -115,6 +115,7 @@ export default function ProductsPage() {
               itemsPerPage={ITEMS_PER_PAGE}
               currentPage={currentPage}
               onPageChange={handlePageChange}
+              className="justify-center items-center flex left-8 mb-8"
             />
           </section>
         </div>

@@ -28,7 +28,7 @@ const Header = ( { } ) => {
               <a href="/products" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Productos
               </a>
-              <a href="/productores" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
+              <a href="/producers" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Productores
               </a>
               <a href="/favoritos" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
