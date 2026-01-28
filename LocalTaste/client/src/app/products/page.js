@@ -1,5 +1,7 @@
 "use client";
 
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useCallback } from 'react';
 import Header from "@/components/layout/Header";
 import MiniFooter from "@/components/layout/MiniFooter";
 import FilterByProducer from "@/components/ui/FilterByProducer";
@@ -16,6 +18,8 @@ import { usePagination } from "@/hooks/usePagination";
 
 export default function ProductsPage() {
   const ITEMS_PER_PAGE = 4;
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   // Usar hooks personalizados para filtrado y paginación
   const {
@@ -31,8 +35,28 @@ export default function ProductsPage() {
   const {
     currentPage,
     paginatedItems: paginatedProducts,
-    handlePageChange
+    handlePageChange: handlePaginationChange,
+    setCurrentPage
   } = usePagination(filteredAndSortedProducts, ITEMS_PER_PAGE);
+
+  // Leer página desde URL al montar el componente
+  useEffect(() => {
+    const pageFromUrl = searchParams.get('page');
+    if (pageFromUrl) {
+      const pageNum = parseInt(pageFromUrl, 10);
+      if (!isNaN(pageNum) && pageNum > 0) {
+        setCurrentPage(pageNum);
+      }
+    }
+  }, [searchParams, setCurrentPage]);
+
+  // Actualizar URL cuando cambie la página
+  const handlePageChange = useCallback((newPage) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', newPage.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+    handlePaginationChange(newPage);
+  }, [searchParams, router, handlePaginationChange]);
 
   return (
     <>

@@ -6,17 +6,16 @@ import { useCallback, useRef } from 'react';
  * @param {number} delay - Tiempo de espera en milisegundos (default: 300)
  * @returns {Function} Función debounced
  */
-export function useDebounce ( callback, delay = 300 ) {
-  const timeoutRef = useRef( null );
+export function useDebounce(callback, delay = 300) {
+  const timeoutRef = useRef(null);
 
-  return useCallback( ( ...args ) => {
-    if ( timeoutRef.current )
-    {
-      clearTimeout( timeoutRef.current );
+  return useCallback((...args) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout( () => {
-      callback( ...args );
-    }, delay );
-  }, [ callback, delay ] );
+    timeoutRef.current = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  }, [callback, delay]);
 }
