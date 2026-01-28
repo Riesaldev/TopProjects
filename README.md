@@ -1,4 +1,4 @@
-# 10 Aplicaciones Web Atractivas para Portafolio
+# 11 Aplicaciones Web para Portafolio por desarrollar, de los cuales RollForge y LocalTaste ya han sido iniciados 
 
 ## 🚀 Aplicaciones de Desarrollo
 
@@ -54,6 +54,10 @@ Galería y plataforma de subastas para artistas digitales con visualizador 3D.
 **Tecnologías:** Vue.js (Frontend) + NestJS (Backend)  
 Plataforma de bienestar empresarial con desafíos de salud mental y mindfulness.
 
+### 11. RollForge - Plataforma para juegos de rol 
+
+**Tecnologías:** React (Frontend) + Node.js/Express/Socket.io (Backend)
+Plataforma para jugar con amigos en linea a juegos de rol de mesa con tableros, manuales, tools,...
 ---
 
 ## 💡 Características Comunes
