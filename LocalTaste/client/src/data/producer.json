@@ -6,6 +6,7 @@
     "description": "Desde hace tres generaciones, la familia Rodríguez cultiva hortalizas orgánicas en el valle. Su compromiso con la agricultura regenerativa no solo produce alimentos más sabrosos, sino que restaura la salud del suelo local.",
     "like": true,
     "type": "Especialidad en hortalizas orgánicas y cítricos",
+    "productionType": [ "ecologica" ],
     "stars": 4.8,
     "distance": "2.5",
     "image": "/producer.png"
@@ -17,6 +18,7 @@
     "description": "Especializados en frutas tropicales, Agroecológicos El Buen Campo utiliza prácticas sostenibles para cultivar mangos, piñas y papayas. Su enfoque en la biodiversidad ayuda a conservar las especies nativas y a mantener el equilibrio ecológico.",
     "like": false,
     "type": "Especialidad en frutas tropicales",
+    "productionType": [ "ecologica" ],
     "stars": 4.5,
     "distance": "5.0",
     "image": false
@@ -28,6 +30,7 @@
     "description": "Hortalizas La Esperanza se dedica a la producción de verduras frescas utilizando técnicas de permacultura. Su enfoque holístico no solo mejora la calidad de sus productos, sino que también promueve la salud del ecosistema local.",
     "like": true,
     "type": "Especialidad en permacultura",
+    "productionType": [ "tradicional" ],
     "stars": 4.2,
     "distance": "7.0",
     "image": "/producer.jpg"
@@ -39,6 +42,7 @@
     "description": "Cítricos del Valle cultiva naranjas, limones y mandarinas utilizando métodos orgánicos certificados. Su dedicación a la calidad y la sostenibilidad les ha permitido convertirse en un referente en la producción de cítricos en la región.",
     "like": false,
     "type": "Especialidad en cítricos orgánicos",
+    "productionType": [ "ecologica" ],
     "stars": 4.7,
     "distance": "3.5",
     "image": false
@@ -50,6 +54,7 @@
     "description": "Finca Verde se especializa en la producción de hortalizas de hoja verde utilizando técnicas de cultivo hidropónico. Su enfoque innovador permite un uso eficiente del agua y una producción constante durante todo el año.",
     "like": true,
     "type": "Especialidad en cultivo hidropónico",
+    "productionType": [ "artesanal" ],
     "stars": 4.3,
     "distance": "6.0",
     "image": false
@@ -61,7 +66,8 @@
     "description": "Agroecológicos La Tierra Viva se dedica a la producción de frutas y verduras utilizando prácticas agroecológicas que promueven la biodiversidad y la salud del suelo. Su compromiso con la sostenibilidad se refleja en la calidad de sus productos.",
     "like": false,
     "type": "Especialidad en agroecología",
-    "stars": 4.6,
+    "productionType": [ "ecologica" ],
+    "stars": 3.6,
     "distance": "4.0",
     "image": "/producer.jpg"
   },
@@ -72,6 +78,7 @@
     "description": "Hortalizas El Buen Sabor cultiva una amplia variedad de verduras utilizando técnicas de cultivo biodinámico. Su enfoque en la armonía con la naturaleza les permite producir alimentos llenos de sabor y nutrientes.",
     "like": true,
     "type": "Especialidad en cultivo biodinámico",
+    "productionType": [ "artesanal" ],
     "stars": 4.4,
     "distance": "8.0",
     "image": "/producer.png"
@@ -83,7 +90,8 @@
     "description": "Cítricos La Huerta se especializa en la producción de cítricos orgánicos utilizando prácticas sostenibles que protegen el medio ambiente. Su dedicación a la calidad y la sostenibilidad les ha permitido convertirse en un referente en la producción de cítricos en la región.",
     "like": false,
     "type": "Especialidad en cítricos orgánicos",
-    "stars": 4.9,
+    "productionType": [ "ecologica" ],
+    "stars": 3.9,
     "distance": "2.0",
     "image": false
   },
@@ -94,7 +102,8 @@
     "description": "Finca El Renacer se dedica a la producción de hortalizas utilizando técnicas de cultivo sostenible que promueven la salud del suelo y la biodiversidad. Su compromiso con la sostenibilidad se refleja en la calidad de sus productos.",
     "like": true,
     "type": "Especialidad en cultivo sostenible",
-    "stars": 4.1,
+    "productionType": [ "tradicional" ],
+    "stars": 2.1,
     "distance": "9.0",
     "image": false
   },
@@ -105,7 +114,8 @@
     "description": "Agroecológicos El Campo Feliz se especializa en la producción de frutas y verduras utilizando prácticas agroecológicas que promueven la biodiversidad y la salud del suelo. Su compromiso con la sostenibilidad se refleja en la calidad de sus productos.",
     "like": false,
     "type": "Especialidad en agroecología",
-    "stars": 4.5,
+    "productionType": [ "ecologica" ],
+    "stars": 2.2,
     "distance": "4.5",
     "image": "/producer.png"
   }

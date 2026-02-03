@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-export default function ProducerFilters ( { onFilterChange } ) {
+export default function ProducerFilters ( { onFilterChange, producers = [] } ) {
+  // Calcular la distancia máxima de los productores disponibles
+  const maxDistanceAvailable = useMemo( () => {
+    if ( producers.length === 0 ) return 100;
+    const distances = producers.map( p => parseFloat( p.distance ) || 0 );
+    return Math.ceil( Math.max( ...distances ) );
+  }, [ producers ] );
+
   // Estados para los filtros
   const [ productionTypes, setProductionTypes ] = useState( {
     ecologica: false,
@@ -10,8 +17,13 @@ export default function ProducerFilters ( { onFilterChange } ) {
     tradicional: false,
   } );
 
-  const [ maxDistance, setMaxDistance ] = useState( 100 ); // km
-  const [ minRating, setMinRating ] = useState( 0 ); // 0 = todas, 3 = 3+, 4 = 4+
+  const [ maxDistance, setMaxDistance ] = useState( maxDistanceAvailable );
+  const [ minRating, setMinRating ] = useState( 0 );
+
+  // Actualizar maxDistance cuando cambie maxDistanceAvailable
+  useEffect( () => {
+    setMaxDistance( maxDistanceAvailable );
+  }, [ maxDistanceAvailable ] );
 
   // Notificar al padre cuando cambian los filtros
   useEffect( () => {
@@ -32,7 +44,7 @@ export default function ProducerFilters ( { onFilterChange } ) {
       artesanal: false,
       tradicional: false
     } );
-    setMaxDistance( 100 );
+    setMaxDistance( maxDistanceAvailable );
     setMinRating( 0 );
   };
 
@@ -45,7 +57,7 @@ export default function ProducerFilters ( { onFilterChange } ) {
   };
 
   // Verificar si hay filtros activos
-  const hasActiveFilters = Object.values( productionTypes ).some( v => v ) || maxDistance < 100 || minRating > 0;
+  const hasActiveFilters = Object.values( productionTypes ).some( v => v ) || maxDistance < maxDistanceAvailable || minRating > 0;
 
   return (
     <>
@@ -57,10 +69,7 @@ export default function ProducerFilters ( { onFilterChange } ) {
             <button
               onClick={clearFilters}
               disabled={!hasActiveFilters}
-              className={`text-xs font-bold uppercase tracking-wider transition-colors ${ hasActiveFilters
-                  ? 'hover:text-green-700/80 cursor-pointer'
-                  : 'text-green-400 cursor-not-allowed'
-                }`}
+              className="text-sm text-green-600 cursor-pointer font-serif font-black hover:bg-green-200 px-2 py-1 rounded-2xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Limpiar
             </button>
@@ -107,20 +116,23 @@ export default function ProducerFilters ( { onFilterChange } ) {
             </div>
             <div className="relative flex w-full flex-col items-start gap-3 py-2">
               <p className="text-[#0d1b13] text-xs">Distancia máxima: <span className="font-bold">{maxDistance} km</span></p>
-              <div className="flex h-2 w-full pt-1">
+              <div className="w-full py-2">
                 <input
                   type="range"
                   min="0"
-                  max="100"
-                  step="5"
+                  max={maxDistanceAvailable}
+                  step="1"
                   value={maxDistance}
                   onChange={( e ) => setMaxDistance( Number( e.target.value ) )}
-                  className="w-full h-1.5 bg-[#cfe7d9] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-primary [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:border-none"
+                  className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer accent-green-600"
+                  style={{
+                    background: `linear-gradient(to right, #16a34a 0%, #16a34a ${ ( maxDistance / maxDistanceAvailable ) * 100 }%, #bbf7d0 ${ ( maxDistance / maxDistanceAvailable ) * 100 }%, #bbf7d0 100%)`
+                  }}
                 />
               </div>
               <div className="flex justify-between w-full text-[10px] text-[#4c9a6c]">
                 <span>0 km</span>
-                <span>100 km</span>
+                <span>{maxDistanceAvailable} km</span>
               </div>
             </div>
           </div>
