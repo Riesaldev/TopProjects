@@ -4,59 +4,71 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 import Header from "@/components/layout/Header";
 import MiniFooter from "@/components/layout/MiniFooter";
-import FilterByProducer from "@/components/ui/FilterByProducer";
-import FilterByCategory from "@/components/ui/FilterByCategory";
-import FilterByPrice from "@/components/ui/FilterByPrice";
-import FilterByProduct from "@/components/ui/FilterByProduct";
+import FilterByProducer from "@/components/ui/products/FilterByProducer";
+import FilterByCategory from "@/components/ui/products/FilterByCategory";
+import FilterByPrice from "@/components/ui/products/FilterByPrice";
+import FilterByProduct from "@/components/ui/products/FilterByProduct";
 import InfoAndSorting from "@/components/ui/InfoAndSorting";
 import Pagination from "@/components/ui/Pagination";
 import ProductCard from "@/components/layout/products/ProductCard";
 
 import productsData from "@/data/products.json";
 import { useProductFilters } from "@/hooks/useProductFilters";
+import { useProductSort } from "@/hooks/useProductSort";
 import { usePagination } from "@/hooks/usePagination";
 
-export default function ProductsPage() {
+export default function ProductsPage () {
   const ITEMS_PER_PAGE = 4;
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Usar hooks personalizados para filtrado y paginación
+  // Usar hooks personalizados para filtrado
   const {
-    filteredAndSortedProducts,
+    filteredProducts,
     handleSearchChange,
     handleProducerSearchChange,
     handleFilterChange,
-    handleSortChange,
     handleCategoryChange,
     handlePriceRangeChange
-  } = useProductFilters(productsData);
+  } = useProductFilters( productsData );
 
+  // Hook de ordenamiento
+  const { sortedData: filteredAndSortedProducts, handleSortChange } = useProductSort(filteredProducts);
+
+  // Hook de paginación
   const {
     currentPage,
     paginatedItems: paginatedProducts,
     handlePageChange: handlePaginationChange,
     setCurrentPage
-  } = usePagination(filteredAndSortedProducts, ITEMS_PER_PAGE);
+  } = usePagination( filteredAndSortedProducts, ITEMS_PER_PAGE );
 
   // Leer página desde URL al montar el componente
-  useEffect(() => {
-    const pageFromUrl = searchParams.get('page');
-    if (pageFromUrl) {
-      const pageNum = parseInt(pageFromUrl, 10);
-      if (!isNaN(pageNum) && pageNum > 0) {
-        setCurrentPage(pageNum);
+  useEffect( () => {
+    const pageFromUrl = searchParams.get( 'page' );
+    if ( pageFromUrl )
+    {
+      const pageNum = parseInt( pageFromUrl, 10 );
+      if ( !isNaN( pageNum ) && pageNum > 0 )
+      {
+        setCurrentPage( pageNum );
       }
     }
-  }, [searchParams, setCurrentPage]);
+  }, [ searchParams, setCurrentPage ] );
 
   // Actualizar URL cuando cambie la página
-  const handlePageChange = useCallback((newPage) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', newPage.toString());
-    router.push(`?${params.toString()}`, { scroll: false });
-    handlePaginationChange(newPage);
-  }, [searchParams, router, handlePaginationChange]);
+  const handlePageChange = useCallback( ( newPage ) => {
+    const params = new URLSearchParams( searchParams.toString() );
+    params.set( 'page', newPage.toString() );
+    router.push( `?${ params.toString() }`, { scroll: false } );
+    handlePaginationChange( newPage );
+  }, [ searchParams, router, handlePaginationChange ] );
+
+  // Manejar cambio de ordenamiento y resetear página
+  const onSortChange = useCallback((newSortOption) => {
+    handleSortChange(newSortOption);
+    setCurrentPage(1); // Resetear a la primera página al ordenar
+  }, [handleSortChange, setCurrentPage]);
 
   return (
     <>
@@ -88,17 +100,19 @@ export default function ProductsPage() {
               onFilterChange={handleFilterChange}
             />
             <InfoAndSorting
-              filteredProducts={filteredAndSortedProducts}
-              onSortChange={handleSortChange}
+              filteredItems={paginatedProducts}
+              totalItems={filteredAndSortedProducts.length}
+              type="products"
+              onSortChange={onSortChange}
             />
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 row-auto justify-around mb-8 gap-3">
               {paginatedProducts.length > 0 ? (
-                paginatedProducts.map((product) => (
+                paginatedProducts.map( ( product ) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                   />
-                ))
+                ) )
               ) : (
                 <div className="col-span-full text-center py-12">
                   <p className="text-gray-500 text-lg">

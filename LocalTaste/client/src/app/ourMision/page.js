@@ -35,7 +35,7 @@ export default function MisionPage () {
               role="link"
             >
               <a className="truncate"
-                href="/history"
+                href="/ourHistory"
               >Leer nuestra historia</a>
             </button>
           </div>
