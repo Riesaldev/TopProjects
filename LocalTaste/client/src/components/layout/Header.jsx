@@ -22,7 +22,7 @@ const Header = ( { } ) => {
           <div className="flex items-center justify-center space-x-24">
             {/* Navigation */}
             <nav className="hidden md:flex space-x-18 brightness-60">
-              <a href="/mision" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
+              <a href="/ourMision" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">
                 Nuestra Misión
               </a>
               <a href="/products" className="text-gray-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110">

@@ -1,21 +1,46 @@
 "use client";
 
 import { useState } from 'react';
-import productsData from "@/data/products.json";
 
-export default function InfoAndSorting({ filteredProducts, onSortChange }) {
-  const [sortOption, setSortOption] = useState('relevancia');
+export default function InfoAndSorting ( {
+  filteredItems = [],
+  totalItems = 0,
+  onSortChange,
+  type = 'products' // 'products' o 'producers'
+} ) {
+  const [ sortOption, setSortOption ] = useState( 'relevancia' );
 
-  const totalProducts = productsData.length;
-  const displayedCount = filteredProducts ? filteredProducts.length : 0;
+  const displayedCount = filteredItems.length;
+  const itemName = type === 'products' ? 'productos' : 'productores';
 
-  const handleSortChange = (e) => {
+  const handleSortChange = ( e ) => {
     const value = e.target.value;
-    setSortOption(value);
+    setSortOption( value );
 
-    if (onSortChange) {
-      onSortChange(value);
+    if ( onSortChange )
+    {
+      onSortChange( value );
     }
+  };
+
+  // Opciones de ordenamiento según el tipo
+  const sortOptions = type === 'products' ? {
+    'relevancia': 'Relevancia',
+    'mejor-valorados': '⭐ Mejor Valorados',
+    'recien-cosechado': '🌱 Recién Cosechado',
+    'ofertas': '🏷️ Ofertas',
+    'popularidad': '❤️ Más Populares',
+    'precio-asc': '💰 Precio: Menor a Mayor',
+    'precio-desc': '💰 Precio: Mayor a Menor',
+    'alfabetico': '🔤 A-Z'
+  } : {
+    'relevancia': 'Relevancia',
+    'mejor-valorados': '⭐ Mejor Valorados',
+    'mas-cercanos': '📍 Más Cercanos',
+    'mas-lejanos': '📍 Más Lejanos',
+    'popularidad': '❤️ Más Populares',
+    'nuevos': '🆕 Nuevos',
+    'alfabetico': '🔤 A-Z'
   };
 
   return (
@@ -23,7 +48,7 @@ export default function InfoAndSorting({ filteredProducts, onSortChange }) {
       {/* Results Info & Sorting */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <p className="text-sm font-medium text-green-600">
-          Mostrando <span className="font-bold text-green-950">{displayedCount}</span> de <span className="font-bold text-green-950">{totalProducts}</span> productos
+          Mostrando <span className="font-bold text-green-950">{displayedCount}</span> de <span className="font-bold text-green-950">{totalItems}</span> {itemName}
         </p>
         <div className="flex items-center gap-2">
           <span className="text-sm text-green-600">Ordenar por:</span>
@@ -32,14 +57,9 @@ export default function InfoAndSorting({ filteredProducts, onSortChange }) {
             value={sortOption}
             onChange={handleSortChange}
           >
-            <option value="relevancia">Relevancia</option>
-            <option value="mejor-valorados">⭐ Mejor Valorados</option>
-            <option value="recien-cosechado">🌱 Recién Cosechado</option>
-            <option value="ofertas">🏷️ Ofertas</option>
-            <option value="popularidad">❤️ Más Populares</option>
-            <option value="precio-asc">💰 Precio: Menor a Mayor</option>
-            <option value="precio-desc">💰 Precio: Mayor a Menor</option>
-            <option value="alfabetico">🔤 A-Z</option>
+            {Object.entries( sortOptions ).map( ( [ value, label ] ) => (
+              <option key={value} value={value}>{label}</option>
+            ) )}
           </select>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import ProducerCard from "../ui/ProducerCard";
+import ProducerCard from "../ui/producers/ProducerCard";
 import producers from '@/data/producer.json';
 
 // Configuración de la transición
