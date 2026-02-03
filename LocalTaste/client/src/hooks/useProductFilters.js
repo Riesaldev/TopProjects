@@ -202,6 +202,7 @@ export function useProductFilters(productsData) {
     selectedCategoryTypes,
     priceRange,
     filteredAndSortedProducts,
+    filteredProducts: filteredAndSortedProducts, // Alias para compatibilidad
     // Handlers
     handleSearchChange,
     handleProducerSearchChange,
