@@ -1,7 +1,7 @@
 "use client";
 //importamos los hooks de next
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 //importamos los componentes
 import Header from "@/components/layout/Header";
 import MiniFooter from "@/components/layout/MiniFooter";
@@ -20,8 +20,48 @@ export default function ProducersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // Estado para los filtros
+  const [filters, setFilters] = useState({
+    productionTypes: {
+      ecologica: false,
+      artesanal: false,
+      tradicional: false,
+      biodinamica: false
+    },
+    maxDistance: 100,
+    minRating: 0
+  });
+
+  // Aplicar filtros a los datos
+  const filteredProducers = useMemo(() => {
+    return producerData.filter(producer => {
+      // Filtro por tipo de producción
+      const hasProductionTypeSelected = Object.values(filters.productionTypes).some(v => v);
+      if (hasProductionTypeSelected) {
+        const producerType = producer.type?.toLowerCase() || '';
+        const matchesProductionType = 
+          (filters.productionTypes.ecologica && producerType.includes('ecológic')) ||
+          (filters.productionTypes.artesanal && producerType.includes('artesanal')) ||
+          (filters.productionTypes.tradicional && producerType.includes('tradicional')) ||
+          (filters.productionTypes.biodinamica && (producerType.includes('biodinám') || producerType.includes('hidropónico')));
+        
+        if (!matchesProductionType) return false;
+      }
+
+      // Filtro por distancia
+      const producerDistance = parseFloat(producer.distance) || 0;
+      if (producerDistance > filters.maxDistance) return false;
+
+      // Filtro por valoración
+      const producerRating = parseFloat(producer.stars) || 0;
+      if (producerRating < filters.minRating) return false;
+
+      return true;
+    });
+  }, [filters]);
+
   // Hook de ordenamiento
-  const { sortedData: filteredAndSortedProducers, handleSortChange } = useProducerSort(producerData);
+  const { sortedData: filteredAndSortedProducers, handleSortChange } = useProducerSort(filteredProducers);
 
   // Hook de paginación
   const {
@@ -56,6 +96,12 @@ export default function ProducersPage() {
     setCurrentPage(1); // Resetear a la primera página al ordenar
   }, [handleSortChange, setCurrentPage]);
 
+  // Manejar cambio de filtros y resetear página
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Resetear a la primera página al filtrar
+  }, [setCurrentPage]);
+
   return (
     <>
       <Header />
@@ -66,7 +112,7 @@ export default function ProducersPage() {
         </div>
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar / Filtros */}
-          <ProducerFilters />
+          <ProducerFilters onFilterChange={handleFilterChange} />
           {/* Grid de Productores */}
           <section className="flex-1 min-w-0">
             <InfoAndSorting
@@ -75,7 +121,7 @@ export default function ProducersPage() {
               type="producers"
               onSortChange={onSortChange}
             />
-
+            {/* Productores */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
               {paginatedProducers.length > 0 ? (
                 paginatedProducers.map((producer) => (
