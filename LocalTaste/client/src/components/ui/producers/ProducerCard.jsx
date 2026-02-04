@@ -15,8 +15,11 @@ export default function ProducerCard ( { producer } ) {
     yearsActive = 0,
     perCentageCaracteristic = 'N/A',
     caracteristic = 'N/A',
-    image = '/producer.png',
+    image,
   } = producer;
+
+  // Manejo seguro de la imagen: usar imagen por defecto si es falsy
+  const imageSrc = image || '/producer.png';
 
   const handleViewProducts = () => {
     if ( id )
@@ -33,7 +36,7 @@ export default function ProducerCard ( { producer } ) {
         <Image
           className="rounded-2xl shadow-xl w-full h-full object-cover relative z-10"
           data-alt="Portrait of a smiling farmer holding fresh vegetables"
-          src={image}
+          src={imageSrc}
           alt={name}
           width={500}
           height={400}
