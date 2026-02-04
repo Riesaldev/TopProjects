@@ -67,7 +67,7 @@ export default function ProductsPage () {
   } = useProductFilters( productsData );
 
   /** Hook de ordenamiento - aplica sort a productos ya filtrados */
-  const { sortedData: filteredAndSortedProducts, handleSortChange } = useProductSort(filteredProducts);
+  const { sortedData: filteredAndSortedProducts, handleSortChange } = useProductSort( filteredProducts );
 
   /** Hook de paginación - divide productos filtrados y ordenados en páginas */
   const {
@@ -109,10 +109,10 @@ export default function ProductsPage () {
    * Callback: Manejar cambio de ordenamiento
    * Resetea a la primera página al cambiar el orden para evitar páginas vacías
    */
-  const onSortChange = useCallback((newSortOption) => {
-    handleSortChange(newSortOption);
-    setCurrentPage(1); // Resetear a la primera página al ordenar
-  }, [handleSortChange, setCurrentPage]);
+  const onSortChange = useCallback( ( newSortOption ) => {
+    handleSortChange( newSortOption );
+    setCurrentPage( 1 ); // Resetear a la primera página al ordenar
+  }, [ handleSortChange, setCurrentPage ] );
 
   return (
     <>

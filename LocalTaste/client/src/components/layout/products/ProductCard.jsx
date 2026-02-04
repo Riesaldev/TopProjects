@@ -95,7 +95,7 @@ export default function ProductCard ( { product } ) {
     return null;
   }
   */
-  
+
   /** Estado local para manejar el like (corazón) independientemente del backend */
   const [ isLiked, setIsLiked ] = useState( like );
 

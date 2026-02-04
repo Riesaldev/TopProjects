@@ -25,7 +25,7 @@ import { usePriceRange } from '@/hooks/usePriceRange';
  *   productsData={products}
  * />
  */
-export default function FilterByPrice({ onPriceRangeChange, productsData = [] }) {
+export default function FilterByPrice ( { onPriceRangeChange, productsData = [] } ) {
   const {
     minPrice,
     maxPrice,
@@ -37,37 +37,38 @@ export default function FilterByPrice({ onPriceRangeChange, productsData = [] })
     handleMinPriceBlur,
     handleMaxPriceBlur,
     updatePriceRange
-  } = usePriceRange(productsData);
+  } = usePriceRange( productsData );
 
   /**
    * Efecto para actualizar el rango de precios cuando cambian los productos disponibles
    * Recalcula min/max automáticamente según el nuevo conjunto de productos
    */
-  useEffect(() => {
+  useEffect( () => {
     updatePriceRange();
-  }, [productsData, updatePriceRange]);
+  }, [ productsData, updatePriceRange ] );
 
   /**
    * Efecto de debouncing para notificar cambios de precio
    * Espera 300ms después del último cambio antes de notificar al padre
    * Esto evita actualizaciones excesivas mientras el usuario arrastra los sliders
    */
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (onPriceRangeChange) {
-        onPriceRangeChange({ min: minPrice, max: maxPrice });
+  useEffect( () => {
+    const timer = setTimeout( () => {
+      if ( onPriceRangeChange )
+      {
+        onPriceRangeChange( { min: minPrice, max: maxPrice } );
       }
-    }, 300);
+    }, 300 );
 
-    return () => clearTimeout(timer);
-  }, [minPrice, maxPrice, onPriceRangeChange]);
+    return () => clearTimeout( timer );
+  }, [ minPrice, maxPrice, onPriceRangeChange ] );
 
-  const handleMinSliderChange = (e) => {
-    handleMinPriceChange(e);
+  const handleMinSliderChange = ( e ) => {
+    handleMinPriceChange( e );
   };
 
-  const handleMaxSliderChange = (e) => {
-    handleMaxPriceChange(e);
+  const handleMaxSliderChange = ( e ) => {
+    handleMaxPriceChange( e );
   };
 
   /**
@@ -77,8 +78,8 @@ export default function FilterByPrice({ onPriceRangeChange, productsData = [] })
    * @param {number} value - Valor del que calcular el porcentaje
    * @returns {number} Porcentaje (0-100) de la posición del valor en el rango
    */
-  const getPercent = (value) => {
-    return ((value - priceRange.min) / (priceRange.max - priceRange.min)) * 100;
+  const getPercent = ( value ) => {
+    return ( ( value - priceRange.min ) / ( priceRange.max - priceRange.min ) ) * 100;
   };
 
   return (
@@ -129,8 +130,8 @@ export default function FilterByPrice({ onPriceRangeChange, productsData = [] })
           <div
             className="absolute h-1 bg-green-600 rounded-lg"
             style={{
-              left: `${getPercent(minPrice)}%`,
-              right: `${100 - getPercent(maxPrice)}%`
+              left: `${ getPercent( minPrice ) }%`,
+              right: `${ 100 - getPercent( maxPrice ) }%`
             }}
           ></div>
 

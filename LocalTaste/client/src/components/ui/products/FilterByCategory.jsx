@@ -25,7 +25,7 @@ import { useCategoryFilter } from '@/hooks/useCategoryFilter';
  *   productsData={products}
  * />
  */
-export default function FilterByCategory({ onCategoryChange, productsData = [] }) {
+export default function FilterByCategory ( { onCategoryChange, productsData = [] } ) {
   /**
    * Mapeo de categorías de interfaz a tipos de producto en la BD
    * Permite que una categoría de UI agrupe múltiples tipos de productos
@@ -35,11 +35,11 @@ export default function FilterByCategory({ onCategoryChange, productsData = [] }
    * 'Frutas y Verduras' mapea a ['Fruta', 'Verdura']
    */
   const categoryMapping = {
-    'Frutas y Verduras': ['Fruta', 'Verdura'],
-    'Lácteos y Huevos': ['Lácteo', 'Huevos'],
-    'Panadería Artesanal': ['Panadería'],
-    'Carnes y Embutidos': ['Carne', 'Embutidos'],
-    'Miel y Mermeladas': ['Miel', 'Mermelada']
+    'Frutas y Verduras': [ 'Fruta', 'Verdura' ],
+    'Lácteos y Huevos': [ 'Lácteo', 'Huevos' ],
+    'Panadería Artesanal': [ 'Panadería' ],
+    'Carnes y Embutidos': [ 'Carne', 'Embutidos' ],
+    'Miel y Mermeladas': [ 'Miel', 'Mermelada' ]
   };
 
   const {
@@ -47,7 +47,7 @@ export default function FilterByCategory({ onCategoryChange, productsData = [] }
     handleCategoryToggle,
     handleClearAll,
     getCategoryCount
-  } = useCategoryFilter(categoryMapping, productsData, onCategoryChange);
+  } = useCategoryFilter( categoryMapping, productsData, onCategoryChange );
 
   return (
     <>
@@ -64,9 +64,9 @@ export default function FilterByCategory({ onCategoryChange, productsData = [] }
           </button>
         </div>
         <div className="space-y-3">
-          {Object.entries(categoryMapping).map(([categoryName, types]) => {
-            const count = getCategoryCount(types);
-            const isChecked = selectedCategories.includes(categoryName);
+          {Object.entries( categoryMapping ).map( ( [ categoryName, types ] ) => {
+            const count = getCategoryCount( types );
+            const isChecked = selectedCategories.includes( categoryName );
 
             return (
               <label key={categoryName} className="flex items-center gap-3 cursor-pointer">
@@ -75,7 +75,7 @@ export default function FilterByCategory({ onCategoryChange, productsData = [] }
                     className="peer h-5 w-5 cursor-pointer appearance-none rounded-md border transition-all"
                     type="checkbox"
                     checked={isChecked}
-                    onChange={() => handleCategoryToggle(categoryName)}
+                    onChange={() => handleCategoryToggle( categoryName )}
                   />
                   <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                     <span className="flex items-center justify-center w-5 h-5 bg-green-600 rounded-md">
@@ -87,7 +87,7 @@ export default function FilterByCategory({ onCategoryChange, productsData = [] }
                 <span className="ml-auto text-xs text-gray-400 px-2 py-1 rounded-full">{count}</span>
               </label>
             );
-          })}
+          } )}
         </div>
       </div>
     </>

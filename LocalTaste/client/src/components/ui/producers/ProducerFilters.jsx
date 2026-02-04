@@ -48,7 +48,7 @@ export default function ProducerFilters ( { onFilterChange, producers = [] } ) {
 
   /** Estado de distancia máxima permitida (en km) */
   const [ maxDistance, setMaxDistance ] = useState( maxDistanceAvailable );
-  
+
   /** Estado de valoración mínima requerida (0, 3, o 4 estrellas) */
   const [ minRating, setMinRating ] = useState( 0 );
 

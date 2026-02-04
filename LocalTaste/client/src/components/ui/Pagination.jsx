@@ -194,32 +194,3 @@ export default function Pagination ( {
     </div>
   );
 }
-aria - label={ `Página ${ pageNum }` }
-aria - current={ currentPage === pageNum ? 'page' : undefined }
-          >
-  { pageNum }
-          </button >
-        )
-      ))}
-
-{/* Botón Siguiente */ }
-<button
-  onClick={() => handlePageChange( currentPage + 1 )}
-  disabled={currentPage === totalPages}
-  className={`h-10 w-10 flex items-center justify-center rounded-xl border transition-all
-          ${ currentPage === totalPages
-      ? 'border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed'
-      : 'border-green-200 bg-green-50 hover:bg-green-100 hover:scale-105 active:scale-95 cursor-pointer'
-    }`}
-  aria-label="Página siguiente"
->
-  <Image
-    src="/Arrow.svg"
-    alt="arrow right icon"
-    width={28}
-    height={28}
-  />
-</button>
-    </div >
-  );
-}

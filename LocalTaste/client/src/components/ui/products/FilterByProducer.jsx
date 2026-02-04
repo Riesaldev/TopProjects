@@ -22,32 +22,33 @@ import Image from 'next/image';
  *   onProducerSearchChange={(searchTerm) => console.log('Buscando:', searchTerm)} 
  * />
  */
-export default function FilterByProducer({ onProducerSearchChange }) {
+export default function FilterByProducer ( { onProducerSearchChange } ) {
   // Estado local para el término de búsqueda
-  const [searchTerm, setSearchTerm] = useState('');
+  const [ searchTerm, setSearchTerm ] = useState( '' );
 
   /**
    * Efecto de debouncing para búsqueda
    * Espera 300ms después de que el usuario deje de escribir antes de notificar al padre.
    * Esto reduce la cantidad de re-renders y mejora el rendimiento.
    */
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (onProducerSearchChange) {
-        onProducerSearchChange(searchTerm);
+  useEffect( () => {
+    const timer = setTimeout( () => {
+      if ( onProducerSearchChange )
+      {
+        onProducerSearchChange( searchTerm );
       }
-    }, 300);
+    }, 300 );
 
     // Cleanup: cancelar el timer si el componente se desmonta o searchTerm cambia
-    return () => clearTimeout(timer);
-  }, [searchTerm, onProducerSearchChange]);
+    return () => clearTimeout( timer );
+  }, [ searchTerm, onProducerSearchChange ] );
 
   /**
    * Maneja los cambios en el input de búsqueda
    * Actualiza el estado local inmediatamente para feedback visual instantáneo
    */
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  const handleSearchChange = ( e ) => {
+    setSearchTerm( e.target.value );
   };
 
   return (

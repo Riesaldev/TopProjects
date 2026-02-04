@@ -25,34 +25,35 @@ import Image from 'next/image';
  *   onFilterChange={(filter) => console.log('Filtro:', filter)}
  * />
  */
-export default function FilterByProduct({ onSearchChange, onFilterChange }) {
+export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
   // Estado para el término de búsqueda
-  const [searchTerm, setSearchTerm] = useState('');
+  const [ searchTerm, setSearchTerm ] = useState( '' );
   // Estado para controlar si el input está enfocado (para animaciones del placeholder)
-  const [isFocused, setIsFocused] = useState(false);
+  const [ isFocused, setIsFocused ] = useState( false );
   // Estado para el filtro rápido activo (todos, organico, sin-lactosa, etc.)
-  const [activeFilter, setActiveFilter] = useState('todos');
+  const [ activeFilter, setActiveFilter ] = useState( 'todos' );
 
   /**
    * Efecto de debouncing para búsqueda
    * Espera 300ms después de que el usuario deje de escribir
    */
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (onSearchChange) {
-        onSearchChange(searchTerm);
+  useEffect( () => {
+    const timer = setTimeout( () => {
+      if ( onSearchChange )
+      {
+        onSearchChange( searchTerm );
       }
-    }, 300);
+    }, 300 );
 
-    return () => clearTimeout(timer);
-  }, [searchTerm, onSearchChange]);
+    return () => clearTimeout( timer );
+  }, [ searchTerm, onSearchChange ] );
 
   /**
    * Maneja cambios en el input de búsqueda
    * Actualiza el estado local inmediatamente para feedback visual
    */
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
+  const handleSearchChange = ( e ) => {
+    setSearchTerm( e.target.value );
   };
 
   /**
@@ -61,10 +62,11 @@ export default function FilterByProduct({ onSearchChange, onFilterChange }) {
    * 
    * @param {string} filter - Filtro seleccionado (todos, organico, sin-lactosa, etc.)
    */
-  const handleFilterClick = (filter) => {
-    setActiveFilter(filter);
-    if (onFilterChange) {
-      onFilterChange(filter);
+  const handleFilterClick = ( filter ) => {
+    setActiveFilter( filter );
+    if ( onFilterChange )
+    {
+      onFilterChange( filter );
     }
   };
 
@@ -83,12 +85,12 @@ export default function FilterByProduct({ onSearchChange, onFilterChange }) {
               className="w-full pl-2 pr-4 outline-none rounded-lg focus:ring-1 focus:ring-green-300 text-xl h-10 text-green-600"
               value={searchTerm}
               onChange={handleSearchChange}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
+              onFocus={() => setIsFocused( true )}
+              onBlur={() => setIsFocused( false )}
             />
             <label
               htmlFor="search"
-              className={`absolute left-2 transition-all pointer-events-none ${searchTerm || isFocused ? 'hidden' : 'top-2 text-xl text-green-600'}`}
+              className={`absolute left-2 transition-all pointer-events-none ${ searchTerm || isFocused ? 'hidden' : 'top-2 text-xl text-green-600' }`}
             >
               Buscar manzanas, miel, queso artesanal...
             </label>
@@ -98,47 +100,47 @@ export default function FilterByProduct({ onSearchChange, onFilterChange }) {
       {/* Chips / Quick Filters */}
       <div className="flex gap-4 mb-8 ml-8 overflow-x-auto pb-2 scrollbar-hide">
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border border-green-300 text-base font-medium transition-all active:scale-95 cursor-pointer ${activeFilter === 'todos'
+          className={`shrink-0 px-4 py-2 rounded-full border border-green-300 text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'todos'
             ? 'bg-green-400 text-green-950 font-bold'
             : 'bg-green-50 hover:bg-green-100'
             }`}
-          onClick={() => handleFilterClick('todos')}
+          onClick={() => handleFilterClick( 'todos' )}
         >
           Todos
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${activeFilter === 'organico'
+          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'organico'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
-          onClick={() => handleFilterClick('organico')}
+          onClick={() => handleFilterClick( 'organico' )}
         >
           🌱 Orgánico
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${activeFilter === 'sin-lactosa'
+          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'sin-lactosa'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
-          onClick={() => handleFilterClick('sin-lactosa')}
+          onClick={() => handleFilterClick( 'sin-lactosa' )}
         >
           🧀 Sin Lactosa
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${activeFilter === 'sin-gluten'
+          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'sin-gluten'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
-          onClick={() => handleFilterClick('sin-gluten')}
+          onClick={() => handleFilterClick( 'sin-gluten' )}
         >
           🥖 Sin Gluten
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${activeFilter === 'vegano'
+          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'vegano'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
-          onClick={() => handleFilterClick('vegano')}
+          onClick={() => handleFilterClick( 'vegano' )}
         >
           🥑 Vegano
         </button>
