@@ -3,10 +3,34 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+/**
+ * @fileoverview Componente de filtro por nombre de productor con búsqueda en tiempo real
+ * Implementa debouncing para optimizar las búsquedas y reducir re-renders innecesarios
+ */
+
+/**
+ * Filtro de búsqueda por nombre de productor
+ * 
+ * Permite a los usuarios buscar productos filtrando por el nombre del productor.
+ * Incluye debouncing de 300ms para evitar búsquedas excesivas mientras el usuario escribe.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onProducerSearchChange - Callback que se ejecuta cuando cambia el término de búsqueda (después del debounce)
+ * 
+ * @example
+ * <FilterByProducer 
+ *   onProducerSearchChange={(searchTerm) => console.log('Buscando:', searchTerm)} 
+ * />
+ */
 export default function FilterByProducer({ onProducerSearchChange }) {
+  // Estado local para el término de búsqueda
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Debouncing: espera 300ms después de que el usuario deje de escribir
+  /**
+   * Efecto de debouncing para búsqueda
+   * Espera 300ms después de que el usuario deje de escribir antes de notificar al padre.
+   * Esto reduce la cantidad de re-renders y mejora el rendimiento.
+   */
   useEffect(() => {
     const timer = setTimeout(() => {
       if (onProducerSearchChange) {
@@ -14,9 +38,14 @@ export default function FilterByProducer({ onProducerSearchChange }) {
       }
     }, 300);
 
+    // Cleanup: cancelar el timer si el componente se desmonta o searchTerm cambia
     return () => clearTimeout(timer);
   }, [searchTerm, onProducerSearchChange]);
 
+  /**
+   * Maneja los cambios en el input de búsqueda
+   * Actualiza el estado local inmediatamente para feedback visual instantáneo
+   */
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };

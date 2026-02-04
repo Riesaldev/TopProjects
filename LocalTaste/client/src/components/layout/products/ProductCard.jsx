@@ -6,8 +6,51 @@ import HeartFilled from '../../../../public/heart.svg';
 import HeartEmpty from '../../../../public/hearte.svg';
 import Star from '../../../../public/Star.svg';
 
+/**
+ * @fileoverview Componente de tarjeta de producto
+ * Muestra información visual y acciones para un producto individual del marketplace
+ */
+
+/**
+ * Tarjeta de producto con información y acciones
+ * 
+ * Muestra imagen, nombre, productor, precio, valoración y descripción del producto.
+ * Incluye acciones interactivas:
+ * - Botón de favoritos (corazón)
+ * - Botón de añadir al carrito (+)
+ * - Click en la tarjeta para ver detalles
+ * 
+ * Maneja valores nulos/undefined con defaults seguros para evitar errores de renderizado.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Object} props.product - Objeto con los datos del producto
+ * @param {string} props.product.id - ID único del producto
+ * @param {string} props.product.name - Nombre del producto
+ * @param {boolean} props.product.like - Si el producto está en favoritos
+ * @param {string} props.product.productor - Nombre del productor
+ * @param {string} props.product.type - Tipo/categoría del producto
+ * @param {string} props.product.description - Descripción del producto
+ * @param {number} props.product.stars - Valoración (0-5 estrellas)
+ * @param {string} props.product.divisa - Símbolo de moneda (ej: '€')
+ * @param {number} props.product.price - Precio actual
+ * @param {string} props.product.unit - Unidad de medida (kg, unidad, etc.)
+ * @param {string} props.product.image - URL de la imagen del producto
+ * @param {boolean} props.product.ofert - Si el producto está en oferta
+ * @param {number} props.product.before - Precio anterior (para mostrar descuento)
+ * @param {string} props.product.popupInfo - Información adicional (ej: "Orgánico", "Nuevo")
+ * 
+ * @example
+ * <ProductCard product={{
+ *   id: 1,
+ *   name: "Tomates Cherry",
+ *   price: 3.50,
+ *   productor: "Granja El Sol",
+ *   stars: 4.5,
+ *   ...
+ * }} />
+ */
 export default function ProductCard ( { product } ) {
-  // Validación y valores por defecto para datos de la base de datos
+  // Validación: retornar null si no hay producto
   if ( !product )
   {
     return null;
@@ -30,7 +73,10 @@ export default function ProductCard ( { product } ) {
     before: rawBefore,
   } = product;
 
-  // Aplicar valores por defecto para campos vacíos o null
+  /**
+   * Aplicar valores por defecto para campos vacíos o null
+   * Esto previene errores de renderizado y muestra valores seguros al usuario
+   */
   const name = rawName?.trim() || 'Producto sin nombre';
   const like = rawLike ?? false;
   const productor = rawProductor?.trim() || 'Desconocido';
@@ -49,18 +95,36 @@ export default function ProductCard ( { product } ) {
     return null;
   }
   */
+  
+  /** Estado local para manejar el like (corazón) independientemente del backend */
   const [ isLiked, setIsLiked ] = useState( like );
 
+  /**
+   * Maneja el click en la tarjeta completa
+   * En producción, navegaría a la página de detalle del producto
+   */
   const handleProductClick = () => {
     console.log( `Producto seleccionado: ${ name } (ID: ${ id })` );
   };
 
+  /**
+   * Alterna el estado de favorito del producto
+   * Previene la propagación del evento para no activar handleProductClick
+   * 
+   * @param {Event} e - Evento del click
+   */
   const handleLikeToggle = ( e ) => {
     e.stopPropagation();
     setIsLiked( !isLiked );
     console.log( `Like toggled: ${ name } (ID: ${ id })` );
   };
 
+  /**
+   * Añade el producto al carrito de compra
+   * Previene la propagación del evento para no activar handleProductClick
+   * 
+   * @param {Event} e - Evento del click
+   */
   const handleAddToCart = ( e ) => {
     e.stopPropagation();
     if ( id )
@@ -69,6 +133,12 @@ export default function ProductCard ( { product } ) {
     }
   };
 
+  /**
+   * Formatea un precio a 2 decimales
+   * 
+   * @param {number} priceValue - Precio a formatear
+   * @returns {string} Precio formateado con 2 decimales
+   */
   const formatPrice = ( priceValue ) => {
     return Number( priceValue || 0 ).toFixed( 2 );
   };

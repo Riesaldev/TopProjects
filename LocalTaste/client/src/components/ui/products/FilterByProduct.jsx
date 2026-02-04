@@ -3,12 +3,40 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+/**
+ * @fileoverview Componente de búsqueda y filtros rápidos de productos
+ * Proporciona una barra de búsqueda con debouncing y filtros rápidos por características (orgánico, sin lactosa, etc.)
+ */
+
+/**
+ * Filtro de búsqueda de productos con chips de filtros rápidos
+ * 
+ * Combina una barra de búsqueda con texto libre y filtros predefinidos (chips)
+ * para características comunes como orgánico, vegano, sin gluten, etc.
+ * Implementa debouncing en la búsqueda para optimizar rendimiento.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onSearchChange - Callback ejecutado cuando cambia el término de búsqueda (con debounce)
+ * @param {Function} props.onFilterChange - Callback ejecutado cuando se selecciona un filtro rápido
+ * 
+ * @example
+ * <FilterByProduct 
+ *   onSearchChange={(term) => console.log('Buscando:', term)}
+ *   onFilterChange={(filter) => console.log('Filtro:', filter)}
+ * />
+ */
 export default function FilterByProduct({ onSearchChange, onFilterChange }) {
+  // Estado para el término de búsqueda
   const [searchTerm, setSearchTerm] = useState('');
+  // Estado para controlar si el input está enfocado (para animaciones del placeholder)
   const [isFocused, setIsFocused] = useState(false);
+  // Estado para el filtro rápido activo (todos, organico, sin-lactosa, etc.)
   const [activeFilter, setActiveFilter] = useState('todos');
 
-  // Debouncing: espera 300ms después de que el usuario deje de escribir
+  /**
+   * Efecto de debouncing para búsqueda
+   * Espera 300ms después de que el usuario deje de escribir
+   */
   useEffect(() => {
     const timer = setTimeout(() => {
       if (onSearchChange) {
@@ -19,10 +47,20 @@ export default function FilterByProduct({ onSearchChange, onFilterChange }) {
     return () => clearTimeout(timer);
   }, [searchTerm, onSearchChange]);
 
+  /**
+   * Maneja cambios en el input de búsqueda
+   * Actualiza el estado local inmediatamente para feedback visual
+   */
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  /**
+   * Maneja clics en los filtros rápidos (chips)
+   * Actualiza el filtro activo y notifica al componente padre
+   * 
+   * @param {string} filter - Filtro seleccionado (todos, organico, sin-lactosa, etc.)
+   */
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
     if (onFilterChange) {

@@ -1,4 +1,10 @@
 "use client";
+
+/**
+ * @fileoverview Página de exploración de productores locales
+ * Página completa con filtros múltiples, ordenamiento, paginación y grid de productores
+ */
+
 //importamos los hooks de next
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useCallback, useState, useMemo } from 'react';
@@ -15,12 +21,51 @@ import producerData from "@/data/producer.json";
 import { usePagination } from "@/hooks/usePagination";
 import { useProducerSort } from "@/hooks/useProducerSort";
 
+/**
+ * Página de productores - Explora productores locales
+ * 
+ * Página principal para descubrir y conectar con productores del marketplace.
+ * 
+ * Características:
+ * - Filtrado por tipo de producción (ecológica, artesanal, tradicional)
+ * - Filtrado por distancia máxima (slider)
+ * - Filtrado por valoración mínima (radio buttons)
+ * - Ordenamiento por cercanía, valoración, nombre
+ * - Paginación con sincronización de URL
+ * - Grid responsive de tarjetas de productor
+ * 
+ * Lógica de filtrado:
+ * - Los filtros se aplican con useMemo para optimizar rendimiento
+ * - Todos los filtros son opcionales (se pueden combinar)
+ * - Cambiar filtros resetea a la primera página
+ * 
+ * Hooks utilizados:
+ * - useState: Gestiona estado de filtros localmente
+ * - useMemo: Aplica filtros de forma optimizada
+ * - useProducerSort: Maneja ordenamiento de resultados
+ * - usePagination: Controla paginación
+ * - useSearchParams/useRouter: Sincroniza con URL
+ * 
+ * @returns {JSX.Element} Página completa de productores
+ * 
+ * @example
+ * // URL: /producers?page=1
+ * <ProducersPage />
+ */
 export default function ProducersPage () {
+  /** Número de productores por página */
   const ITEMS_PER_PAGE = 3;
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Estado para los filtros
+  /**
+   * Estado para los filtros de productores
+   * Agrupa todos los criterios de filtrado en un solo objeto
+   * 
+   * @property {Object} productionTypes - Tipos de producción seleccionados
+   * @property {number} maxDistance - Distancia máxima en km
+   * @property {number} minRating - Valoración mínima (0, 3, o 4)
+   */
   const [ filters, setFilters ] = useState( {
     productionTypes: {
       ecologica: false,
@@ -32,7 +77,17 @@ export default function ProducersPage () {
     minRating: 0
   } );
 
-  // Aplicar filtros a los datos
+  /**
+   * Aplicar filtros a los datos de productores
+   * Usa useMemo para evitar recalcular el filtrado en cada render
+   * 
+   * Lógica de filtrado:
+   * 1. Filtro por tipo de producción (ecológica, artesanal, tradicional)
+   * 2. Filtro por distancia máxima
+   * 3. Filtro por valoración mínima
+   * 
+   * Todos los filtros son acumulativos (AND lógico)
+   */
   const filteredProducers = useMemo( () => {
     return producerData.filter( producer => {
       // Filtro por tipo de producción
@@ -59,10 +114,10 @@ export default function ProducersPage () {
     } );
   }, [ filters ] );
 
-  // Hook de ordenamiento
+  /** Hook de ordenamiento - aplica sort a productores ya filtrados */
   const { sortedData: filteredAndSortedProducers, handleSortChange } = useProducerSort( filteredProducers );
 
-  // Hook de paginación
+  /** Hook de paginación - divide productores filtrados y ordenados en páginas */
   const {
     currentPage,
     paginatedItems: paginatedProducers,
@@ -70,7 +125,10 @@ export default function ProducersPage () {
     setCurrentPage
   } = usePagination( filteredAndSortedProducers, ITEMS_PER_PAGE );
 
-  // Leer página desde URL al montar el componente
+  /**
+   * Efecto: Leer página desde URL al montar
+   * Permite compartir URLs con paginación específica
+   */
   useEffect( () => {
     const pageFromUrl = searchParams.get( 'page' );
     if ( pageFromUrl )
@@ -83,7 +141,10 @@ export default function ProducersPage () {
     }
   }, [ searchParams, setCurrentPage ] );
 
-  // Actualizar URL cuando cambie la página
+  /**
+   * Callback: Actualizar URL al cambiar de página
+   * Sincroniza el query param ?page=N con el estado
+   */
   const handlePageChange = useCallback( ( newPage ) => {
     const params = new URLSearchParams( searchParams.toString() );
     params.set( 'page', newPage.toString() );
@@ -91,13 +152,19 @@ export default function ProducersPage () {
     handlePaginationChange( newPage );
   }, [ router, searchParams, handlePaginationChange ] );
 
-  // Manejar cambio de ordenamiento y resetear página
+  /**
+   * Callback: Manejar cambio de ordenamiento
+   * Resetea a página 1 para evitar páginas vacías después de reordenar
+   */
   const onSortChange = useCallback( ( newSortOption ) => {
     handleSortChange( newSortOption );
     setCurrentPage( 1 ); // Resetear a la primera página al ordenar
   }, [ handleSortChange, setCurrentPage ] );
 
-  // Manejar cambio de filtros y resetear página
+  /**
+   * Callback: Manejar cambio de filtros
+   * Resetea a página 1 porque los resultados pueden reducirse drásticamente
+   */
   const handleFilterChange = useCallback( ( newFilters ) => {
     setFilters( newFilters );
     setCurrentPage( 1 ); // Resetear a la primera página al filtrar

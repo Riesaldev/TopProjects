@@ -17,12 +17,46 @@ import { useProductFilters } from "@/hooks/useProductFilters";
 import { useProductSort } from "@/hooks/useProductSort";
 import { usePagination } from "@/hooks/usePagination";
 
+/**
+ * @fileoverview Página de exploración de productos locales
+ * Página completa con filtros, ordenamiento, paginación y grid de productos
+ */
+
+/**
+ * Página de productos - Explora productos locales
+ * 
+ * Página principal para explorar y buscar productos del marketplace.
+ * 
+ * Características:
+ * - Filtrado por nombre de producto, productor, categoría y precio
+ * - Filtros rápidos (orgánico, vegano, sin gluten, etc.)
+ * - Ordenamiento por relevancia, precio, valoración, novedad
+ * - Paginación con sincronización de URL (query param ?page=N)
+ * - Grid responsive de tarjetas de producto
+ * - Sidebar con filtros colapsables
+ * 
+ * Hooks utilizados:
+ * - useProductFilters: Gestiona todos los filtros de productos
+ * - useProductSort: Maneja el ordenamiento de resultados
+ * - usePagination: Controla la paginación de items
+ * - useSearchParams/useRouter: Sincroniza estado con URL
+ * 
+ * @returns {JSX.Element} Página completa de productos
+ * 
+ * @example
+ * // URL: /products?page=2
+ * <ProductsPage />
+ */
 export default function ProductsPage () {
+  /** Número de productos por página */
   const ITEMS_PER_PAGE = 4;
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Usar hooks personalizados para filtrado
+  /**
+   * Hook de filtrado de productos
+   * Gestiona búsqueda por nombre, productor, categoría, precio y filtros rápidos
+   */
   const {
     filteredProducts,
     handleSearchChange,
@@ -32,10 +66,10 @@ export default function ProductsPage () {
     handlePriceRangeChange
   } = useProductFilters( productsData );
 
-  // Hook de ordenamiento
+  /** Hook de ordenamiento - aplica sort a productos ya filtrados */
   const { sortedData: filteredAndSortedProducts, handleSortChange } = useProductSort(filteredProducts);
 
-  // Hook de paginación
+  /** Hook de paginación - divide productos filtrados y ordenados en páginas */
   const {
     currentPage,
     paginatedItems: paginatedProducts,
@@ -43,7 +77,10 @@ export default function ProductsPage () {
     setCurrentPage
   } = usePagination( filteredAndSortedProducts, ITEMS_PER_PAGE );
 
-  // Leer página desde URL al montar el componente
+  /**
+   * Efecto: Leer página desde URL al montar el componente
+   * Permite bookmarking y compartir URLs con paginación
+   */
   useEffect( () => {
     const pageFromUrl = searchParams.get( 'page' );
     if ( pageFromUrl )
@@ -56,7 +93,11 @@ export default function ProductsPage () {
     }
   }, [ searchParams, setCurrentPage ] );
 
-  // Actualizar URL cuando cambie la página
+  /**
+   * Callback: Actualizar URL cuando cambie la página
+   * Mantiene sincronizada la URL con el estado de paginación
+   * Usa scroll:false para evitar saltos al top de la página
+   */
   const handlePageChange = useCallback( ( newPage ) => {
     const params = new URLSearchParams( searchParams.toString() );
     params.set( 'page', newPage.toString() );
@@ -64,7 +105,10 @@ export default function ProductsPage () {
     handlePaginationChange( newPage );
   }, [ searchParams, router, handlePaginationChange ] );
 
-  // Manejar cambio de ordenamiento y resetear página
+  /**
+   * Callback: Manejar cambio de ordenamiento
+   * Resetea a la primera página al cambiar el orden para evitar páginas vacías
+   */
   const onSortChange = useCallback((newSortOption) => {
     handleSortChange(newSortOption);
     setCurrentPage(1); // Resetear a la primera página al ordenar

@@ -1,6 +1,24 @@
+/**
+ * @fileoverview Componente de encabezado principal de la aplicación
+ * Barra de navegación sticky con logo, menú, búsqueda y botones de autenticación
+ */
 
-
-
+/**
+ * Header principal de LocalTaste
+ * 
+ * Componente de navegación sticky que incluye:
+ * - Logo y nombre de la aplicación
+ * - Menú de navegación (Nuestra Misión, Productos, Productores, Favoritos)
+ * - Barra de búsqueda global
+ * - Botones de registro e inicio de sesión
+ * 
+ * Se mantiene fijo en la parte superior de la página al hacer scroll.
+ * 
+ * @returns {JSX.Element} Componente Header
+ * 
+ * @example
+ * <Header />
+ */
 const Header = ( { } ) => {
   return (
     <header className="w-full bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">

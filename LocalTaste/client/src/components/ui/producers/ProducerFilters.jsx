@@ -2,30 +2,68 @@
 
 import { useState, useEffect, useMemo } from 'react';
 
+/**
+ * @fileoverview Componente de filtros para productores
+ * Agrupa múltiples filtros: tipo de producción, distancia máxima y valoración mínima
+ */
+
+/**
+ * Panel de filtros para búsqueda de productores
+ * 
+ * Combina tres tipos de filtros:
+ * - Tipo de producción (checkboxes): ecológica, artesanal, tradicional
+ * - Distancia máxima (slider): filtra por cercanía en km
+ * - Valoración mínima (radio buttons): 4+, 3+, o todas las estrellas
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onFilterChange - Callback ejecutado cuando cambia cualquier filtro
+ * @param {Array} props.producers - Array de productores para calcular distancia máxima disponible
+ * 
+ * @example
+ * <ProducerFilters 
+ *   onFilterChange={(filters) => console.log('Filtros:', filters)}
+ *   producers={producersList}
+ * />
+ */
 export default function ProducerFilters ( { onFilterChange, producers = [] } ) {
-  // Calcular la distancia máxima de los productores disponibles
+  /**
+   * Calcula la distancia máxima disponible en los productores
+   * Se recalcula solo cuando cambia el array de productores
+   */
   const maxDistanceAvailable = useMemo( () => {
     if ( producers.length === 0 ) return 100;
     const distances = producers.map( p => parseFloat( p.distance ) || 0 );
     return Math.ceil( Math.max( ...distances ) );
   }, [ producers ] );
 
-  // Estados para los filtros
+  /**
+   * Estado de filtros de tipo de producción
+   * Cada propiedad representa si ese tipo está seleccionado
+   */
   const [ productionTypes, setProductionTypes ] = useState( {
     ecologica: false,
     artesanal: false,
     tradicional: false,
   } );
 
+  /** Estado de distancia máxima permitida (en km) */
   const [ maxDistance, setMaxDistance ] = useState( maxDistanceAvailable );
+  
+  /** Estado de valoración mínima requerida (0, 3, o 4 estrellas) */
   const [ minRating, setMinRating ] = useState( 0 );
 
-  // Actualizar maxDistance cuando cambie maxDistanceAvailable
+  /**
+   * Actualiza maxDistance cuando cambia la distancia máxima disponible
+   * Esto ocurre cuando se cargan nuevos productores o cambia el dataset
+   */
   useEffect( () => {
     setMaxDistance( maxDistanceAvailable );
   }, [ maxDistanceAvailable ] );
 
-  // Notificar al padre cuando cambian los filtros
+  /**
+   * Efecto para notificar al padre cuando cambian los filtros
+   * Envía un objeto con todos los filtros activos
+   */
   useEffect( () => {
     if ( onFilterChange )
     {
@@ -37,7 +75,10 @@ export default function ProducerFilters ( { onFilterChange, producers = [] } ) {
     }
   }, [ productionTypes, maxDistance, minRating, onFilterChange ] );
 
-  // Función para limpiar todos los filtros
+  /**
+   * Resetea todos los filtros a sus valores por defecto
+   * Restaura tipos de producción, distancia máxima y valoración
+   */
   const clearFilters = () => {
     setProductionTypes( {
       ecologica: false,
@@ -48,7 +89,11 @@ export default function ProducerFilters ( { onFilterChange, producers = [] } ) {
     setMinRating( 0 );
   };
 
-  // Función para toggle tipo de producción
+  /**
+   * Alterna el estado de un tipo de producción específico
+   * 
+   * @param {string} type - Tipo de producción a alternar (ecologica, artesanal, tradicional)
+   */
   const toggleProductionType = ( type ) => {
     setProductionTypes( prev => ( {
       ...prev,
@@ -56,7 +101,10 @@ export default function ProducerFilters ( { onFilterChange, producers = [] } ) {
     } ) );
   };
 
-  // Verificar si hay filtros activos
+  /**
+   * Verifica si hay algún filtro activo (diferente del valor por defecto)
+   * Usado para habilitar/deshabilitar el botón "Limpiar"
+   */
   const hasActiveFilters = Object.values( productionTypes ).some( v => v ) || maxDistance < maxDistanceAvailable || minRating > 0;
 
   return (

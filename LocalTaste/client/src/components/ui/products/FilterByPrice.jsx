@@ -3,6 +3,28 @@
 import { useEffect } from 'react';
 import { usePriceRange } from '@/hooks/usePriceRange';
 
+/**
+ * @fileoverview Componente de filtro por rango de precios
+ * Implementa un slider dual para seleccionar rango mínimo y máximo de precio
+ */
+
+/**
+ * Filtro de productos por rango de precios
+ * 
+ * Proporciona inputs numéricos y sliders duales para seleccionar un rango de precios.
+ * Los valores se actualizan automáticamente basados en los productos disponibles.
+ * Incluye debouncing (300ms) para evitar notificaciones excesivas al padre.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onPriceRangeChange - Callback ejecutado cuando cambia el rango de precios
+ * @param {Array} props.productsData - Array de productos para calcular el rango de precios disponible
+ * 
+ * @example
+ * <FilterByPrice 
+ *   onPriceRangeChange={({min, max}) => console.log(`Precio: €${min} - €${max}`)}
+ *   productsData={products}
+ * />
+ */
 export default function FilterByPrice({ onPriceRangeChange, productsData = [] }) {
   const {
     minPrice,
@@ -17,12 +39,19 @@ export default function FilterByPrice({ onPriceRangeChange, productsData = [] })
     updatePriceRange
   } = usePriceRange(productsData);
 
-  // Actualizar valores cuando cambien los productos
+  /**
+   * Efecto para actualizar el rango de precios cuando cambian los productos disponibles
+   * Recalcula min/max automáticamente según el nuevo conjunto de productos
+   */
   useEffect(() => {
     updatePriceRange();
   }, [productsData, updatePriceRange]);
 
-  // Notificar al padre cuando cambie el rango de precios con debounce
+  /**
+   * Efecto de debouncing para notificar cambios de precio
+   * Espera 300ms después del último cambio antes de notificar al padre
+   * Esto evita actualizaciones excesivas mientras el usuario arrastra los sliders
+   */
   useEffect(() => {
     const timer = setTimeout(() => {
       if (onPriceRangeChange) {
@@ -41,7 +70,13 @@ export default function FilterByPrice({ onPriceRangeChange, productsData = [] })
     handleMaxPriceChange(e);
   };
 
-  // Calcular porcentajes para el rango visual
+  /**
+   * Calcula el porcentaje de posición de un valor dentro del rango
+   * Usado para posicionar visualmente el rango activo en los sliders
+   * 
+   * @param {number} value - Valor del que calcular el porcentaje
+   * @returns {number} Porcentaje (0-100) de la posición del valor en el rango
+   */
   const getPercent = (value) => {
     return ((value - priceRange.min) / (priceRange.max - priceRange.min)) * 100;
   };

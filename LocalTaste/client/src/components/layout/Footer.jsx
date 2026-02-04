@@ -1,5 +1,24 @@
+/**
+ * @fileoverview Componente de pie de página principal
+ * Footer completo con logo, enlaces de navegación, redes sociales y copyright
+ */
 
-
+/**
+ * Footer principal de LocalTaste
+ * 
+ * Componente de pie de página organizado en 4 columnas:
+ * - Columna 1: Logo, descripción de la empresa y redes sociales
+ * - Columna 2: Enlaces del Mercado (categorías de productos)
+ * - Columna 3: Enlaces de Compañía (sobre nosotros, productores, blog, empleo)
+ * - Columna 4: Enlaces de Ayuda (centro de ayuda, envíos, términos, privacidad)
+ * 
+ * Incluye sección inferior con copyright y mensaje "Hecho con ♥ localmente"
+ * 
+ * @returns {JSX.Element} Componente Footer
+ * 
+ * @example
+ * <Footer />
+ */
 const Footer = ( { } ) => {
   return (
     <footer className="w-full bg-background-light  border-t border-[#e7f3ec] pt-16 pb-8 px-4 md:px-10">

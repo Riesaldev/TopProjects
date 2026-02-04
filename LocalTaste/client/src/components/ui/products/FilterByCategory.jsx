@@ -3,8 +3,37 @@
 import Image from 'next/image';
 import { useCategoryFilter } from '@/hooks/useCategoryFilter';
 
+/**
+ * @fileoverview Componente de filtro por categorías de productos
+ * Permite filtrar productos por categorías predefinidas con checkboxes múltiples
+ */
+
+/**
+ * Filtro de productos por categorías
+ * 
+ * Muestra checkboxes para filtrar productos por categorías como
+ * "Frutas y Verduras", "Lácteos y Huevos", "Panadería Artesanal", etc.
+ * Incluye contador de productos por categoría y botón para limpiar selección.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Function} props.onCategoryChange - Callback ejecutado cuando cambian las categorías seleccionadas
+ * @param {Array} props.productsData - Array de productos para calcular contadores por categoría
+ * 
+ * @example
+ * <FilterByCategory 
+ *   onCategoryChange={(categories) => console.log('Categorías:', categories)}
+ *   productsData={products}
+ * />
+ */
 export default function FilterByCategory({ onCategoryChange, productsData = [] }) {
-  // Definir categorías con mapeo de tipos
+  /**
+   * Mapeo de categorías de interfaz a tipos de producto en la BD
+   * Permite que una categoría de UI agrupe múltiples tipos de productos
+   * 
+   * @type {Object<string, string[]>}
+   * @example
+   * 'Frutas y Verduras' mapea a ['Fruta', 'Verdura']
+   */
   const categoryMapping = {
     'Frutas y Verduras': ['Fruta', 'Verdura'],
     'Lácteos y Huevos': ['Lácteo', 'Huevos'],

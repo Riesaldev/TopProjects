@@ -6,7 +6,45 @@ import HeartFilled from '../../../../public/heart.svg';
 import HeartEmpty from '../../../../public/hearte.svg';
 import Star from '../../../../public/Star.svg';
 
+/**
+ * @fileoverview Componente de tarjeta de productor
+ * Muestra información visual y acciones para un productor local del marketplace
+ */
+
+/**
+ * Tarjeta de productor con información y acciones
+ * 
+ * Muestra imagen, nombre, tipo de negocio, descripción, valoración y distancia del productor.
+ * Incluye acciones interactivas:
+ * - Botón de favoritos (corazón) para seguir productores
+ * - Botón para ver el perfil completo del productor
+ * - Click en la tarjeta para navegar al perfil
+ * 
+ * Maneja valores nulos/undefined con defaults seguros.
+ * 
+ * @param {Object} props - Propiedades del componente
+ * @param {Object} props.producer - Objeto con los datos del productor
+ * @param {string} props.producer.id - ID único del productor
+ * @param {string} props.producer.name - Nombre del productor/negocio
+ * @param {boolean} props.producer.like - Si el productor está en favoritos
+ * @param {string} props.producer.type - Tipo de negocio (Granja, Panadería, etc.)
+ * @param {string} props.producer.description - Descripción del productor
+ * @param {number} props.producer.stars - Valoración (0-5 estrellas)
+ * @param {string} props.producer.image - URL de la imagen del productor
+ * @param {string} props.producer.distance - Distancia en km desde el usuario
+ * 
+ * @example
+ * <ProducerCard producer={{
+ *   id: 1,
+ *   name: "Granja El Sol",
+ *   type: "Granja",
+ *   stars: 4.8,
+ *   distance: "5",
+ *   ...
+ * }} />
+ */
 export default function ProducerCard ( { producer } ) {
+  // Validación: retornar null si no hay productor
   if ( !producer )
   {
     return null;
@@ -23,6 +61,10 @@ export default function ProducerCard ( { producer } ) {
     distance: rawDistance
   } = producer;
 
+  /**
+   * Aplicar valores por defecto para campos vacíos o null
+   * Esto previene errores de renderizado y muestra valores seguros
+   */
   const name = rawName?.trim() || 'Productor sin nombre';
   const like = rawLike ?? false;
   const type = rawType?.trim() || 'Sin categoría';
@@ -30,12 +72,23 @@ export default function ProducerCard ( { producer } ) {
   const stars = rawStars || 0;
   const distance = rawDistance || 'N/A';
 
+  /** Estado local para manejar el like (corazón) independientemente del backend */
   const [ isLiked, setIsLiked ] = useState( like );
 
+  /**
+   * Maneja el click en la tarjeta completa
+   * En producción, navegaría a la página de perfil del productor
+   */
   const handleProducerClick = () => {
     console.log( `Productor seleccionado: ${ name } (ID: ${ id })` );
   };
 
+  /**
+   * Alterna el estado de favorito del productor
+   * Previene la propagación del evento para no activar handleProducerClick
+   * 
+   * @param {Event} e - Evento del click
+   */
   const handleLikeToggle = ( e ) => {
     e.stopPropagation();
     setIsLiked( !isLiked );
