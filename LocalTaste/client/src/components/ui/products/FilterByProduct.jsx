@@ -72,35 +72,37 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
 
   return (
     <>
-      <div className="mb-6 items-center justify-around flex gap-6">
-        <div className="flex w-1/2 items-center rounded-2xl border border-green-300 bg-green-50 p-2 shadow-sm transition-all">
-          <div className="flex items-center justify-center pl-4 pr-2">
-            <span className="flex items-center justify-center w-10 h-10 bg-green-700 rounded-xl">
-              <Image src="/lupa.svg" alt="search icon" width={24} height={24} />
+      <div className="mb-6 items-center justify-around flex gap-4 md:gap-6">
+        <div className="flex w-full md:w-1/2 items-center rounded-2xl border border-green-300 bg-green-50 p-2 shadow-sm transition-all">
+          <div className="flex items-center justify-center pl-2 md:pl-4 pr-2">
+            <span className="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 bg-green-700 rounded-xl">
+              <Image src="/lupa.svg" alt="search icon" width={24} height={24} className="w-5 h-5 md:w-6 md:h-6" />
             </span>
           </div>
           <div className="relative flex-1">
             <input
               id="search"
-              className="w-full pl-2 pr-4 outline-none rounded-lg focus:ring-1 focus:ring-green-300 text-xl h-10 text-green-600"
+              className="w-full pl-2 pr-2 md:pr-4 outline-none rounded-lg focus:ring-1 focus:ring-green-300 text-base md:text-xl h-8 md:h-10 text-green-600 bg-transparent"
               value={searchTerm}
               onChange={handleSearchChange}
               onFocus={() => setIsFocused( true )}
               onBlur={() => setIsFocused( false )}
+              placeholder=""
             />
             <label
               htmlFor="search"
-              className={`absolute left-2 transition-all pointer-events-none ${ searchTerm || isFocused ? 'hidden' : 'top-2 text-xl text-green-600' }`}
+              className={`absolute left-2 transition-all pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis max-w-full ${ searchTerm || isFocused ? 'hidden' : 'top-1 md:top-2 text-sm md:text-xl text-green-600' }`}
             >
-              Buscar manzanas, miel, queso artesanal...
+              <span className="hidden md:inline">Buscar manzanas, miel, queso artesanal...</span>
+              <span className="md:hidden">Buscar productos...</span>
             </label>
           </div>
         </div>
       </div>
       {/* Chips / Quick Filters */}
-      <div className="flex gap-4 mb-8 ml-8 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex gap-2 md:gap-4 mb-8 ml-4 md:ml-8 overflow-x-auto pb-2 scrollbar-hide">
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border border-green-300 text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'todos'
+          className={`shrink-0 px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-green-300 text-sm md:text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'todos'
             ? 'bg-green-400 text-green-950 font-bold'
             : 'bg-green-50 hover:bg-green-100'
             }`}
@@ -109,7 +111,7 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
           Todos
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'organico'
+          className={`shrink-0 px-3 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'organico'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
@@ -118,7 +120,7 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
           🌱 Orgánico
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'sin-lactosa'
+          className={`shrink-0 px-3 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-base font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap ${ activeFilter === 'sin-lactosa'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
@@ -127,7 +129,7 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
           🧀 Sin Lactosa
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'sin-gluten'
+          className={`shrink-0 px-3 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-base font-medium transition-all active:scale-95 cursor-pointer whitespace-nowrap ${ activeFilter === 'sin-gluten'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}
@@ -136,7 +138,7 @@ export default function FilterByProduct ( { onSearchChange, onFilterChange } ) {
           🥖 Sin Gluten
         </button>
         <button
-          className={`shrink-0 px-4 py-2 rounded-full border text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'vegano'
+          className={`shrink-0 px-3 md:px-4 py-1.5 md:py-2 rounded-full border text-sm md:text-base font-medium transition-all active:scale-95 cursor-pointer ${ activeFilter === 'vegano'
             ? 'bg-green-400 text-green-950 font-bold border-green-400'
             : 'bg-green-50 hover:bg-green-100'
             }`}

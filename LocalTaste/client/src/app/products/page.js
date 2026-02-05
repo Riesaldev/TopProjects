@@ -49,7 +49,7 @@ import { usePagination } from "@/hooks/usePagination";
  */
 export default function ProductsPage () {
   /** Número de productos por página */
-  const ITEMS_PER_PAGE = 4;
+  const ITEMS_PER_PAGE = 5;
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -149,7 +149,7 @@ export default function ProductsPage () {
               type="products"
               onSortChange={onSortChange}
             />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 row-auto justify-around mb-8 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 row-auto justify-around mb-8 gap-5">
               {paginatedProducts.length > 0 ? (
                 paginatedProducts.map( ( product ) => (
                   <ProductCard

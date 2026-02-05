@@ -10,16 +10,16 @@ export default function ProductSpotlight () {
         <div className="flex justify-between items-end px-2">
           <div>
             <h2 className="text-text-main text-3xl font-bold leading-tight tracking-tight">Productos Frescos de Temporada</h2>
-            <p className="text-gray-500 mt-2 text-sm">Cosechados ayer, entregados hoy.</p>
+            <p className="text-gray-500 mt-2 text-lg">Cosechados ayer, entregados hoy.</p>
           </div>
-          <a className="text-[#2BEE7C] font-bold text-sm hover:underline flex items-center gap-1" href="#">
+          <a className="text-[#2BEE7C] font-bold text-lg leading-tight hover:underline flex items-center gap-1" href="#">
             Ver todo
             <img src="/Arrow.svg" alt="Arrow Right" className="w-4 h-4" />
           </a>
         </div>
-        <div className="">
+        <div>
           {/* carousel de productos */}
-          <div className="flex overflow-x-auto pb-4 px-8 justify-around">
+          <div className="flex overflow-x-auto pb-4 px-8 justify-around gap-3">
             {products.map( product => (
               <ProductCard key={product.id} product={product} alt={product.name} />
             ) )}

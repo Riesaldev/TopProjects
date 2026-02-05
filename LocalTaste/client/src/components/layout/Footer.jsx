@@ -42,26 +42,28 @@ const Footer = ( { } ) => {
               <a className="hover:scale-115 transition-scale" href="#"><img src="/Mail.svg" alt="Email" width={26} height={26} /></a>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <h4 className="font-bold text-text-main ">Mercado</h4>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Frutas y Verduras</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Lácteos y Huevos</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Carne y Pescado</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Despensa</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h4 className="font-bold text-text-main ">Compañía</h4>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Sobre Nosotros</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Productores</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Blog</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Trabaja con nosotros</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h4 className="font-bold text-text-main ">Ayuda</h4>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Centro de Ayuda</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Envíos y Devoluciones</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Términos y Condiciones</a>
-            <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Privacidad</a>
+          <div className="gap-8 md:gap-12 col-span-2 md:col-span-3 grid grid-cols-3">
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-text-main ">Mercado</h4>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Frutas y Verduras</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Lácteos y Huevos</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Carne y Pescado</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Despensa</a>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-text-main ">Compañía</h4>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Sobre Nosotros</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Productores</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Blog</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Trabaja con nosotros</a>
+            </div>
+            <div className="flex flex-col gap-4">
+              <h4 className="font-bold text-text-main ">Ayuda</h4>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Centro de Ayuda</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Envíos y Devoluciones</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Términos y Condiciones</a>
+              <a className="text-gray-500 hover:text-[#2BEE7C] hover:scale-115 text-sm" href="#">Privacidad</a>
+            </div>
           </div>
         </div>
         <div className="border-t border-[#e7f3ec] pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">

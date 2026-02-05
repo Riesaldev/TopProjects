@@ -54,7 +54,7 @@ import { useProducerSort } from "@/hooks/useProducerSort";
  */
 export default function ProducersPage () {
   /** Número de productores por página */
-  const ITEMS_PER_PAGE = 3;
+  const ITEMS_PER_PAGE = 4;
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -190,7 +190,7 @@ export default function ProducersPage () {
               onSortChange={onSortChange}
             />
             {/* Productores */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-24">
               {paginatedProducers.length > 0 ? (
                 paginatedProducers.map( ( producer ) => (
                   <ProducerCard
@@ -203,13 +203,14 @@ export default function ProducersPage () {
               )}
             </div>
             {/* Pagination */}
-            <Pagination
-              totalItems={filteredAndSortedProducers.length}
-              itemsPerPage={ITEMS_PER_PAGE}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              className="justify-center items-center flex left-8 mb-8"
-            />
+            <div className="flex justify-center pt-25">
+              <Pagination
+                totalItems={filteredAndSortedProducers.length}
+                itemsPerPage={ITEMS_PER_PAGE}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </section>
         </div>
       </main>
