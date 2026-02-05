@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import ProducerCard from "../ui/producers/ProducerCard";
-import producers from '@/data/producer.json';
+import producers from '@/data/producers.json';
 
 // Configuración de la transición
 const TRANSITION_DURATION = 1500; // Duración en milisegundos

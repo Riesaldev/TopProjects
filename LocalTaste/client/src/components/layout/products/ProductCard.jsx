@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import HeartFilled from '../../../../public/heart.svg';
 import HeartEmpty from '../../../../public/hearte.svg';
 import Star from '../../../../public/Star.svg';
@@ -89,31 +90,17 @@ export default function ProductCard ( { product } ) {
   const ofert = rawOfert ?? false;
   const before = rawBefore || 0;
 
-  /*// Si el producto no tiene nombre, no lo mostramos
-  if ( !name || name === 'Producto sin nombre' )
-  {
-    return null;
-  }
-  */
-
   /** Estado local para manejar el like (corazón) independientemente del backend */
   const [ isLiked, setIsLiked ] = useState( like );
 
   /**
-   * Maneja el click en la tarjeta completa
-   * En producción, navegaría a la página de detalle del producto
-   */
-  const handleProductClick = () => {
-    console.log( `Producto seleccionado: ${ name } (ID: ${ id })` );
-  };
-
-  /**
    * Alterna el estado de favorito del producto
-   * Previene la propagación del evento para no activar handleProductClick
+   * Previene la propagación del evento para no activar la navegación
    * 
    * @param {Event} e - Evento del click
    */
   const handleLikeToggle = ( e ) => {
+    e.preventDefault();
     e.stopPropagation();
     setIsLiked( !isLiked );
     console.log( `Like toggled: ${ name } (ID: ${ id })` );
@@ -121,11 +108,12 @@ export default function ProductCard ( { product } ) {
 
   /**
    * Añade el producto al carrito de compra
-   * Previene la propagación del evento para no activar handleProductClick
+   * Previene la propagación del evento para no activar la navegación
    * 
    * @param {Event} e - Evento del click
    */
   const handleAddToCart = ( e ) => {
+    e.preventDefault();
     e.stopPropagation();
     if ( id )
     {
@@ -144,19 +132,10 @@ export default function ProductCard ( { product } ) {
   };
 
   return (
-    <div
-      className="w-auto h-auto bg-white rounded-3xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
+    <Link
+      href={`/products/${ id }`}
+      className="block w-auto h-auto bg-white rounded-3xl shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
       title={`${ name } - ${ type }`}
-      onClick={handleProductClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={( e ) => {
-        if ( e.key === 'Enter' || e.key === ' ' )
-        {
-          e.preventDefault();
-          handleProductClick();
-        }
-      }}
     >
       {/* Imagen del producto */}
       <div className="relative w-full h-40 rounded-t-3xl mb-2 overflow-hidden">
@@ -259,6 +238,6 @@ export default function ProductCard ( { product } ) {
           </button>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

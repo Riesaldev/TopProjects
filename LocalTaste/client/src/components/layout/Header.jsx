@@ -39,7 +39,7 @@ const Header = () => {
           <div className="flex items-center hover:scale-120 transition-transform duration-300">
             <a href="/" className="flex items-center space-x-4">
               <img
-                src="./FarmTractor.svg"
+                src="/FarmTractor.svg"
                 alt="Logo LocalTaste"
                 className="w-12 h-12"
               />

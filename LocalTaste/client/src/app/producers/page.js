@@ -16,7 +16,7 @@ import ProducerFilters from "@/components/ui/producers/ProducerFilters";
 import Pagination from "@/components/ui/Pagination";
 import InfoAndSorting from "@/components/ui/InfoAndSorting";
 //importamos los datos mockeados
-import producerData from "@/data/producer.json";
+import producerData from "@/data/producers.json";
 //importamos los hooks
 import { usePagination } from "@/hooks/usePagination";
 import { useProducerSort } from "@/hooks/useProducerSort";
