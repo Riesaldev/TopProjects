@@ -1,16 +1,20 @@
 # DevTracker - Especificaciones Técnicas
 
 ## 📋 Descripción del Proyecto
+
 DevTracker es un dashboard de productividad para desarrolladores que integra métricas de GitHub, GitLab y Jira para visualizar y analizar el rendimiento de desarrollo.
 
 ## 🎯 Objetivos Principales
+
 - Proporcionar métricas claras de productividad de desarrollo
 - Establecer y hacer seguimiento de objetivos personales y de equipo
 - Ofrecer comparativas anónimas con estándares de la industria
 - Identificar áreas de mejora en el flujo de trabajo
 
 ## 🛠 Stack Tecnológico
+
 ### Frontend
+
 - **Next.js 14** con App Router
 - **Chart.js** y **D3.js** para visualizaciones
 - **Tailwind CSS** para estilos
@@ -18,6 +22,7 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 - **Zod** para validación
 
 ### Backend
+
 - **NestJS** con arquitectura modular
 - **TypeORM** como ORM principal
 - **Passport.js** para autenticación OAuth
@@ -25,10 +30,12 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 - **Jest** para testing
 
 ### Base de Datos
+
 - **PostgreSQL** con TimescaleDB
 - **Redis** para caching y colas
 
 ### APIs Externas
+
 - **GitHub REST API** v4
 - **GitLab API** v4
 - **Jira REST API** v3
@@ -37,6 +44,7 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 ## 🗄️ Esquema de Base de Datos
 
 ### Tabla: users
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID (PK) | ID único usuario |
@@ -47,6 +55,7 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 | created_at | TIMESTAMP | Fecha creación |
 
 ### Tabla: connected_services
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID (PK) | ID único |
@@ -60,6 +69,7 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 | created_at | TIMESTAMP | Fecha creación |
 
 ### Tabla: developer_metrics
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID (PK) | ID único |
@@ -77,6 +87,7 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 | active_days | INTEGER | Días activos |
 
 ### Tabla: goals
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID (PK) | ID único |
@@ -94,30 +105,35 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 ## 🔧 Funcionalidades Principales
 
 ### 1. Sistema de Autenticación
+
 - Login con OAuth2 para GitHub, GitLab, Jira
 - Gestión segura de tokens
 - Reconexión automática
 - Permisos granulares
 
 ### 2. Sincronización de Datos
+
 - Sincronización incremental
 - Procesamiento en background
 - Manejo de rate limits
 - Cache inteligente
 
 ### 3. Dashboard de Métricas
+
 - Visualización personal/equipo
 - Gráficos interactivos
 - Vistas temporales
 - Comparativas históricas
 
 ### 4. Sistema de Objetivos
+
 - Objetivos SMART
 - Notificaciones de progreso
 - Análisis de tendencias
 - Recomendaciones automáticas
 
 ### 5. Reportes y Exportación
+
 - Reportes PDF personalizables
 - Exportación CSV/JSON
 - Reportes automáticos
@@ -126,18 +142,21 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 ## 🚀 Entregables por Fases
 
 ### Fase 1: MVP (3 semanas)
+
 - [ ] Autenticación OAuth GitHub
 - [ ] Sincronización básica repositorios
 - [ ] Dashboard métricas básicas
 - [ ] Visualizaciones simples
 
 ### Fase 2: Completar (2 semanas)
+
 - [ ] Integración GitLab/Jira
 - [ ] Sistema objetivos
 - [ ] Métricas avanzadas
 - [ ] Exportación reportes
 
 ### Fase 3: Mejoras (1 semana)
+
 - [ ] Dashboard equipo
 - [ ] Recomendaciones automáticas
 - [ ] Optimización rendimiento
@@ -146,18 +165,21 @@ DevTracker es un dashboard de productividad para desarrolladores que integra mé
 ## 📱 Consideraciones Técnicas
 
 ### Seguridad
+
 - Encriptación tokens
 - Validación scopes OAuth
 - Rate limiting APIs
 - Auditoría accesos
 
 ### Performance
+
 - Cache agresivo métricas
 - Sincronización incremental
 - Paginación datos
 - Optimización queries
 
 ### Escalabilidad
+
 - Arquitectura modular
 - Procesamiento asíncrono
 - DB optimizada temporal

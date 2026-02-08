@@ -1,16 +1,20 @@
 # SkillCanvas - Especificaciones Técnicas
 
 ## 📋 Descripción del Proyecto
+
 SkillCanvas es una plataforma para crear portfolios interactivos para desarrolladores, con visualización 3D de habilidades y proyectos, e integración con GitHub.
 
 ## 🎯 Objetivos Principales
+
 - Crear portfolios visualmente atractivos para desarrolladores
 - Visualizar habilidades técnicas en 3D de forma interactiva
 - Integrar proyectos de GitHub automáticamente
 - Proporcionar analytics de visitas y engagement
 
 ## 🛠 Stack Tecnológico
+
 ### Frontend
+
 - **Vue 3** con Composition API
 - **Three.js** para visualizaciones 3D
 - **Vite** como build tool
@@ -18,6 +22,7 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 - **Vue Router** para navegación SPA
 
 ### Backend
+
 - **Node.js** + **Express.js**
 - **GitHub REST API** v3
 - **JWT** para autenticación
@@ -25,12 +30,14 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 - **Jest** para testing
 
 ### Base de Datos
+
 - **MongoDB** para datos de usuarios y portfolios
 - **Redis** para caching de datos de GitHub
 
 ## 🗄️ Esquema de Base de Datos
 
 ### Tabla: users
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | ObjectId (PK) | ID único del usuario |
@@ -41,6 +48,7 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 | created_at | Date | Fecha de creación |
 
 ### Tabla: portfolios
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | ObjectId (PK) | ID único del portfolio |
@@ -54,6 +62,7 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 | updated_at | Date | Fecha de actualización |
 
 ### Tabla: skills
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | ObjectId (PK) | ID único de skill |
@@ -65,6 +74,7 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 | created_at | Date | Fecha de creación |
 
 ### Tabla: projects
+
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | ObjectId (PK) | ID único del proyecto |
@@ -81,30 +91,35 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 ## 🔧 Funcionalidades Principales
 
 ### 1. Editor Visual de Portfolios
+
 - Interfaz drag & drop para organizar elementos
 - Templates predefinidos y personalizables
 - Vista previa en tiempo real
 - Personalización de colores y estilos
 
 ### 2. Visualización 3D de Habilidades
+
 - Gráfico 3D interactivo de skills
 - Diferentes representaciones visuales
 - Animaciones y transiciones suaves
 - Navegación intuitiva
 
 ### 3. Integración con GitHub
+
 - Sincronización automática de repositorios
 - Importación de datos de proyectos
 - Actualización periódica de métricas
 - Filtrado y selección de proyectos
 
 ### 4. Analytics de Portfolio
+
 - Tracking de visitas y engagement
 - Gráficos de métricas de visualización
 - Datos demográficos de visitantes
 - Exportación de reportes
 
 ### 5. Sistema de Compartición
+
 - URLs personalizadas
 - Tarjetas sociales optimizadas (Open Graph)
 - Códigos QR para compartir
@@ -113,18 +128,21 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 ## 🚀 Entregables por Fases
 
 ### Fase 1: MVP (3 semanas)
+
 - [ ] Autenticación con GitHub OAuth
 - [ ] Editor básico de portfolio
 - [ ] Integración con GitHub API
 - [ ] Vista 2D de habilidades
 
 ### Fase 2: Funcionalidades Avanzadas (2 semanas)
+
 - [ ] Visualización 3D de habilidades
 - [ ] Sistema de analytics
 - [ ] Templates personalizables
 - [ ] Compartición y URLs personalizadas
 
 ### Fase 3: Mejoras (1 semana)
+
 - [ ] Optimización de rendimiento
 - [ ] Temas adicionales
 - [ ] Exportación de datos
@@ -133,18 +151,21 @@ SkillCanvas es una plataforma para crear portfolios interactivos para desarrolla
 ## 📱 Consideraciones Técnicas
 
 ### Seguridad
+
 - Validación de datos de entrada
 - Autenticación JWT segura
 - Control de acceso a portfolios
 - Encriptación de datos sensibles
 
 ### Performance
+
 - Caching de datos de GitHub con Redis
 - Optimización de gráficos 3D para rendimiento
 - Lazy loading de componentes pesados
 - Compresión de assets
 
 ### Escalabilidad
+
 - Arquitectura modular para fácil expansión
 - Diseño responsive para diferentes dispositivos
 - Base de datos escalable con MongoDB
