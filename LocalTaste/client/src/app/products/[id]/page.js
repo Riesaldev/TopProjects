@@ -89,6 +89,7 @@ export default function ProductDetailPage ( { params } ) {
     origin = 'Origen no especificado',
     location = 'Ubicación no especificada',
     category = product.type || 'Sin categoría',
+    productor = 'No especificado',
     stars = 0,
     reviews = 0,
     price: productPrice = 0,
@@ -103,15 +104,17 @@ export default function ProductDetailPage ( { params } ) {
     image
   } = product;
 
-  // Imágenes de la galería (usar imagen principal si no hay galería)
-  const images = gallery.length > 0 ? gallery : [ image, image, image, image ];
+  // Imágenes de la galería (si no hay mas de una imagen, no usar galería)
+  const images = gallery.length > 1 ? gallery : [ image ];
 
-  // Productos relacionados - prioriza mismo tipo, luego otros productos
+  // Productos relacionados - prioriza los productos del mismo productor, luego los del mismo tipo, y excluye el producto actual
   const relatedProducts = productsData
     .filter( p => p.id !== product.id && p.name ) // Excluir el actual y productos sin nombre
     .sort( ( a, b ) => {
-      // Priorizar productos del mismo tipo
-      if ( a.type === product.type && b.type !== product.type ) return -1;
+      //Priorizamos los productos pertenecientes al mismo productor
+      if ( a.producerId )
+        // Luego riorizar productos del mismo tipo
+        if ( a.type === product.type && b.type !== product.type ) return -1;
       if ( a.type !== product.type && b.type === product.type ) return 1;
       return 0;
     } )
