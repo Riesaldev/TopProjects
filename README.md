@@ -4,7 +4,7 @@ Repositorio que contiene 10 aplicaciones web innovadoras diseñadas y desarrolla
 
 ## 📊 Estado del Proyecto
 
-- **✅ En desarrollo activo:** RollForge, LocalTaste
+- **✅ En desarrollo activo:** RollForge, LocalTaste, Blurry
 - **📋 Planificados:** DevTracker, EventMatch, GreenRoute, MindSpace, SkillsCanva, GrannFix, NäraPaws, PaketGranne
 
 ---
@@ -44,6 +44,27 @@ Conecta consumidores con productores locales de alimentos frescos. Permite suscr
 - Notificaciones en tiempo real con Socket.io
 - Búsqueda con filtros avanzados
 - Integración con Cloudinary para imágenes
+
+### Blurry - Plataforma de Citas con IA
+
+**Estado:** 🟢 En desarrollo  
+**Stack:** Next.js 16 + TypeScript + Tailwind (Frontend) | NestJS + TypeORM + MySQL + Redis (Backend)
+
+Plataforma moderna de citas que conecta personas mediante algoritmos de compatibilidad inteligentes. Incluye:
+
+- Matching por IA con scores de compatibilidad
+- Chat en tiempo real con Socket.io
+- Videollamadas integradas con WebRTC
+- Sistema de gamificación con tokens y recompensas
+- Panel de moderación y administración
+
+**Características destacadas:**
+
+- Algoritmos de IA para matching basado en compatibilidad
+- Videollamadas P2P con WebRTC
+- Sistema de tokens y misiones gamificadas
+- Moderación automática de contenido
+- Dashboard administrativo completo
 
 ---
 
@@ -148,10 +169,10 @@ Organiza la recepción y entrega de paquetes en edificios y comunidades, con mod
 
 | Tecnología | Proyectos |
 |------------|-----------|
-| **Next.js** | LocalTaste, GrannFix, NäraPaws, PaketGranne, DevTracker |
+| **Next.js** | LocalTaste, Blurry, GrannFix, NäraPaws, PaketGranne, DevTracker |
 | **React** | RollForge, EventMatch |
 | **Vue.js 3** | GreenRoute, MindSpace, SkillsCanva |
-| **TypeScript** | RollForge |
+| **TypeScript** | RollForge, Blurry |
 | **Tailwind CSS** | Todos los proyectos |
 
 ### Backend
@@ -159,19 +180,19 @@ Organiza la recepción y entrega de paquetes en edificios y comunidades, con mod
 | Tecnología | Proyectos |
 |------------|-----------|
 | **Node.js + Express** | RollForge, LocalTaste, EventMatch, GreenRoute, GrannFix, NäraPaws, PaketGranne, SkillsCanva |
-| **NestJS** | DevTracker, MindSpace |
-| **Socket.io** | RollForge, LocalTaste, EventMatch, GrannFix, NäraPaws, PaketGranne |
+| **NestJS** | Blurry, DevTracker, MindSpace |
+| **Socket.io** | RollForge, LocalTaste, Blurry, EventMatch, GrannFix, NäraPaws, PaketGranne |
 | **Prisma ORM** | LocalTaste, EventMatch, GrannFix, NäraPaws, PaketGranne |
-| **TypeORM** | DevTracker, MindSpace |
+| **TypeORM** | Blurry, DevTracker, MindSpace |
 
 ### Base de Datos
 
 | Tecnología | Proyectos |
 |------------|-----------|
-| **MySQL** | RollForge, LocalTaste, GrannFix, NäraPaws, PaketGranne |
+| **MySQL** | RollForge, LocalTaste, Blurry, GrannFix, NäraPaws, PaketGranne |
 | **PostgreSQL** | DevTracker, EventMatch, GreenRoute, MindSpace |
 | **MongoDB** | SkillsCanva |
-| **Redis** | DevTracker, GreenRoute, MindSpace, SkillsCanva, PaketGranne (opcional) |
+| **Redis** | Blurry, DevTracker, GreenRoute, MindSpace, SkillsCanva, PaketGranne (opcional) |
 
 ### Servicios Externos
 
@@ -196,6 +217,9 @@ TopProjects/
 │   ├── client/                  # Next.js 16
 │   ├── server/                  # (Planificado)
 │   └── design/                  # Mockups y diseños
+├── Blurry/                      # 🟢 En desarrollo
+│   ├── Client/                  # Next.js 16 + TypeScript
+│   └── Server/                  # NestJS + TypeORM + MySQL
 ├── DevTracker/                  # 📋 Planificado
 │   ├── HISTORIAS.md
 │   └── README.md
