@@ -1,0 +1,32 @@
+[
+  {
+    "id": "report_001",
+    "usuario_reportado": "usuario123",
+    "usuario_reportador": "usuario456",
+    "motivo": "Comportamiento inapropiado",
+    "descripcion": "Usuario enviando mensajes ofensivos",
+    "fecha": "2025-07-30T09:30:00Z",
+    "estado": "pendiente",
+    "categoria": "conducta"
+  },
+  {
+    "id": "report_002",
+    "usuario_reportado": "usuario789",
+    "usuario_reportador": "usuario101",
+    "motivo": "Spam",
+    "descripcion": "Usuario enviando mensajes repetitivos",
+    "fecha": "2025-07-29T13:45:00Z",
+    "estado": "resuelto",
+    "categoria": "spam"
+  },
+  {
+    "id": "report_003",
+    "usuario_reportado": "usuario112",
+    "usuario_reportador": "usuario131",
+    "motivo": "Perfil falso",
+    "descripcion": "Información de perfil sospechosa",
+    "fecha": "2025-07-28T16:20:00Z",
+    "estado": "investigando",
+    "categoria": "perfil"
+  }
+]
