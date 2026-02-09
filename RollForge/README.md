@@ -320,50 +320,208 @@ npm test
 ## 📂 Estructura del Proyecto
 
 ```
+
 RollForge/
-├── client/                      # Frontend React
+├── client/
 │   ├── src/
-│   │   ├── components/          # Componentes reutilizables
-│   │   │   ├── DraggableResizable.tsx
-│   │   │   ├── HexGridMap.tsx
-│   │   │   ├── PlayerList.tsx
-│   │   │   └── Tools.tsx
-│   │   ├── context/             # Context API
-│   │   │   └── PlayersContext.tsx
-│   │   ├── utils/               # Utilidades
-│   │   │   └── hex.ts           # Lógica hexagonal
+│   │   ├── components/
+│   │   │   ├── common/                    # Componentes reutilizables globales
+│   │   │   │   ├── Button.tsx
+│   │   │   │   ├── Modal.tsx
+│   │   │   │   ├── Navbar.tsx
+│   │   │   │   └── ...
+│   │   │   │
+│   │   │   ├── layouts/                   # Layouts (con sidebar, topbar, etc.)
+│   │   │   │   ├── MainLayout.tsx
+│   │   │   │   └── AuthLayout.tsx
+│   │   │   │
+│   │   │   └── features/                  # Por CADA feature del designs/
+│   │   │       ├── auth/
+│   │   │       │   ├── LoginForm.tsx
+│   │   │       │   ├── RegisterForm.tsx
+│   │   │       │   └── PasswordRecovery.tsx
+│   │   │       │
+│   │   │       ├── dashboard/
+│   │   │       │   ├── Dashboard.tsx
+│   │   │       │   ├── CampaignOverview.tsx
+│   │   │       │   └── QuickStats.tsx
+│   │   │       │
+│   │   │       ├── vtt/                   # Virtual Tabletop Interface
+│   │   │       │   ├── MapViewer.tsx
+│   │   │       │   ├── TokenManager.tsx
+│   │   │       │   └── LayerManager.tsx
+│   │   │       │
+│   │   │       ├── character-sheet/
+│   │   │       │   ├── CharacterSheet.tsx
+│   │   │       │   ├── AttributesPanel.tsx
+│   │   │       │   └── SkillsPanel.tsx
+│   │   │       │
+│   │   │       ├── map-tools/
+│   │   │       │   ├── DistanceMeasurement.tsx
+│   │   │       │   ├── AoECalculator.tsx
+│   │   │       │   └── GridOverlay.tsx
+│   │   │       │
+│   │   │       ├── chat-dice/
+│   │   │       │   ├── ChatPanel.tsx
+│   │   │       │   ├── DiceRoller.tsx
+│   │   │       │   └── MessageHistory.tsx
+│   │   │       │
+│   │   │       ├── campaign/
+│   │   │       │   ├── CampaignSetup.tsx
+│   │   │       │   ├── InvitationManager.tsx
+│   │   │       │   └── CampaignSettings.tsx
+│   │   │       │
+│   │   │       ├── resources/
+│   │   │       │   ├── ResourceLibrary.tsx
+│   │   │       │   ├── RulebookViewer.tsx
+│   │   │       │   └── ImageUploader.tsx
+│   │   │       │
+│   │   │       ├── scheduler/
+│   │   │       │   ├── SessionScheduler.tsx
+│   │   │       │   └── AlertNotifications.tsx
+│   │   │       │
+│   │   │       └── profile/
+│   │   │           ├── UserProfile.tsx
+│   │   │           └── PreferencesPanel.tsx
+│   │   │
+│   │   ├── hooks/                        # Custom hooks
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useSocket.ts
+│   │   │   ├── useLocalStorage.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── context/                      # Context API providers
+│   │   │   ├── AuthContext.tsx
+│   │   │   ├── GameContext.tsx
+│   │   │   └── NotificationContext.tsx
+│   │   │
+│   │   ├── services/                     # API & externa services
+│   │   │   ├── api.ts                    # Axios/Fetch instance
+│   │   │   ├── authService.ts
+│   │   │   ├── gameService.ts
+│   │   │   ├── socketService.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── types/                        # TypeScript interfaces
+│   │   │   ├── auth.ts
+│   │   │   ├── game.ts
+│   │   │   ├── character.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── utils/                        # Funciones reutilizables
+│   │   │   ├── hexMath.ts               # Cálculos para hexágonos
+│   │   │   ├── validators.ts
+│   │   │   ├── formatters.ts
+│   │   │   └── calculations.ts
+│   │   │
+│   │   ├── styles/                       # Estilos globales
+│   │   │   ├── globals.css
+│   │   │   └── variables.css
+│   │   │
+│   │   ├── assets/
+│   │   │   ├── images/
+│   │   │   ├── icons/
+│   │   │   ├── fonts/
+│   │   │   └── sounds/
+│   │   │
 │   │   ├── App.tsx
 │   │   └── main.tsx
-│   ├── package.json
-│   └── vite.config.ts
+│   │
+│   ├── tests/
+│   │   ├── unit/
+│   │   ├── integration/
+│   │   └── e2e/
+│   │
+│   └── package.json
 │
-└── server/                      # Backend Node.js
-    ├── src/
-    │   ├── config/              # Configuración
-    │   ├── controllers/         # Lógica de negocio
-    │   ├── db/                  # Conexión y schemas
-    │   │   ├── getPool.ts
-    │   │   └── initDb.ts
-    │   ├── jobs/                # Tareas programadas
-    │   ├── middlewares/         # Middlewares Express
-    │   │   └── authUser.ts
-    │   ├── models/              # Modelos de datos
-    │   ├── routes/              # Definición de rutas
-    │   ├── schemas/             # Validación Zod
-    │   │   ├── campaign.ts
-    │   │   ├── pjs.ts
-    │   │   ├── resources.ts
-    │   │   └── tokens.ts
-    │   ├── tests/               # Tests Vitest + Supertest
-    │   └── utils/               # Utilidades
-    │       ├── email/
-    │       │   └── sendEmail.ts
-    │       └── generateErrorUtil.ts
-    ├── uploads/                 # Archivos subidos
-    ├── app.ts                   # Entry point
-    ├── package.json
-    └── tsconfig.json
-```
+├── server/
+│   ├── src/
+│   │   ├── routes/                       # Todas las rutas
+│   │   │   ├── auth.routes.ts
+│   │   │   ├── campaign.routes.ts
+│   │   │   ├── character.routes.ts
+│   │   │   ├── game.routes.ts
+│   │   │   ├── resources.routes.ts
+│   │   │   └── index.ts
+│   │   │
+│   │   ├── controllers/                  # Lógica de endpoints
+│   │   │   ├── authController.ts
+│   │   │   ├── campaignController.ts
+│   │   │   ├── characterController.ts
+│   │   │   ├── gameController.ts
+│   │   │   └── resourceController.ts
+│   │   │
+│   │   ├── services/                     # Lógica de negocio
+│   │   │   ├── authService.ts
+│   │   │   ├── campaignService.ts
+│   │   │   ├── characterService.ts
+│   │   │   ├── emailService.ts
+│   │   │   ├── fileService.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── models/                       # Esquemas de BD
+│   │   │   ├── User.ts
+│   │   │   ├── Campaign.ts
+│   │   │   ├── Character.ts
+│   │   │   ├── Session.ts
+│   │   │   ├── GameToken.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── middlewares/                  # Middleware Express
+│   │   │   ├── auth.middleware.ts
+│   │   │   ├── errorHandler.ts
+│   │   │   ├── validation.middleware.ts
+│   │   │   └── logging.middleware.ts
+│   │   │
+│   │   ├── socket/                       # Socket.io handlers
+│   │   │   ├── gameEvents.ts
+│   │   │   ├── chatEvents.ts
+│   │   │   ├── presenceEvents.ts
+│   │   │   └── namespacesConfig.ts
+│   │   │
+│   │   ├── types/                        # TS interfaces
+│   │   │   ├── express.d.ts
+│   │   │   ├── entities.ts
+│   │   │   └── socket.ts
+│   │   │
+│   │   ├── utils/
+│   │   │   ├── validators.ts
+│   │   │   ├── errorHandler.ts
+│   │   │   ├── logger.ts
+│   │   │   └── constants.ts
+│   │   │
+│   │   ├── config/
+│   │   │   ├── database.ts
+│   │   │   ├── environment.ts
+│   │   │   └── socketConfig.ts
+│   │   │
+│   │   ├── uploads/                      # Directorio para archivos
+│   │   │   ├── maps/
+│   │   │   ├── pdfs/
+│   │   │   ├── avatars/
+│   │   │   ├── audio/
+│   │   │   └── music/
+│   │   │
+│   │   └── index.ts
+│   │
+│   ├── tests/
+│   │   ├── unit/
+│   │   ├── integration/
+│   │   └── fixtures/
+│   │
+│   └── package.json
+│
+├── docs/                                  # Documentación
+│   ├── API.md
+│   ├── ARCHITECTURE.md
+│   ├── SOCKET_EVENTS.md
+│   └── DATABASE_SCHEMA.md
+│
+├── HISTORIAS.md
+├── README.md
+├── .gitignore
+├── .env.example
+└── package.json (root - para scripts compartidos)
 
 ## 🚀 Características Futuras
 
