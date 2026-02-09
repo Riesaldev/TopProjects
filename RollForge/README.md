@@ -9,14 +9,16 @@ RollForge es una plataforma web colaborativa para jugar juegos de rol de mesa en
 - Facilitar sesiones de rol a distancia con herramientas visuales.
 - Proporcionar mapas interactivos con medición de distancias y áreas de efecto.
 - Permitir la gestión completa de campañas, personajes y tokens.
-- Ofrecer un sistema de recursos compartidos (mapas, PDFs, audio).
+- Ofrecer un sistema de recursos compartidos (mapas, PDFs, audio, música, imágenes, notas y resúmenes autogenerados de las campañas jugadas).
 - Garantizar experiencia fluida con sincronización en tiempo real.
+- Avisar a los jugadores sobre eventos importantes (turnos, efectos, etc.) mediante notificaciones visuales y sonoras.
+- Avisos via email o wasap de próximas sesiones, cambios en la campaña o eventos importantes.
 
 ## 🛠 Stack Tecnológico
 
 ### Frontend Setup
 
-- **React 18** con **Vite**
+- **React** con **Vite**
 - **TypeScript** para type safety
 - **Tailwind CSS** para estilos modernos
 - **Socket.io-client** para comunicación en tiempo real
