@@ -58,6 +58,7 @@
 **Criterios de aceptación:**
 
 - ✅ Nombre del personaje
+- ✅ Edición y guardado de la ficha 
 - ✅ Imagen/avatar opcional
 - ✅ Vinculación a campaña
 - ✅ Persistencia en BD
@@ -73,10 +74,11 @@
 **Criterios de aceptación:**
 
 - ✅ Lista visual con nombres
-- ✅ Colores distintivos automáticos
+- ✅ Colores distintivos elegibles por el usuario
 - ✅ Indicador online/offline
 - ✅ Badge de GM visible
 - ✅ Persistencia en localStorage
+- ✅ Actualización en tiempo real (Socket.io
 
 ---
 
@@ -93,6 +95,8 @@
 - ✅ Línea visual discontinua
 - ✅ Distancia en pies (1 hex = 5 ft)
 - ✅ Colores diferenciados (inicio verde, fin rojo)
+- ✅ Reset al hacer click en otro hex o botón de limpiar
+- ✅ Persistencia temporal de la medición hasta nueva acción
 
 ---
 
@@ -154,9 +158,13 @@
 **Criterios de aceptación:**
 
 - ⏳ Generación de código de invitación
-- ⏳ Link compartible
+- ⏳ Link compartible por email o redes
 - ⏳ Lista de jugadores invitados
 - ⏳ Control de permisos
+- ⏳ Opción de revocar invitación
+- ⏳ Notificación al jugador invitado
+- ⏳ Acceso a campaña tras aceptación de invitación
+- ⏳ Acceso al mapa y recursos de campaña para jugadores invitados segun sistema eleguido
 
 ---
 
@@ -283,6 +291,9 @@
 - ⏳ Guardado manual
 - ⏳ Restauración de estado
 - ⏳ Historial de versiones
+- ⏳ Notificación de guardado exitoso mediante toast o presencia de icono de guardado
+- ⏳ Sincronización de estado entre jugadores en tiempo real (Socket.io)
+- ⏳ Generacion de la transcripcion de la partida en formato texto o PDF al finalizar la sesión, incluyendo acciones, tiradas de dados y chat relevante
 
 ---
 
@@ -298,6 +309,13 @@
 - ⏳ Modificadores (+/-)
 - ⏳ Historial de tiradas
 - ⏳ Tiradas visibles para todos/privadas GM
+- ⏳ Integración con chat para mostrar resultados
+- ⏳ Personalización de dados (colores, estilos)
+- ⏳ Opción de tirar múltiples dados a la vez
+- ⏳ Soporte para tiradas de habilidad (ej: 3d6) y tiradas de ataque (ej: 1d20 + mod)
+- ⏳ Animaciones visuales para las tiradas de dados
+- ⏳ Sonidos asociados a las tiradas de dados
+- ⏳ Opción de guardar tiradas frecuentes como macros para uso rápido
 
 ---
 
@@ -309,10 +327,14 @@
 
 **Criterios de aceptación:**
 
-- ⏳ Mensajes en tiempo real (Socket.io)
+- ⏳ Mensajes en tiempo real en grupo o a un usuario especifico(Socket.io)
 - ⏳ Mensajes de sistema (acciones)
 - ⏳ Historial persistente
 - ⏳ Markdown básico
+- ⏳ Chat de voz en tiempo real (WebRTC)
+- ⏳ Compartir imágenes y recursos en el chat
+- ⏳ Notificaciones de nuevos mensajes
+- ⏳ Opción de silenciar chat o usuarios específicos
 
 ---
 
