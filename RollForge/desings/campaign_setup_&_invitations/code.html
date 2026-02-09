@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RollForge - Campaign Setup</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3713ec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#131022",
+                        "surface-dark": "#1e1e24",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #131022; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b2839; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3713ec; 
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased min-h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#2b2839] bg-surface-light dark:bg-[#121118] px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">casino</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">RollForge</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8 items-center">
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium leading-normal text-primary" href="#">Campaigns</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Compendium</a>
+<a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Assets</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center rounded-full size-10 hover:bg-slate-100 dark:hover:bg-[#2b2839] transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-slate-200 dark:ring-[#2b2839]" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAW8XjCE3vPKjv70kxDB4bHipp7Ia8ly0XgvtNYPPfq4IXKjJrAty-bv-VsKhUVwrT69zERnBlJzEoewzPa9cH6hLFOHSRu2fYeMdmXtC1jZuHNgEhG4gHwILXS67JvqgvrTi3dGBvvjoeHvTH0kAofh0RMDebegqPhlPfARcCnJCVKn7KPqOtg4qkzd5YS53d7F7Vd0epjIz32_rm6McccWCPXqh7D8X2TmnNDuNC7dMoGrw1CV3MBiepst3myagKjzQRZVOay958");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-[1440px] mx-auto p-6 md:p-10">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<div class="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm mb-1">
+<a class="hover:text-primary" href="#">Campaigns</a>
+<span class="material-symbols-outlined text-base">chevron_right</span>
+<span>Edit</span>
+</div>
+<h1 class="text-3xl font-black tracking-tight">The Cursed Spire of Eldoria</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-5 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 font-medium text-sm hover:bg-slate-100 dark:hover:bg-[#2b2839] transition-colors">
+                    Cancel
+                </button>
+<button class="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-white font-medium text-sm shadow-lg shadow-primary/25 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">save</span>
+                    Save Changes
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Campaign Identity -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- Basic Info Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 border border-slate-200 dark:border-[#2b2839] shadow-sm">
+<h2 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">edit_document</span>
+                        Campaign Details
+                    </h2>
+<div class="space-y-6">
+<label class="block">
+<span class="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">Campaign Name</span>
+<input class="w-full bg-slate-50 dark:bg-[#131022] border border-slate-200 dark:border-[#2b2839] rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" type="text" value="The Cursed Spire of Eldoria"/>
+</label>
+<label class="block">
+<span class="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">Synopsis</span>
+<textarea class="w-full bg-slate-50 dark:bg-[#131022] border border-slate-200 dark:border-[#2b2839] rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all min-h-[160px] resize-y">The kingdom is in peril. A mysterious spire has erupted from the earth, spewing dark magic across the lands. Only a band of unlikely heroes can stop the encroaching darkness.</textarea>
+<span class="text-xs text-slate-400 mt-1 block text-right">142/500 characters</span>
+</label>
+</div>
+</div>
+<!-- Cover Art Card -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 border border-slate-200 dark:border-[#2b2839] shadow-sm flex flex-col h-full">
+<h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">image</span>
+                        Cover Art
+                    </h2>
+<div class="flex-1 relative group cursor-pointer overflow-hidden rounded-lg border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-primary dark:hover:border-primary transition-colors bg-slate-50 dark:bg-[#131022] min-h-[240px] flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-40 transition-opacity" data-alt="Fantasy landscape with a dark tower" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDUn4yJA4CFyH_qCIiLzmeCpFaelK2JKr7NdSjUQemmPXGXvN2sl8tO1Wc7M-Fv-bgHMecm3wQq_okEqZ4e4Bq8TwMwbO8H4MVj1I_HDRJJ1OpZ6v-cEVtgeTrBc3uHM13hpFFKakBVHsL24VD3j3YjxJzGV5L7uvwnHKJKlcDyzyRnQh5CPgDjuZo3bwTlTF-lHpHteJZsD7Ig1mxA0c60j5lrY6TSpBnNHBH0xL_3O7_gx5k22h_dIM1h9Po_lMHVkPLiVFhbklw');"></div>
+<div class="relative z-10 flex flex-col items-center gap-3 text-slate-600 dark:text-slate-300">
+<div class="p-3 bg-surface-light dark:bg-surface-dark rounded-full shadow-lg">
+<span class="material-symbols-outlined text-2xl">cloud_upload</span>
+</div>
+<p class="font-medium text-sm bg-surface-light/80 dark:bg-surface-dark/80 px-3 py-1 rounded-full backdrop-blur-sm">Click or drag to replace cover</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Invitations & Members -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- Invitation Module -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 border border-slate-200 dark:border-[#2b2839] shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-9xl">qr_code_2</span>
+</div>
+<h2 class="text-xl font-bold mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person_add</span>
+                        Invite Players
+                    </h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Share this unique link to let your party join automatically.</p>
+<div class="flex gap-4 mb-6">
+<div class="bg-white p-2 rounded-lg border border-slate-200 dark:border-none">
+<img alt="QR Code for joining campaign" class="size-24 mix-blend-multiply" data-alt="QR Code to join campaign" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTxcflqk8_usANcBw_m6tsT4Ai6HeDU3b3zqQuj2payD7tL_Y9yEd6bUcBRr3esSe2tDu6kylF-L20nNkl24EayUDHqItgfBSNkIil6j4-41Dbex_pAX6ZTCTRsU1Mgbl-FLcwfAT2BZ3msc-P6r2HdamxeoeZytF7cu93DGnHzNpEynhEz7gXWzVvWt2-sDvzy15xPVJspyQsklaBw_PRhKvtLTEbvXLvmeCVU3ck4bnIecW3ewayV0fo8oG6xVwskE0awFova2E"/>
+</div>
+<div class="flex flex-col justify-between flex-1">
+<label class="text-xs font-bold text-slate-500 uppercase tracking-wider">Invite Link</label>
+<div class="flex items-center gap-2">
+<div class="bg-slate-50 dark:bg-[#131022] border border-slate-200 dark:border-[#2b2839] rounded px-3 py-2 text-sm text-slate-600 dark:text-slate-300 font-mono flex-1 truncate select-all">
+                                    rollforge.com/join/x7k9-m2p
+                                </div>
+<button class="p-2 bg-primary/10 hover:bg-primary/20 text-primary rounded transition-colors" title="Copy Link">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+</button>
+</div>
+<button class="text-xs text-slate-400 hover:text-primary flex items-center gap-1 mt-2 self-start transition-colors">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                                Regenerate Link
+                            </button>
+</div>
+</div>
+<!-- Permissions Toggle List -->
+<div class="border-t border-slate-200 dark:border-[#2b2839] pt-5">
+<h3 class="text-sm font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wider">Default Permissions</h3>
+<div class="space-y-4">
+<!-- Toggle Item -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Token Movement</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Players can move their own tokens</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Asset Uploads</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Allow players to upload images</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle Item -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-200">Map Drawing</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Enable drawing tools for players</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 dark:peer-focus:ring-primary/30 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Members List -->
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl p-6 border border-slate-200 dark:border-[#2b2839] shadow-sm flex-1">
+<div class="flex items-center justify-between mb-4">
+<h2 class="text-xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">groups</span>
+                            Current Party
+                        </h2>
+<span class="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">3/6</span>
+</div>
+<div class="space-y-1">
+<!-- Member Item -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-[#131022] transition-colors group/member">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Portrait of a male user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC6hOI9zXFmHdSh1yYUGNJ_bZwxKwCaAhvQvWSUEPYDlYx25S4GKGHH6jjP1LhTbuu99rR2B4b8Qnm8BovwjIuY8K_2WVqgA1GkdZHc4MV4bY8g0Nu3WJUPdcmdWNgboisAkKNfxca78LAFifsoe993hNY9VRWylkLKZNfl_iUBFmD76Z6WnZ45U74L47asL6QHeJFiwPWq_Ms6X9cHF7N3fzX7YqUIG0xZt6J55SU73v00cvEu_rL7PWu-OdyshoJAD1qWzv--BYo')"></div>
+<span class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-surface-light dark:border-surface-dark rounded-full"></span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">DungeonMaster99</p>
+<p class="text-xs text-green-500">Online</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover/member:opacity-100 transition-all p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20" title="Revoke Access">
+<span class="material-symbols-outlined text-lg">person_remove</span>
+</button>
+</div>
+<!-- Member Item -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-[#131022] transition-colors group/member">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Portrait of a female user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-er5ydn1VdKU3qEeLjNudDPXiVZfb9s5lubuacINei1BznpknTEhk0Fr6efDir-wGKhBtqWQj0-kNTRlWdNKwfxtrkSQl1DsyOOL68qfTasEBQIijV-Ne9AdMxCOA7ELscqS5HqvUc0-YG-IWWXo__5XT89WMc7yeN69n_JJSGxgGJsjdmYt-OtRwLd_flgaDOI2Yy-1a_hvzaDDSoMxM4tVITgb4irMisYEAZY5rqu3K23uuPUZS_EI2hG1vSfnx5uUvgdprX-Q')"></div>
+<span class="absolute bottom-0 right-0 size-3 bg-slate-400 border-2 border-surface-light dark:border-surface-dark rounded-full"></span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">ElfRanger_42</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Last seen 2h ago</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover/member:opacity-100 transition-all p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20" title="Revoke Access">
+<span class="material-symbols-outlined text-lg">person_remove</span>
+</button>
+</div>
+<!-- Member Item -->
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-[#131022] transition-colors group/member">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="size-10 rounded-full bg-cover bg-center" data-alt="Portrait of a male user" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCibjVHjwQ14CqsfKXVTqYZeAK8ply7I5LggmTTlU5Izi36Zmwn3FkOrF_XQ3hHXZFl9peudKBzwlNcJwexv3Lc8Km1I4woMQIlhjSL6Cerl0KOSmacveQp07vmVmrFpWPc__VyzgOG4ZIerSragGDIxNkvdnrpRHNVCE6somsY_DisdUFRn8Q_kOi2dMh23ro3zOjyNWFlV6x-ZXlQq4-Uznd0ClmwYawwpSfMXcPERZ-pHlHy9RYl2pSxBEdnc52x4Vm2TzBg8zc')"></div>
+<span class="absolute bottom-0 right-0 size-3 bg-slate-400 border-2 border-surface-light dark:border-surface-dark rounded-full"></span>
+</div>
+<div>
+<p class="text-sm font-medium text-slate-900 dark:text-white">BardicInspo</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Offline</p>
+</div>
+</div>
+<button class="text-slate-400 hover:text-red-500 dark:hover:text-red-400 opacity-0 group-hover/member:opacity-100 transition-all p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20" title="Revoke Access">
+<span class="material-symbols-outlined text-lg">person_remove</span>
+</button>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-slate-200 dark:border-[#2b2839] text-center">
+<button class="text-xs text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary font-medium transition-colors">
+                            View All History
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Toast Notification (Visual Mockup) -->
+<div class="fixed bottom-6 right-6 z-50 transform transition-all duration-300 translate-y-20 opacity-0 hover:translate-y-0 hover:opacity-100 pointer-events-none">
+<div class="bg-surface-dark dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-lg shadow-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span class="text-sm font-medium">Changes saved successfully</span>
+</div>
+</div>
+</body></html>

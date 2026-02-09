@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RollForge - Map Measurement &amp; AOE Tools</title>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3713ec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#131022",
+                        "surface-dark": "#1d1c27",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>/* Custom Hex Grid Pattern */
+.hex-grid {
+    background-color: #0f0f12;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBuMDO2ABZmCwf1H7_L0RmlCYEKVQakqJ4LZoQv4xM9P1L0SUu9pE7iFTogcZKr0eFEkUeg6F3uj1TrtQekmnxvQ6lJ8I0T7SEWrut9zLQm2FYymMO3JasS2i0QF1nj5nicpO8A05xR_qlTnag48UPvvJYwyywU6k5PmXMXuDp4DO3Ud7GJZnmkrcRXPchWO24G8ZUGUZy9sy-dlewXmfiUcJSRnL8Qk8nhoG5IUXpKKNsUlGjGLGOgz55vYhTCAYRX01AYvmXo7Y4)
+    }
+/* AOE Cone Helper */
+.cone-aoe {
+    clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+    background: linear-gradient(0deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.6) 100%);
+    border-top: 2px solid rgba(249, 115, 22, 0.8)
+    }
+/* AOE Radial Helper */
+.radial-aoe {
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, rgba(139, 92, 246, 0.5) 100%);
+    border: 2px solid rgba(139, 92, 246, 0.8)
+    }
+/* Dashed Line SVG styling */
+.measurement-line line {
+    stroke: #3713ec;
+    stroke-width: 3;
+    stroke-dasharray: 8, 4;
+    stroke-linecap: round;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5))
+    }
+.measurement-dot {
+    fill: #3713ec;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5))
+    }</style>
+</head>
+<body class="bg-[#121118] dark text-white font-display h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<header class="flex-none flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#2b2839] px-6 py-3 bg-[#121118] z-50">
+<div class="flex items-center gap-4 text-white">
+<div class="size-8 text-primary">
+<span class="material-symbols-outlined text-4xl">hexagon</span>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">RollForge</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Campaigns</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Characters</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Compendium</a>
+<a class="text-white text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Marketplace</a>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center justify-center overflow-hidden rounded-lg size-10 bg-[#2b2839] text-white hover:bg-[#3e3a52] transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex items-center justify-center overflow-hidden rounded-lg size-10 bg-[#2b2839] text-white hover:bg-[#3e3a52] transition-colors">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border border-[#2b2839] cursor-pointer" data-alt="User Avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCdwk_Ijg9WIg8fnL0FZTVIOGRATAK47Joe7KE-q1cbbgdQGdJpdTru7PCfue46GQ76LK6Z5f_MTZUGZjbUTQiyKa8dGcjuSMQ1NsWiwmHS63oWGvwXITwYY1iSLlLQ6vNr5RbnxBoWWvU-kGXJiG74cQ5BUGneoVuxsBFSn9OJoafmxRHrrpzoD4B-nMM-V-UdNbJb-OskphVUz0YQ5x2u-nU0OGuT1elQDRIPDfE2IqlV4FWasMoeJ62OorJ3yIFn2TGutnwAmDA");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 relative overflow-hidden flex">
+<!-- Interactive Map Canvas -->
+<div class="relative w-full h-full bg-[#0f0f12] hex-grid overflow-hidden cursor-crosshair group/map">
+<!-- Map Background Image (Simulated Terrain) -->
+<div class="absolute inset-0 opacity-40 mix-blend-overlay bg-cover bg-center pointer-events-none" data-alt="Dark moody dungeon floor texture map" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDlIsRCBHOzwoP4iGY24f8kbsKDZvXMu9Ok3WzN7mKursNIxwQ_CzAOVUPbEBsievAXEGKlexJb0b78CxYRijsmsijQlWlMRYpMgxPdGl9MVX6xljyfzCqWFHbdsnSQaYgAvzWggwbe0W3BrIMj91KQoEJvl6_8PNKfch3f_paMuQTA9tV7-_uV7xxVRl8pFi6iUTOUvh1OsjLDE5N2zHyvK0ULU82oztyLNowfoaV7Gk4iGvZlSCKdJqCm9nH0qhk4dotnqUfBefg');"></div>
+<!-- Grid SVG Overlay for clean lines -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="98" id="hex-pattern" patterntransform="scale(2)" patternunits="userSpaceOnUse" width="56">
+<path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z" fill="none" stroke="#a19db9" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#hex-pattern)" height="100%" width="100%"></rect>
+</svg>
+<!-- Measurement Tool Visualization -->
+<div class="absolute inset-0 pointer-events-none z-20">
+<svg class="w-full h-full measurement-line">
+<!-- Point A -->
+<circle class="measurement-dot" cx="40%" cy="60%" r="4"></circle>
+<!-- Point B -->
+<circle class="measurement-dot" cx="65%" cy="35%" r="4"></circle>
+<!-- Line -->
+<line x1="40%" x2="65%" y1="60%" y2="35%"></line>
+</svg>
+<!-- Measurement Label -->
+<div class="absolute left-[52.5%] top-[47.5%] -translate-x-1/2 -translate-y-1/2 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg border border-white/20 flex items-center gap-1.5 z-30 transform hover:scale-110 transition-transform cursor-pointer pointer-events-auto">
+<span class="material-symbols-outlined text-[16px]">straighten</span>
+<span>30 ft / 6 Hex</span>
+</div>
+</div>
+<!-- AOE: Radial (Violet) -->
+<div class="absolute left-[30%] top-[30%] w-64 h-64 -translate-x-1/2 -translate-y-1/2 rounded-full radial-aoe flex items-center justify-center group cursor-move z-10 hover:border-violet-400 transition-colors">
+<div class="bg-violet-900/80 text-violet-100 text-[10px] font-bold px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 pointer-events-none">
+                    20ft Radius
+                </div>
+<div class="w-1.5 h-1.5 bg-violet-500 rounded-full"></div>
+</div>
+<!-- AOE: Cone (Orange) -->
+<div class="absolute left-[65%] top-[35%] w-[400px] h-[400px] -translate-x-1/2 -translate-y-full origin-bottom cone-aoe rotate-[150deg] z-10 group cursor-move hover:border-t-orange-400 transition-colors">
+<div class="absolute top-[30%] left-1/2 -translate-x-1/2 text-orange-100 font-bold text-xs opacity-70 rotate-180">
+                    60ft Cone
+                 </div>
+</div>
+<!-- Character Token Example (Point A of measurement) -->
+<div class="absolute left-[40%] top-[60%] -translate-x-1/2 -translate-y-1/2 size-12 rounded-full border-2 border-green-500 shadow-[0_0_15px_rgba(34,197,94,0.5)] bg-surface-dark bg-cover bg-center z-20 cursor-pointer hover:scale-110 transition-transform" data-alt="Elf Ranger Token" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB16IG8ZJdXSaDWnkJ3T08Ff4L79kj3A5u5bid9d0EnJGSykFjWWHx7Ki_m-GAVdpjRKIx_0G1QkTruggrYrvUTAGsa6laaH3ltrh7xzWmarJkqkGoj83DFC8rWHVfN1wyEwx-GM8iEyRNEp_F0v7qAm3DOkUPMiW77R93nDW-ikgur7X-TotIj5Z7pYzC2wnl_85x9cYIwPIa9dYwed5kcIGx_EnES74XvZh5AN0cv1BxQT3QYlkkxBxQVRl5vFpKHAOHoIr5Qfzc');">
+<div class="absolute -bottom-1 -right-1 bg-surface-dark rounded-full p-0.5 border border-white/10">
+<div class="w-4 h-4 bg-green-500 rounded-full text-[10px] flex items-center justify-center font-bold text-black">HP</div>
+</div>
+</div>
+<!-- Target Token Example (Point B of measurement) -->
+<div class="absolute left-[65%] top-[35%] -translate-x-1/2 -translate-y-1/2 size-14 rounded-full border-2 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)] bg-surface-dark bg-cover bg-center z-20 cursor-pointer hover:scale-110 transition-transform" data-alt="Orc Boss Token" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBO9wUxT2doA9NoBkwgIK-K5CbDoC8VbTLQUzTvzw21_eB6ACo59i1xm8PkAG1zlxv2hFNGpLVesT2C6IGzGFjLATl97UiEVoms_DyiJKm5sKN2er3EHpwQSc4ZMudqsMmyuHrUPPIZ8_HTGja3DHFszJWFNbJiEk-Gk2ORJ8Qaa67fyV1r1fgexT8hZDPWHy4jbCcHM4hxLmRBtvLy3_m74ntbgP_HvmGfiA-3LzI-WB976Kl4NvSMUrK_emhRP8M-X4N-GKKFFcU');">
+</div>
+</div>
+<!-- Right Sidebar: Grid Settings -->
+<aside class="w-80 bg-[#1d1c27] border-l border-[#2b2839] flex flex-col shadow-2xl z-40 relative">
+<div class="p-5 border-b border-[#2b2839] flex items-center justify-between">
+<h3 class="text-white font-bold text-base flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grid_4x4</span>
+                    Grid Settings
+                </h3>
+<button class="text-[#a19db9] hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-5 space-y-6">
+<!-- Toggles Section -->
+<div class="space-y-4">
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-sm font-medium text-[#e3e3e3]">Show Grid</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#2b2839] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-sm font-medium text-[#e3e3e3]">Snap to Grid</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#2b2839] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="text-sm font-medium text-[#e3e3e3]">Show Coordinates</span>
+<div class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-[#2b2839] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</div>
+</label>
+</div>
+<hr class="border-[#2b2839]"/>
+<!-- Sliders Section -->
+<div class="space-y-5">
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-[#a19db9]">
+<span>Grid Opacity</span>
+<span class="text-white">20%</span>
+</div>
+<input class="w-full h-1.5 bg-[#2b2839] rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="20"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs text-[#a19db9]">
+<span>Line Thickness</span>
+<span class="text-white">1px</span>
+</div>
+<input class="w-full h-1.5 bg-[#2b2839] rounded-lg appearance-none cursor-pointer accent-primary" max="100" min="0" type="range" value="10"/>
+</div>
+</div>
+<hr class="border-[#2b2839]"/>
+<!-- Inputs Section -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-[#a19db9]">Cell Size (px)</label>
+<div class="relative">
+<input class="w-full bg-[#121118] border border-[#2b2839] rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" type="number" value="70"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="text-xs font-medium text-[#a19db9]">Dist. per Hex</label>
+<div class="relative">
+<div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+<span class="text-[#a19db9] text-xs">ft</span>
+</div>
+<input class="w-full bg-[#121118] border border-[#2b2839] rounded-lg py-2 px-3 text-sm text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary" type="number" value="5"/>
+</div>
+</div>
+</div>
+<!-- Grid Type Selection -->
+<div class="space-y-2">
+<label class="text-xs font-medium text-[#a19db9]">Grid Type</label>
+<div class="grid grid-cols-2 gap-2">
+<button class="flex items-center justify-center gap-2 py-2 px-3 bg-[#3713ec] border border-primary text-white rounded-lg text-sm font-medium transition-colors">
+<span class="material-symbols-outlined text-sm">hexagon</span>
+                            Hex
+                        </button>
+<button class="flex items-center justify-center gap-2 py-2 px-3 bg-[#121118] border border-[#2b2839] text-[#a19db9] rounded-lg text-sm font-medium hover:text-white hover:border-[#a19db9] transition-colors">
+<span class="material-symbols-outlined text-sm">grid_view</span>
+                            Square
+                        </button>
+</div>
+</div>
+</div>
+<div class="p-5 border-t border-[#2b2839] bg-[#1d1c27]">
+<button class="w-full py-2.5 bg-[#2b2839] hover:bg-[#3e3a52] text-white rounded-lg text-sm font-bold transition-colors">
+                    Reset to Defaults
+                </button>
+</div>
+</aside>
+</main>
+<!-- Floating Toolbar (Bottom Center) -->
+<div class="absolute bottom-6 left-1/2 -translate-x-[calc(50%+160px)] z-50">
+<div class="flex items-center gap-1 bg-[#1d1c27]/90 backdrop-blur-sm border border-[#2b2839] p-1.5 rounded-xl shadow-2xl">
+<!-- Select Tool -->
+<button aria-label="Select" class="group relative flex items-center justify-center size-10 text-[#a19db9] hover:text-white hover:bg-[#2b2839] rounded-lg transition-all">
+<span class="material-symbols-outlined">near_me</span>
+<span class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Select (V)</span>
+</button>
+<div class="w-px h-6 bg-[#2b2839] mx-1"></div>
+<!-- Measure Tool (Active) -->
+<button aria-label="Measure" class="group relative flex items-center justify-center size-10 text-white bg-primary rounded-lg transition-all shadow-[0_0_10px_rgba(55,19,236,0.4)]">
+<span class="material-symbols-outlined">straighten</span>
+<span class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Measure (M)</span>
+</button>
+<!-- Line Tool -->
+<button aria-label="Line AOE" class="group relative flex items-center justify-center size-10 text-[#a19db9] hover:text-white hover:bg-[#2b2839] rounded-lg transition-all">
+<span class="material-symbols-outlined">maximize</span>
+<span class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Line</span>
+</button>
+<!-- Circle Tool -->
+<button aria-label="Circle AOE" class="group relative flex items-center justify-center size-10 text-[#a19db9] hover:text-white hover:bg-[#2b2839] rounded-lg transition-all">
+<span class="material-symbols-outlined">radio_button_unchecked</span>
+<span class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Circle</span>
+</button>
+<!-- Cone Tool -->
+<button aria-label="Cone AOE" class="group relative flex items-center justify-center size-10 text-[#a19db9] hover:text-white hover:bg-[#2b2839] rounded-lg transition-all">
+<span class="material-symbols-outlined">signal_wifi_4_bar</span>
+<span class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Cone</span>
+</button>
+<!-- Cube Tool -->
+<button aria-label="Cube AOE" class="group relative flex items-center justify-center size-10 text-[#a19db9] hover:text-white hover:bg-[#2b2839] rounded-lg transition-all">
+<span class="material-symbols-outlined">square</span>
+<span class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 bg-black text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Cube</span>
+</button>
+</div>
+</div>
+</body></html>

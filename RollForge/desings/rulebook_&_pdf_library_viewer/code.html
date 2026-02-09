@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RollForge VTT - Rulebook Viewer</title>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3713ec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#131022",
+                        "surface-dark": "#1e1b2e",
+                        "surface-light": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar for webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b2839;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3713ec;
+        }
+        
+        .pdf-page-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#2b2839] bg-surface-light dark:bg-[#121118] px-6 py-3 shrink-0 z-20">
+<div class="flex items-center gap-4 text-slate-900 dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">RollForge VTT</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Campaigns</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Characters</a>
+<a class="text-primary dark:text-white text-sm font-bold leading-normal" href="#">Compendium</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary dark:hover:text-white text-sm font-medium leading-normal transition-colors" href="#">Jukebox</a>
+</nav>
+<div class="flex gap-2">
+<button class="flex items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-slate-200 dark:bg-[#2b2839] hover:bg-slate-300 dark:hover:bg-[#3f3b52] text-slate-900 dark:text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors">
+<span class="material-symbols-outlined text-[20px] mr-2">settings</span>
+<span class="truncate">Settings</span>
+</button>
+<button class="size-9 rounded-full overflow-hidden border border-slate-200 dark:border-[#2b2839]">
+<img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-SNbAf9dNqGZGjYVd3OhxM2z_woVX3Z09A8ID2vjrO__7ojf_PkcwsZ7F02rzIetsjOqEtloKX6nFxTpwkzta6pAnJJsIpOCJn8LWvKmdaLeRdF7rC8BvmFGcFKSpNtwiJDfVq5QdjCP0qiWgUwyr8dmKznf1Ss8AYEe5pn_OnfOlp7Z1D7YFYCU54eL4OIcgh5aYQUDg3jt2cJf22LhavlhZhSxql5uJXRG0u2fGWF7kXgKDEzwNfguH1gW0nISQgMhymBpF7Dg"/>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="flex flex-1 overflow-hidden relative">
+<!-- Left Sidebar: TOC & Bookmarks -->
+<aside class="w-80 bg-surface-light dark:bg-surface-dark border-r border-slate-200 dark:border-[#2b2839] flex flex-col shrink-0 z-10 transition-all duration-300 absolute md:relative h-full -translate-x-full md:translate-x-0" id="sidebar">
+<!-- Sidebar Header with Image -->
+<div class="p-4 border-b border-slate-200 dark:border-[#2b2839]">
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden rounded-lg h-32 relative group cursor-pointer" data-alt="Dark fantasy book cover with mystical symbols" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAo9cVm2r6py102PsO-PhMcQeNTva1RNqbWWuKbFfyGciPZHLi2VNDUV2SDPgJmRqi95_kYeRn1t7b4M4hT3gauAVxTGxjIifAZmaJoXhFsqymXyW0rVr2JmqYLfQsbANMSdyOIXuICuxiPQTEYxI-LTxFryTu-0v3WQxcwrbQXgc_ewmMJR2kOalwFxMdCoUxTsPGfPAPyWHln8UM3Dk4h0s_NrVjniHSxXhUMY0zV2AjQfZZnKRy7t0QukXk6PkR4egOL9985I3c");'>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+<div class="relative z-10 p-3">
+<p class="text-white text-sm font-bold leading-tight shadow-black drop-shadow-md">Dungeon Master's Guide</p>
+<p class="text-white/70 text-xs mt-1">5th Edition Core Rules</p>
+</div>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-slate-200 dark:border-[#2b2839]">
+<button class="flex-1 py-3 text-sm font-medium text-primary border-b-2 border-primary bg-primary/5">Chapters</button>
+<button class="flex-1 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#2b2839]/50 transition-colors">Bookmarks</button>
+</div>
+<!-- Search Filter -->
+<div class="p-3">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-2.5 text-slate-400 text-[18px]">search</span>
+<input class="w-full bg-slate-100 dark:bg-[#121118] border-none rounded-lg py-2 pl-9 pr-3 text-sm text-slate-900 dark:text-white focus:ring-1 focus:ring-primary placeholder-slate-500" placeholder="Filter chapters..." type="text"/>
+</div>
+</div>
+<!-- Tree View List -->
+<div class="flex-1 overflow-y-auto p-2 space-y-1">
+<div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] cursor-pointer text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+<span class="text-sm font-medium">Introduction</span>
+</div>
+<div class="group flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 dark:bg-[#2b2839] text-primary dark:text-white cursor-pointer border-l-2 border-primary">
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+<span class="text-sm font-medium">Chapter 1: A World of Your Own</span>
+</div>
+<!-- Sub-items -->
+<div class="ml-4 pl-4 border-l border-slate-200 dark:border-slate-700 space-y-1 my-1">
+<div class="flex items-center justify-between px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] cursor-pointer text-sm text-slate-600 dark:text-slate-400">
+<span>The Big Picture</span>
+<span class="text-xs opacity-50">pg. 9</span>
+</div>
+<div class="flex items-center justify-between px-3 py-1.5 rounded-lg bg-primary/10 text-primary dark:text-white cursor-pointer text-sm font-medium">
+<span>Gods of Your World</span>
+<span class="text-xs opacity-70">pg. 10</span>
+</div>
+<div class="flex items-center justify-between px-3 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] cursor-pointer text-sm text-slate-600 dark:text-slate-400">
+<span>Mapping Your World</span>
+<span class="text-xs opacity-50">pg. 14</span>
+</div>
+</div>
+<div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] cursor-pointer text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+<span class="text-sm font-medium">Chapter 2: Creating a Multiverse</span>
+</div>
+<div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] cursor-pointer text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+<span class="text-sm font-medium">Chapter 3: Creating Adventures</span>
+</div>
+<div class="group flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] cursor-pointer text-slate-700 dark:text-slate-300">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+<span class="text-sm font-medium">Chapter 4: Creating NPCs</span>
+</div>
+</div>
+</aside>
+<!-- Main PDF Viewer Area -->
+<main class="flex-1 flex flex-col relative bg-slate-200 dark:bg-[#0c0a13]">
+<!-- Toolbar -->
+<div class="h-14 bg-surface-light dark:bg-[#1e1b2e] border-b border-slate-200 dark:border-[#2b2839] flex items-center justify-between px-4 shadow-sm z-10">
+<!-- Left: View Controls -->
+<div class="flex items-center gap-2">
+<button class="md:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center bg-slate-100 dark:bg-[#121118] rounded-lg p-0.5 border border-slate-200 dark:border-[#2b2839]">
+<button class="p-1.5 rounded hover:bg-white dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300" title="Zoom Out">
+<span class="material-symbols-outlined text-[20px]">remove</span>
+</button>
+<span class="text-xs font-mono w-12 text-center text-slate-700 dark:text-slate-300">100%</span>
+<button class="p-1.5 rounded hover:bg-white dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300" title="Zoom In">
+<span class="material-symbols-outlined text-[20px]">add</span>
+</button>
+</div>
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300 hidden sm:flex" title="Fit to Width">
+<span class="material-symbols-outlined text-[20px]">fit_screen</span>
+</button>
+</div>
+<!-- Center: Page Navigation -->
+<div class="flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
+<button class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<div class="flex items-center gap-1 text-sm text-slate-700 dark:text-slate-300 font-medium">
+<span>Page</span>
+<input class="w-10 h-7 bg-slate-100 dark:bg-[#121118] border border-slate-300 dark:border-[#2b2839] rounded text-center text-sm focus:ring-primary focus:border-primary" type="text" value="10"/>
+<span class="opacity-60">of 320</span>
+</div>
+<button class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<!-- Right: Actions -->
+<div class="flex items-center gap-3">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-2 top-1.5 text-slate-400 text-[18px]">search</span>
+<input class="h-8 w-40 lg:w-56 bg-slate-100 dark:bg-[#121118] border-none rounded-lg pl-8 pr-3 text-sm text-slate-900 dark:text-white focus:ring-1 focus:ring-primary placeholder-slate-500" placeholder="Find in text" type="text"/>
+</div>
+<div class="h-6 w-px bg-slate-300 dark:bg-[#2b2839]"></div>
+<button class="flex items-center gap-2 h-9 px-4 bg-primary hover:bg-primary/90 text-white text-sm font-bold rounded-lg shadow-lg shadow-primary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]">cast</span>
+<span class="hidden lg:inline">Share with Players</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-[#2b2839] text-slate-600 dark:text-slate-300" title="Pop out window">
+<span class="material-symbols-outlined text-[20px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- PDF Viewport -->
+<div class="flex-1 overflow-auto p-8 flex justify-center bg-slate-200 dark:bg-[#0c0a13] relative">
+<!-- PDF Page Container -->
+<div class="w-full max-w-[850px] space-y-8 pb-20">
+<!-- Page 10 (Current) -->
+<div class="relative bg-white text-black min-h-[1100px] w-full rounded-sm pdf-page-shadow p-12 flex flex-col" data-alt="PDF page showing rules for fantasy world deities">
+<!-- Decorative Header for PDF page -->
+<div class="mb-8 border-b-2 border-slate-800 pb-2 flex justify-between items-end">
+<h1 class="text-3xl font-serif font-bold text-slate-900">Gods of Your World</h1>
+<span class="text-sm font-serif italic text-slate-600">Chapter 1 | A World of Your Own</span>
+</div>
+<!-- Content Columns -->
+<div class="flex gap-8 flex-1">
+<!-- Column 1 -->
+<div class="flex-1 space-y-4 text-sm font-serif leading-relaxed text-justify">
+<p>The gods of your world are not distant concepts; they are active forces that shape history and the land itself. When creating your pantheon, consider how these deities interact with mortals. Do they walk among them in disguise, or do they rule from distant planes?</p>
+<p>In a fantasy setting, religion is rarely a matter of faith alone. Clerics channel divine magic, paladins swear sacred oaths, and druids draw power from nature itself. These are tangible proofs of the divine.</p>
+<h3 class="text-lg font-bold text-slate-800 mt-6 mb-2 border-b border-slate-300">Divine Ranks</h3>
+<p>Gods typically fall into a hierarchy. <span class="bg-primary/20 text-primary-900 px-1 rounded">Greater deities</span> (search match) possess immense power and influence, often overseeing broad concepts like War, Love, or Death. Lesser deities might control more specific domains, such as a single river or the craft of weaving.</p>
+<div class="bg-slate-100 p-4 border border-slate-300 rounded mt-4">
+<h4 class="font-bold text-slate-900 mb-2">Pantheon Sample: The Dawn War</h4>
+<ul class="list-disc pl-5 space-y-1 text-slate-800">
+<li><strong>Bahamut:</strong> Justice, Nobility, Protection</li>
+<li><strong>Corellon:</strong> Arcane Magic, Spring, Beauty</li>
+<li><strong>Erathis:</strong> Civilization, Invention, Law</li>
+<li><strong>Ioun:</strong> Knowledge, Skill, Prophecy</li>
+</ul>
+</div>
+</div>
+<!-- Column 2 -->
+<div class="flex-1 space-y-4 text-sm font-serif leading-relaxed text-justify">
+<div class="float-right w-full h-48 mb-4 bg-slate-200 rounded relative overflow-hidden">
+<img alt="Stone statue of a Greek god against a dark background" class="w-full h-full object-cover sepia-[.3] contrast-125" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAde0bTqYeSWJ8r1pyYeWPnmBM0jKisKWSuU7D232jFVy4ou-Gou9ZZbqTJmKKvsKNypYiYydcUUvJ6mdi4bK4C5EXicjXSv6HrwhVv9I4_XzeSZqK3WtnE0NI-N2R6puZQK0wkS5b5BTlcSUJFdT2WRGMSAoBtjfJYd4-CAsI3t9r4EifWId-PyjsEeIYQixLt4t9BuWGBA4GZVx_DgwXlgkZEBmrPQGDuXfH74DimpTHUWJciLXs8Q_AQQ6lUeeIAxNgSWmGhX_8"/>
+<div class="absolute bottom-0 w-full bg-black/60 p-2 text-white text-xs italic text-center">Statue of a forgotten deity</div>
+</div>
+<p>Quasi-deities have a divine origin but lack the full power of a god. They might be children of gods and mortals, or mortals who have ascended through legendary deeds.</p>
+<p>Titans are the primordial creators or destroyers, often predating the gods themselves. Their power is raw and elemental.</p>
+<h3 class="text-lg font-bold text-slate-800 mt-6 mb-2 border-b border-slate-300">Religious Organizations</h3>
+<p>Temples act as centers of community life as much as places of worship. In small villages, a shrine might be dedicated to a local spirit, while in great cities, cathedrals to the major gods dominate the skyline.</p>
+</div>
+</div>
+<!-- Page Footer -->
+<div class="mt-auto pt-8 border-t border-slate-300 flex justify-between text-xs font-serif text-slate-500">
+<span>10</span>
+<span>PART 1 | MASTER OF WORLDS</span>
+</div>
+</div>
+<!-- Page 11 (Next Preview) -->
+<div class="relative bg-white text-black min-h-[1100px] w-full rounded-sm pdf-page-shadow opacity-50 blur-[1px]" data-alt="Blurred preview of the next PDF page">
+<div class="p-12 h-full flex items-center justify-center">
+<span class="text-slate-400 font-serif italic text-xl">Next Page Preview...</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Action Button -->
+<div class="absolute bottom-8 right-8 z-30">
+<button class="flex items-center justify-center size-14 rounded-full bg-primary text-white shadow-lg shadow-primary/40 hover:bg-primary/90 transition-transform hover:scale-105 group">
+<span class="material-symbols-outlined text-[28px]">bookmark_add</span>
+<span class="absolute right-full mr-3 bg-slate-900 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Bookmark this page</span>
+</button>
+</div>
+<!-- Status Bar -->
+<div class="h-8 bg-surface-light dark:bg-[#1e1b2e] border-t border-slate-200 dark:border-[#2b2839] flex items-center justify-between px-4 text-xs text-slate-500 dark:text-slate-400 shrink-0 z-20">
+<div class="flex items-center gap-4">
+<span>Ready</span>
+<span class="w-px h-3 bg-slate-300 dark:bg-slate-700"></span>
+<span>Selection Mode: Text</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-20 h-1.5 bg-slate-200 dark:bg-[#2b2839] rounded-full overflow-hidden">
+<div class="h-full w-full bg-primary/50"></div>
+</div>
+<span>Loaded</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
