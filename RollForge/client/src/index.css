@@ -4,6 +4,9 @@
   --color-primary: #3713ec;
   --color-primary-hover: #2c0ebf;
 
+  --color-secondary: #8b5cf6;
+  --color-secondary-hover: #7c4de8;
+
   --color-background-light: #f6f6f8;
   --color-background-dark: #131022;
 
@@ -70,4 +73,21 @@
   padding: 0;
   box-sizing: border-box;
   background-color: #131022;
+}
+
+/* Ocultar el icono nativo de mostrar/ocultar contraseña */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
 }
