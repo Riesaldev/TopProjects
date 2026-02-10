@@ -3,7 +3,7 @@ import { Dice3 } from 'lucide-react';
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-screen w-full flex-row">
+    <div className="flex min-h-screen w-full flex-row ">
       {/* Left Side: Atmospheric Artwork - Hidden on mobile, visible on lg+ */}
       <div
         className="hidden lg:flex min-h-screen w-5/12 xl:w-1/2 relative flex-col justify-between bg-cover bg-center bg-no-repeat overflow-hidden  bg-[url('/auth-bg.png')]"
@@ -17,7 +17,9 @@ export default function AuthLayout() {
             <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
               <Dice3 className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-black tracking-tight text-text-primary">RollForge</h1>
+            <a rel="login" href="/login" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
+              RollForge
+            </a>
           </div>
         </div>
 
@@ -33,19 +35,19 @@ export default function AuthLayout() {
       </div>
 
       {/* Right Side: Auth Forms */}
-      <div className="flex-1 flex flex-col justify-center items-center p-4 sm:p-8 relative bg-background-primary">
+      <div className="flex-1 flex flex-col p-4 sm:p-8 relative bg-background-primary">
         {/* Mobile Logo - Visible only on small screens */}
         <div className="lg:hidden absolute top-8 left-8 flex items-center gap-3">
           <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
             <Dice3 className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-text-primary">
+          <a rel="login" href="/login" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
             RollForge
-          </h1>
+          </a>
         </div>
 
         {/* Auth Container - Here render Login/Register/Reset forms */}
-        <div className="w-full max-w-120 flex flex-col gap-6">
+        <div className="w-full max-w-180 flex flex-col gap-6 max-h-[90vh] overflow-y-auto mx-auto my-auto">
           <Outlet />
         </div>
       </div>
