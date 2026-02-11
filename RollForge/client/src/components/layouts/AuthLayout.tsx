@@ -3,7 +3,7 @@ import { Dice3 } from 'lucide-react';
 
 export default function AuthLayout() {
   return (
-    <div className="flex min-h-screen w-full flex-row ">
+    <main className="flex min-h-screen w-full flex-row ">
       {/* Left Side: Atmospheric Artwork - Hidden on mobile, visible on lg+ */}
       <div
         className="hidden lg:flex min-h-screen w-5/12 xl:w-1/2 relative flex-col justify-between bg-cover bg-center bg-no-repeat overflow-hidden  bg-[url('/auth-bg.png')]"
@@ -17,7 +17,7 @@ export default function AuthLayout() {
             <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
               <Dice3 className="w-8 h-8 text-white" />
             </div>
-            <a rel="login" href="/login" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
+            <a rel="login" href="/" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
               RollForge
             </a>
           </div>
@@ -51,6 +51,6 @@ export default function AuthLayout() {
           <Outlet />
         </div>
       </div>
-    </div>
+    </main>
   );
 }
