@@ -1,5 +1,6 @@
 import { Dice3, Search } from 'lucide-react';
 import { useState } from 'react';
+import { BRAND_CONFIG } from '../../data/authConstants';
 
 export default function Header() {
   const [isOnline] = useState(true);
@@ -12,7 +13,7 @@ export default function Header() {
             <Dice3 className="w-8 h-8 text-white" />
           </div>
           <a rel="login" href="/" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
-            RollForge
+            {BRAND_CONFIG.LOGO_TEXT}
           </a>
         </div>
       </div>

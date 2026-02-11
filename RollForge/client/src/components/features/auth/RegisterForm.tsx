@@ -1,106 +1,24 @@
-// Componentes reutilizables para el formulario de registro
+import { ArrowRight, Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
+
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
 import AuthFooter from "./AuthFooter";
-// Iconos
-import { ArrowRight, Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
-// Hooks y estado
-import { useState, type ChangeEvent } from 'react';
-
-// Tipos para el formulario
-interface FormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-// Constantes de validación
-const MIN_PASSWORD_LENGTH = 8;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { useRegisterForm } from '../../../hooks/useAuthForm';
 
 export default function RegisterForm() {
-  // Estados de UI
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  // Estado del formulario
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-
-  // Estado de errores
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-
-  /**
-   * Valida el formato del email
-   */
-  const validateEmail = (email: string): boolean => {
-    return EMAIL_REGEX.test(email.trim());
-  };
-
-  /**
-   * Valida que la contraseña cumpla los requisitos mínimos
-   */
-  const validatePassword = (password: string): string | null => {
-    if (!password) return 'Password is required';
-    if (password.length < MIN_PASSWORD_LENGTH) {
-      return `Password must be at least ${MIN_PASSWORD_LENGTH} characters`;
-    }
-    // Opcional: añadir validación de complejidad
-    // if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-    //   return 'Password must contain uppercase, lowercase, and numbers';
-    // }
-    return null;
-  };
-
-  /**
-   * Maneja los cambios en los campos del formulario
-   */
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-
-    // Limpiar error del campo específico
-    if (errors[name as keyof FormData]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  /**
-   * Valida todo el formulario y retorna true si es válido
-   */
-  const validateForm = (): boolean => {
-    const newErrors: Partial<FormData> = {};
-
-    // Validar email
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    // Validar contraseña
-    const passwordError = validatePassword(formData.password);
-    if (passwordError) {
-      newErrors.password = passwordError;
-    }
-
-    // Validar confirmación de contraseña
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    showPassword,
+    showConfirmPassword,
+    handleInputChange,
+    validateForm,
+    togglePasswordVisibility,
+    toggleConfirmPasswordVisibility,
+    setIsSubmitting,
+    setErrors,
+  } = useRegisterForm();
 
   /**
    * Maneja el envío del formulario
@@ -199,7 +117,7 @@ export default function RegisterForm() {
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={togglePasswordVisibility}
               aria-label={showPassword ? "Hide password" : "Show password"}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary/60 hover:text-text-primary transition-colors"
             >
@@ -239,7 +157,7 @@ export default function RegisterForm() {
             />
             <button
               type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              onClick={toggleConfirmPasswordVisibility}
               aria-label={showConfirmPassword ? "Hide password confirmation" : "Show password confirmation"}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary/60 hover:text-text-primary transition-colors"
             >

@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { Dice3 } from 'lucide-react';
+import { BRAND_CONFIG } from '../../data/authConstants';
 
 export default function AuthLayout() {
   return (
@@ -18,7 +19,7 @@ export default function AuthLayout() {
               <Dice3 className="w-8 h-8 text-white" />
             </div>
             <a rel="login" href="/" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
-              RollForge
+              {BRAND_CONFIG.LOGO_TEXT}
             </a>
           </div>
         </div>
@@ -27,8 +28,7 @@ export default function AuthLayout() {
         <div className="relative z-10 p-12 flex items-center gap-6">
           <blockquote className="border-l-4 border-primary pl-6 py-2">
             <p className="text-2xl font-medium leading-relaxed text-text-primary mb-4">
-              "The dice tell the story, but the forge is where legends are built.<br /> Join thousands
-              of game masters crafting worlds today."
+              "{BRAND_CONFIG.AUTH_QUOTE.text}"
             </p>
           </blockquote>
         </div>
@@ -42,7 +42,7 @@ export default function AuthLayout() {
             <Dice3 className="w-8 h-8 text-white" />
           </div>
           <a rel="login" href="/login" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
-            RollForge
+            {BRAND_CONFIG.LOGO_TEXT}
           </a>
         </div>
 

@@ -1,66 +1,14 @@
-import { useState, type ChangeEvent } from 'react';
 import { ArrowRight, Mail, } from 'lucide-react';
 
+import { usePasswordRecoveryForm } from '../../../hooks/useAuthForm';
+import { AUTH_MESSAGES } from '../../../data/authConstants';
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
 import AuthFooter from './AuthFooter';
 
-
-interface FormData {
-  email: string;
-}
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export default function PasswordRecovery() {
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-  });
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const { formData, errors, isSubmitting, handleInputChange, validateForm, setIsSubmitting } = usePasswordRecoveryForm();
 
-  /**
-   * Validates email format using RFC 5322 simplified regex pattern
-   * @param email - Email string to validate
-   * @returns True if email format is valid
-   */
-  const validateEmail = (email: string): boolean => {
-    return EMAIL_REGEX.test(email.trim());
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-
-    if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  /**
-   * Validates all form fields before submission
-   * @returns True if all validations pass
-   */
-  const validateForm = (): boolean => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  /**
-   * Handles form submission for password recovery
-   * @param e - Form event
-   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -114,7 +62,7 @@ export default function PasswordRecovery() {
           </div>
           {errors.email && (
             <p id="email-error" className="text-red-500 text-sm" role="alert">
-              {errors.email}
+              {errors.email || AUTH_MESSAGES.EMAIL_INVALID}
             </p>
           )}
         </div>

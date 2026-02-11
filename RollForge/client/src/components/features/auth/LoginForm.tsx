@@ -1,70 +1,24 @@
-import { useState, type ChangeEvent } from 'react';
 import { ArrowRight, Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
 import AuthFooter from "./AuthFooter";
-
-interface FormData {
-  email: string;
-  password: string;
-  remember: boolean;
-}
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { useLoginForm } from '../../../hooks/useAuthForm';
+import { AUTH_MESSAGES } from '../../../data/authConstants';
 
 export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: '',
-    remember: false,
-  });
-  const [errors, setErrors] = useState<Partial<Omit<FormData, 'remember'>>>({});
-
-  /**
-   * Validates email format using RFC 5322 simplified regex pattern
-   * @param email - Email string to validate
-   * @returns True if email format is valid
-   */
-  const validateEmail = (email: string): boolean => {
-    return EMAIL_REGEX.test(email.trim());
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-
-    if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  /**
-   * Validates all form fields before submission
-   * @returns True if all validations pass
-   */
-  const validateForm = (): boolean => {
-    const newErrors: Partial<Omit<FormData, 'remember'>> = {};
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    showPassword,
+    handleInputChange,
+    validateForm,
+    togglePasswordVisibility,
+    setIsSubmitting,
+    setErrors,
+  } = useLoginForm();
 
   /**
    * Handles form submission with validation and API call
@@ -90,7 +44,7 @@ export default function LoginForm() {
       // TODO: Redirigir al usuario a la página principal o dashboard después de un inicio de sesión exitoso
     } catch (error) {
       console.error('Login error:', error);
-      setErrors({ email: 'Invalid credentials. Please try again.' });
+      setErrors({ email: AUTH_MESSAGES.INVALID_CREDENTIALS });
     } finally {
       setIsSubmitting(false);
     }
@@ -159,7 +113,7 @@ export default function LoginForm() {
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
+              onClick={togglePasswordVisibility}
               aria-label={showPassword ? "Hide password" : "Show password"}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary/60 hover:text-text-primary transition-colors"
             >

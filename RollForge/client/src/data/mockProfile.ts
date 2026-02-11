@@ -1,0 +1,70 @@
+import type { UserProfileData } from '../types/profile';
+
+export const BADGE_COLORS = [
+  { value: '#3713ec', label: 'Primary' },
+  { value: '#ff4d4f', label: 'Red' },
+  { value: '#f5c518', label: 'Yellow' },
+  { value: '#0bda6c', label: 'Green' },
+] as const;
+
+export const CHARACTER_CLASSES = ['All Classes', 'Fighter', 'Wizard', 'Rogue'] as const;
+
+export const mockUserData: UserProfileData = {
+  displayName: 'DungeonMaster99',
+  email: 'DungeonMaster99@gmail.com',
+  phone: '+1 (555) 123-4567',
+  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuALPnNUlc7GZE66xlXiAR_p4tgOeF7_3sroifjyELgHwm-wSCjEynXcW62WJb4gM9raClv7wjLIVIQpyDXrrwuYXOMwaeMn2wlSxJ-pdmBGSOReKcE8I5KhY-OB-kAWzznxncj7NCWuE-LMPQKwe-AL7aTc1WjkYIC5FxATetVKa1opEL2FhFaV52dgA5UHB7OwK40GWAMhpoU1XAwuhJnZ-ObIw_3On9fj7vOpmIBngVuM7ky1MfjuBmkjWtAOA_MekqXiBmeJWv0',
+  role: 'Veteran Player',
+  level: 42,
+  campaigns: 12,
+  hoursPlayed: '450h',
+  badgeColor: '#00ff9d',
+  characters: [
+    {
+      id: '1',
+      name: 'Valeros',
+      system: 'D&D 5e',
+      class: 'Fighter',
+      race: 'Human',
+      level: 5,
+      hp: 48,
+      ac: 18,
+      mainStat: 'STR',
+      mainStatValue: 16,
+      backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBBg3ia67AXtYlxNTMGAjEWjb3SyLCyl7ouR7wy-ldI158j2BRG0TZT-kCPkl-0R9-QhUUOwW7UtvIU-2sT2c3KrJCpSzdFeCLQPUY88AMnLKJ4KNi75jq5LMILjQ3Yfz95mHE6klsWOtdtyEMNq-j8p6-9Lp8bOD80Fmhpa1p_Z41FRf1OFPftdIzZGCpK9HC-V49pHOe6elXjht41AvzyKwlxGeH3Fd2ICCVAw3yx5MjI_Nu2zpnWHBUqTACbMxuPvJC32Ta7eKc")',
+      portraitImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAIu0jDUZcF381rl03Ccv9Bf-kZ2W-hQCc5i8R1JKTDzbyVds8NWR98TZF937ZP7WUNQ90HQTzeX0emPy7WfXQRyWYYEdXHQEO2hI8Rb7R4Zkk4HMRjtF0EUvLDLssx-qK8NA8P7I37pP2nDzSK5GmfQdukmfob8OAK-dl_IUmHEX5xa-9Fs7Phqze66a2cbVqgPLkzSu5tJ4M-XvAsodpyAlNpwOjcUcaJduunOekJU7GdYU09I6jngaMDsPq-UrkjzlHUzz895AI',
+    },
+    {
+      id: '2',
+      name: 'Merisiel',
+      system: 'D&D 5e',
+      class: 'Rogue',
+      race: 'Elf',
+      level: 3,
+      hp: 24,
+      ac: 16,
+      mainStat: 'DEX',
+      mainStatValue: 18,
+      backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBPsaxDRa2kgGINlcJvLdpOyYbS09KvkmInFuuf67U2UF41z5lvNM_e7IYdw2ACKqOcmZ6SpDNNWV7iALVUL7VpuJQcygqcst4W5qsf0QWYu9ETtL51i_RfbPsQM0YiboAeB1Q7Sr9hmcw8ZirtVMUlqin338UAhQ4XDMnz4z23OBUUN5JxKFAPa3hnrTlH6Jfp8G8MsCuNOgj8FLXbgEirCg3xELkqwVGV5nLL_sy9s2LlMRGu1TiHZuw_hYfHQN3gtVVt1HIzCNc")',
+      portraitImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB2Hzskrc9V2kwjdS-DIB5Eac_wc2FwXo_d1fw9Z2BdJRCezlAY04FUvVqRrG_ELJ5Q1HAgan3v_lNVXt_hPppR_lPdjn4RO-UDhlIRD3kalbjBFXl9YFgc7lMt1nG5lCbwpprJ2UgGOvvGadWVYMo0DuGtaMLQlbCPPwIiz2tnNBGmMKQrPUjKa9FbnXy0JoAkY1zOxxnNb0f-ICjw9LdWwcL_2s-kGxjTL3TTdWWdfODxZOTgVvP35UghFcJbm1Zn5x_2H1of3zU',
+    },
+    {
+      id: '3',
+      name: 'Ezren',
+      system: 'D&D 5e',
+      class: 'Wizard',
+      race: 'Human',
+      level: 9,
+      hp: 52,
+      ac: 12,
+      mainStat: 'INT',
+      mainStatValue: 20,
+      backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuBZnhEDwnw0rGhauJExVVNnQR7iuq1MNwVpssQfrUcmu8sUbEzndIBRtkSltNCZqobu7vM1hrbY0zPGM99sBmEp4ddtxxl5We9veJFTuGal7naWg6IZhzCKFnQPvhlbUsWywL2aeBQ4PDW3fjq8WSP8OZ1lJ9zcIKXvUspAQ50M1oPfEuO16dB4XmRwANox6U_ZgRei8mstPXQ14Fzask6D9ldZ0kO8dkvBoh4ENYCW-J-wHDWkXMcsX1D5zqAvS9QRVSkwYD8r330")',
+      portraitImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDap-tlbV5WHZfpoU2e7PnCZeCg2owfRMfmjtqX8qcC88v2YmKqLiFIYsix6ZBpDFEs-Pj4-XexRww-QG4zeyWqFqMIHZaMULc31xZ26o9Isni7j14SNEfYzl4u14QS-lRj6hVJ7fwhLMrceCZv6MBI6GbrW4XW7fIOkeMmwISPwMSI1EDqXfypTw2GyYgHM14MEzrr-iLzBKdUuDc7D3WBHFdUSkxoP2cPqvT9pxDliUXvaAifqClcDyyejqyWpK1-9aDkRA6VaMY',
+    },
+  ],
+  notifications: [
+    { type: 'email', enabled: true, frequency: 'Instant' },
+    { type: 'whatsapp', enabled: false, frequency: 'Instant' },
+  ],
+};
