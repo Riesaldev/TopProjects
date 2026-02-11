@@ -10,7 +10,7 @@ export default function App() {
       <Routes>
         {/* Rutas de autenticación */}
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<LoginForm />} />
+          <Route path="/" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
           <Route path="/reset" element={<PasswordRecovery />} />
         </Route>

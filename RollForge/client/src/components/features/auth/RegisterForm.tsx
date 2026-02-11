@@ -261,13 +261,13 @@ export default function RegisterForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-4 bg-primary text-white py-3 rounded-md font-medium hover:bg-primary/90 active:scale-95 transition-transform duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="mt-4 bg-primary text-white py-3 rounded-md font-medium hover:bg-primary/90 active:scale-95 transition-transform duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none cursor-pointer"
         >
           {isSubmitting ? (
             'Creating Account...'
           ) : (
             <>
-              Enter the Forge <ArrowRight className="inline-block ml-2" />
+              Well met, traveler — welcome to the Forge <ArrowRight className="inline-block ml-2" />
             </>
           )}
         </button>

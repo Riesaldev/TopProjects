@@ -4,7 +4,7 @@ export default function AuthTabs() {
   return (
     <nav className="flex text-sm font-medium text-text-primary justify-around">
       <NavLink
-        to="/login"
+        to="/"
         className={({ isActive }) => `
           h-auto w-full pb-2 flex justify-center border-b transition-all
           ${isActive

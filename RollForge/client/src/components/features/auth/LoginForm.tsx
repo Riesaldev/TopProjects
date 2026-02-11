@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from 'react';
 import { ArrowRight, Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
@@ -190,21 +191,21 @@ export default function LoginForm() {
               Remember me
             </label>
           </div>
-          <a href="/reset" className="text-primary hover:underline text-sm">
+          <Link to="/reset" className="text-primary brightness-175 hover:underline text-sm">
             Forgot password?
-          </a>
+          </Link>
         </section>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="mt-4 bg-primary text-white py-3 rounded-md font-medium hover:bg-primary/90 active:scale-95 transition-transform duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          className="mt-4 bg-primary text-white py-3 rounded-md font-medium hover:bg-primary/90 active:scale-95 transition-transform duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none  cursor-pointer"
         >
           {isSubmitting ? (
             'Signing in...'
           ) : (
             <>
-              Enter the Forge <ArrowRight className="inline-block ml-2" />
+              Well met at the Forge <ArrowRight className="inline-block ml-2" />
             </>
           )}
         </button>
