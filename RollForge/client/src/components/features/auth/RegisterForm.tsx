@@ -66,7 +66,7 @@ export default function RegisterForm() {
       <AuthMedia />
 
       {/* Register Form */}
-      <form onSubmit={handleSubmit} className="w-full max-w-120 flex flex-col gap-2" noValidate>
+      <form onSubmit={handleSubmit} className="w-full max-w-120 flex flex-col gap-4" noValidate>
         {/* Email Field */}
         <div className="flex flex-col">
           <label htmlFor="email" className="text-text-primary">

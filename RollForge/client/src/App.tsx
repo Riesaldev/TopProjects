@@ -3,8 +3,10 @@ import AuthLayout from './components/layouts/AuthLayout';
 import LoginForm from './components/features/auth/LoginForm';
 import RegisterForm from './components/features/auth/RegisterForm';
 import PasswordRecovery from './components/features/auth/PasswordRecovery';
-import MainLayout from './components/layouts/MainLayout';
+import ProfileLayout from './components/layouts/ProfileLayout';
 import UserProfile from './components/features/profile/UserProfile';
+import DashboardLayout from './components/layouts/DashboardLayout';
+import Dashboard from './components/features/dashboard/Dashboard';
 
 export default function App() {
   return (
@@ -17,11 +19,18 @@ export default function App() {
           <Route path="/reset" element={<PasswordRecovery />} />
         </Route>
 
-        {/* Rutas principales */}
-        <Route element={<MainLayout />}>
-          <Route path="/profile" element={<UserProfile />} />
-          {/* Otras rutas principales */}
+        {/* Dashboard routes */}
+        <Route element={<DashboardLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          {/* Otras rutas del dashboard */}
         </Route>
+
+        {/* Rutas de perfil */}
+        <Route element={<ProfileLayout />}>
+          <Route path="/profile" element={<UserProfile />} />
+          {/* Otras rutas de perfil */}
+        </Route>
+
       </Routes>
     </BrowserRouter>
   );

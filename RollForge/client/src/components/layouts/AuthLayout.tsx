@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import { Dice3 } from 'lucide-react';
 import { BRAND_CONFIG } from '../../data/authConstants';
+import Logo from '../common/Logo';
 
 export default function AuthLayout() {
   return (
@@ -12,17 +12,7 @@ export default function AuthLayout() {
         {/* Overlay Gradient */}
         <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
 
-        {/* Top Brand */}
-        <div className="relative z-10 p-12 flex items-center gap-6">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
-              <Dice3 className="w-8 h-8 text-white" />
-            </div>
-            <a rel="login" href="/" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
-              {BRAND_CONFIG.LOGO_TEXT}
-            </a>
-          </div>
-        </div>
+        <Logo />
 
         {/* Bottom Quote */}
         <div className="relative z-10 p-12 flex items-center gap-6">
@@ -35,16 +25,9 @@ export default function AuthLayout() {
       </div>
 
       {/* Right Side: Auth Forms */}
-      <div className="flex-1 flex flex-col p-4 sm:p-8 relative bg-background-primary">
+      <div className="flex-1 flex flex-col lg:p-8 relative bg-background-primary">
         {/* Mobile Logo - Visible only on small screens */}
-        <div className="lg:hidden absolute top-8 left-8 flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
-            <Dice3 className="w-8 h-8 text-white" />
-          </div>
-          <a rel="login" href="/login" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
-            {BRAND_CONFIG.LOGO_TEXT}
-          </a>
-        </div>
+        <Logo />
 
         {/* Auth Container - Here render Login/Register/Reset forms */}
         <div className="w-full max-w-180 flex flex-col gap-6 max-h-[90vh] overflow-y-auto mx-auto my-auto">
