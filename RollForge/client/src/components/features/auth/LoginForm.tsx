@@ -1,13 +1,16 @@
 import { ArrowRight, Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
 import AuthFooter from "./AuthFooter";
 import { useLoginForm } from '../../../hooks/useAuthForm';
 import { AUTH_MESSAGES } from '../../../data/authConstants';
+import { mockUserData as mockAuthData } from '@/data/mockUser';
+import { mockUserData as mockProfileData } from '@/data/mockProfile';
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const {
     formData,
     errors,
@@ -32,16 +35,41 @@ export default function LoginForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: Implementar lógica de autenticación real (API call, token handling, etc.)
-      console.log('Form submitted:', {
-        email: formData.email.trim(),
-        password: formData.password,
-        remember: formData.remember,
-      });
+      const trimmedInput = formData.email.trim().toLowerCase();
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Validate credentials against mock data
+      const isValidEmail = trimmedInput === mockAuthData.email.toLowerCase();
+      const isValidUsername = mockAuthData.username && trimmedInput === mockAuthData.username.toLowerCase();
+      const isValidPassword = formData.password === mockAuthData.password;
 
-      // TODO: Redirigir al usuario a la página principal o dashboard después de un inicio de sesión exitoso
+      if ((isValidEmail || isValidUsername) && isValidPassword) {
+        console.log('Login successful:', {
+          input: trimmedInput,
+          remember: formData.remember,
+        });
+
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Store user session in localStorage
+        if (formData.remember) {
+          localStorage.setItem('rememberMe', JSON.stringify({
+            email: trimmedInput,
+            timestamp: new Date().toISOString(),
+          }));
+        }
+
+        // Store authenticated user profile data
+        localStorage.setItem('userProfile', JSON.stringify(mockProfileData));
+        localStorage.setItem('isAuthenticated', 'true');
+
+        // Redirect to profile page
+        navigate('/profile');
+      } else {
+        // Invalid credentials
+        console.error('Login failed: Invalid credentials');
+        setErrors({ email: AUTH_MESSAGES.INVALID_CREDENTIALS });
+      }
     } catch (error) {
       console.error('Login error:', error);
       setErrors({ email: AUTH_MESSAGES.INVALID_CREDENTIALS });
@@ -72,7 +100,7 @@ export default function LoginForm() {
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-text-secondary/40" />
             <input
-              type="email"
+              type="text"
               name="email"
               id="email"
               value={formData.email}

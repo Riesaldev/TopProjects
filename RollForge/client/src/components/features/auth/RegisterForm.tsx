@@ -50,7 +50,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <main className="flex-1 h-auto w-full flex flex-col justify-center items-center p-4 sm:p-8 relative bg-background-primary gap-6 overflow-hidden">
+    <main className="h-auto w-full flex flex-col justify-center items-center p-4 sm:p-8 mt-6 bg-background-primary gap-6 overflow-hidden">
       {/* Welcome Section */}
       <section className="w-full max-w-120 flex flex-col">
         <h2 className="text-4xl font-bold tracking-tight text-text-primary mb-6">
@@ -66,9 +66,9 @@ export default function RegisterForm() {
       <AuthMedia />
 
       {/* Register Form */}
-      <form onSubmit={handleSubmit} className="w-full max-w-120 flex flex-col gap-4" noValidate>
+      <form onSubmit={handleSubmit} className="w-full max-w-120 flex flex-col gap-2" noValidate>
         {/* Email Field */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col">
           <label htmlFor="email" className="text-text-primary">
             Email
           </label>

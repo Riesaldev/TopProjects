@@ -15,6 +15,17 @@ export const validateEmail = (email: string): boolean => {
 };
 
 /**
+ * Valida que sea un email o un username válido
+ * @param input - Email o username a validar
+ * @returns true si es válido
+ */
+export const validateEmailOrUsername = (input: string): boolean => {
+  const trimmed = input.trim();
+  // Aceptar emails o usernames (mínimo 3 caracteres)
+  return validateEmail(trimmed) || trimmed.length >= 3;
+};
+
+/**
  * Valida que la contraseña cumpla con los requisitos mínimos
  * @param password - Contraseña a validar
  * @returns null si es válida, o mensaje de error
@@ -39,8 +50,8 @@ export const validateLoginForm = (
 
   if (!formData.email.trim()) {
     errors.email = AUTH_MESSAGES.EMAIL_REQUIRED;
-  } else if (!validateEmail(formData.email)) {
-    errors.email = AUTH_MESSAGES.EMAIL_INVALID;
+  } else if (!validateEmailOrUsername(formData.email)) {
+    errors.email = 'Please enter a valid email or username';
   }
 
   if (!formData.password) {

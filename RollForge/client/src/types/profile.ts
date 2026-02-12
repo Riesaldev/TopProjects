@@ -19,6 +19,12 @@ export interface NotificationPreference {
   frequency: string;
 }
 
+export interface UserData {
+  email: string;
+  username?: string;
+  password: string;
+}
+
 export interface UserProfileData {
   displayName: string;
   email: string;
