@@ -9,6 +9,8 @@ export const BADGE_COLORS = [
 
 export const CHARACTER_CLASSES = ['All Classes', 'Fighter', 'Wizard', 'Rogue'] as const;
 
+export const CAMPAIGN_SYSTEMS = ['All Systems', 'D&D 5e', 'Pathfinder 2e', 'Cyberpunk RED'] as const;
+
 export const mockUserData: UserProfileData = {
   displayName: 'DungeonMaster99',
   email: 'DungeonMaster99@gmail.com',
@@ -66,5 +68,46 @@ export const mockUserData: UserProfileData = {
   notifications: [
     { type: 'email', enabled: true, frequency: 'Instant' },
     { type: 'whatsapp', enabled: false, frequency: 'Instant' },
+  ],
+  campaign: [
+    {
+      id: '1',
+      name: 'Curse of Strahd',
+      system: 'D&D 5e',
+      description: 'The mists of Barovia are closing in. Will you survive the night?',
+      backgroundImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQTwjWWh-JXT1K3bTMSh6UpbPwONNiKyvLbN8fxK8WWr4JpHYtVytpwJIbTh9r7jPQiFRb1iE9K9cBAfLd4u0CqOJ7Pl1WYPXmIGd6hlKWhI77P_-bQq_H3bvYIyZltv7fYj8AxeiJjI5EMfMqyBFxfid-2Dt0DCEfw8hsF00n3zBp2AQMYHjFV4a_xP3Ehj943QJkISH5y_5A-xkL91j1MEZEiryGO_V6QK7CPlmNl1J8j25IEqNPWPo396pAiXMMPxMdU0Y-lLI',
+      players: [
+        { name: 'Player1', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvONqMBQu7BvurqXTeBmoeY9bTvyQK5gxe1OvGHtdXMkQSGFPsz5-nz8hlEXuYUr900WjpfDg2OwBQ9cus1SKek80IjahgP7Yk4VZkyDj7Xr8xKWPHn3xWOIbCFB-FkXY9AyT-QNRV7LeVCs-Dv8G5MYPJih9w6ERO8wJKxuaMHEz9kRHZ4Zyn64OdIJqebobcuu0qC1mpInHrpGtwklcBw7SPTEUyNaP7Dyc_lBIcFt_XwIGuu9cL6ViI5Z1UC2Npf4FADOsQvO0' },
+        { name: 'Player2', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCq455EwvaQBEdvuK1HrMYMI3ZUDhMIzKPspYnvIDZyVvHAhOs1j2WUVdRBAsp6qUfnEqkDdjDxoKF7OMOLIYTIRBWLNT-PDnF3BQ_VXkqoZBVhcKOPTJlyYHDYuYzy_Akf32mjGd5FVjRpqZ5pMs1wVEJHwySpqoQfm-Cw-4a7pg6d_TN8e5JT2utYJ3kda_GGc2eXL3Hylg4Y8Qi4eA56LiKPzuynQQ_W4PDAAq9e5qYmjHtliHJoYLgvRoRJsHeREILnh6Wl_zc' },
+        { name: 'Player3', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA_U0qfklRQvuMBhXphFJXMXr59k9m-nBPbm9MsXmLwyJN2AxfMVdaO300pbkTi0zGb4fT0k4GTHdPwhlMoK86JMjnjgqydoNxJjVgRVdo0kFvGGQNu939exJH0P-886S__iAdu7tWPT-oK51Mofzwq5iKQE30e-u1tFAWQ9uKqJ5f5YR2YJ60rTby-NPPw1t16C6HgI4SAC1D3CClyOJwP5U5ltHXEBgDLhXKe0ntt8Pn7LTZNAENgaAhbIuhUDYPFwRRaIR4sUfo' },
+        { name: 'Player4', avatar: '' },
+        { name: 'Player5', avatar: '' },
+      ],
+    },
+    {
+      id: '2',
+      name: 'Lost Omens',
+      system: 'Pathfinder 2e',
+      description: 'Exploring the Mwangi Expanse in search of lost artifacts.',
+      backgroundImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDheGOqb-2MOSgOqflVNKZ_Oy8jAlMvE-9Z_2cxNZp9eqPVXXFKug0W8Y2ZO-YD5ngkMWWFg2Lu7gi46Vt3QQPxUEjFp4JEjI7aOoSXxtcZOcA_o1Rv7-C1GP2WyvjkImbcmkoKE_k2QG01ygJ0Hu0PlYZU29l_1W9BpalqTEVJecWdic9Uzcmdgey6trEKRNOP7kFygYazmr19bxbxlO7YhnX0XSn1tV6ziWc4Yzn6lsWPKDEecHPBDBPsrGU0a6V3HTTT5w-j5X0',
+      players: [
+        { name: 'PlayerA', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAsv1dblSWmfc_qYT-xwTNLS9H2Vf1WtUOxwoglggtwVFgNcM2ByOirlylExLD-9hXGN7YWRBIdIFTH5ROMwK370tSct1VeavJdh_tSATNz5R76-bbXtY5nNWpY-TR-iD4rZvDmSn03rLeknKBfb2E5mbnI-9TtJa6uIKmwplAkI4-RuNKUPzzKmorKQXtq1eeX5rQn8eDWUwhp4PXOQVB2NzShzWblieISE5mUtfo-dftKeJFgwXfb7DVWx4fk3vmauB7rDJ_oqKc' },
+        { name: 'PlayerB', avatar: '' },
+        { name: 'PlayerC', avatar: '' },
+        { name: 'PlayerD', avatar: '' },
+        { name: 'PlayerE', avatar: '' },
+      ],
+    },
+    {
+      id: '3',
+      name: 'Neon Nights',
+      system: 'Cyberpunk RED',
+      description: 'One last job before we leave Night City for good.',
+      backgroundImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCZPjeMHof59u2pbXHGS55YN-d3mDcR-VjbSQEPyOaoVJFMqJw-NDNKLmQT5HnTPJzRPCXSxSuNlCg1A9RSbT7A5ZUTYlI9EeUhXBEvabIJTspB4fROyZOImICfWDMdrz7kLM49QnFDsAfkUdrGb0nJbiShgimqpvepgIU7lA2dNoNcW19OL9Ax4RaD0wt80IkekNWUJahPgLcXYSkoISSobd7L5PGAWHom6o8AK1MKGkpYHbksJz9Lmqc1jSLqVgX1zJdr6wTfTZo',
+      players: [
+        { name: 'PlayerX', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCsTPN7mwAqof8iIsmX6tPDuy3-XrnDbTHoF5EHCg3MMcHFvm1-qsTSAUTC61vrsMQanDP3IHPk7ul1Ip1VaCrrbuPeWKXB9Kdq-gOnAHxTFR1gyjL9mjXeC2Dks_AWNlLTG33LqVzxwBsDgbs60O14MH7-VBOBQDXAMdzIMwqqDg6uS8eeDPxAa17kqB3NOU-EDI0Mptl57WIQ28LXsQfwARwPv1nv2SqEC10ncs9fM892_XBP7pS29dB82KjcxIQ645AnojmDY7c' },
+        { name: 'PlayerY', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBURDyh_iZHJ8nuaHIXOs_LdMsFux_s2rdZemBhe4pRjaApt16tO--hBO5k0H1rR0xakyYwzSTj5fIAMhgiprDTLGLxWolHv0RXtXMnJyaV3TeCgDnV3vNPia31-kPzCBymCo-I2tbWZ3g_6ulLGo872aMz-_5YKeQchSVNVu0jSTmTaYNm_Ka8AbFGB9HCMxSfARukQDTd-LHIG3IZw8VwHLppKKOUpS8ijKwvB2UH_u0fovxG2kC2pGz9RGJXJzs_b5q7hiM4CA' },
+      ],
+    },
   ],
 };

@@ -2,29 +2,29 @@ import Logo from "@/components/common/Logo";
 
 export default function LDashboardSidebar() {
   return (
-    <aside className="flex w-64 flex-col justify-between border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-[#121118] p-4 md:flex">
+    <aside className="flex w-48 flex-col justify-between bg-[#121118]  md:flex">
       <div className="flex flex-col items-start gap-6">
         {/* Branding */}
         <div className="h-10 w-full flex items-center justify-start">
           <Logo />
         </div>
         {/* Navigation */}
-        <nav className="flex flex-col gap-2">
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white group transition-all duration-200 shadow-md shadow-primary/20" href="#">
+        <nav className="flex flex-col mt-4 gap-2">
+          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-text-primary group transition-all duration-200 shadow-md shadow-primary/20" href="#">
             <span className="material-symbols-outlined filled">home</span>
             <span className="text-sm font-semibold">Home</span>
           </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-hover hover:text-slate-900 dark:hover:text-white transition-colors duration-200" href="#">
+          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-surface-hover hover:text-text-primary transition-colors duration-200" href="#">
             <span className="material-symbols-outlined">group</span>
             <span className="text-sm font-medium">Characters</span>
           </a>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-hover hover:text-slate-900 dark:hover:text-white transition-colors duration-200" href="#">
+          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-surface-hover hover:text-text-primary transition-colors duration-200" href="#">
             <span className="material-symbols-outlined">menu_book</span>
             <span className="text-sm font-medium">Library</span>
           </a>
 
           <div className="my-2 border-t border-slate-200 dark:border-slate-800"></div>
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-surface-hover hover:text-slate-900 dark:hover:text-white transition-colors duration-200" href="#">
+          <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-surface-hover hover:text-text-primary transition-colors duration-200" href="#">
             <span className="material-symbols-outlined">settings</span>
             <span className="text-sm font-medium">Settings</span>
           </a>

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { mockUserData } from '../../../data/mockProfile';
-import { useProfileForm } from '../../../hooks/useProfileForm';
+import { mockUserData } from '@/data/mockProfile';
+import { useProfileForm } from '@/hooks/useProfileForm';
 import ProfileInfo from './ProfileInfo';
 import NotificationPreferences from './NotificationPreferences';
-import CharacterVault from './CharacterVault';
 import ProfileActionBar from './ProfileActionBar';
 
 export default function UserProfile() {
@@ -19,7 +18,7 @@ export default function UserProfile() {
     reset,
   } = useProfileForm(mockUserData);
 
-  const [selectedClass, setSelectedClass] = useState<string>('All Classes');
+
   const [saveError, setSaveError] = useState<string | undefined>();
 
   const handleSave = async () => {
@@ -33,7 +32,6 @@ export default function UserProfile() {
   const handleCancel = () => {
     setSaveError(undefined);
     reset();
-    setSelectedClass('All Classes');
   };
 
   return (
@@ -64,12 +62,6 @@ export default function UserProfile() {
         <NotificationPreferences
           notifications={editedData.notifications}
           onNotificationChange={handleNotificationChange}
-        />
-
-        <CharacterVault
-          characters={editedData.characters}
-          selectedClass={selectedClass}
-          onClassChange={setSelectedClass}
         />
 
         {/* Bottom Action Bar (Desktop) */}
