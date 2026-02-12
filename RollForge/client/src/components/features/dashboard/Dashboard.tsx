@@ -99,24 +99,6 @@ export default function Dashboard() {
                 </button>
               </div>
             </section>
-            {/* Recent Activity / News */}
-            <section className="pb-10">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-                <span className="material-symbols-outlined text-primary">feed</span>
-                Community &amp; News
-              </h3>
-              <div className="bg-white dark:bg-surface-dark rounded-xl p-6 border border-slate-200 dark:border-slate-800">
-                <div className="flex flex-col md:flex-row gap-6">
-                  <div className="w-full md:w-1/3 h-48 md:h-auto rounded-lg bg-cover bg-center" data-alt="Abstract colorful nebula space background" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBH_5yKecaLb30JRpbT9bTmpr_zD-1HM9KQhdsP1acgu9vp9UqvPOqUXWVZGIljpWqzWWe_Rn_VLivFOxF3vkrEjopvodVP5hJlmU3R_HLPOelZGDGAXls_o__YrplPS905l_xJ5vdTnOBNbrwIQNKgDh5JL03PDJGm0NeXc3kdNtoDx2wAOR0i8KP1gYxIhqLNUobSJg5m86Nv9jowSt543TKH9yxg-4CY9bi8vPhVvNyuKBB4kJiRXMW62Yqf4BBPVQ3GhQNvdIQ')" }}></div>
-                  <div className="flex-1 flex flex-col justify-center">
-                    <span className="text-primary text-xs font-bold uppercase tracking-wider mb-2">Update v2.4</span>
-                    <h4 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">The Astral Sea Update is Live!</h4>
-                    <p className="text-slate-500 dark:text-slate-400 mb-4">New dynamic lighting features, 3D dice physics overhaul, and over 500+ new assets for space-faring adventures have been added to the library.</p>
-                    <a className="text-primary font-bold hover:underline flex items-center gap-1" href="#">Read Patch Notes <span className="material-symbols-outlined text-sm">open_in_new</span></a>
-                  </div>
-                </div>
-              </div>
-            </section>
           </div>
         </div>
       </main>

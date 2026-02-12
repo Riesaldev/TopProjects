@@ -31,7 +31,7 @@ export default function LDashboardSidebar() {
         </nav>
       </div>
       {/* User Profile */}
-      <div className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-slate-100 dark:hover:bg-surface-hover cursor-pointer transition-colors">
+      <div className="flex absolute bottom-6 left-4 items-end justify-start gap-3 rounded-lg hover:bg-primary cursor-pointer transition-colors">
         <div className="relative">
           <div className="h-10 w-10 rounded-full bg-slate-300 dark:bg-slate-700 bg-cover bg-center" data-alt="User avatar" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAV23wF4T8bhEmP3o2vT67y4IQwzzD-k-f3IBkCrdruqPbPJDOycnHNos5OaSDx_V3idJzkTw0iFxUUz9qOGkym8jpYbM3q6jhggWE0_0wX_vkCDcUEc7T-N7kLetdXWVA9iRxJVS2Ev4J073mPiPKlsBYB7I4ZXuXczNUhoYK4GyRjllsTrAvJLlsWFQVcadl1yM1pIHrZkqTOCH_4b__whbG9P6zsZuNvkT68Q2ZAXgi9wEefpfIZ-HxOR5oJqOodgPzD0AMY90k')" }}></div>
           <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-[#121118]"></div>
