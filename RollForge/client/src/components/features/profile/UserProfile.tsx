@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { mockUserData } from '../../../data/mockProfile';
 import { useProfileForm } from '../../../hooks/useProfileForm';
-import ProfileHeader from './ProfileHeader';
+import ProfileInfo from './ProfileInfo';
 import NotificationPreferences from './NotificationPreferences';
 import CharacterVault from './CharacterVault';
 import ProfileActionBar from './ProfileActionBar';
@@ -39,7 +39,7 @@ export default function UserProfile() {
   return (
     <main className="flex-1 w-full max-w-8xl mx-auto px-4 py-8 md:px-8 lg:py-12 flex flex-col lg:flex-row gap-20">
       {/* Left Sidebar */}
-      <ProfileHeader
+      <ProfileInfo
         data={editedData}
         errors={errors}
         onDisplayNameChange={(value) => handleInputChange('displayName', value)}

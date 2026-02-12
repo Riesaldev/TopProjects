@@ -1,159 +1,59 @@
-import type { UserProfileData } from '../../../types/profile';
-import { BADGE_COLORS } from '../../../data/mockProfile';
+import { Dice3, Search } from 'lucide-react';
+import { useState } from 'react';
+import { BRAND_CONFIG } from '../../../data/authConstants';
 
-interface ProfileHeaderProps {
-  data: UserProfileData;
-  errors: Record<string, string>;
-  onDisplayNameChange: (value: string) => void;
-  onEmailChange: (value: string) => void;
-  onPhoneChange: (value: string) => void;
-  onBadgeColorChange: (color: string) => void;
-}
-
-export default function ProfileHeader({
-  data,
-  errors,
-  onDisplayNameChange,
-  onEmailChange,
-  onPhoneChange,
-  onBadgeColorChange,
-}: ProfileHeaderProps) {
+export default function ProfileHeader() {
+  const [isOnline] = useState(true);
   return (
-    <aside className="w-full lg:w-80 shrink-0 space-y-6">
-      <div className="bg-surface-dark rounded-xl p-6 shadow-sm border border-border-dark-heavy relative overflow-hidden group">
-        {/* Decorative background blur */}
-        <div className="absolute top-0 left-0 w-full h-24 bg-linear-to-b from-primary/20 to-transparent pointer-events-none"></div>
-        <div className="relative flex flex-col items-center">
-          <div className="relative mb-4 group/avatar">
-            <div className="size-32 rounded-full overflow-hidden border-4 border-surface-dark shadow-lg bg-slate-800">
-              <img alt={data.displayName} className="w-full h-full object-cover" src={data.avatar} />
-            </div>
-            <button className="absolute inset-0 flex items-center justify-center bg-black/50 text-white opacity-0 group-hover/avatar:opacity-100 transition-opacity rounded-full">
-              <span className="material-symbols-outlined text-3xl">photo_camera</span>
-            </button>
-            {/* Online Status Indicator */}
-            <div
-              className="absolute bottom-2 right-2 size-6 rounded-full border-4 border-surface-dark shadow-sm z-10"
-              style={{ backgroundColor: data.badgeColor }}
-            ></div>
+    <header className="w-full border-b border-border-dark-heavy/50 p-4 flex items-center gap-18 justify-between">
+      {/*Logo*/}
+      <div className="relative z-10 flex items-center gap-6 ml-6">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
+            <Dice3 className="w-8 h-8 text-white" />
           </div>
-
-          <h2 className="text-2xl font-bold text-text-primary">{data.displayName}</h2>
-          <p className="text-text-muted text-sm font-medium">{data.email}</p>
-          <p className="text-text-muted text-sm font-medium mb-6">
-            {data.role} | Lvl {data.level}
-          </p>
-
-          {/* Stats Grid */}
-          <div className="w-full grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-surface-dark-lighter rounded-lg p-3 text-center">
-              <span className="block text-2xl font-bold text-primary">{data.campaigns}</span>
-              <span className="text-xs text-text-muted uppercase tracking-wide">Campaigns</span>
-            </div>
-            <div className="bg-surface-dark-lighter rounded-lg p-3 text-center">
-              <span className="block text-2xl font-bold text-primary">{data.hoursPlayed}</span>
-              <span className="text-xs text-text-muted uppercase tracking-wide">Played</span>
-            </div>
-          </div>
-
-          {/* Edit Form */}
-          <div className="w-full space-y-4 border-t border-border-dark pt-6">
-            {/* Display Name Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-text-secondary">Display Name</label>
-              <div className={`flex items-center bg-surface-dark-lighter rounded-lg px-3 py-2 border transition-all ${errors.displayName
-                ? 'border-accent-red focus-within:ring-1 focus-within:ring-accent-red'
-                : 'border-border-dark focus-within:border-primary focus-within:ring-1 focus-within:ring-primary'
-                }`}>
-                <span className="material-symbols-outlined text-text-muted mr-2 text-[20px]">person</span>
-                <input
-                  className="bg-transparent border-none text-sm w-full focus:outline-none text-text-primary p-0"
-                  type="text"
-                  value={data.displayName}
-                  onChange={(e) => onDisplayNameChange(e.target.value)}
-                  aria-invalid={!!errors.displayName}
-                />
-              </div>
-              {errors.displayName && (
-                <p className="text-xs text-accent-red">{errors.displayName}</p>
-              )}
-            </div>
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-text-secondary">Email</label>
-              <div className={`flex items-center bg-surface-dark-lighter rounded-lg px-3 py-2 border transition-all ${errors.email
-                ? 'border-accent-red focus-within:ring-1 focus-within:ring-accent-red'
-                : 'border-border-dark focus-within:border-primary focus-within:ring-1 focus-within:ring-primary'
-                }`}>
-                <span className="material-symbols-outlined text-text-muted mr-2 text-[20px]">email</span>
-                <input
-                  className="bg-transparent border-none text-sm w-full focus:outline-none text-text-primary p-0"
-                  type="email"
-                  value={data.email}
-                  onChange={(e) => onEmailChange(e.target.value)}
-                  aria-invalid={!!errors.email}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-xs text-accent-red">{errors.email}</p>
-              )}
-            </div>
-
-            {/*Phone Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-text-secondary">Phone</label>
-              <div className={`flex items-center bg-surface-dark-lighter rounded-lg px-3 py-2 border transition-all ${errors.phone
-                ? 'border-accent-red focus-within:ring-1 focus-within:ring-accent-red'
-                : 'border-border-dark focus-within:border-primary focus-within:ring-1 focus-within:ring-primary'
-                }`}>
-                <span className="material-symbols-outlined text-text-muted mr-2 text-[20px]">phone</span>
-                <input
-                  className="bg-transparent border-none text-sm w-full focus:outline-none text-text-primary p-0"
-                  type="tel"
-                  value={data.phone}
-                  onChange={(e) => onPhoneChange(e.target.value)}
-                  aria-invalid={!!errors.phone}
-                />
-              </div>
-              {errors.phone && (
-                <p className="text-xs text-accent-red">{errors.phone}</p>
-              )}
-            </div>
-
-            {/* Badge Color Selector */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-text-secondary flex justify-between">
-                Online Badge Color
-                <span className="text-xs font-normal text-text-muted">Preview above</span>
-              </label>
-              <div className="flex gap-2 items-center">
-                <input
-                  className="h-10 w-12 bg-transparent border-none cursor-pointer p-0 rounded overflow-hidden"
-                  title="Choose your custom color"
-                  type="color"
-                  value={data.badgeColor}
-                  onChange={(e) => onBadgeColorChange(e.target.value)}
-                />
-                <div className="flex flex-1 gap-2 justify-end">
-                  {BADGE_COLORS.map((color) => (
-                    <button
-                      key={color.value}
-                      onClick={() => onBadgeColorChange(color.value)}
-                      className={`size-6 rounded-full hover:scale-110 transition-transform ring-2 ${data.badgeColor === color.value
-                        ? `ring-offset-2 ring-offset-surface-dark ring-text-secondary`
-                        : 'ring-offset-2 ring-offset-surface-dark ring-transparent hover:ring-text-secondary'
-                        }`}
-                      style={{ backgroundColor: color.value }}
-                      title={color.label}
-                    ></button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <a rel="login" href="/" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
+            {BRAND_CONFIG.LOGO_TEXT}
+          </a>
         </div>
       </div>
-    </aside>
+      {/* User Menu */}
+      <nav className="relative z-10">
+        <ul className="flex items-center gap-6">
+          <li className="flex items-center gap-22 text-lg ">
+            <a href="#" className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
+              Campaigns
+            </a>
+            <a href="#"
+              className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
+              Compendium
+            </a>
+          </li>
+        </ul>
+      </nav>
+      {/* Campaign Search */}
+      <div className="relative z-10">
+        <Search
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-text-primary/50"
+          aria-hidden="true"
+        />
+        <input
+          className="w-full text-text-muted/20 bg-border-dark pl-15 pr-20 py-2 rounded-xl border border-border-dark-heavy focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
+          type="text"
+          placeholder="Search campaigns..."
+          aria-label="Search campaigns"
+        />
+      </div>
+      {/* User Avatar */}
+      <a className="relative z-10 flex items-center gap-3 cursor-pointer mr-6"
+        href="/profile">
+        <img
+          src="/Avatar.svg"
+          alt="User Avatar"
+          className="w-18 h-18 rounded-full object-cover border-2 border-primary"
+        />
+        <span className={`h-4 w-4 border-2 border-border-dark rounded-full absolute bottom-1 right-2 ${isOnline ? 'bg-accent-green' : 'bg-accent-red'}`}></span>
+      </a>
+    </header>
   );
 }
