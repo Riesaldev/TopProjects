@@ -26,6 +26,6 @@ export const BRAND_CONFIG = {
   LOGO_TEXT: 'RollForge',
   AUTH_QUOTE: {
     text: 'The dice tell the story, but the forge is where legends are built. Join thousands of game masters crafting worlds today.',
-    subtitle: '',
+    subtitle: 'Craft Your Legend with RollForge',
   },
 } as const;

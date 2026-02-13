@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { Campaign } from '../../../types/profile';
-import { CAMPAIGN_SYSTEMS } from '../../../data/mockProfile';
+import type { Campaign } from '@/types/profile';
+import { CAMPAIGN_SYSTEMS } from '@/data/mockProfile';
 import CampainCard from './CampainCard';
 
 interface CampainVaultProps {

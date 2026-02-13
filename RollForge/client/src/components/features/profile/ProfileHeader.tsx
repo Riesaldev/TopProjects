@@ -21,10 +21,10 @@ export default function ProfileHeader() {
       <nav className="relative z-10">
         <ul className="flex items-center gap-6">
           <li className="flex items-center gap-22 text-lg ">
-            <a href="#" className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
+            <a href="/campaigns" className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
               Campaigns
             </a>
-            <a href="#"
+            <a href="/compendium"
               className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
               Compendium
             </a>

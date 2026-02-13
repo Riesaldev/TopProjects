@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import type { Character } from '../../../types/profile';
-import { CHARACTER_CLASSES } from '../../../data/mockProfile';
+import type { Character } from '@/types/profile';
+import { CHARACTER_CLASSES } from '@/data/mockProfile';
 import CharacterCard from './CharacterCard';
 
 interface CharacterVaultProps {

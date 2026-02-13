@@ -1,4 +1,4 @@
-import type { Campaign } from '../../../types/profile';
+import type { Campaign } from '@/types/profile';
 
 interface CampainCardProps {
   campaign: Campaign;

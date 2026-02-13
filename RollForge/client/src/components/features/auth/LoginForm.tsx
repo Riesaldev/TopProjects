@@ -64,7 +64,7 @@ export default function LoginForm() {
         localStorage.setItem('isAuthenticated', 'true');
 
         // Redirect to profile page
-        navigate('/dashboard');
+        navigate('/campaigns');
       } else {
         // Invalid credentials
         console.error('Login failed: Invalid credentials');

@@ -6,7 +6,8 @@ import PasswordRecovery from './components/features/auth/PasswordRecovery';
 import ProfileLayout from './components/layouts/ProfileLayout';
 import UserProfile from './components/features/profile/UserProfile';
 import DashboardLayout from './components/layouts/DashboardLayout';
-import Dashboard from './components/features/dashboard/Dashboard';
+import CampaignsPage from './components/features/dashboard/campaigns/CampaignsPage';
+import CharactersPage from './components/features/dashboard/characters/CharactersPage';
 
 export default function App() {
   return (
@@ -19,18 +20,16 @@ export default function App() {
           <Route path="/reset" element={<PasswordRecovery />} />
         </Route>
 
-        {/* Dashboard routes */}
+        {/* Main App routes */}
         <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          {/* Otras rutas del dashboard */}
+          <Route path="/campaigns" element={<CampaignsPage />} />
+          <Route path="/characters" element={<CharactersPage />} />
         </Route>
 
         {/* Rutas de perfil */}
         <Route element={<ProfileLayout />}>
           <Route path="/profile" element={<UserProfile />} />
-          {/* Otras rutas de perfil */}
         </Route>
-
       </Routes>
     </BrowserRouter>
   );
