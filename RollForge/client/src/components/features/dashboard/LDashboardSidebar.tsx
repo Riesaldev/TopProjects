@@ -30,7 +30,7 @@ export default function LDashboardSidebar() {
             <span className="material-symbols-outlined">group</span>
             <span className="text-sm font-medium">Characters</span>
           </a>
-          <a className={getlinkClasses("/library")} href="/library">
+          <a className={getlinkClasses("/compendium")} href="/compendium">
             <span className="material-symbols-outlined">menu_book</span>
             <span className="text-sm font-medium">Compendium</span>
           </a>

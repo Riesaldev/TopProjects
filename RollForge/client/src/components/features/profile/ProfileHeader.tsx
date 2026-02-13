@@ -1,49 +1,37 @@
-import { Dice3, Search } from 'lucide-react';
 import { useState } from 'react';
-import { BRAND_CONFIG } from '../../../data/authConstants';
+import Logo from '@/components/common/Logo';
 
 export default function ProfileHeader() {
   const [isOnline] = useState(true);
   return (
     <header className="w-full border-b border-border-dark-heavy/50 p-4 flex items-center gap-18 justify-between">
       {/*Logo*/}
-      <div className="relative z-10 flex items-center gap-6 ml-6">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
-            <Dice3 className="w-8 h-8 text-white" />
-          </div>
-          <a rel="login" href="/" className="text-2xl font-bold tracking-tight text-text-primary cursor-pointer">
-            {BRAND_CONFIG.LOGO_TEXT}
-          </a>
-        </div>
+      <div className="relative z-10 flex items-center gap-6 ml-6 scale-120">
+        <Logo redirectTo="#" />
       </div>
       {/* User Menu */}
-      <nav className="relative z-10">
-        <ul className="flex items-center gap-6">
-          <li className="flex items-center gap-22 text-lg ">
-            <a href="/campaigns" className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
+      <nav className="w-1/3 z-10  px-6 py-2 flex items-center justify-center">
+        <ul className=" w-full flex items-center justify-between">
+          <li className="flex items-center">
+            <a href="/campaigns" className="text-text-primary hover:font-bold hover:text-2xl hover:text-primary hover:scale-115 active:scale-95 transition-all">
               Campaigns
             </a>
+          </li>
+          <li className="flex items-center gap-2">
+            <a href="/characters"
+              className="text-text-primary hover:font-bold hover:text-2xl hover:text-primary hover:scale-115 active:scale-95 transition-all">
+              Characters
+            </a>
+          </li>
+          <li className="flex items-center gap-2">
             <a href="/compendium"
-              className="text-text-primary hover:text-primary hover:scale-115 active:scale-95 transition-all">
+              className="text-text-primary hover:font-bold hover:text-2xl hover:text-primary hover:scale-115 active:scale-95 transition-all">
               Compendium
             </a>
           </li>
         </ul>
       </nav>
-      {/* Campaign Search */}
-      <div className="relative z-10">
-        <Search
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-text-primary/50"
-          aria-hidden="true"
-        />
-        <input
-          className="w-full text-text-muted/20 bg-border-dark pl-15 pr-20 py-2 rounded-xl border border-border-dark-heavy focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
-          type="text"
-          placeholder="Search campaigns..."
-          aria-label="Search campaigns"
-        />
-      </div>
+
       {/* User Avatar */}
       <a className="relative z-10 flex items-center gap-3 cursor-pointer mr-6"
         href="/profile">

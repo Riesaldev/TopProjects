@@ -23,10 +23,6 @@ export default function CampaignsPage() {
                   Ready to weave your next epic tale?
                 </p>
               </div>
-              <button className="flex items-center gap-2 bg-primary hover:bg-primary-hover text-white px-5 py-2.5 rounded-lg font-bold shadow-lg shadow-primary/25 transition-all active:scale-95">
-                <span className="material-symbols-outlined text-[20px]">add</span>
-                <span>Create Campaign</span>
-              </button>
             </div>
 
             {/* Campaigns Vault Section */}

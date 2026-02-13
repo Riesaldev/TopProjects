@@ -9,7 +9,7 @@ export default function Logo({ redirectTo = '/' }: LogoProps) {
   return (
     <>
       {/*Logo*/}
-      <div className="relative z-10 flex items-center gap-6 m-6">
+      <div className="relative z-10 flex items-center gap-6 m-6 cursor-none">
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-10 h-10 rounded bg-primary/80">
             <Dice3 className="w-8 h-8 text-white" />

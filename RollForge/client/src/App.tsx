@@ -8,6 +8,7 @@ import UserProfile from './components/features/profile/UserProfile';
 import DashboardLayout from './components/layouts/DashboardLayout';
 import CampaignsPage from './components/features/dashboard/campaigns/CampaignsPage';
 import CharactersPage from './components/features/dashboard/characters/CharactersPage';
+import CompendiumPage from './components/features/dashboard/compendium/CompendiumPage';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/campaigns" element={<CampaignsPage />} />
           <Route path="/characters" element={<CharactersPage />} />
+          <Route path="/compendium" element={<CompendiumPage />} />
         </Route>
 
         {/* Rutas de perfil */}

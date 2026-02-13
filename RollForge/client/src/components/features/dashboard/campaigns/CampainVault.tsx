@@ -26,6 +26,7 @@ export default function CampainVault({
       : campaigns.filter(campaign => campaign.system === selectedSystem);
   }, [campaigns, selectedSystem]);
 
+
   return (
     <div className="flex-1 flex flex-col">
       {/* Header & Controls */}
@@ -78,19 +79,6 @@ export default function CampainVault({
             onLaunch={onCampaignLaunch}
           />
         ))}
-
-        {/* Create New Placeholder */}
-        <button
-          onClick={onCreateNew}
-          className="group flex flex-col items-center justify-center h-full min-h-62.5 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-700 bg-transparent hover:border-primary hover:bg-primary/5 transition-all duration-300"
-        >
-          <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-surface-dark group-hover:bg-primary group-hover:text-white flex items-center justify-center text-slate-400 dark:text-slate-500 transition-colors mb-3">
-            <span className="material-symbols-outlined">add</span>
-          </div>
-          <span className="text-sm font-bold text-slate-500 dark:text-slate-400 group-hover:text-primary">
-            Create New Campaign
-          </span>
-        </button>
       </div>
     </div>
   );

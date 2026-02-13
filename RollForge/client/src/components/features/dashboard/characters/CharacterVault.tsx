@@ -70,17 +70,6 @@ export default function CharacterVault({
             onSelect={onCharacterSelect}
           />
         ))}
-
-        {/* Create New Placeholder */}
-        <div className="group relative flex flex-col items-center justify-center bg-surface-dark-lighter rounded-xl border-2 border-dashed border-border-dark-heavy hover:border-primary hover:bg-primary/5 transition-all cursor-pointer h-full min-h-56">
-          <div className="size-14 rounded-full bg-border-dark group-hover:bg-primary text-text-muted group-hover:text-white flex items-center justify-center transition-colors mb-3">
-            <span className="material-symbols-outlined text-3xl">add</span>
-          </div>
-          <span className="text-sm font-bold text-text-secondary group-hover:text-primary transition-colors">
-            Create New Character
-          </span>
-          <span className="text-xs text-text-muted mt-1">Start from scratch or import</span>
-        </div>
       </div>
     </div>
   );
