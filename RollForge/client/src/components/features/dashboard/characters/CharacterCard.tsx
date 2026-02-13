@@ -1,4 +1,4 @@
-import type { Character } from '../../../types/profile';
+import type { Character } from '@/types/profile';
 
 interface CharacterCardProps {
   character: Character;

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import CharacterVault from './CharacterVault';
 import { mockUserData } from '@/data/mockProfile';
 import { useProfileForm } from '@/hooks/useProfileForm';
@@ -30,6 +31,8 @@ export default function CharactersPage() {
                 characters={editedData.characters}
                 selectedClass={selectedClass}
                 onClassChange={setSelectedClass}
+                onCharacterSelect={(character) => console.log('Selected character:', character)}
+                onCreateNew={() => console.log('Create new character')}
               />
             </section>
           </div>
