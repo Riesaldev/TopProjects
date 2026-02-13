@@ -11,6 +11,8 @@ export const CHARACTER_CLASSES = ['All Classes', 'Fighter', 'Wizard', 'Rogue'] a
 
 export const CAMPAIGN_SYSTEMS = ['All Systems', 'D&D 5e', 'Pathfinder 2e', 'Cyberpunk RED'] as const;
 
+export const COMPENDIUM_SYSTEMS = ['All Systems', 'D&D 5e', 'Pathfinder 2e', 'Cyberpunk RED'] as const;
+
 export const mockUserData: UserProfileData = {
   displayName: 'DungeonMaster99',
   email: 'DungeonMaster99@gmail.com',
@@ -108,6 +110,29 @@ export const mockUserData: UserProfileData = {
         { name: 'PlayerX', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCsTPN7mwAqof8iIsmX6tPDuy3-XrnDbTHoF5EHCg3MMcHFvm1-qsTSAUTC61vrsMQanDP3IHPk7ul1Ip1VaCrrbuPeWKXB9Kdq-gOnAHxTFR1gyjL9mjXeC2Dks_AWNlLTG33LqVzxwBsDgbs60O14MH7-VBOBQDXAMdzIMwqqDg6uS8eeDPxAa17kqB3NOU-EDI0Mptl57WIQ28LXsQfwARwPv1nv2SqEC10ncs9fM892_XBP7pS29dB82KjcxIQ645AnojmDY7c' },
         { name: 'PlayerY', avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBBURDyh_iZHJ8nuaHIXOs_LdMsFux_s2rdZemBhe4pRjaApt16tO--hBO5k0H1rR0xakyYwzSTj5fIAMhgiprDTLGLxWolHv0RXtXMnJyaV3TeCgDnV3vNPia31-kPzCBymCo-I2tbWZ3g_6ulLGo872aMz-_5YKeQchSVNVu0jSTmTaYNm_Ka8AbFGB9HCMxSfARukQDTd-LHIG3IZw8VwHLppKKOUpS8ijKwvB2UH_u0fovxG2kC2pGz9RGJXJzs_b5q7hiM4CA' },
       ],
+    },
+  ],
+  compendium: [
+    {
+      id: '1',
+      name: 'D&D 5e Compendium',
+      system: 'D&D 5e',
+      backgroundImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9n8sXo2l7j8mNqjKZt0a9vXhQy7sVh1kJYp3z8r2bXGgH4c5w6n9oPzL1sQO-9fV4u2c8Wl3X9R0yT1aJqvO7e5t8w6n3r4x5y6z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X',
+      portraitImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9n8sXo2l7j8mNqjKZt0a9vXhQy7sVh1kJYp3z8r2bXGgH4c5w6n9oPzL1sQO-9fV4u2c8Wl3X9R0yT1aJqvO7e5t8w6n3r4x5y6z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X',
+    },
+    {
+      id: '2',
+      name: 'Pathfinder 2e Compendium',
+      system: 'Pathfinder 2e',
+      backgroundImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9n8sXo2l7j8mNqjKZt0a9vXhQy7sVh1kJYp3z8r2bXGgH4c5w6n9oPzL1sQO-9fV4u2c8Wl3X9R0yT1aJqvO7e5t8w6n3r4x5y6z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X',
+      portraitImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9n8sXo2l7j8mNqjKZt0a9vXhQy7sVh1kJYp3z8r2bXGgH4c5w6n9oPzL1sQO-9fV4u2c8Wl3X9R0yT1aJqvO7e5t8w6n3r4x5y6z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X',
+    },
+    {
+      id: '3',
+      name: 'Cyberpunk RED Compendium',
+      system: 'Cyberpunk RED',
+      backgroundImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9n8sXo2l7j8mNqjKZt0a9vXhQy7sVh1kJYp3z8r2bXGgH4c5w6n9oPzL1sQO-9fV4u2c8Wl3X9R0yT1aJqvO7e5t8w6n3r4x5y6z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X',
+      portraitImage: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA9n8sXo2l7j8mNqjKZt0a9vXhQy7sVh1kJYp3z8r2bXGgH4c5w6n9oPzL1sQO-9fV4u2c8Wl3X9R0yT1aJqvO7e5t8w6n3r4x5y6z7A8B9C0D1E2F3G4H5I6J7K8L9M0N1O2P3Q4R5S6T7U8V9W0X',
     },
   ],
 };

@@ -25,6 +25,14 @@ export interface Campaign {
   }[];
 }
 
+export interface Compendium {
+  id: string;
+  name: string;
+  system: string;
+  backgroundImage?: string;
+  portraitImage?: string;
+}
+
 export interface NotificationPreference {
   type: 'email' | 'whatsapp';
   enabled: boolean;
@@ -50,6 +58,7 @@ export interface UserProfileData {
   characters: Character[];
   notifications: NotificationPreference[];
   campaign: Campaign[];
+  compendium: Compendium[];
 }
 
 export interface ProfileError {
