@@ -3,10 +3,9 @@ import type { Campaign } from '@/types/profile';
 interface CampainCardProps {
   campaign: Campaign;
   onSelect?: (campaign: Campaign) => void;
-  onLaunch?: (campaign: Campaign) => void;
 }
 
-export default function CampainCard({ campaign, onSelect, onLaunch }: CampainCardProps) {
+export default function CampainCard({ campaign, onSelect }: CampainCardProps) {
   const visiblePlayers = campaign.players.slice(0, 3);
   const remainingCount = campaign.players.length - 3;
 
@@ -62,17 +61,6 @@ export default function CampainCard({ campaign, onSelect, onLaunch }: CampainCar
               </div>
             )}
           </div>
-
-          {/* Launch Button */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onLaunch?.(campaign);
-            }}
-            className="text-sm font-bold text-primary hover:text-primary-hover flex items-center gap-1 transition-colors"
-          >
-            Launch <span className="material-symbols-outlined text-sm">arrow_forward</span>
-          </button>
         </div>
       </div>
     </div>

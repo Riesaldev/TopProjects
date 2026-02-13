@@ -32,7 +32,6 @@ export default function CampaignsPage() {
                 selectedSystem={selectedSystem}
                 onSystemChange={setSelectedSystem}
                 onCampaignSelect={(campaign) => console.log('Selected campaign:', campaign)}
-                onCampaignLaunch={(campaign) => console.log('Launch campaign:', campaign)}
                 onCreateNew={() => console.log('Create new campaign')}
               />
             </section>

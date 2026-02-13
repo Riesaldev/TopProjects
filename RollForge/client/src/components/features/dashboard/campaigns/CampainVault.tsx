@@ -8,7 +8,6 @@ interface CampainVaultProps {
   selectedSystem: string;
   onSystemChange: (system: string) => void;
   onCampaignSelect?: (campaign: Campaign) => void;
-  onCampaignLaunch?: (campaign: Campaign) => void;
   onCreateNew?: () => void;
 }
 
@@ -17,7 +16,6 @@ export default function CampainVault({
   selectedSystem,
   onSystemChange,
   onCampaignSelect,
-  onCampaignLaunch,
   onCreateNew,
 }: CampainVaultProps) {
   const filteredCampaigns = useMemo(() => {
@@ -61,7 +59,7 @@ export default function CampainVault({
           {/* New Campaign Button */}
           <button
             onClick={onCreateNew}
-            className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-lg shadow-primary/20"
+            className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-lg shadow-primary/20 cursor-pointer active:scale-95"
           >
             <span className="material-symbols-outlined text-[18px]">add</span>
             <span className="hidden sm:inline">New Campaign</span>
@@ -76,7 +74,6 @@ export default function CampainVault({
             key={campaign.id}
             campaign={campaign}
             onSelect={onCampaignSelect}
-            onLaunch={onCampaignLaunch}
           />
         ))}
       </div>
