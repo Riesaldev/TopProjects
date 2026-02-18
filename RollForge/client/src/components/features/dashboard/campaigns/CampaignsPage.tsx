@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import CampainVault from './CampainVault';
+import CampaignVault from './CampaignVault';
 import { mockUserData } from '@/data/mockProfile';
 import { useProfileForm } from '@/hooks/useProfileForm';
 
@@ -27,12 +27,11 @@ export default function CampaignsPage() {
 
             {/* Campaigns Vault Section */}
             <section className="pb-4">
-              <CampainVault
+              <CampaignVault
                 campaigns={editedData.campaign}
                 selectedSystem={selectedSystem}
                 onSystemChange={setSelectedSystem}
                 onCampaignSelect={(campaign) => console.log('Selected campaign:', campaign)}
-                onCreateNew={() => console.log('Create new campaign')}
               />
             </section>
           </div>

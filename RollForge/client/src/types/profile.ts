@@ -43,6 +43,8 @@ export interface UserData {
   email: string;
   username?: string;
   password: string;
+  avatar: string;
+  status: 'online' | 'offline';
 }
 
 export interface UserProfileData {

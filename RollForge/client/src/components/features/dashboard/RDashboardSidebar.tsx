@@ -1,13 +1,26 @@
-export default function Dashboard() {
+import { mockUserData } from "@/data/mockUser";
+
+export default function RDashboardSidebar() {
+  const isOnline = mockUserData.status === "online";
+
   return (
     <>
       {/* Right Sidebar (Session Widget) */}
 
       <aside className="flex w-64 flex-col justify-between  bg-white dark:bg-[#121118] p-4 md:flex ">
+        {/* User Profile */}
+        <div className="flex items-end justify-start gap-3 rounded-lg transition-colors mb-6">
+          <div className="relative">
+            <div className="h-16 w-16 rounded-full bg-slate-300 dark:bg-slate-700 bg-cover bg-center" data-alt="User avatar" style={{ backgroundImage: `url(${mockUserData.avatar})` }}></div>
+            <div className={`absolute bottom-0 right-0 h-5 w-5 rounded-full border-2 border-white dark:border-[#121118] ${isOnline ? "bg-green-500 animate-pulse" : "bg-gray-500"}`}></div>
+          </div>
+          <div className="flex flex-col overflow-hidden">
+            <p className="text-xl font-bold text-white truncate">{mockUserData.username}</p>
+          </div>
+        </div>
         <div className="mb-8">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center justify-between">
+          <h3 className="text-lg font-bold text-white mb-4 flex items-center justify-between">
             Next Session
-            <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
           </h3>
           {/* Active Session Card */}
           <div className="bg-linear-to-b from-primary/10 to-primary/5 rounded-xl p-4 border border-primary/20 relative overflow-hidden group">
@@ -16,16 +29,16 @@ export default function Dashboard() {
             </div>
             <div className="relative z-10">
               <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-primary text-white mb-2">STARTS SOON</span>
-              <h4 className="text-lg font-bold text-slate-900 dark:text-white leading-tight mb-1">Curse of Strahd</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">Tuesday Group • Session 12</p>
+              <h4 className="text-lg font-bold text-white leading-tight mb-1">Curse of Strahd</h4>
+              <p className="text-xs text-white mb-4">Tuesday Group • Session 12</p>
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex flex-col items-center bg-white dark:bg-surface-dark rounded p-1.5 min-w-12 border border-slate-200 dark:border-slate-700">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">00</span>
+                <div className="flex flex-col items-center bg-surface-dark rounded p-1.5 min-w-12 border border-slate-700">
+                  <span className="text-xs font-bold text-white">00</span>
                   <span className="text-[9px] text-slate-400 uppercase">Hr</span>
                 </div>
                 <span className="text-slate-300 font-bold">:</span>
-                <div className="flex flex-col items-center bg-white dark:bg-surface-dark rounded p-1.5 min-w-12 border border-slate-200 dark:border-slate-700">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">45</span>
+                <div className="flex flex-col items-center bg-surface-dark rounded p-1.5 min-w-12 border border-slate-700">
+                  <span className="text-xs font-bold text-white">45</span>
                   <span className="text-[9px] text-slate-400 uppercase">Min</span>
                 </div>
               </div>

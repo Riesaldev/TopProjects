@@ -1,11 +1,11 @@
 import type { Campaign } from '@/types/profile';
 
-interface CampainCardProps {
+interface CampaignCardProps {
   campaign: Campaign;
   onSelect?: (campaign: Campaign) => void;
 }
 
-export default function CampainCard({ campaign, onSelect }: CampainCardProps) {
+export default function CampaignCard({ campaign, onSelect }: CampaignCardProps) {
   const visiblePlayers = campaign.players.slice(0, 3);
   const remainingCount = campaign.players.length - 3;
 
