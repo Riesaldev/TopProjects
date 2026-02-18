@@ -9,6 +9,7 @@ import DashboardLayout from './components/layouts/DashboardLayout';
 import CampaignsPage from './components/features/dashboard/campaigns/CampaignsPage';
 import CharactersPage from './components/features/dashboard/characters/CharactersPage';
 import CompendiumPage from './components/features/dashboard/compendium/CompendiumPage';
+import CampaignEdit from './components/features/dashboard/campaigns/CampaignEdit';
 
 export default function App() {
   return (
@@ -32,6 +33,9 @@ export default function App() {
         <Route element={<ProfileLayout />}>
           <Route path="/profile" element={<UserProfile />} />
         </Route>
+
+        {/* Rutas de edición */}
+        <Route path="/dashboard/campaigns/new" element={<CampaignEdit />} />
       </Routes>
     </BrowserRouter>
   );
