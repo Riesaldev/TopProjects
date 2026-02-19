@@ -93,7 +93,7 @@ function MessageItem({ msg }: { msg: ChatMessage }) {
           )}
           <span className="text-[10px] text-text-muted">{time}</span>
         </div>
-        <p className={`text-sm leading-snug break-words ${isWhisper ? 'italic text-purple-200' : 'text-text-secondary'}`}>
+        <p className={`text-sm leading-snug wrap-break-words ${isWhisper ? 'italic text-purple-200' : 'text-text-secondary'}`}>
           {msg.content}
         </p>
       </div>

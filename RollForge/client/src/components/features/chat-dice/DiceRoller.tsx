@@ -58,14 +58,14 @@ export function DiceRoller() {
           <div className="flex">
             <button
               onClick={() => setConfig((c) => ({ ...c, count: Math.max(1, c.count - 1) }))}
-              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-l text-sm transition-colors"
+              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-l-sm text-sm transition-colors"
             >−</button>
             <span className="w-7 h-7 flex items-center justify-center bg-surface-dark border-y border-border-dark text-sm font-bold text-text-primary">
               {config.count}
             </span>
             <button
               onClick={() => setConfig((c) => ({ ...c, count: Math.min(20, c.count + 1) }))}
-              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-r text-sm transition-colors"
+              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-r-sm text-sm transition-colors"
             >+</button>
           </div>
         </div>
@@ -75,14 +75,14 @@ export function DiceRoller() {
           <div className="flex">
             <button
               onClick={() => setConfig((c) => ({ ...c, modifier: c.modifier - 1 }))}
-              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-l text-sm transition-colors"
+              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-l-sm text-sm transition-colors"
             >−</button>
             <span className="w-8 h-7 flex items-center justify-center bg-surface-dark border-y border-border-dark text-xs font-bold text-text-primary">
               {config.modifier >= 0 ? `+${config.modifier}` : config.modifier}
             </span>
             <button
               onClick={() => setConfig((c) => ({ ...c, modifier: c.modifier + 1 }))}
-              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-r text-sm transition-colors"
+              className="w-7 h-7 bg-surface-dark-lighter border border-border-dark text-text-muted hover:text-white rounded-r-sm text-sm transition-colors"
             >+</button>
           </div>
         </div>
