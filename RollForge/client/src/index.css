@@ -9,10 +9,14 @@
 
   --color-background-light: #f6f6f8;
   --color-background-dark: #131022;
+  /* Alias usado en todos los layouts como bg-background-primary */
+  --color-background-primary: #131022;
 
   --color-surface-light: #ffffff;
   --color-surface-dark: #1a1625;
   --color-surface-dark-lighter: #2a2836;
+  /* Alias para estados hover en sidebar y nav */
+  --color-surface-hover: #2a2836;
 
   --color-border-light: #e5e7eb;
   --color-border-dark: #2b2839;

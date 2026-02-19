@@ -1,5 +1,17 @@
 import { useState } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import Logo from '@/components/common/Logo';
+
+const NAV_LINKS = [
+  { to: '/campaigns', label: 'Campaigns' },
+  { to: '/characters', label: 'Characters' },
+  { to: '/compendium', label: 'Compendium' },
+] as const;
+
+const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+  `text-sm font-medium transition-all ${
+    isActive ? 'text-primary font-bold' : 'text-text-primary hover:text-primary'
+  }`;
 
 export default function ProfileHeader() {
   const [isOnline] = useState(true);
@@ -15,33 +27,25 @@ export default function ProfileHeader() {
       {/* Nav + Avatar (desktop) */}
       <nav className="hidden md:flex w-1/3 z-10 px-6 py-2 items-center justify-center">
         <ul className="w-full flex items-center justify-between">
-          <li>
-            <a href="/campaigns" className="text-text-primary hover:font-bold hover:text-2xl hover:text-primary hover:scale-115 active:scale-95 transition-all">
-              Campaigns
-            </a>
-          </li>
-          <li>
-            <a href="/characters" className="text-text-primary hover:font-bold hover:text-2xl hover:text-primary hover:scale-115 active:scale-95 transition-all">
-              Characters
-            </a>
-          </li>
-          <li>
-            <a href="/compendium" className="text-text-primary hover:font-bold hover:text-2xl hover:text-primary hover:scale-115 active:scale-95 transition-all">
-              Compendium
-            </a>
-          </li>
+          {NAV_LINKS.map(({ to, label }) => (
+            <li key={to}>
+              <NavLink to={to} className={navLinkClass}>
+                {label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </nav>
 
       {/* User Avatar (desktop) */}
-      <a className="hidden md:flex relative z-10 items-center gap-3 cursor-pointer mr-6" href="/profile">
+      <Link className="hidden md:flex relative z-10 items-center gap-3 cursor-pointer mr-6" to="/profile">
         <img
           src="/Avatar.svg"
           alt="User Avatar"
           className="w-18 h-18 rounded-full object-cover border-2 border-primary"
         />
         <span className={`h-4 w-4 border-2 border-border-dark rounded-full absolute bottom-1 right-2 ${isOnline ? 'bg-accent-green' : 'bg-accent-red'}`}></span>
-      </a>
+      </Link>
 
       {/* Burger Button (mobile) */}
       <button
@@ -57,17 +61,18 @@ export default function ProfileHeader() {
       {/* Mobile Menu */}
       <div className={`md:hidden absolute top-full left-0 w-full bg-background-dark border-b border-border-dark-heavy/50 z-10 transition-all duration-300 overflow-hidden ${menuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
         <nav className="flex flex-col px-6 py-4 gap-4">
-          <a href="/campaigns" className="text-text-primary hover:text-primary hover:font-bold transition-all" onClick={() => setMenuOpen(false)}>
-            Campaigns
-          </a>
-          <a href="/characters" className="text-text-primary hover:text-primary hover:font-bold transition-all" onClick={() => setMenuOpen(false)}>
-            Characters
-          </a>
-          <a href="/compendium" className="text-text-primary hover:text-primary hover:font-bold transition-all" onClick={() => setMenuOpen(false)}>
-            Compendium
-          </a>
+          {NAV_LINKS.map(({ to, label }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={navLinkClass}
+              onClick={() => setMenuOpen(false)}
+            >
+              {label}
+            </NavLink>
+          ))}
           {/* Avatar mobile */}
-          <a href="/profile" className="flex items-center gap-3 pt-2 border-t border-border-dark-heavy/30" onClick={() => setMenuOpen(false)}>
+          <Link to="/profile" className="flex items-center gap-3 pt-2 border-t border-border-dark-heavy/30" onClick={() => setMenuOpen(false)}>
             <div className="relative">
               <img
                 src="/Avatar.svg"
@@ -77,7 +82,7 @@ export default function ProfileHeader() {
               <span className={`h-3 w-3 border-2 border-border-dark rounded-full absolute bottom-0 right-0 ${isOnline ? 'bg-accent-green' : 'bg-accent-red'}`}></span>
             </div>
             <span className="text-text-primary">My Profile</span>
-          </a>
+          </Link>
         </nav>
       </div>
     </header>

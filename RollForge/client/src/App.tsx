@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthLayout from './components/layouts/AuthLayout';
 import LoginForm from './components/features/auth/LoginForm';
 import RegisterForm from './components/features/auth/RegisterForm';
@@ -24,9 +24,10 @@ export default function App() {
           <Route path="/reset" element={<PasswordRecovery />} />
         </Route>
 
-        {/* Main App routes */}
+        {/* Dashboard principal */}
         <Route element={<DashboardLayout />}>
           <Route path="/campaigns" element={<CampaignsPage />} />
+          <Route path="/campaigns/new" element={<CampaignEdit />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/compendium" element={<CompendiumPage />} />
         </Route>
@@ -41,8 +42,8 @@ export default function App() {
           <Route path="/profile" element={<UserProfile />} />
         </Route>
 
-        {/* Rutas de edición */}
-        <Route path="/dashboard/campaigns/new" element={<CampaignEdit />} />
+        {/* Catch-all: redirige a login */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
