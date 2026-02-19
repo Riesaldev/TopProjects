@@ -6,7 +6,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { ApiCampaign, CreateCampaignRequest, UpdateCampaignRequest } from '@/types/api';
-import { campaignService } from '@/services/campaignService';
 import { ApiError } from '@/services/api';
 import { useToast } from '@/context/ToastContext';
 
@@ -14,7 +13,7 @@ import { useToast } from '@/context/ToastContext';
 import { mockUserData } from '@/data/mockProfile';
 
 function mapMockToCampaigns(): ApiCampaign[] {
-  return mockUserData.campaign.map((c, i) => ({
+  return mockUserData.campaign.map((c) => ({
     id: Number(c.id),
     name: c.name,
     description: c.description ?? '',

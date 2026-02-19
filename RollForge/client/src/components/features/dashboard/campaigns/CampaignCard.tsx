@@ -86,10 +86,20 @@ export default function CampaignCard({ campaign, onDelete }: CampaignCardProps) 
                 <div className="h-6 w-6 rounded-full ring-2 ring-surface-dark bg-surface-hover flex items-center justify-center text-[10px] font-bold text-text-muted">+{remaining}</div>
               )}
             </div>
-            <span className="text-xs text-text-muted flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">group</span>
-              {campaign.player_count}
-            </span>
+            <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+              <span className="text-xs text-text-muted flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm">group</span>
+                {campaign.player_count}
+              </span>
+              <button
+                onClick={() => navigate(`/vtt/${campaign.id}`)}
+                className="flex items-center gap-1 px-2.5 py-1 bg-primary hover:bg-primary-hover text-white text-xs font-bold rounded-lg transition-colors shadow-[0_0_8px_rgba(55,19,236,0.3)]"
+                title="Entrar al VTT"
+              >
+                <span className="material-symbols-outlined text-sm">play_arrow</span>
+                Jugar
+              </button>
+            </div>
           </div>
         </div>
       </article>

@@ -9,13 +9,18 @@ import type { ApiErrorResponse } from '@/types/api';
 export const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
 
 export class ApiError extends Error {
+  readonly status: number;
+  readonly errors?: Record<string, string>;
+
   constructor(
-    public readonly status: number,
+    status: number,
     message: string,
-    public readonly errors?: Record<string, string>,
+    errors?: Record<string, string>,
   ) {
     super(message);
     this.name = 'ApiError';
+    this.status = status;
+    this.errors = errors;
   }
 }
 

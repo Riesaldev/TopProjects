@@ -15,6 +15,7 @@ import CompendiumPage from './components/features/dashboard/compendium/Compendiu
 import CampaignEdit from './components/features/dashboard/campaigns/CampaignEdit';
 import { CampaignResources } from './components/features/dashboard/campaigns/CampaignResources';
 import CampaignLayout from './components/layouts/CampaignLayout';
+import VttPage from './components/features/vtt/VttPage';
 
 export default function App() {
   return (
@@ -42,6 +43,9 @@ export default function App() {
             <Route element={<CampaignLayout />}>
               <Route path="/campaigns/resources/:campaignId" element={<CampaignResources />} />
             </Route>
+
+            {/* VTT — pantalla completa, sin layout de dashboard */}
+            <Route path="/vtt/:campaignId" element={<VttPage />} />
 
             {/* Rutas de perfil */}
             <Route element={<ProfileLayout />}>

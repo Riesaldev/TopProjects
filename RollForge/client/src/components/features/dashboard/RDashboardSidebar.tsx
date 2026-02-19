@@ -1,7 +1,9 @@
-import { mockUserData } from "@/data/mockUser";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 export default function RDashboardSidebar() {
-  const isOnline = mockUserData.status === "online";
+  const { user } = useAuth();
+  const isOnline = !!user;
 
   return (
     <>
@@ -9,15 +11,25 @@ export default function RDashboardSidebar() {
 
       <aside className="flex w-64 flex-col justify-between  bg-white dark:bg-[#121118] p-4 md:flex ">
         {/* User Profile */}
-        <div className="flex items-end justify-start gap-3 rounded-lg transition-colors mb-6">
+        <Link to="/profile" className="flex items-end justify-start gap-3 rounded-lg transition-colors mb-6 hover:bg-surface-hover p-2 -m-2 cursor-pointer group">
           <div className="relative">
-            <div className="h-16 w-16 rounded-full bg-slate-300 dark:bg-slate-700 bg-cover bg-center" data-alt="User avatar" style={{ backgroundImage: `url(${mockUserData.avatar})` }}></div>
+            <div
+              className="h-16 w-16 rounded-full bg-slate-700 bg-cover bg-center border-2 border-transparent group-hover:border-primary transition-colors"
+              style={{ backgroundImage: user?.avatar ? `url(${user.avatar})` : undefined }}
+            >
+              {!user?.avatar && (
+                <div className="w-full h-full rounded-full bg-primary/30 flex items-center justify-center text-xl font-bold text-white">
+                  {user?.username?.slice(0, 1).toUpperCase() ?? '?'}
+                </div>
+              )}
+            </div>
             <div className={`absolute bottom-0 right-0 h-5 w-5 rounded-full border-2 border-white dark:border-[#121118] ${isOnline ? "bg-green-500 animate-pulse" : "bg-gray-500"}`}></div>
           </div>
           <div className="flex flex-col overflow-hidden">
-            <p className="text-xl font-bold text-white truncate">{mockUserData.username}</p>
+            <p className="text-xl font-bold text-white truncate">{user?.username ?? 'Usuario'}</p>
+            <span className="text-xs text-text-muted group-hover:text-primary transition-colors">Ver perfil →</span>
           </div>
-        </div>
+        </Link>
         <div className="mb-8">
           <h3 className="text-lg font-bold text-white mb-4 flex items-center justify-between">
             Next Session

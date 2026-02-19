@@ -95,7 +95,7 @@ function ResourcePreview({ resource }: { resource: MockResource }) {
 }
 
 export const CampaignResources = () => {
-  const { campaignId } = useParams<{ campaignId: string }>();
+  const { campaignId: _campaignId } = useParams<{ campaignId: string }>();
   const [activeType, setActiveType] = useState<ResourceType>("all");
   const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");

@@ -19,7 +19,7 @@ export default function CampaignEdit() {
   const [name, setName] = useState("");
   const [system, setSystem] = useState("");
   const [description, setDescription] = useState("");
-  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [_coverImage, setCoverImage] = useState<File | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [playerInput, setPlayerInput] = useState("");
   const [players, setPlayers] = useState<InvitedPlayer[]>([]);
@@ -36,7 +36,7 @@ export default function CampaignEdit() {
         setName(campaign.name);
         setSystem(campaign.system ?? "");
         setDescription(campaign.description ?? "");
-        if (campaign.cover_url) setCoverPreview(campaign.cover_url);
+        if (campaign.cover_image) setCoverPreview(campaign.cover_image);
       }
     }
   }, [isEditMode, id, campaigns]);
