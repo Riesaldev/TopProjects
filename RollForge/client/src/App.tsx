@@ -10,6 +10,8 @@ import CampaignsPage from './components/features/dashboard/campaigns/CampaignsPa
 import CharactersPage from './components/features/dashboard/characters/CharactersPage';
 import CompendiumPage from './components/features/dashboard/compendium/CompendiumPage';
 import CampaignEdit from './components/features/dashboard/campaigns/CampaignEdit';
+import { CampaignResources } from './components/features/dashboard/campaigns/CampaignResources';
+import CampaignLayout from './components/layouts/CampaignLayout';
 
 export default function App() {
   return (
@@ -27,6 +29,11 @@ export default function App() {
           <Route path="/campaigns" element={<CampaignsPage />} />
           <Route path="/characters" element={<CharactersPage />} />
           <Route path="/compendium" element={<CompendiumPage />} />
+        </Route>
+
+        {/* Rutas de campaña específica */}
+        <Route element={<CampaignLayout />}>
+          <Route path="/campaigns/resources/:campaignId" element={<CampaignResources />} />
         </Route>
 
         {/* Rutas de perfil */}

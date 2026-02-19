@@ -31,7 +31,6 @@ export default function CampaignsPage() {
                 campaigns={editedData.campaign}
                 selectedSystem={selectedSystem}
                 onSystemChange={setSelectedSystem}
-                onCampaignSelect={(campaign) => console.log('Selected campaign:', campaign)}
               />
             </section>
           </div>

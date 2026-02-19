@@ -9,14 +9,12 @@ interface CampaignVaultProps {
   campaigns: Campaign[];
   selectedSystem: string;
   onSystemChange: (system: string) => void;
-  onCampaignSelect?: (campaign: Campaign) => void;
 }
 
 export default function CampaignVault({
   campaigns,
   selectedSystem,
   onSystemChange,
-  onCampaignSelect,
 }: CampaignVaultProps) {
   const navigate = useNavigate();
 
@@ -80,7 +78,6 @@ export default function CampaignVault({
           <CampaignCard
             key={campaign.id}
             campaign={campaign}
-            onSelect={onCampaignSelect}
           />
         ))}
       </div>

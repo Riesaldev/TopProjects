@@ -1,18 +1,25 @@
+import { useNavigate } from 'react-router-dom';
+
 import type { Campaign } from '@/types/profile';
 
 interface CampaignCardProps {
   campaign: Campaign;
-  onSelect?: (campaign: Campaign) => void;
+
 }
 
-export default function CampaignCard({ campaign, onSelect }: CampaignCardProps) {
+export default function CampaignCard({ campaign }: CampaignCardProps) {
+  const navigate = useNavigate();
   const visiblePlayers = campaign.players.slice(0, 3);
   const remainingCount = campaign.players.length - 3;
+
+  const handleCardClick = () => {
+    navigate(`/campaigns/resources/${campaign.id}`);
+  };
 
   return (
     <div
       className="group relative flex flex-col bg-white dark:bg-surface-dark rounded-xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 border border-slate-200 dark:border-slate-800/50 hover:border-primary/50 dark:hover:border-primary/50 cursor-pointer"
-      onClick={() => onSelect?.(campaign)}
+      onClick={handleCardClick}
     >
       {/* Campaign Background Image */}
       <div
