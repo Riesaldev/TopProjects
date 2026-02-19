@@ -1,27 +1,32 @@
 import { useMemo } from 'react';
-import type { Compendium } from '@/types/profile';
-import { COMPENDIUM_SYSTEMS } from '@/data/mockProfile';
+import type { ApiCompendium } from '@/types/api';
+import { SkeletonCard } from '@/components/common/Skeleton';
+import EmptyState from '@/components/common/EmptyState';
 import CompendiumCard from './CompendiumCard';
 
+const COMPENDIUM_SYSTEMS = ['All Systems', 'D&D 5e', 'Pathfinder 2e', 'CoC 7e', 'Shadowrun', 'Blades in the Dark', 'Other'];
+
 interface CompendiumVaultProps {
-  compendium: Compendium[];
+  compendium: ApiCompendium[];
+  isLoading?: boolean;
   selectedSystem: string;
   onSystemChange: (system: string) => void;
-  onCompendiumSelect?: (compendium: Compendium) => void;
+  onDelete?: (id: number) => Promise<boolean>;
   onCreateNew?: () => void;
 }
 
 export default function CompendiumVault({
   compendium,
+  isLoading = false,
   selectedSystem,
   onSystemChange,
-  onCompendiumSelect,
+  onDelete,
   onCreateNew,
 }: CompendiumVaultProps) {
-  const filteredCompendium = useMemo(() => {
+  const filtered = useMemo(() => {
     return selectedSystem === 'All Systems'
       ? compendium
-      : compendium.filter(comp => comp.system === selectedSystem);
+      : compendium.filter(e => e.system === selectedSystem);
   }, [compendium, selectedSystem]);
 
   return (
@@ -29,12 +34,12 @@ export default function CompendiumVault({
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400">
-            <span className="material-symbols-outlined">swords</span>
+          <div className="p-2 bg-violet-500/20 rounded-lg text-violet-400">
+            <span className="material-symbols-outlined">menu_book</span>
           </div>
           <div>
             <h3 className="text-lg font-bold text-text-primary">Compendium Vault</h3>
-            <p className="text-sm text-text-muted">Manage your grimoire and arcane knowledge.</p>
+            <p className="text-sm text-text-muted">{filtered.length} {filtered.length === 1 ? 'entry' : 'entries'} in your arcane library.</p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -48,32 +53,43 @@ export default function CompendiumVault({
               value={selectedSystem}
               onChange={(e) => onSystemChange(e.target.value)}
             >
-              {COMPENDIUM_SYSTEMS.map((system) => (
-                <option key={system} value={system}>
-                  {system}
-                </option>
+              {COMPENDIUM_SYSTEMS.map((s) => (
+                <option key={s} value={s}>{s}</option>
               ))}
             </select>
           </div>
-          {/* New Character Button */}
-          <button className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-lg shadow-primary/20 cursor-pointer active:scale-95"
-            onClick={onCreateNew}>
+          <button
+            className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-lg shadow-primary/20 cursor-pointer active:scale-95"
+            onClick={onCreateNew}
+          >
             <span className="material-symbols-outlined text-[18px]">add</span>
-            <span className="hidden sm:inline">New Compendium</span>
+            <span className="hidden sm:inline">Add Entry</span>
           </button>
         </div>
       </div>
 
-      {/* Characters Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCompendium.map((pdf) => (
-          <CompendiumCard
-            key={pdf.id}
-            compendium={pdf}
-            onSelect={onCompendiumSelect}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 5 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      ) : filtered.length === 0 ? (
+        <EmptyState
+          icon="auto_stories"
+          title="Your library is empty"
+          description="Add rulebooks, supplements, and homebrew PDFs to your compendium."
+          action={{ label: 'Add Entry', onClick: onCreateNew ?? (() => {}) }}
+        />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((entry) => (
+            <CompendiumCard
+              key={entry.id}
+              entry={entry}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

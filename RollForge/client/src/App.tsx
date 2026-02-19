@@ -1,4 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
+import ToastContainer from './components/common/ToastContainer';
 import AuthLayout from './components/layouts/AuthLayout';
 import LoginForm from './components/features/auth/LoginForm';
 import RegisterForm from './components/features/auth/RegisterForm';
@@ -16,35 +19,41 @@ import CampaignLayout from './components/layouts/CampaignLayout';
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        {/* Rutas de autenticación */}
-        <Route element={<AuthLayout />}>
-          <Route path="/" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
-          <Route path="/reset" element={<PasswordRecovery />} />
-        </Route>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
+            {/* Rutas de autenticación */}
+            <Route element={<AuthLayout />}>
+              <Route path="/" element={<LoginForm />} />
+              <Route path="/register" element={<RegisterForm />} />
+              <Route path="/reset" element={<PasswordRecovery />} />
+            </Route>
 
-        {/* Dashboard principal */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/campaigns" element={<CampaignsPage />} />
-          <Route path="/campaigns/new" element={<CampaignEdit />} />
-          <Route path="/characters" element={<CharactersPage />} />
-          <Route path="/compendium" element={<CompendiumPage />} />
-        </Route>
+            {/* Dashboard principal */}
+            <Route element={<DashboardLayout />}>
+              <Route path="/campaigns" element={<CampaignsPage />} />
+              <Route path="/campaigns/new" element={<CampaignEdit />} />
+              <Route path="/campaigns/:id/edit" element={<CampaignEdit />} />
+              <Route path="/characters" element={<CharactersPage />} />
+              <Route path="/compendium" element={<CompendiumPage />} />
+            </Route>
 
-        {/* Rutas de campaña específica */}
-        <Route element={<CampaignLayout />}>
-          <Route path="/campaigns/resources/:campaignId" element={<CampaignResources />} />
-        </Route>
+            {/* Rutas de campaña específica */}
+            <Route element={<CampaignLayout />}>
+              <Route path="/campaigns/resources/:campaignId" element={<CampaignResources />} />
+            </Route>
 
-        {/* Rutas de perfil */}
-        <Route element={<ProfileLayout />}>
-          <Route path="/profile" element={<UserProfile />} />
-        </Route>
+            {/* Rutas de perfil */}
+            <Route element={<ProfileLayout />}>
+              <Route path="/profile" element={<UserProfile />} />
+            </Route>
 
-        {/* Catch-all: redirige a login */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+            {/* Catch-all: redirige a login */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+          <ToastContainer />
+        </ToastProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

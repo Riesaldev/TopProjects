@@ -1,24 +1,38 @@
 {
-  "name": "server",
+  "name": "rollforge-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "RollForge REST API + Socket.io backend",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "lint": "eslint src --ext .ts"
   },
   "keywords": [ ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.9.7",
+    "nodemailer": "^8.0.1",
+    "socket.io": "^4.7.5",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/multer": "^2.0.0",
     "@types/node": "^22.0.0",
+    "@types/nodemailer": "^7.0.10",
     "tsx": "^4.7.0",
     "typescript": "^5.9.3"
   }

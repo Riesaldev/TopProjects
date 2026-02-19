@@ -1,21 +1,26 @@
 import { useMemo } from 'react';
-import type { Character } from '@/types/profile';
-import { CHARACTER_CLASSES } from '@/data/mockProfile';
+import type { ApiCharacter } from '@/types/api';
+import { SkeletonCard } from '@/components/common/Skeleton';
+import EmptyState from '@/components/common/EmptyState';
 import CharacterCard from './CharacterCard';
 
+const CHARACTER_CLASSES = ['All Classes', 'Barbarian', 'Bard', 'Cleric', 'Druid', 'Fighter', 'Monk', 'Paladin', 'Ranger', 'Rogue', 'Sorcerer', 'Warlock', 'Wizard'];
+
 interface CharacterVaultProps {
-  characters: Character[];
+  characters: ApiCharacter[];
+  isLoading?: boolean;
   selectedClass: string;
   onClassChange: (className: string) => void;
-  onCharacterSelect?: (character: Character) => void;
+  onDelete?: (id: number) => Promise<boolean>;
   onCreateNew?: () => void;
 }
 
 export default function CharacterVault({
   characters,
+  isLoading = false,
   selectedClass,
   onClassChange,
-  onCharacterSelect,
+  onDelete,
   onCreateNew,
 }: CharacterVaultProps) {
   const filteredCharacters = useMemo(() => {
@@ -56,7 +61,7 @@ export default function CharacterVault({
             </select>
           </div>
           {/* New Character Button */}
-          <button className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-lg shadow-primary/20 cursor-pointer active:scale-95"
+          <button className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-lg shadow-primary/20 cursor-pointer active:scale-95"
             onClick={onCreateNew}>
             <span className="material-symbols-outlined text-[18px]">add</span>
             <span className="hidden sm:inline">New Character</span>
@@ -65,15 +70,28 @@ export default function CharacterVault({
       </div>
 
       {/* Characters Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCharacters.map((character) => (
-          <CharacterCard
-            key={character.id}
-            character={character}
-            onSelect={onCharacterSelect}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      ) : filteredCharacters.length === 0 ? (
+        <EmptyState
+          icon="person_search"
+          title="No characters yet"
+          description="Create your first hero and start your legend."
+          action={{ label: 'Create Character', onClick: onCreateNew ?? (() => {}) }}
+        />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredCharacters.map((char) => (
+            <CharacterCard
+              key={char.id}
+              character={char}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
