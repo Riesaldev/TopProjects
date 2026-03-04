@@ -127,6 +127,27 @@ export default function UserProfilePage({ userId }: Readonly<UserProfilePageProp
             <div className="text-accent-600 mb-2">Tokens: <span className="font-bold">{user.tokens ?? 0}</span></div>
             <div className="mb-2"><span className="font-semibold text-primary-700">Bio:</span> {user.bio || <span className="text-accent-400">Sin bio</span>}</div>
             <div className="mb-2"><span className="font-semibold text-primary-700">Intereses:</span> {user.interests || <span className="text-accent-400">Sin intereses</span>}</div>
+            
+            {/* Cosméticos Comprados */}
+            <div className="w-full my-4 p-4 bg-white rounded-lg shadow-sm border border-accent-200">
+              <h3 className="text-lg font-bold text-primary-700 mb-3 border-b pb-2">Mis Cosméticos</h3>
+              <div className="flex gap-4 overflow-x-auto pb-2">
+                {/* Mocked Cosmetics - Se conectará luego con el campo user.cosmetics u endpoint */}
+                <div className="flex flex-col items-center min-w-[80px]">
+                  <div className="w-14 h-14 bg-gradient-to-tr from-yellow-300 to-orange-500 rounded-full flex items-center justify-center shadow-md mb-2">⭐</div>
+                  <span className="text-xs text-center font-medium">Marco VIP</span>
+                </div>
+                <div className="flex flex-col items-center min-w-[80px]">
+                  <div className="w-14 h-14 bg-gradient-to-tr from-purple-400 to-pink-500 rounded-full flex items-center justify-center shadow-md mb-2">🔥</div>
+                  <span className="text-xs text-center font-medium">Fueguito</span>
+                </div>
+                <div className="flex flex-col items-center min-w-[80px] opacity-40">
+                  <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center border-2 border-dashed border-gray-400 mb-2">+</div>
+                  <span className="text-xs text-center">Tienda</span>
+                </div>
+              </div>
+            </div>
+
             <AchievementsUser all={allAchievements} userAchievements={userAchievements} />
             <button className="bg-primary-600 text-white px-4 py-2 rounded-lg font-semibold shadow-md" onClick={() => setEditing(true)}>Editar perfil</button>
           </>

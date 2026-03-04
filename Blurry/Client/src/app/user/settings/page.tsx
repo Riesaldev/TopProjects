@@ -107,15 +107,25 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
   };
 
   const handleSuspendAccount = async () => {
-    if (!confirm("¿Seguro que quieres suspender temporalmente tu cuenta?")) return;
+    if (!confirm("¿Seguro que quieres suspender temporalmente tu cuenta? Podrás reactivarla iniciando sesión.")) return;
     
-    const success = await updateUser({ is_suspended: true } as any);
-    if (success) {
+    // Llamada simulada al endpoint ya creado en el backend (PATCH /users/:id/suspend)
+    try {
+      const res = await fetch(`/api/users/${userId}/suspend`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: "Suspensión solicitada por el usuario desde ajustes", days: null })
+      });
+      if (!res.ok) throw new Error("Error al suspender la cuenta");
+      
       showSuccess("Cuenta suspendida temporalmente");
       // Redirect to login
       setTimeout(() => {
         window.location.href = "/auth/login";
       }, 2000);
+    } catch (e) {
+      console.error(e);
+      alert("Hubo un error al suspender la cuenta");
     }
   };
 
@@ -211,38 +221,45 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
           </div>
         </section>
         
-        <section>
-          <h2 className="font-semibold mb-2">Acciones de cuenta</h2>
-          <div className="flex flex-col gap-2">
-            <button 
-              type="button" 
-              className="text-primary-600 underline text-left"
-            >
-              Cambiar contraseña
-            </button>
-            <button 
-              type="button" 
-              className="text-yellow-600 underline text-left" 
-              onClick={handleSuspendAccount}
-            >
-              Suspender cuenta temporalmente
-            </button>
-            <button 
-              type="button" 
-              className="text-red-700 underline text-left" 
-              onClick={handleDeleteAccount}
-            >
-              Eliminar cuenta
-            </button>
+        <section className="bg-red-50 p-4 rounded-lg border border-red-100 mt-2">
+          <h2 className="font-semibold mb-3 text-red-800">Zona de Peligro</h2>
+          <div className="flex flex-col gap-3">
+            <div className="flex justify-between items-start bg-white p-3 rounded shadow-sm border border-red-100">
+              <div className="flex flex-col pr-4">
+                <span className="font-bold text-gray-800">Suspender cuenta temporalmente</span>
+                <span className="text-xs text-gray-500">Tu perfil desaparecerá, pero podrás reactivarlo al iniciar sesión.</span>
+              </div>
+              <button 
+                type="button" 
+                className="bg-yellow-100 text-yellow-800 border border-yellow-300 font-bold px-3 py-1 rounded hover:bg-yellow-200 transition-colors whitespace-nowrap text-sm mt-1" 
+                onClick={handleSuspendAccount}
+              >
+                Pausar Cuenta
+              </button>
+            </div>
+            
+            <div className="flex justify-between items-start bg-white p-3 rounded shadow-sm border border-red-100">
+              <div className="flex flex-col pr-4">
+                <span className="font-bold text-gray-800">Eliminar cuenta permanentemente</span>
+                <span className="text-xs text-gray-500">Se borrarán todos tus tokens, items y chats. Acción irreversible.</span>
+              </div>
+              <button 
+                type="button" 
+                className="bg-red-100 text-red-800 border border-red-300 font-bold px-3 py-1 rounded hover:bg-red-200 transition-colors whitespace-nowrap text-sm mt-1" 
+                onClick={handleDeleteAccount}
+              >
+                Borrar Cuenta
+              </button>
+            </div>
           </div>
         </section>
         
         <button 
           type="submit" 
-          className="bg-primary-600 text-white px-4 py-2 rounded font-semibold disabled:opacity-50" 
+          className="bg-primary-600 text-white px-4 py-3 rounded-lg font-bold shadow-md hover:bg-primary-700 transition disabled:opacity-50 mt-4" 
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Guardando..." : "Guardar cambios"}
+          {isSubmitting ? "Guardando..." : "Guardar todos los cambios"}
         </button>
       </form>
       
