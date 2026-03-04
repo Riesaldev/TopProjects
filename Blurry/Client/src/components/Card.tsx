@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 type CardProps = {
   children: React.ReactNode;
-  variant?: "default" | "glass" | "gradient" | "bordered";
+  variant?: "default" | "glass" | "gradient" | "bordered" | "gamified";
   padding?: "none" | "sm" | "md" | "lg" | "xl";
   shadow?: "none" | "sm" | "md" | "lg" | "xl";
   hover?: boolean;
@@ -19,36 +19,42 @@ export default function Card({
   hover = false,
   className = "",
   onClick,
-  animation = true
+  animation = true,
 }: CardProps) {
-  const baseStyles = "border-radius-xl transition-all duration-300";
-  
+  const baseStyles =
+    "rounded-2xl transition-all duration-300 relative overflow-hidden";
+
   const variantStyles = {
-    default: "bg-white border border-secondary-100",
-    glass: "bg-white/10 backdrop-blur-lg border border-white/20",
-    gradient: "bg-gradient-to-br from-primary-50 to-secondary-50 border border-secondary-100",
-    bordered: "bg-white border-2 border-primary-200"
+    default:
+      "bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800",
+    glass: "glass-card",
+    gradient:
+      "bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-primary-900/30 dark:to-secondary-900/30 border border-secondary-100 dark:border-secondary-800",
+    bordered:
+      "bg-white dark:bg-zinc-900 border-2 border-primary-200 dark:border-primary-800",
+    gamified:
+      "bg-gradient-to-b from-gray-900 to-black border-2 border-purple-500/50 shadow-[0_0_15px_rgba(168,85,247,0.3)] text-white",
   };
-  
+
   const paddingStyles = {
     none: "",
     sm: "p-4",
     md: "p-6",
     lg: "p-8",
-    xl: "p-10"
+    xl: "p-10",
   };
-  
+
   const shadowStyles = {
     none: "",
     sm: "shadow-sm",
-    md: "shadow-lg",
-    lg: "shadow-xl",
-    xl: "shadow-2xl"
+    md: "shadow-md",
+    lg: "shadow-lg",
+    xl: "shadow-xl",
   };
-  
-  const hoverStyles = hover ? "hover:shadow-xl hover:-translate-y-1 cursor-pointer" : "";
+
+  const hoverStyles = hover ? "hover-lift cursor-pointer" : "";
   const clickableStyles = onClick ? "cursor-pointer" : "";
-  
+
   const combinedClassName = `
     ${baseStyles} 
     ${variantStyles[variant]} 
@@ -57,7 +63,9 @@ export default function Card({
     ${hoverStyles}
     ${clickableStyles}
     ${className}
-  `.replace(/\s+/g, ' ').trim();
+  `
+    .replace(/\s+/g, " ")
+    .trim();
 
   if (animation) {
     return (
@@ -67,16 +75,22 @@ export default function Card({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        whileHover={hover ? { y: -4 } : {}}
+        whileHover={hover ? { y: -8, scale: 1.02 } : {}}
       >
-        {children}
+        {variant === "gamified" && (
+          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+        )}
+        <div className="relative z-10">{children}</div>
       </motion.div>
     );
   }
 
   return (
     <div className={combinedClassName} onClick={onClick}>
-      {children}
+      {variant === "gamified" && (
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20 bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+      )}
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }

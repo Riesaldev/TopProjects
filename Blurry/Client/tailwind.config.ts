@@ -95,6 +95,19 @@ const config: Config = {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        glow: {
+          '0%, 100%': { opacity: '1', boxShadow: '0 0 15px rgba(240, 101, 228, 0.4)' },
+          '50%': { opacity: '0.8', boxShadow: '0 0 30px rgba(240, 101, 228, 0.8)' },
+        },
+        pop: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' },
+          '100%': { transform: 'scale(1)' },
+        }
       },
       animation: {
         'fade-in-up': 'fadeInUp 0.6s ease-out',
@@ -104,6 +117,9 @@ const config: Config = {
         bounce: 'bounce 1s infinite',
         shimmer: 'shimmer 1.5s infinite',
         'skeleton-loading': 'skeletonLoading 1.5s infinite',
+        float: 'float 3s ease-in-out infinite',
+        glow: 'glow 2s ease-in-out infinite',
+        pop: 'pop 0.3s ease-in-out',
       },
       maxWidth: {
         'container-modern': '1280px',

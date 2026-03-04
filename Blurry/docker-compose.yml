@@ -11,7 +11,7 @@ services:
       MYSQL_USER: blurry_user
       MYSQL_PASSWORD: blurry_password
     ports:
-      - "3306:3306"
+      - '3306:3306'
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -20,7 +20,7 @@ services:
     container_name: blurry-redis
     restart: always
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis-data:/data
 
@@ -30,7 +30,7 @@ services:
     container_name: blurry-ai
     restart: on-failure
     ports:
-      - "8000:8000"
+      - '8000:8000'
 
   server:
     build:
@@ -38,7 +38,7 @@ services:
     container_name: blurry-server
     restart: on-failure
     ports:
-      - "3001:3001"
+      - '3001:3001'
     environment:
       - PORT=3001
       - DB_HOST=mysql-db
@@ -62,7 +62,7 @@ services:
     container_name: blurry-client
     restart: on-failure
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:3001
     depends_on:

@@ -1,7 +1,9 @@
 
+import { motion } from 'framer-motion';
+
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "gamified";
   size?: "sm" | "md" | "lg" | "xl";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -21,7 +23,7 @@ export default function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseStyles = "relative inline-flex items-center justify-center font-semibold rounded-xl focus:outline-none focus:ring-4 transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none transform hover:scale-105 active:scale-95";
+  const baseStyles = "relative inline-flex items-center justify-center font-semibold rounded-xl focus:outline-none focus:ring-4 transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed";
   
   const sizeStyles = {
     sm: "px-3 py-2 text-sm gap-1.5",
@@ -32,33 +34,40 @@ export default function Button({
   
   const variantStyles = {
     primary: `
-      bg-gradient-to-r from-primary-600 to-primary-700 
+      bg-gradient-to-r from-primary-500 to-primary-600 
       text-white 
-      hover:from-primary-700 hover:to-primary-800 
+      hover:from-primary-600 hover:to-primary-700 
       focus:ring-primary-200 
       shadow-lg hover:shadow-xl hover:shadow-primary-500/25
-      border border-primary-600
+      border border-transparent
     `,
     secondary: `
       bg-gradient-to-r from-secondary-500 to-secondary-600 
       text-white 
       hover:from-secondary-600 hover:to-secondary-700 
       focus:ring-secondary-200 
-      shadow-lg hover:shadow-xl
-      border border-secondary-500
+      shadow-lg hover:shadow-xl hover:shadow-secondary-500/25
+      border border-transparent
+    `,
+    gamified: `
+      bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 
+      text-white text-shadow-sm
+      border-b-4 border-orange-600 active:border-b-0
+      shadow-[0_0_15px_rgba(251,191,36,0.5)] 
+      hover:shadow-[0_0_25px_rgba(251,191,36,0.8)]
     `,
     outline: `
-      border-2 border-primary-600 
+      border-2 border-primary-500 
       text-primary-600 
-      hover:bg-primary-600 hover:text-white 
-      focus:ring-primary-200 
+      hover:bg-primary-50 hover:text-primary-700 
+      focus:ring-primary-200 dark:border-primary-400 dark:text-primary-400 dark:hover:bg-primary-900/40
       bg-transparent
-      shadow-sm hover:shadow-lg
+      shadow-sm hover:shadow-md
     `,
     ghost: `
-      text-gray-700 
-      hover:bg-primary-50 
-      focus:ring-primary-200 
+      text-gray-700 dark:text-gray-300
+      hover:bg-gray-100 dark:hover:bg-gray-800 
+      focus:ring-gray-200 dark:focus:ring-gray-700
       bg-transparent
       border border-transparent
     `,
@@ -68,7 +77,7 @@ export default function Button({
       hover:from-red-600 hover:to-red-700 
       focus:ring-red-200 
       shadow-lg hover:shadow-xl hover:shadow-red-500/25
-      border border-red-500
+      border border-transparent
     `
   };
   
@@ -83,9 +92,11 @@ export default function Button({
   `.replace(/\s+/g, ' ').trim();
 
   return (
-    <button 
+    <motion.button 
       className={combinedClassName} 
       disabled={disabled || isLoading}
+      whileHover={disabled ? {} : { scale: 1.02 }}
+      whileTap={disabled ? {} : { scale: 0.98 }}
       {...props}
     >
       {leftIcon && !isLoading && (
@@ -113,9 +124,9 @@ export default function Button({
       {/* Shine effect overlay */}
       {!disabled && (
         <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full hover:translate-x-full transition-transform duration-700"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 -translate-x-full hover:translate-x-full transition-transform duration-700"></div>
         </div>
       )}
-    </button>
+    </motion.button>
   );
 }
