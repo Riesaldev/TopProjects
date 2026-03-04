@@ -1,190 +1,117 @@
 "use client";
 
-import React from "react";
-import Button from "@/components/Button";
-import { User, Product, TokenTransaction } from "@/types";
-import { Coins, Sparkles, Clock, ShoppingBag, ShieldCheck, Zap } from "lucide-react";
-import Link from "next/link";
-
-const usuarioActual = "Carlos Pérez"; // Simulación de usuario logueado
+import { useNotifications } from "@/components/NotificationsContext";
+import { TokenPackage } from "@/types";
+import { useEffect, useState } from 'react';
+import { ShoppingCart, Hexagon, Sparkles, CreditCard, ChevronRight, Zap } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function TokenStorePage() {
-  const [productos, setProductos] = React.useState<Product[]>([]);
-  const [tokens, setTokens] = React.useState<number>(0);
-  const [historial, setHistorial] = React.useState<TokenTransaction[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [mensaje, setMensaje] = React.useState<{ text: string, type: 'success' | 'error' } | null>(null);
+  const [packages, setPackages] = useState<TokenPackage[]>([]);
+  const { showToast } = useNotifications();
+  const [loading, setLoading] = useState(true);
+  const [buying, setBuying] = useState<number | null>(null);
 
-  // Fetch productos, saldo y compras
-  React.useEffect(() => {
-    setLoading(true);
-    fetch("/api/products")
-      .then(res => res.json())
-      .then(setProductos)
-      .catch(() => setProductos([
-        { id: "p1", name: "100 Tokens", price: 100, description: "Paquete básico", category: "tokens" },
-        { id: "p2", name: "500 Tokens", price: 450, description: "Paquete popular", category: "tokens" },
-        { id: "p3", name: "1000 Tokens + Bonus", price: 800, description: "Mejor valor", category: "tokens" }
-      ]));
-      
-    fetch("/api/users")
-      .then(res => res.json())
-      .then(data => {
-        const user = data.find((u: User) => u.nombre === usuarioActual);
-        setTokens(user?.tokens || 1250); // Default to show UI
-      })
-      .catch(() => setTokens(1250));
-
-    fetch("/api/tokens")
-      .then(res => res.json())
-      .then(data => {
-        setHistorial(data.filter((t: TokenTransaction) => t.usuario === usuarioActual));
-        setLoading(false);
-      })
-      .catch(() => {
-        setHistorial([
-          { id: "t1", usuario: usuarioActual, tipo: "Compra", producto: "Boost 24h", cantidad: 200, fecha: "2024-05-12" }
-        ]);
-        setLoading(false);
-      });
+  useEffect(() => {
+    setTimeout(() => {
+      setPackages([
+        { id: 1, name: "Starter Core", tokens: 100, price: 9.99, isPopular: false },
+        { id: 2, name: "Nexus Pack", tokens: 500, price: 39.99, isPopular: true, bonus: "50 Bonus" },
+        { id: 3, name: "Quantum Vault", tokens: 1000, price: 69.99, isPopular: false, bonus: "200 Bonus" }
+      ] as any);
+      setLoading(false);
+    }, 600);
   }, []);
 
-  // Comprar producto
-  const comprar = async (producto: Product) => {
-    if (tokens < producto.price) {
-      setMensaje({ text: "No tienes suficientes tokens. ¡Recarga ahora!", type: 'error' });
-      setTimeout(() => setMensaje(null), 3000);
-      return;
-    }
-    // Simulación
-    setTokens(t => t - producto.price);
-    setHistorial(h => [
-      {
-        id: Date.now().toString(),
-        usuario: usuarioActual,
-        tipo: "Compra",
-        producto: producto.name,
-        cantidad: producto.price,
-        fecha: new Date().toISOString().slice(0, 10)
-      },
-      ...h
-    ]);
-    setMensaje({ text: `¡Has comprado ${producto.name} con éxito!`, type: 'success' });
-    setTimeout(() => setMensaje(null), 3000);
+  const handlePurchase = (pkg: any) => {
+    setBuying(pkg.id);
+    setTimeout(() => {
+      showToast(`Transacción aprobada: ${pkg.tokens} TKN añadidos a tu billetera.`, "success");
+      setBuying(null);
+    }, 1500);
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-black py-12 px-4 flex flex-col items-center selection:bg-primary-500/30">
-      <div className="w-full max-w-5xl">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
-          <div className="text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-amber-500 mb-2 flex items-center justify-center md:justify-start gap-3">
-              <ShoppingBag size={36} className="text-primary-500" />
-              Tienda Blurry
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 font-medium">Potencia tu perfil, envía regalos y destaca entre la multitud.</p>
-          </div>
+    <main className="min-h-screen py-12 px-4 bg-zinc-950 text-slate-200 relative overflow-hidden flex flex-col items-center">
+      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-primary-900/20 via-zinc-950 to-zinc-950 -z-10" />
+
+      <div className="w-full max-w-5xl space-y-12 z-10">
+        
+        {/* Header */}
+        <div className="glass-panel p-8 text-center relative overflow-hidden group rounded-3xl border border-zinc-800/60">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary-500/10 rounded-full blur-[100px] -z-10 animate-pulse-slow" />
           
-          <div className="glass-card rounded-2xl p-6 shadow-lg border border-yellow-500/30 relative overflow-hidden group animate-float">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-400/20 rounded-full blur-[40px] -mr-10 -mt-10 group-hover:bg-yellow-400/40 transition-all"></div>
-            <div className="relative z-10 flex flex-col items-center">
-              <span className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-1">Tu Saldo</span>
-              <div className="flex items-center gap-3">
-                <Coins size={32} className="text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
-                <span className="text-4xl font-black text-gradient-gold drop-shadow-sm">{tokens.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
+          <Hexagon className="w-16 h-16 text-primary-400 mx-auto mb-4 animate-spin-slow" />
+          <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight uppercase mb-4">
+            MERCADO DE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-accent-500">ENERGÍA</span>
+          </h1>
+          <p className="text-zinc-400 text-lg font-medium max-w-2xl mx-auto">Adquiere TKN para desbloquear filtros premium, videollamadas prolongadas y mejoras cosméticas en el Nexus.</p>
         </div>
 
-        {mensaje && (
-          <div className={`mb-8 p-4 rounded-xl font-bold flex items-center justify-center gap-2 animate-pop shadow-lg text-white ${mensaje.type === 'success' ? 'bg-gradient-to-r from-green-500 to-emerald-600' : 'bg-gradient-to-r from-red-500 to-orange-600'}`}>
-            {mensaje.type === 'success' ? <ShieldCheck size={24} /> : <Zap size={24} />}
-            {mensaje.text}
+        {/* Store Grid */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+             <div className="w-12 h-12 border-4 border-zinc-800 border-t-primary-500 rounded-full animate-spin shadow-neon" />
+             <p className="mt-4 text-primary-400 font-bold tracking-widest text-xs uppercase">Estableciendo conexión comercial...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            {packages.map((pkg, idx) => (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                key={pkg.id} 
+                className={`relative glass-panel rounded-3xl p-6 sm:p-8 flex flex-col justify-between border transition-all duration-300 ${pkg.isPopular ? 'border-primary-500/50 bg-primary-900/10 shadow-[0_0_30px_rgba(168,85,247,0.15)] scale-105 z-10' : 'border-zinc-800/50 bg-zinc-900/40 hover:bg-zinc-800/60'}`}
+              >
+                {pkg.isPopular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary-600 to-accent-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-neon flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" /> MÁS VENDIDO
+                  </div>
+                )}
+                
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-bold text-white mb-2">{pkg.name}</h3>
+                  <div className="flex items-center justify-center gap-2 mb-4">
+                    <Zap className={`w-8 h-8 ${pkg.isPopular ? 'text-primary-400' : 'text-zinc-500'}`} />
+                    <span className="text-4xl font-black text-white">{pkg.tokens}</span>
+                    <span className="text-sm font-bold text-zinc-500 uppercase">TKN</span>
+                  </div>
+                  {pkg.bonus ? (
+                    <span className="inline-block px-3 py-1 bg-accent-500/20 text-accent-400 text-xs font-bold rounded-lg border border-accent-500/30">
+                      + {pkg.bonus}
+                    </span>
+                  ) : (
+                    <span className="inline-block px-3 py-1 opacity-0 text-xs">spacer</span>
+                  )}
+                </div>
+
+                <div className="mt-auto">
+                  <div className="text-center mb-6">
+                    <span className="text-3xl font-black text-white">$${pkg.price}</span>
+                    <span className="text-zinc-500 text-sm ml-1">USD</span>
+                  </div>
+                  
+                  <button 
+                    disabled={buying === pkg.id}
+                    onClick={() => handlePurchase(pkg)}
+                    className={`w-full py-4 rounded-xl flex items-center justify-center gap-2 font-bold uppercase tracking-widest text-sm transition-all ${pkg.isPopular ? 'bg-primary-600 text-white hover:bg-primary-500 shadow-neon' : 'bg-zinc-800 text-white hover:bg-zinc-700 border border-zinc-700'} disabled:opacity-50`}
+                  >
+                    {buying === pkg.id ? (
+                      "PROCESANDO..."
+                    ) : (
+                      <>
+                        <ShoppingCart className="w-4 h-4" /> ADQUIRIR
+                      </>
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            ))}
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-          <div className="col-span-1 lg:col-span-2 space-y-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-extrabold flex items-center gap-2 text-gray-900 dark:text-white">
-                <Sparkles className="text-primary-500" /> 
-                Artículos Premium
-              </h2>
-              <Link href="/tokens/gifts" className="text-primary-600 dark:text-primary-400 font-bold hover:underline underline-offset-4 text-sm flex items-center gap-1">
-                Ver mis regalos enviados &rarr;
-              </Link>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {productos.map((p, index) => (
-                <div key={p.id} className="glass-panel p-6 rounded-2xl hover-lift border-2 border-transparent hover:border-primary-500/50 flex flex-col relative overflow-hidden group">
-                  {index === 2 && (
-                    <div className="absolute top-4 -right-8 bg-gradient-to-r from-red-500 to-pink-600 text-white text-xs font-black px-10 py-1 rotate-45 shadow-lg">
-                      MEJOR VALOR
-                    </div>
-                  )}
-                  <div className="w-14 h-14 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center mb-4 badge-glow">
-                    <Coins size={28} className="text-primary-600 dark:text-primary-400" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">{p.name}</h3>
-                  <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 flex-grow">{p.description || "Consigue más visibilidad"}</p>
-                  
-                  <div className="flex items-end justify-between mt-auto">
-                    <div className="flex flex-col">
-                      <span className="text-xs text-gray-400 font-bold uppercase">Precio</span>
-                      <span className="text-2xl font-black text-amber-500 flex items-center gap-1">
-                        {p.price} <Coins size={16} />
-                      </span>
-                    </div>
-                    <Button 
-                      variant="gamified" 
-                      size="sm" 
-                      onClick={() => comprar(p)}
-                    >
-                      Comprar
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="col-span-1">
-            <h2 className="text-2xl font-extrabold flex items-center gap-2 mb-6 text-gray-900 dark:text-white">
-              <Clock className="text-secondary-500" /> 
-              Historial
-            </h2>
-            <div className="glass-panel rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-zinc-800">
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-10 opacity-50">
-                  <div className="w-8 h-8 border-4 border-t-primary-500 border-primary-200 rounded-full animate-spin mb-4"></div>
-                  <p className="font-bold">Cargando registros...</p>
-                </div>
-              ) : historial.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 font-medium">
-                  <Coins size={40} className="mx-auto mb-3 opacity-20" />
-                  Aún no has hecho compras.
-                </div>
-              ) : (
-                <ul className="space-y-4">
-                  {historial.map((h, i) => (
-                    <li key={h.id || i} className="flex justify-between items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-gray-800 dark:text-gray-200 text-sm">{h.producto}</span>
-                        <span className="text-xs text-gray-500">{h.fecha}</span>
-                      </div>
-                      <span className="font-black text-red-500 bg-red-50 dark:bg-red-900/20 px-2 py-1 rounded-lg text-sm flex items-center gap-1">
-                        -{h.cantidad} <Coins size={12}/>
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
     </main>
   );
-} 
+}

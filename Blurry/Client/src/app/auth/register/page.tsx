@@ -2,132 +2,83 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Video, ArrowLeft, Heart, Shield, Users } from "lucide-react";
+import { Hexagon, ArrowLeft, Fingerprint } from "lucide-react";
 import Link from "next/link";
 import RegisterForm from "@/components/RegisterForm";
+import { AuthProvider } from '@/context/AuthContext';
 
 export default function RegisterPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-        
-        {/* Left side - Registration Form */}
-        <div className="order-2 lg:order-1">
-          {/* Header */}
-          <div className="text-center lg:text-left mb-8">
-            <Link href="/" className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6 transition-colors">
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Volver al inicio
-            </Link>
-            
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center justify-center lg:justify-start mb-6"
-            >
-              <div className="bg-gradient-to-r from-primary-600 to-primary-700 p-3 rounded-xl">
-                <Video className="h-8 w-8 text-white" />
-              </div>
-              <h1 className="ml-3 text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
-                Blurry
-              </h1>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                Únete a Blurry
-              </h2>
-              <p className="text-gray-600">
-                Comienza tu aventura de conexiones auténticas
-              </p>
-            </motion.div>
-          </div>
+    <main className="min-h-screen bg-zinc-950 text-slate-200 flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/10 via-zinc-950 to-zinc-950 -z-10" />
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-blue-500/10 blur-[120px] rounded-full -z-10 animate-pulse-slow" />
+      
+      <div className="w-full max-w-md relative z-10 py-10">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center text-zinc-500 hover:text-blue-400 mb-8 transition-colors text-sm font-bold uppercase tracking-widest">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Cancelar Enrolamiento
+          </Link>
 
-          {/* Registration Form Card */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center justify-center mb-6"
+          >
+            <div className="bg-blue-500/10 p-4 rounded-3xl border border-blue-500/20 mb-4 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+              <Hexagon className="h-10 w-10 text-blue-400 animate-spin-slow" />
+            </div>
+            <h1 className="text-4xl font-black bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent drop-shadow-sm uppercase tracking-tight">
+              CREAR IDENTIDAD
+            </h1>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100"
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <RegisterForm />
-            
-            <div className="mt-6 text-center">
-              <p className="text-gray-600">
-                ¿Ya tienes cuenta?{" "}
-                <Link href="/auth/login" className="text-primary-600 hover:text-primary-700 font-semibold transition-colors">
-                  Inicia sesión aquí
-                </Link>
-              </p>
-            </div>
+            <h2 className="text-xl font-bold text-white mb-2 uppercase tracking-widest flex items-center justify-center gap-2">
+              <Fingerprint className="w-5 h-5 text-blue-500" /> Registro en el Nexus
+            </h2>
+            <p className="text-zinc-400 text-sm font-medium">
+              Genera tu perfil para unirte a la red global.
+            </p>
           </motion.div>
-
-          {/* Footer */}
-          <div className="text-center lg:text-left mt-8 text-sm text-gray-500">
-            Al registrarte, aceptas nuestros{" "}
-            <a href="#" className="text-primary-600 hover:underline">
-              Términos de Servicio
-            </a>
-            {" "}y{" "}
-            <a href="#" className="text-primary-600 hover:underline">
-              Política de Privacidad
-            </a>
-          </div>
         </div>
 
-        {/* Right side - Benefits */}
-        <div className="order-1 lg:order-2">
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="space-y-6"
-          >
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">
-              ¿Por qué elegir Blurry?
-            </h3>
-            
-            {[
-              {
-                icon: Heart,
-                title: "Conexiones Auténticas",
-                description: "Conoce a personas por su personalidad, no solo por su apariencia"
-              },
-              {
-                icon: Shield,
-                title: "Privacidad Total",
-                description: "Tus datos están seguros con nuestro sistema de protección avanzado"
-              },
-              {
-                icon: Users,
-                title: "Comunidad Activa",
-                description: "Miles de usuarios verificados esperando conectar contigo"
-              }
-            ].map((benefit, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
-                className="flex items-start space-x-4"
-              >
-                <div className="bg-gradient-to-r from-primary-600 to-primary-700 p-3 rounded-xl">
-                  <benefit.icon className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-gray-900 mb-1">{benefit.title}</h4>
-                  <p className="text-gray-600 text-sm">{benefit.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+        {/* Register Form Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="glass-panel rounded-3xl p-8 border border-zinc-800/60 bg-zinc-900/60 backdrop-blur-md relative overflow-hidden" 
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50" />
+          
+          <AuthProvider>
+            <RegisterForm />
+          </AuthProvider>
+
+          <div className="mt-8 pt-6 border-t border-zinc-800/50 text-center">
+            <p className="text-zinc-500 text-sm font-medium">
+              ¿Ya estás en el sistema?{" "}
+              <Link href="/auth/login" className="text-blue-400 hover:text-blue-300 font-bold uppercase tracking-wider transition-colors ml-1">
+                Autenticarse
+              </Link>
+            </p>
+          </div>
+        </motion.div>
+        
+        {/* Footer */}
+        <div className="text-center mt-10 text-xs text-zinc-600 font-medium">
+          Al enrolarte, confirmas tu adherencia a las{" "}
+          <a href="/legal/terms" className="text-blue-500/70 hover:text-blue-400 underline decoration-zinc-800 underline-offset-4">Directivas del Servidor</a>
         </div>
       </div>
     </main>
   );
-} 
+}

@@ -3,7 +3,7 @@
 ## 🧍‍♂️ Experiencia del Usuario No Registrado
 
 - [x] Registro rápido y sencillo (`/auth/register`)
-- [ ] Landing Page, calificaciones, opiniones, secciones informativas, enlace de descarga (Frontend)
+- [x] Landing Page, calificaciones, opiniones, secciones informativas, enlace de descarga (Frontend)
 
 ## 👤 Gestión de Cuenta y Acceso – Usuario Registrado
 

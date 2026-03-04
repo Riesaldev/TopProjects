@@ -44,18 +44,18 @@ export default function PrivacyPolicy() {
               
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Información que nos proporcionas:</h3>
               <ul className="list-disc pl-6 text-gray-700 space-y-2 mb-4">
-                <li>Información de registro (nombre, email, edad, ubicación general)</li>
-                <li>Preferencias y datos de perfil</li>
-                <li>Mensajes y contenido que compartes</li>
-                <li>Información de contacto para soporte</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Información de registro (nombre, email, edad, ubicación general)</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Preferencias y datos de perfil</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Mensajes y contenido que compartes</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Información de contacto para soporte</li>
               </ul>
 
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Información recopilada automáticamente:</h3>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                <li>Datos de uso de la aplicación</li>
-                <li>Información del dispositivo</li>
-                <li>Datos de videollamadas (solo metadatos, no contenido)</li>
-                <li>Información de geolocalización aproximada</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Datos de uso de la aplicación</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Información del dispositivo</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Datos de videollamadas (solo metadatos, no contenido)</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Información de geolocalización aproximada</li>
               </ul>
             </section>
 
@@ -65,12 +65,12 @@ export default function PrivacyPolicy() {
                 <h2 className="text-xl font-bold text-primary-900">2. Cómo Usamos tu Información</h2>
               </div>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                <li>Facilitar conexiones y matches entre usuarios</li>
-                <li>Personalizar tu experiencia en la aplicación</li>
-                <li>Mejorar nuestros servicios y desarrollar nuevas funciones</li>
-                <li>Detectar y prevenir actividades fraudulentas o dañinas</li>
-                <li>Comunicarnos contigo sobre tu cuenta y nuestros servicios</li>
-                <li>Cumplir con requisitos legales</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Facilitar conexiones y matches entre usuarios</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Personalizar tu experiencia en la aplicación</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Mejorar nuestros servicios y desarrollar nuevas funciones</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Detectar y prevenir actividades fraudulentas o dañinas</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Comunicarnos contigo sobre tu cuenta y nuestros servicios</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Cumplir con requisitos legales</li>
               </ul>
             </section>
 
@@ -114,21 +114,21 @@ export default function PrivacyPolicy() {
                 <strong>No vendemos tu información personal.</strong> Solo compartimos información en situaciones limitadas:
               </p>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                <li>Con otros usuarios según tu configuración de privacidad</li>
-                <li>Con proveedores de servicios que nos ayudan a operar la plataforma</li>
-                <li>Cuando sea requerido por ley o para proteger la seguridad</li>
-                <li>En caso de fusión o adquisición (con notificación previa)</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Con otros usuarios según tu configuración de privacidad</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Con proveedores de servicios que nos ayudan a operar la plataforma</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Cuando sea requerido por ley o para proteger la seguridad</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">En caso de fusión o adquisición (con notificación previa)</li>
               </ul>
             </section>
 
             <section className="mb-8">
               <h2 className="text-xl font-bold text-primary-900 mb-4">5. Tus Derechos y Controles</h2>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                <li><strong>Acceso:</strong> Puedes ver toda la información que tenemos sobre ti</li>
-                <li><strong>Corrección:</strong> Puedes actualizar tu información en cualquier momento</li>
-                <li><strong>Eliminación:</strong> Puedes eliminar tu cuenta y datos asociados</li>
-                <li><strong>Portabilidad:</strong> Puedes descargar una copia de tus datos</li>
-                <li><strong>Objeción:</strong> Puedes oponerte a ciertos procesamientos de datos</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50"><strong>Acceso:</strong> Puedes ver toda la información que tenemos sobre ti</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50"><strong>Corrección:</strong> Puedes actualizar tu información en cualquier momento</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50"><strong>Eliminación:</strong> Puedes eliminar tu cuenta y datos asociados</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50"><strong>Portabilidad:</strong> Puedes descargar una copia de tus datos</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50"><strong>Objeción:</strong> Puedes oponerte a ciertos procesamientos de datos</li>
               </ul>
             </section>
 

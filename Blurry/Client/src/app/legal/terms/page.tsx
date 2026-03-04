@@ -43,10 +43,10 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-xl font-bold text-primary-900 mb-4">3. Elegibilidad y Registro</h2>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                <li>Debes tener al menos 18 años para usar Blurry</li>
-                <li>Debes proporcionar información precisa y completa durante el registro</li>
-                <li>Eres responsable de mantener la confidencialidad de tu cuenta</li>
-                <li>Solo puedes tener una cuenta activa</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Debes tener al menos 18 años para usar Blurry</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Debes proporcionar información precisa y completa durante el registro</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Eres responsable de mantener la confidencialidad de tu cuenta</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Solo puedes tener una cuenta activa</li>
               </ul>
             </section>
 
@@ -56,11 +56,11 @@ export default function TermsOfService() {
                 Al usar Blurry, te comprometes a:
               </p>
               <ul className="list-disc pl-6 text-gray-700 space-y-2">
-                <li>Tratar a otros usuarios con respeto y cortesía</li>
-                <li>No compartir contenido ofensivo, discriminatorio o inapropiado</li>
-                <li>No acosar, intimidar o amenazar a otros usuarios</li>
-                <li>No intentar eludir las medidas de seguridad de la plataforma</li>
-                <li>No usar la plataforma para fines comerciales no autorizados</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">Tratar a otros usuarios con respeto y cortesía</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">No compartir contenido ofensivo, discriminatorio o inapropiado</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">No acosar, intimidar o amenazar a otros usuarios</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">No intentar eludir las medidas de seguridad de la plataforma</li>
+                <li className="text-zinc-400 font-medium mb-2 pl-2 border-l-2 border-primary-500/50">No usar la plataforma para fines comerciales no autorizados</li>
               </ul>
             </section>
 

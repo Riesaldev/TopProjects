@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export type UserProfile = {
   name: string;
   avatarUrl?: string;
@@ -33,7 +35,7 @@ export default function UserProfileCard({ user }: Props) {
         {/* Avatar */}
         <div className="relative mb-5 group/avatar perspective-500">
           <div className="absolute inset-0 bg-primary-500 blur-[20px] rounded-full opacity-20 group-hover/avatar:opacity-60 transition-opacity duration-300" />
-          <img
+          <Image
             src={user.avatarUrl || "/globe.svg"}
             alt={user.name}
             className="w-28 h-28 rounded-2xl object-cover border-2 border-zinc-700/80 shadow-2xl relative z-10 transition-transform duration-500 group-hover/avatar:rotate-y-12 group-hover/avatar:scale-105"
@@ -47,7 +49,7 @@ export default function UserProfileCard({ user }: Props) {
         {/* Info */}
         <h3 className="font-black text-2xl mb-1 text-white tracking-tight drop-shadow-md text-center">{user.name}</h3>
         {user.bio ? (
-          <p className="text-zinc-400 text-xs mb-6 text-center line-clamp-3 font-medium leading-relaxed leading-relaxed min-h-[54px]">
+          <p className="text-zinc-400 text-xs mb-6 text-center line-clamp-3 font-medium leading-relaxed min-h-[54px]">
             {user.bio}
           </p>
         ) : (

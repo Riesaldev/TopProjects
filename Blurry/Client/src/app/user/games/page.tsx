@@ -3,85 +3,217 @@
 import { Game } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
-
-
+import GameCard from "@/components/GameCard";
+import { motion, AnimatePresence } from "framer-motion";
+import { Gamepad2, Trophy, Clock, Search, Activity, Flame, ArrowUpRight } from "lucide-react";
 
 type GameHistory = {
   id: number | string;
   game: string;
   date: string;
   score: number;
+  opponent?: string;
+  result?: "win" | "loss";
 };
 
 export default function GamesPage() {
   const realtimeContext = useRealtime();
   const gameInvite = realtimeContext?.gameInvite;
+  const [activeTab, setActiveTab] = useState<"lobby" | "history">("lobby");
+  const [games, setGames] = useState<Game[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [history, setHistory] = useState<GameHistory[]>([]);
 
   useEffect(() => {
+    // Si manejamos invitaciones a videojuegos a través de realtime global
     if (gameInvite) {
-      // Mostrar modal de invitación a juego o lógica personalizada
-      alert(`${gameInvite.from} te ha invitado a jugar: ${gameInvite.gameType}`);
+      // alert(`${gameInvite.from} te ha invitado a jugar: ${gameInvite.gameType}`);
     }
   }, [gameInvite]);
 
-  const [games, setGames] =useState<Game[]>([]);
-  const [loading, setLoading] =useState(true);
-  const [history, setHistory] = useState<GameHistory[]>([]);
-  // Si se requiere contactId, debe recibirse por prop o contexto
-
   useEffect(() => {
-    fetch("/api/games")
-      .then(res => res.json())
-      .then(data => {
-        setGames(data);
-        setLoading(false);
-      });
-    // Obtener historial real si existe endpoint
-    fetch("/api/games/history")
-      .then(res => res.json())
-      .then(data => setHistory(data));
+    // Fetch mocks para evitar errores si no hay backend activo
+    setTimeout(() => {
+      setGames([
+        { id: "1", name: "Rivalidad Rápida", description: "Encuentra la pareja antes de que acabe el tiempo.", imageUrl: "/globe.svg" },
+        { id: "2", name: "Quiz Neon", description: "Preguntas de cultura pop y tecnología.", imageUrl: "/globe.svg" },
+        { id: "3", name: "Duelo de Código", description: "Encuentra el bug en tiempo real.", imageUrl: "/globe.svg" },
+        { id: "4", name: "Atrapa el Token", description: "Juego de reflejos y velocidad extrema.", imageUrl: "/globe.svg" }
+      ]);
+      
+      setHistory([
+        { id: 1, game: "Rivalidad Rápida", date: "Hace 2h", score: 25, opponent: "CyberNinja", result: "win" },
+        { id: 2, game: "Quiz Neon", date: "Ayer", score: -10, opponent: "GlitchMaster", result: "loss" },
+        { id: 3, game: "Atrapa el Token", date: "Hace 2 días", score: 15, opponent: "ZeroCool", result: "win" }
+      ]);
+      setLoading(false);
+    }, 800);
   }, []);
 
+  const handleGameSelect = (id: string) => {
+    const game = games.find(g => g.id === id);
+    alert(`Buscando oponente para ${game?.name}... (Simulado)`);
+  };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Juegos</h1>
-      {loading ? <div>Cargando...</div> : (
-        <div className="w-full max-w-2xl flex flex-col md:flex-row gap-8">
-          {/* Lista de juegos */}
-          <section className="md:w-2/3 w-full">
-            <h2 className="font-semibold mb-2">Juegos disponibles</h2>
-            <ul className="flex flex-col gap-4">
-              {games.map(g => (
-                <li key={g.id} className="bg-white rounded shadow p-4 flex flex-col md:flex-row md:items-center gap-2">
-                  <div className="flex-1">
-                    <span className="font-semibold">{g.name}</span>
-                    <span className="text-xs text-gray-500">{g.description}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-          {/* Historial de partidas  */}
-          <aside className="md:w-1/3 w-full">
-            <h2 className="font-semibold mb-2">Historial de partidas</h2>
-            <ul className="flex flex-col gap-2">
-              {history.map(h => (
-                <li key={h.id} className="bg-gray-100 rounded p-2 flex flex-col">
-                  <span className="font-semibold">{h.game}</span>
-                  <span className="text-xs text-gray-500">{h.date}</span>
-                  <span className="text-xs">Puntuación: {h.score}</span>
-                </li>
-              ))}
-            </ul>
-          </aside>
+    <div className="max-w-6xl mx-auto space-y-6 animate-fade-in relative z-10 p-4 pb-20">
+      
+      {/* Header Section */}
+      <div className="glass-panel p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[100px] -z-10 group-hover:bg-primary-500/20 transition-all duration-700" />
+        
+        <div>
+          <h1 className="text-4xl font-black text-white flex items-center gap-3 tracking-tight mb-2">
+            <Gamepad2 className="w-10 h-10 text-primary-500 animate-pulse-slow" /> 
+            ARCADE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 drop-shadow-sm">NEXUS</span>
+          </h1>
+          <p className="text-zinc-400 text-lg max-w-xl font-medium">Selecciona un juego, encuentra un rival y suma puntos para liderar la clasificación global.</p>
         </div>
-      )}
-      <div>
-        <h2>Juegos en tiempo real</h2>
-        {/* Si se requiere lógica de invitación, usar el contactId real */}
-        {/* Aquí iría la lógica y UI de los juegos */}
+
+        <div className="flex gap-4">
+          <div className="glass-card px-5 py-3 flex items-center gap-4 min-w-[140px]">
+            <div className="bg-green-500/20 p-2 rounded-xl border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.15)]">
+              <Activity className="w-5 h-5 text-green-400" />
+            </div>
+            <div>
+              <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Online</p>
+              <p className="text-white font-black text-xl">1,204</p>
+            </div>
+          </div>
+          
+          <div className="glass-card px-5 py-3 flex items-center gap-4 min-w-[140px]">
+            <div className="bg-orange-500/20 p-2 rounded-xl border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
+              <Flame className="w-5 h-5 text-orange-400" />
+            </div>
+            <div>
+              <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Racha</p>
+              <p className="text-white font-black text-xl">x3</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </main>
+
+      {/* Tabs */}
+      <div className="flex gap-4 border-b border-zinc-800/80 pb-px">
+        <button
+          onClick={() => setActiveTab("lobby")}
+          className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${activeTab === 'lobby' ? 'text-primary-400' : 'text-zinc-500 hover:text-zinc-300'}`}
+        >
+          Lobby Principal
+          {activeTab === 'lobby' && (
+             <motion.div layoutId="gamesTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-500 shadow-[0_-2px_10px_rgba(168,85,247,0.5)]" />
+          )}
+        </button>
+        <button
+          onClick={() => setActiveTab("history")}
+          className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${activeTab === 'history' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+        >
+          Historial de Partidas
+          {activeTab === 'history' && (
+             <motion.div layoutId="gamesTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-white shadow-[0_-2px_10px_rgba(255,255,255,0.5)]" />
+          )}
+        </button>
+      </div>
+
+      {/* Content Area */}
+      <div className="min-h-[400px]">
+        <AnimatePresence mode="wait">
+          {activeTab === "lobby" ? (
+            <motion.div
+              key="lobby"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="space-y-6"
+            >
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <h2 className="text-xl font-bold flex items-center gap-2 text-white">
+                  <Gamepad2 className="w-5 h-5 text-zinc-400" /> Juegos Destacados
+                </h2>
+                <div className="relative w-full sm:w-auto">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+                  <input 
+                    type="text" 
+                    placeholder="Buscar juego..." 
+                    className="pl-9 pr-4 py-2 w-full sm:w-64 bg-black/20 border border-zinc-800 rounded-xl text-sm text-white focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
+                  />
+                </div>
+              </div>
+
+              {loading ? (
+                <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="glass-card animate-pulse w-full sm:w-60 h-[260px] p-5 rounded-2xl flex flex-col items-center border border-zinc-800/30 flex-shrink-0">
+                      <div className="w-20 h-20 bg-zinc-800/50 rounded-2xl mb-4"></div>
+                      <div className="w-3/4 h-5 bg-zinc-800/50 rounded-md mb-2"></div>
+                      <div className="w-full h-8 bg-zinc-800/30 rounded-md mb-4 mt-2"></div>
+                      <div className="w-full h-10 bg-zinc-800/80 rounded-xl mt-auto"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {games.map(game => (
+                    <GameCard key={game.id} game={game} onSelect={handleGameSelect} />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="history"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="glass-panel p-6"
+            >
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2 text-white">
+                <Clock className="w-5 h-5 text-primary-400" /> Últimos Encuentros
+              </h2>
+              <div className="space-y-4">
+                {history.map((match, i) => (
+                  <div key={i} className="group flex items-center justify-between p-4 bg-zinc-900/50 border border-zinc-800/50 rounded-2xl hover:bg-zinc-800/50 hover:border-zinc-700 transition-all cursor-pointer">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-lg ${
+                        match.result === 'win' 
+                        ? 'bg-green-500/10 border-green-500/20 text-green-400' 
+                        : 'bg-red-500/10 border-red-500/20 text-red-400'
+                      }`}>
+                        <Trophy className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-md tracking-wide">{match.game}</h4>
+                        <p className="text-zinc-500 text-xs font-medium mt-1">
+                          vs <span className="text-primary-400 font-bold">{match.opponent || "Rival Anónimo"}</span>
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-6 text-right">
+                       <div>
+                         <span className={`block font-black text-lg font-mono ${match.result === 'win' ? 'text-green-400' : 'text-red-400'}`}>
+                           {match.score > 0 ? '+' : ''}{match.score} XP
+                         </span>
+                         <span className="text-zinc-500 text-xs font-medium block mt-1">{match.date}</span>
+                       </div>
+                       <div className="hidden sm:flex w-10 h-10 rounded-full bg-zinc-800 items-center justify-center group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                         <ArrowUpRight className="w-5 h-5" />
+                       </div>
+                    </div>
+                  </div>
+                ))}
+                
+                {history.length === 0 && !loading && (
+                    <div className="text-center py-12 text-zinc-500">
+                        <Trophy className="w-12 h-12 mx-auto mb-4 opacity-20" />
+                        <p>Aún no has jugado ninguna partida.</p>
+                    </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
   );
 } 
