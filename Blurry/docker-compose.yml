@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: blurry-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: blurry_db
+      MYSQL_USER: blurry_user
+      MYSQL_PASSWORD: blurry_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis-cache:
+    image: redis:alpine
+    container_name: blurry-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  ai-engine:
+    build:
+      context: ./AI_Engine
+    container_name: blurry-ai
+    restart: on-failure
+    ports:
+      - "8000:8000"
+
+  server:
+    build:
+      context: ./Server
+    container_name: blurry-server
+    restart: on-failure
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_USER=blurry_user
+      - DB_PASS=blurry_password
+      - DB_NAME=blurry_db
+      - REDIS_HOST=redis-cache
+      - REDIS_PORT=6379
+      - AI_SERVICE_URL=http://ai-engine:8000
+      - JWT_SECRET=super_secret_jwt_for_mvp
+      - FRONTEND_URL=http://localhost:3000
+    depends_on:
+      - mysql-db
+      - redis-cache
+      - ai-engine
+
+  client:
+    build:
+      context: ./Client
+    container_name: blurry-client
+    restart: on-failure
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+    depends_on:
+      - server
+
+volumes:
+  mysql-data:
+  redis-data:
