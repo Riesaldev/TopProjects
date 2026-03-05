@@ -16,7 +16,7 @@ export async function proxyRequest(
 
   let body: any = undefined;
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
-    body = await req.json();
+    body = await req.json().catch(() => undefined);
   }
 
   const res = await fetch(url, {

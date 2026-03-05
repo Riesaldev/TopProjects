@@ -15,12 +15,28 @@ export default function AdminReportsPage() {
   const [reportes, setReportes] = React.useState<Reporte[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  const getAuthHeaders = () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    return token
+      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+      : { "Content-Type": "application/json" };
+  };
+
+  const normalizeReport = (raw: any): Reporte => ({
+    id: String(raw?.id ?? ""),
+    usuario: `ID ${raw?.reported_user_id ?? raw?.usuario ?? "N/A"}`,
+    motivo: String(raw?.type ?? raw?.motivo ?? "Sin motivo"),
+    fecha: raw?.created_at ? new Date(raw.created_at).toLocaleString() : String(raw?.fecha ?? "-"),
+    estado: String(raw?.status ?? raw?.estado ?? "Pendiente"),
+  });
+
   const fetchReports = () => {
     setLoading(true);
-    fetch("/api/reports")
+    fetch("/api/reports", { headers: getAuthHeaders() })
       .then((res) => res.json())
       .then((data) => {
-        setReportes(data);
+        const normalized = Array.isArray(data) ? data.map(normalizeReport) : [];
+        setReportes(normalized);
         setLoading(false);
       });
   };
@@ -30,19 +46,18 @@ export default function AdminReportsPage() {
   }, []);
 
   const marcarResuelta = async (id: string) => {
-    await fetch("/api/reports", {
+    await fetch(`/api/reports/${id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, estado: "Resuelta" })
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ status: "resolved" })
     });
     fetchReports();
   };
 
   const eliminarReporte = async (id: string) => {
-    await fetch("/api/reports", {
+    await fetch(`/api/reports/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
+      headers: getAuthHeaders(),
     });
     fetchReports();
   };
@@ -61,7 +76,7 @@ export default function AdminReportsPage() {
               <span className="text-xs text-gray-400">Fecha: {report.fecha}</span>
               <span className="text-xs text-gray-500">Estado: {report.estado}</span>
               <div className="flex gap-2 mt-2">
-                {report.estado !== "Resuelta" && (
+                {(String(report.estado).toLowerCase().includes("resuelt") || String(report.estado).toLowerCase().includes("resolved")) ? null : (
                   <Button variant="primary" onClick={() => marcarResuelta(report.id)}>Marcar como resuelta</Button>
                 )}
                 <Button variant="secondary" onClick={() => eliminarReporte(report.id)}>Eliminar</Button>

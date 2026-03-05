@@ -60,7 +60,10 @@ export default function AdminDashboard() {
   }, [adminAlert]);
 
   useEffect(() => {
-    fetch("/api/users")
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
+    fetch("/api/users", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: User[]) => {
         setUsuarios(data.length);
@@ -69,7 +72,7 @@ export default function AdminDashboard() {
         setTiempoMedio(32); // Simulado (minutos)
         setUsuariosData(data);
       });
-    fetch("/api/reports")
+    fetch("/api/reports", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Report[]) => {
         setDenunciasPendientes(data.filter((d: Report) => d.estado === "Pendiente").length);
@@ -82,10 +85,10 @@ export default function AdminDashboard() {
         setSancionesActivas(data.filter((s: Sanction) => s.estado === "Activa").length);
         setSancionesData(data);
       });
-    fetch("/api/matches")
+    fetch("/api/matches", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Match[]) => setMatchesData(data));
-    fetch("/api/tokens")
+    fetch("/api/tokens", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: TokenTransaction[]) => setTokensData(data));
     fetch("/api/services")

@@ -6,7 +6,7 @@ import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
 
 interface Usuario {
-  id: string;
+  id: number;
   nombre: string;
   email: string;
   estado: string;
@@ -15,6 +15,12 @@ interface Usuario {
   fechaRegistro: string;
   codigoPostal: string;
   rol?: string;
+}
+
+interface ActivityItem {
+  id: number;
+  fecha: string;
+  accion: string;
 }
 
 const ESTADOS = ["Todos", "Activo", "Suspendido"];
@@ -47,23 +53,61 @@ export default function AdminUsersPage() {
 
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [loading, setLoading] = useState(true);
-  const [modalUser, setModalUser] =useState<Usuario | null>(null);
-  const [editUser, setEditUser] =useState<Usuario | null>(null);
+  const [modalUser, setModalUser] = useState<Usuario | null>(null);
+  const [editUser, setEditUser] = useState<Usuario | null>(null);
+  const [activityHistory, setActivityHistory] = useState<ActivityItem[]>([]);
 
   // Filtros
-  const [estado, setEstado] =useState("Todos");
-  const [genero, setGenero] =useState("Todos");
-  const [actividad, setActividad] =useState("Todas");
-  const [codigoPostal, setCodigoPostal] =useState("");
+  const [estado, setEstado] = useState("Todos");
+  const [genero, setGenero] = useState("Todos");
+  const [actividad, setActividad] = useState("Todas");
+  const [codigoPostal, setCodigoPostal] = useState("");
 
-  const fetchUsers = () => {
+  const getAuthHeaders = () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    return token
+      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+      : { "Content-Type": "application/json" };
+  };
+
+  const normalizeUser = (raw: any): Usuario => {
+    const isSuspended = Boolean(raw?.is_suspended);
+    const genderRaw = String(raw?.gender || raw?.genero || "").toLowerCase();
+    const genero =
+      genderRaw === "male" || genderRaw === "masculino"
+        ? "Masculino"
+        : genderRaw === "female" || genderRaw === "femenino"
+          ? "Femenino"
+          : "No especificado";
+
+    return {
+      id: Number(raw?.id || 0),
+      nombre: String(raw?.display_name || raw?.nombre || `Usuario ${raw?.id ?? ""}`),
+      email: String(raw?.email || ""),
+      estado: isSuspended ? "Suspendido" : "Activo",
+      genero,
+      actividad: isSuspended ? "Baja" : "Media",
+      fechaRegistro: raw?.created_at
+        ? new Date(raw.created_at).toLocaleDateString()
+        : String(raw?.fechaRegistro || "-"),
+      codigoPostal: String(raw?.location || raw?.codigoPostal || "-"),
+      rol: String(raw?.role || raw?.rol || "usuario"),
+    };
+  };
+
+  const fetchUsers = async () => {
     setLoading(true);
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => {
-        setUsuarios(data);
-        setLoading(false);
-      });
+    try {
+      const res = await fetch("/api/users", { headers: getAuthHeaders() });
+      const data = await res.json().catch(() => []);
+      const normalized = Array.isArray(data) ? data.map(normalizeUser) : [];
+      setUsuarios(normalized);
+    } catch (error) {
+      console.error("Error cargando usuarios:", error);
+      setUsuarios([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -81,42 +125,80 @@ export default function AdminUsersPage() {
   });
 
   // Acciones
-  const cambiarEstado = async (id: string, nuevoEstado: string) => {
-    await fetch("/api/users", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, estado: nuevoEstado })
+  const cambiarEstado = async (id: number, nuevoEstado: string) => {
+    const endpoint = nuevoEstado === "Suspendido"
+      ? `/api/users/${id}/suspend`
+      : `/api/users/${id}/unsuspend`;
+
+    const payload = nuevoEstado === "Suspendido"
+      ? { reason: "Suspendido por administrador" }
+      : {};
+
+    await fetch(endpoint, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
     });
     fetchUsers();
   };
 
-  const eliminarUsuario = async (id: string) => {
-    await fetch("/api/users", {
+  const eliminarUsuario = async (id: number) => {
+    await fetch(`/api/users/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id })
+      headers: getAuthHeaders(),
     });
     fetchUsers();
   };
 
   const guardarEdicion = async () => {
     if (!editUser) return;
-    await fetch("/api/users", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(editUser)
+    const backendGender = editUser.genero === "Masculino"
+      ? "male"
+      : editUser.genero === "Femenino"
+        ? "female"
+        : null;
+
+    await fetch(`/api/users/${editUser.id}`, {
+      method: "PUT",
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        display_name: editUser.nombre,
+        email: editUser.email,
+        gender: backendGender,
+        role: editUser.rol || "usuario",
+        location: editUser.codigoPostal,
+      }),
     });
     setEditUser(null);
     fetchUsers();
   };
 
-  // Historial simulado
-  const historial = [
-    { fecha: "2024-07-10", accion: "Inicio de sesión" },
-    { fecha: "2024-07-12", accion: "Cambio de contraseña" },
-    { fecha: "2024-07-13", accion: "Compra de tokens" },
-    { fecha: "2024-07-14", accion: "Match realizado" }
-  ];
+  useEffect(() => {
+    const loadActivity = async () => {
+      if (!modalUser) {
+        setActivityHistory([]);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/activity-logs", { headers: getAuthHeaders() });
+        const data = await res.json().catch(() => []);
+        const history = (Array.isArray(data) ? data : [])
+          .filter((item: any) => Number(item?.user_id) === Number(modalUser.id))
+          .map((item: any) => ({
+            id: Number(item?.id || 0),
+            fecha: item?.created_at ? new Date(item.created_at).toLocaleString() : "-",
+            accion: String(item?.action || "Actividad"),
+          }));
+        setActivityHistory(history);
+      } catch (error) {
+        console.error("Error cargando actividad del usuario:", error);
+        setActivityHistory([]);
+      }
+    };
+
+    loadActivity();
+  }, [modalUser]);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
@@ -210,9 +292,8 @@ export default function AdminUsersPage() {
             <div className="mt-4">
               <b>Historial de actividad:</b>
               <ul className="list-disc ml-6 text-sm mt-1">
-                {historial.map((h) => (
-                  <li key={`${h.fecha}-${h.accion}`}>{h.fecha} - {h.accion}</li>
-                ))}
+                {activityHistory.map((h) => <li key={h.id}>{h.fecha} - {h.accion}</li>)}
+                {activityHistory.length === 0 ? <li>Sin registros</li> : null}
               </ul>
             </div>
           </div>
