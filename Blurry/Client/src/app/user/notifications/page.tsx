@@ -82,7 +82,48 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
   };
 
   const handleMarkAllRead = () => {
-    setLocalNotifications((n: Notification[]) => n.map((notif: Notification) => ({ ...notif, read: true })));
+    const unreadIds = localNotifications
+      .filter((notif: Notification) => !notif.read)
+      .map((notif: Notification) => notif.id);
+
+    if (unreadIds.length === 0) {
+      return;
+    }
+
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const headers = token
+      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+      : { "Content-Type": "application/json" };
+
+    Promise.allSettled(
+      unreadIds.map(async (id) => {
+        const res = await fetch("/api/notifications", {
+          method: "PATCH",
+          headers,
+          body: JSON.stringify({ id, read: true }),
+        });
+        if (!res.ok) {
+          throw new Error(`Error ${res.status} actualizando notificacion ${id}`);
+        }
+        return id;
+      })
+    ).then((results) => {
+      const successfulIds = new Set<number>(
+        results
+          .filter((result): result is PromiseFulfilledResult<number> => result.status === "fulfilled")
+          .map((result) => result.value)
+      );
+
+      if (successfulIds.size === 0) {
+        return;
+      }
+
+      setLocalNotifications((current: Notification[]) =>
+        current.map((notif: Notification) =>
+          successfulIds.has(notif.id) ? { ...notif, read: true } : notif
+        )
+      );
+    });
   };
 
   const handleDelete = async (id: number) => {
