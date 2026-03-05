@@ -6,29 +6,120 @@ import { useEffect, useState } from 'react';
 import { ShoppingCart, Hexagon, Sparkles, CreditCard, ChevronRight, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
+type ProductApiItem = {
+  id?: number;
+  name?: string;
+  description?: string;
+  price?: number;
+};
+
+type JwtPayload = {
+  sub?: number;
+};
+
+function parseTokensFromText(text: string): number {
+  const match = text.match(/(\d+)/);
+  return match ? Number(match[1]) : 0;
+}
+
+function normalizePackages(items: ProductApiItem[]): TokenPackage[] {
+  const sorted = [...items].sort((a, b) => Number(a.price ?? 0) - Number(b.price ?? 0));
+  const maxPrice = sorted.length ? Number(sorted[sorted.length - 1].price ?? 0) : 0;
+
+  return sorted.map((item) => {
+    const description = item.description || "";
+    const name = item.name || `Paquete ${item.id ?? ""}`;
+    const parsedTokens = parseTokensFromText(`${name} ${description}`);
+    const price = Number(item.price ?? 0);
+
+    return {
+      id: Number(item.id ?? 0),
+      name,
+      tokens: parsedTokens,
+      price,
+      isPopular: price === maxPrice,
+      bonus: parsedTokens >= 500 ? "Bonus incluido" : undefined,
+    };
+  });
+}
+
+function getUserIdFromToken(token: string | null): number | null {
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1])) as JwtPayload;
+    return typeof payload.sub === "number" ? payload.sub : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function TokenStorePage() {
   const [packages, setPackages] = useState<TokenPackage[]>([]);
   const { showToast } = useNotifications();
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setTimeout(() => {
-      setPackages([
-        { id: 1, name: "Starter Core", tokens: 100, price: 9.99, isPopular: false },
-        { id: 2, name: "Nexus Pack", tokens: 500, price: 39.99, isPopular: true, bonus: "50 Bonus" },
-        { id: 3, name: "Quantum Vault", tokens: 1000, price: 69.99, isPopular: false, bonus: "200 Bonus" }
-      ] as any);
-      setLoading(false);
-    }, 600);
+    fetch("/api/products")
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Error ${res.status} cargando productos`);
+        }
+        return res.json();
+      })
+      .then((data: unknown) => {
+        const rows = Array.isArray(data) ? (data as ProductApiItem[]) : [];
+        setPackages(normalizePackages(rows));
+        setError(null);
+      })
+      .catch(() => {
+        setPackages([]);
+        setError("No se pudo cargar la tienda en este momento.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
-  const handlePurchase = (pkg: any) => {
+  const handlePurchase = async (pkg: TokenPackage) => {
     setBuying(pkg.id);
-    setTimeout(() => {
-      showToast(`Transacción aprobada: ${pkg.tokens} TKN añadidos a tu billetera.`, "success");
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const userId = getUserIdFromToken(token);
+
+    if (!userId) {
+      showToast("No se pudo identificar al usuario autenticado.", "error");
       setBuying(null);
-    }, 1500);
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/purchases", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          product_name: pkg.name,
+          price: Number(pkg.price),
+          quantity: 1,
+          total: Number(pkg.price),
+          status: "completed",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status} registrando compra`);
+      }
+
+      showToast(`Transaccion aprobada: ${pkg.tokens} TKN añadidos a tu billetera.`, "success");
+    } catch {
+      showToast("No se pudo completar la compra.", "error");
+    } finally {
+      setBuying(null);
+    }
   };
 
   return (
@@ -53,6 +144,11 @@ export default function TokenStorePage() {
           <div className="flex flex-col items-center justify-center py-20">
              <div className="w-12 h-12 border-4 border-zinc-800 border-t-primary-500 rounded-full animate-spin shadow-neon" />
              <p className="mt-4 text-primary-400 font-bold tracking-widest text-xs uppercase">Estableciendo conexión comercial...</p>
+          </div>
+        ) : packages.length === 0 ? (
+          <div className="py-16 text-center text-zinc-400">
+            <p className="font-semibold text-zinc-200">No hay paquetes disponibles</p>
+            <p className="text-sm mt-2">{error || "Intenta de nuevo en unos minutos."}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">

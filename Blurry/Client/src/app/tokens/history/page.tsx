@@ -1,21 +1,76 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Link } from "next/link";
 import { Hexagon, Activity, ArrowDownRight, ArrowUpRight, Clock, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
-const mockHistory = [
-  { id: "1", concept: "Carga de Energía (Starter Core)", amount: 100, date: "2026-03-01 14:30", type: 'in' },    
-  { id: "2", concept: "Transferencia (Regalo a CyberNinja)", amount: -20, date: "2026-03-02 18:45", type: 'out' }, 
-  { id: "3", concept: "Recompensa de Misión Diaria", amount: 50, date: "2026-03-04 09:15", type: 'in' },     
-];
+type TokenHistoryItem = {
+  id: string;
+  concept: string;
+  amount: number;
+  date: string;
+  type: "in" | "out";
+};
+
+type TokenApiItem = {
+  id?: number;
+  amount?: number;
+  reason?: string;
+  created_at?: string;
+};
+
+function normalizeTokenHistory(items: TokenApiItem[]): TokenHistoryItem[] {
+  return items
+    .map((item) => {
+      const amount = Number(item.amount ?? 0);
+      const createdAt = item.created_at ? new Date(item.created_at) : null;
+
+      return {
+        id: String(item.id ?? Math.random()),
+        concept: item.reason || "Movimiento de energia",
+        amount,
+        date: createdAt
+          ? createdAt.toLocaleString([], { dateStyle: "short", timeStyle: "short" })
+          : "Sin fecha",
+        type: amount >= 0 ? "in" : "out",
+      } as TokenHistoryItem;
+    })
+    .sort((a, b) => {
+      const left = new Date(a.date).getTime();
+      const right = new Date(b.date).getTime();
+      return Number.isNaN(left) || Number.isNaN(right) ? 0 : right - left;
+    });
+}
 
 export default function TokenHistoryPage() {
   const [loading, setLoading] = useState(true);
+  const [history, setHistory] = useState<TokenHistoryItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 600);
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+
+    fetch("/api/tokens", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Error ${res.status} cargando historial de tokens`);
+        }
+        return res.json();
+      })
+      .then((data: unknown) => {
+        const rows = Array.isArray(data) ? (data as TokenApiItem[]) : [];
+        setHistory(normalizeTokenHistory(rows));
+        setError(null);
+      })
+      .catch(() => {
+        setHistory([]);
+        setError("No se pudo cargar el historial de energia.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -48,9 +103,14 @@ export default function TokenHistoryPage() {
                <div className="w-12 h-12 border-4 border-zinc-800 border-t-primary-500 rounded-full animate-spin shadow-neon" />
                <p className="mt-4 text-primary-400 font-bold tracking-widest text-xs uppercase">Decodificando Registros...</p>
             </div>
+          ) : history.length === 0 ? (
+            <div className="py-16 text-center">
+              <p className="text-zinc-300 font-semibold">{error ? "Error de conexion" : "Sin movimientos aun"}</p>
+              <p className="text-zinc-500 text-sm mt-2">{error || "Tus transacciones de energia apareceran aqui."}</p>
+            </div>
           ) : (
             <div className="space-y-4">
-              {mockHistory.map((h, i) => (
+              {history.map((h, i) => (
                 <motion.div 
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
