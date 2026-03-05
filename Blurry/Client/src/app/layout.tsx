@@ -6,6 +6,16 @@ import { NotificationsProvider } from "@/components/NotificationsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
+function resolveMetadataBase(): URL {
+  const rawUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+  try {
+    return new URL(rawUrl);
+  } catch {
+    return new URL("http://localhost:3000");
+  }
+}
+
 export const viewport: Viewport = {
   themeColor: "#4f46e5",
   width: "device-width",
@@ -14,6 +24,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: resolveMetadataBase(),
   title: "Blurry | Conexiones Auténticas Más Allá de lo Físico",
   description: "Blurry es la app de citas que revoluciona las relaciones. Concreta citas a ciegas, conoce gente por su personalidad mediante inteligencia artificial y descubre un entorno seguro con videollamadas y juegos.",
   keywords: ["citas", "dating app", "conocer gente", "videollamada anónima", "match con IA"],
