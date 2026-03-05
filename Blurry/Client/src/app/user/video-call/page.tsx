@@ -2,12 +2,13 @@
 
 import Button from "@/components/Button";
 import ReportForm from "@/components/ReportForm";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { checkModeration } from "@/utils/moderation";
 import { useNotifications } from "@/components/NotificationsContext";
 import { Contact, Game, Product, Note, AgendaEvent, User } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
+import { Brain, Swords } from "lucide-react";
 
 const CALL_DURATION = 8 * 60; // 8 minutos en segundos
 const TOKEN_COST_PER_2MIN = 10; // 10 tokens por 2 minutos extra
@@ -48,6 +49,7 @@ type SpeechRecognitionInstance = {
 type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
 
 function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
+  const router = useRouter();
   const getAuthHeaders = () => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -66,6 +68,8 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   const [games, setGames] =useState<Game[]>([]);
   const searchParams = useSearchParams();
   const contactId = searchParams?.get("contactId");
+  const gameId = searchParams?.get("gameId");
+  const gameName = searchParams?.get("gameName");
   const [showStore, setShowStore] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [purchaseMsg, setPurchaseMsg] = useState("");
@@ -106,7 +110,11 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
         setNoteId(null);
       }
     });
-    fetch(`/api/games`, { headers: authHeaders }).then(res => res.json()).then(setGames);
+    fetch(`/api/games`, { headers: authHeaders })
+      .then(res => res.json())
+      .then((data: unknown) => {
+        setGames(Array.isArray(data) ? data : []);
+      });
     fetch(`/api/users/${userId}`, { headers: authHeaders }).then(res => res.json()).then((u: User) => setTokens(u.tokens ?? 0));
   }, [contactId, userId]);
 
@@ -114,10 +122,11 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   useEffect(() => {
     if (!contactId) return;
     const authHeaders = getAuthHeaders();
-    fetch(`/api/agenda?userId=${userId}`)
+    fetch(`/api/agenda?userId=${userId}`, { headers: authHeaders })
       .then(res => res.json())
-      .then((agenda: AgendaEvent[]) => {
-        const cita = agenda.find((e: AgendaEvent) => String(e.contactId) === String(contactId) && e.note);
+      .then((agenda: unknown) => {
+        const agendaList = Array.isArray(agenda) ? (agenda as AgendaEvent[]) : [];
+        const cita = agendaList.find((e: AgendaEvent) => String(e.contactId) === String(contactId) && e.note);
         setAgendaNote(cita?.note ?? "");
       });
   }, [contactId, userId]);
@@ -125,7 +134,11 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   // Obtener productos de la tienda al abrir el store
   useEffect(() => {
     if (showStore) {
-      fetch("/api/products", { headers: getAuthHeaders() }).then(res => res.json()).then(setProducts);
+      fetch("/api/products", { headers: getAuthHeaders() })
+        .then(res => res.json())
+        .then((data: unknown) => {
+          setProducts(Array.isArray(data) ? data : []);
+        });
     }
   }, [showStore]);
 
@@ -318,7 +331,13 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
 
   // Abrir juego en videollamada
   const handleOpenGame = async (game: Game) => {
-    window.open(`/user/games/${game.id}`, "_blank");
+    const params = new URLSearchParams();
+    if (contactId) params.set("contactId", contactId);
+    params.set("gameId", String(game.id));
+    params.set("gameName", game.name || "Juego");
+    router.replace(`/user/video-call?${params.toString()}`);
+    setShowPanel("none");
+
     // Llamar al endpoint de misión
     const res = await fetch("/api/video-call/play-game", {
       method: "POST",
@@ -337,11 +356,37 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   const sec = (secondsLeft % 60).toString().padStart(2, "0");
   const timerRed = secondsLeft <= 60 && callActive;
   const timerClass = timerRed ? "animate-pulse text-error-600" : "text-accent-700";
+  const activeGame = games.find((g) => String(g.id) === String(gameId ?? ""));
+  const activeCategory = activeGame ? (activeGame.category === "test" ? "test" : "game") : null;
+  const isActiveTest = activeCategory === "test";
+  const ActiveCategoryIcon = isActiveTest ? Brain : Swords;
+  const activeCategoryLabel = isActiveTest ? "Test" : "Juego";
+  const cardAccentClass = activeCategory
+    ? isActiveTest
+      ? "border-cyan-300/70"
+      : "border-violet-300/70"
+    : "";
+  const activeBadgeClass = isActiveTest
+    ? "border-cyan-300 bg-cyan-50 text-cyan-800"
+    : "border-violet-300 bg-violet-50 text-violet-800";
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <h1 className="text-2xl font-bold mb-4">Videollamada</h1>
-      <div className="w-full max-w-2xl bg-white rounded shadow p-6 flex flex-col items-center relative">
+      <div className={`w-full max-w-2xl bg-white rounded shadow p-6 flex flex-col items-center relative border ${cardAccentClass}`}>
+        {(activeGame || gameName) && (
+          <div className="mb-4 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="text-sm text-zinc-700">
+              Sesion activa: <span className="font-semibold text-zinc-900">{activeGame?.name || gameName}</span>
+            </div>
+            {activeCategory && (
+              <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-black uppercase tracking-widest ${activeBadgeClass}`}>
+                <ActiveCategoryIcon className="w-3 h-3" />
+                {activeCategoryLabel}
+              </span>
+            )}
+          </div>
+        )}
         {/* Panel lateral */}
         {showPanel !== "none" && (
           <aside className="absolute right-0 top-0 h-full w-80 bg-accent-400 border-l shadow-lg z-10 p-4 flex flex-col gap-4">
@@ -352,7 +397,13 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
                 <ul className="flex flex-col gap-2">
                   {games.map(g => (
                     <li key={g.id} className="bg-white rounded shadow p-2 flex flex-col">
-                      <span className="font-semibold">{g.name}</span>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold">{g.name}</span>
+                        <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-black uppercase tracking-wider ${g.category === "test" ? "border-cyan-300 text-cyan-700 bg-cyan-50" : "border-violet-300 text-violet-700 bg-violet-50"}`}>
+                          {g.category === "test" ? <Brain className="w-3 h-3" /> : <Swords className="w-3 h-3" />}
+                          {g.category === "test" ? "Test" : "Juego"}
+                        </span>
+                      </div>
                       <span className="text-xs text-accent-600">{g.description}</span>
                       <button onClick={() => handleOpenGame(g)} className="text-blue-600 underline text-xs mt-1">Abrir</button>
                     </li>

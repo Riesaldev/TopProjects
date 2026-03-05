@@ -17,6 +17,10 @@ type GameHistory = {
   result?: "win" | "loss";
 };
 
+const GAMES_FILTER_STORAGE_KEY = "games.categoryFilter";
+const GAMES_QUERY_STORAGE_KEY = "games.searchQuery";
+const GAMES_TAB_STORAGE_KEY = "games.activeTab";
+
 export default function GamesPage() {
   const router = useRouter();
   const realtimeContext = useRealtime();
@@ -53,6 +57,38 @@ export default function GamesPage() {
 
     loadGames();
   }, []);
+
+  useEffect(() => {
+    try {
+      const savedTab = localStorage.getItem(GAMES_TAB_STORAGE_KEY);
+      const savedFilter = localStorage.getItem(GAMES_FILTER_STORAGE_KEY);
+      const savedQuery = localStorage.getItem(GAMES_QUERY_STORAGE_KEY);
+
+      if (savedTab === "lobby" || savedTab === "history") {
+        setActiveTab(savedTab);
+      }
+
+      if (savedFilter === "all" || savedFilter === "game" || savedFilter === "test") {
+        setCategoryFilter(savedFilter);
+      }
+
+      if (typeof savedQuery === "string") {
+        setQuery(savedQuery);
+      }
+    } catch {
+      // localStorage can fail in restricted browser contexts.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(GAMES_TAB_STORAGE_KEY, activeTab);
+      localStorage.setItem(GAMES_FILTER_STORAGE_KEY, categoryFilter);
+      localStorage.setItem(GAMES_QUERY_STORAGE_KEY, query);
+    } catch {
+      // localStorage can fail in restricted browser contexts.
+    }
+  }, [activeTab, categoryFilter, query]);
 
   const handleGameSelect = (id: string | number) => {
     const game = games.find(g => String(g.id) === String(id));
