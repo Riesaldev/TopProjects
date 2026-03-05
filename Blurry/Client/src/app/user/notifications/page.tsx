@@ -21,6 +21,7 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
   const notifications = realtimeContext?.notifications || [];
   const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [markingAllRead, setMarkingAllRead] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -81,7 +82,11 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
     } catch {}
   };
 
-  const handleMarkAllRead = () => {
+  const handleMarkAllRead = async () => {
+    if (markingAllRead) {
+      return;
+    }
+
     const unreadIds = localNotifications
       .filter((notif: Notification) => !notif.read)
       .map((notif: Notification) => notif.id);
@@ -95,19 +100,22 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
       ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
       : { "Content-Type": "application/json" };
 
-    Promise.allSettled(
-      unreadIds.map(async (id) => {
-        const res = await fetch("/api/notifications", {
-          method: "PATCH",
-          headers,
-          body: JSON.stringify({ id, read: true }),
-        });
-        if (!res.ok) {
-          throw new Error(`Error ${res.status} actualizando notificacion ${id}`);
-        }
-        return id;
-      })
-    ).then((results) => {
+    try {
+      setMarkingAllRead(true);
+      const results = await Promise.allSettled(
+        unreadIds.map(async (id) => {
+          const res = await fetch("/api/notifications", {
+            method: "PATCH",
+            headers,
+            body: JSON.stringify({ id, read: true }),
+          });
+          if (!res.ok) {
+            throw new Error(`Error ${res.status} actualizando notificacion ${id}`);
+          }
+          return id;
+        })
+      );
+
       const successfulIds = new Set<number>(
         results
           .filter((result): result is PromiseFulfilledResult<number> => result.status === "fulfilled")
@@ -123,7 +131,9 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
           successfulIds.has(notif.id) ? { ...notif, read: true } : notif
         )
       );
-    });
+    } finally {
+      setMarkingAllRead(false);
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -182,10 +192,11 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
           {unreadCount > 0 && (
             <button 
               onClick={handleMarkAllRead}
-              className="gamified w-full sm:w-auto px-5 py-2.5 rounded-xl border border-primary-500/30 font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all hover:bg-primary-500/10 hover:shadow-neon text-primary-400 shrink-0"
+              disabled={markingAllRead}
+              className="gamified w-full sm:w-auto px-5 py-2.5 rounded-xl border border-primary-500/30 font-bold uppercase tracking-wider text-xs flex items-center justify-center gap-2 transition-all hover:bg-primary-500/10 hover:shadow-neon text-primary-400 shrink-0 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <Zap className="w-4 h-4 fill-current" />
-              Marcar todo como leído
+              {markingAllRead ? "Sincronizando..." : "Marcar todo como leído"}
             </button>
           )}
         </div>
