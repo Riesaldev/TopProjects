@@ -28,6 +28,8 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
   const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [markingAllRead, setMarkingAllRead] = useState(false);
+  const [markReadInFlightIds, setMarkReadInFlightIds] = useState<Set<number>>(new Set());
+  const [deleteInFlightIds, setDeleteInFlightIds] = useState<Set<number>>(new Set());
   const markReadInFlightRef = useRef<Set<number>>(new Set());
   const deleteInFlightRef = useRef<Set<number>>(new Set());
 
@@ -38,8 +40,46 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
     return () => {
       markReadInFlight.clear();
       deleteInFlight.clear();
+      setMarkReadInFlightIds(new Set());
+      setDeleteInFlightIds(new Set());
     };
   }, []);
+
+  const beginMarkReadInFlight = (id: number) => {
+    markReadInFlightRef.current.add(id);
+    setMarkReadInFlightIds((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  };
+
+  const endMarkReadInFlight = (id: number) => {
+    markReadInFlightRef.current.delete(id);
+    setMarkReadInFlightIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  };
+
+  const beginDeleteInFlight = (id: number) => {
+    deleteInFlightRef.current.add(id);
+    setDeleteInFlightIds((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+  };
+
+  const endDeleteInFlight = (id: number) => {
+    deleteInFlightRef.current.delete(id);
+    setDeleteInFlightIds((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  };
 
   const getAuthHeader = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
@@ -110,7 +150,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
       return;
     }
 
-    markReadInFlightRef.current.add(id);
+    beginMarkReadInFlight(id);
     try {
       await patchNotificationRead(id);
 
@@ -120,7 +160,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
     } catch {
       showToast("No se pudo marcar la notificacion como leida.", "error");
     } finally {
-      markReadInFlightRef.current.delete(id);
+      endMarkReadInFlight(id);
     }
   };
 
@@ -179,7 +219,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
       return;
     }
 
-    deleteInFlightRef.current.add(id);
+    beginDeleteInFlight(id);
     try {
       const res = await fetch("/api/notifications", {
         method: "DELETE",
@@ -195,7 +235,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
     } catch {
       showToast("No se pudo eliminar la notificacion.", "error");
     } finally {
-      deleteInFlightRef.current.delete(id);
+      endDeleteInFlight(id);
     }
   };
 
@@ -284,8 +324,8 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
                         notification={n}
                         onMarkRead={() => handleMarkRead(n.id)}
                         onDelete={() => handleDelete(n.id)}
-                        markReadLoading={markReadInFlightRef.current.has(n.id)}
-                        deleteLoading={deleteInFlightRef.current.has(n.id)}
+                        markReadLoading={markReadInFlightIds.has(n.id)}
+                        deleteLoading={deleteInFlightIds.has(n.id)}
                       />
                     ))}
                   </AnimatePresence>
