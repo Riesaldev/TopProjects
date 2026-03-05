@@ -15,6 +15,8 @@ import { User, Report, Sanction, Match, TokenTransaction } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
 
+type FeedbackItem = { rating?: number };
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,6 +35,7 @@ export default function AdminCharts({ usuarios, denuncias, sanciones, matches, t
   sanciones: readonly Sanction[];
   matches: readonly Match[];
   tokens: readonly TokenTransaction[];
+  feedback: readonly FeedbackItem[];
 }>) {
   const realtimeContext = useRealtime();
   const metric = realtimeContext?.metric;
@@ -145,16 +148,17 @@ export default function AdminCharts({ usuarios, denuncias, sanciones, matches, t
     ]
   };
 
-  // Rating medio histórico (simulado)
-  const ratingLine = {
-    labels: meses,
+  // Distribucion real de ratings
+  const ratingsBuckets = [1, 2, 3, 4, 5].map((bucket) =>
+    feedback.filter((item) => Math.round(Number(item?.rating ?? 0)) === bucket).length
+  );
+  const ratingDistribution = {
+    labels: ["1★", "2★", "3★", "4★", "5★"],
     datasets: [
       {
-        label: "Rating medio",
-        data: [4.5, 4.6, 4.7, 4.6, 4.8, 4.7, 4.7],
-        borderColor: "#6366f1",
-        backgroundColor: "#6366f1",
-        fill: false
+        label: "Feedback",
+        data: ratingsBuckets,
+        backgroundColor: "#6366f1"
       }
     ]
   };
@@ -186,8 +190,8 @@ export default function AdminCharts({ usuarios, denuncias, sanciones, matches, t
         <Bar data={ventasBar} />
       </div>
       <div className="bg-white rounded shadow p-4">
-        <h3 className="font-semibold mb-2">Rating medio histórico</h3>
-        <Line data={ratingLine} />
+        <h3 className="font-semibold mb-2">Distribución de ratings</h3>
+        <Bar data={ratingDistribution} options={{ responsive: true, plugins: { legend: { display: false } } }} />
       </div>
       <div className="bg-white rounded shadow p-4">
         <h3>Métricas en tiempo real</h3>

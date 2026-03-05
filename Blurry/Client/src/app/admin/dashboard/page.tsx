@@ -9,9 +9,8 @@ import { useEffect, useState } from 'react';
 import { useAuth } from "@/components/AuthContext";
 import { useRouter } from 'next/navigation';
 
-interface UserSettingsPageProps {
-  userId: number;
-}
+type FeedbackItem = { rating?: number };
+type ActivityLogItem = { metadata?: Record<string, unknown> };
 
 export default function AdminDashboard() {
   const { user, isLoading } = useAuth();
@@ -34,6 +33,7 @@ export default function AdminDashboard() {
   const [sancionesData, setSancionesData] =useState<Sanction[]>([]);
   const [matchesData, setMatchesData] =useState<Match[]>([]);
   const [tokensData, setTokensData] =useState<TokenTransaction[]>([]);
+  const [feedbackData, setFeedbackData] = useState<FeedbackItem[]>([]);
 
   const realtimeContext = useRealtime();
   const adminAlert = realtimeContext?.adminAlert;
@@ -67,11 +67,52 @@ export default function AdminDashboard() {
       .then((res) => res.json())
       .then((data: User[]) => {
         setUsuarios(data.length);
-        setUsuariosActivos(data.filter((u: User) => u.actividad === "Alta").length);
-        setRatingMedio(4.7); // Simulado
-        setTiempoMedio(32); // Simulado (minutos)
+        setUsuariosActivos(
+          data.filter((u: User) => String((u as unknown as { estado?: string }).estado || "").toLowerCase() !== "suspendido").length
+        );
         setUsuariosData(data);
       });
+
+    fetch("/api/feedback", { headers: authHeaders })
+      .then((res) => res.json())
+      .then((data: FeedbackItem[]) => {
+        const rows = Array.isArray(data) ? data : [];
+        setFeedbackData(rows);
+        const ratings = rows
+          .map((item) => Number(item?.rating ?? 0))
+          .filter((value) => Number.isFinite(value) && value > 0);
+
+        if (!ratings.length) {
+          setRatingMedio(null);
+          return;
+        }
+
+        const avg = ratings.reduce((acc, value) => acc + value, 0) / ratings.length;
+        setRatingMedio(Number(avg.toFixed(2)));
+      })
+      .catch(() => setRatingMedio(null));
+
+    fetch("/api/activity-logs", { headers: authHeaders })
+      .then((res) => res.json())
+      .then((data: ActivityLogItem[]) => {
+        const durations = (Array.isArray(data) ? data : [])
+          .map((item) => {
+            const metadata = (item?.metadata || {}) as Record<string, unknown>;
+            const raw = metadata.durationMinutes ?? metadata.duration_minutes ?? metadata.sessionMinutes;
+            return Number(raw);
+          })
+          .filter((value) => Number.isFinite(value) && value > 0);
+
+        if (!durations.length) {
+          setTiempoMedio(null);
+          return;
+        }
+
+        const avg = durations.reduce((acc, value) => acc + value, 0) / durations.length;
+        setTiempoMedio(Math.round(avg));
+      })
+      .catch(() => setTiempoMedio(null));
+
     fetch("/api/reports", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Report[]) => {
@@ -79,7 +120,7 @@ export default function AdminDashboard() {
         setDenunciasMes(data.length);
         setDenunciasData(data);
       });
-    fetch("/api/sanctions")
+    fetch("/api/sanctions", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Sanction[]) => {
         setSancionesActivas(data.filter((s: Sanction) => s.estado === "Activa").length);
@@ -91,22 +132,29 @@ export default function AdminDashboard() {
     fetch("/api/tokens", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: TokenTransaction[]) => setTokensData(data));
-    fetch("/api/services")
+    fetch("/api/services", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Service[]) => {
         setServices(data);
         setLoadingServices(false);
-      });
+      })
+      .catch(() => setLoadingServices(false));
   }, []);
 
   // Actualizar estado de servicio
   const cambiarEstadoServicio = async (id: string, estado: string) => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
     await fetch("/api/services", {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify({ id, estado })
     });
-    const res = await fetch("/api/services");
+    const res = await fetch("/api/services", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
     setServices(await res.json());
     setLogs((prev) => [
       { id: Date.now(), mensaje: `Servicio actualizado: ${id} → ${estado}`, fecha: new Date().toLocaleString() },
@@ -117,15 +165,31 @@ export default function AdminDashboard() {
   // Añadir nuevo servicio
   const agregarServicio = async (e: React.FormEvent) => {
     e.preventDefault();
-    const nuevo = { ...nuevoServicio, id: Date.now().toString() };
-    const actualizados = [...services, nuevo];
-    setServices(actualizados);
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+
+    const res = await fetch("/api/services", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(nuevoServicio),
+    });
+
+    if (!res.ok) {
+      return;
+    }
+
+    const refetch = await fetch("/api/services", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    const refreshed = await refetch.json().catch(() => []);
+    setServices(Array.isArray(refreshed) ? refreshed : []);
     setNuevoServicio({ nombre: "", estado: "Activo" });
     setLogs((prev) => [
-      { id: Date.now(), mensaje: `Nuevo servicio añadido: ${nuevo.nombre}`, fecha: new Date().toLocaleString() },
+      { id: Date.now(), mensaje: `Nuevo servicio añadido: ${nuevoServicio.nombre}`, fecha: new Date().toLocaleString() },
       ...prev
     ]);
-    // Simulación: en un backend real, aquí harías un POST a la API
   };
 
   return (
@@ -151,6 +215,7 @@ export default function AdminDashboard() {
         sanciones={sancionesData}
         matches={matchesData}
         tokens={tokensData}
+        feedback={feedbackData}
       />
       {/* Métricas */}
       <div className="flex flex-wrap gap-6 mb-8">

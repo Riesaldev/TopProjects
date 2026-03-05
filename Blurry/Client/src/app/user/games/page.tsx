@@ -3,6 +3,7 @@
 import { Game } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import GameCard from "@/components/GameCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gamepad2, Trophy, Clock, Search, Activity, Flame, ArrowUpRight } from "lucide-react";
@@ -17,6 +18,7 @@ type GameHistory = {
 };
 
 export default function GamesPage() {
+  const router = useRouter();
   const realtimeContext = useRealtime();
   const gameInvite = realtimeContext?.gameInvite;
   const [activeTab, setActiveTab] = useState<"lobby" | "history">("lobby");
@@ -52,7 +54,8 @@ export default function GamesPage() {
 
   const handleGameSelect = (id: string) => {
     const game = games.find(g => g.id === id);
-    alert(`Buscando oponente para ${game?.name}... (Simulado)`);
+    const query = new URLSearchParams({ gameId: String(id), gameName: game?.name || "Juego" });
+    router.push(`/user/video-call?${query.toString()}`);
   };
 
   return (
