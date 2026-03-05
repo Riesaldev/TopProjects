@@ -37,8 +37,8 @@ export default function RegisterForm() {
       
       showToast("Identidad creada. Acceso concedido.", "success");
       setTimeout(() => router.push("/auth/login"), 1500);
-    } catch (err: Error | unknown) {
-      setError(err instanceof Error ? err.message : "Error al enrolar");
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export default function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-xl flex items-start text-sm font-bold shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+         <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-xl flex items-start text-sm font-bold shadow-[0_0_15px_rgba(239,68,68,0.2)]">
           <AlertCircle className="w-5 h-5 mr-2 shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>
