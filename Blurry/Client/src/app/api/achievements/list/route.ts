@@ -1,22 +1,32 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
 function normalizeAchievement(item: unknown) {
   const achievement = (item ?? {}) as Record<string, unknown>;
+  const tokenReward = Number(achievement.token_reward ?? 0);
   return {
     id: achievement.id,
     name: achievement.name,
     description: achievement.description,
     icon: achievement.icon,
-    tokenReward: achievement.token_reward,
-    secret: achievement.secret,
+    tokenReward,
+    secret: Boolean(achievement.secret),
   };
 }
 
-export async function GET() {
+function authHeaders(req: NextRequest) {
+  const authorization = req.headers.get("authorization");
+  return authorization ? { authorization } : {};
+}
+
+export async function GET(req: NextRequest) {
   try {
-    const res = await fetch(`${BACKEND_URL}/achievements/list`);
+    const res = await fetch(`${BACKEND_URL}/achievements/list`, {
+      headers: {
+        ...authHeaders(req),
+      },
+    });
     const data = await res.json().catch(() => []);
 
     const normalized = Array.isArray(data) ? data.map(normalizeAchievement) : [];
