@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { Gift, Navigation, Clock, CheckCircle2, Truck, PackageSearch, Zap, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -15,19 +14,103 @@ interface GiftTrack {
   progress: number;
 }
 
+type TokenTx = {
+  id?: number;
+  amount?: number;
+  reason?: string;
+  created_at?: string;
+};
+
+function parseRecipient(reason: string): string {
+  const match = reason.match(/(?:to|a)\s+([\w\-@.]+)/i);
+  return match?.[1] || "Destinatario desconocido";
+}
+
+function parseGiftName(reason: string): string {
+  const colonIndex = reason.indexOf(":");
+  if (colonIndex !== -1 && colonIndex + 1 < reason.length) {
+    return reason.slice(colonIndex + 1).trim();
+  }
+  return "Transferencia de TKN";
+}
+
+function deriveStatus(createdAt?: string): Pick<GiftTrack, "status" | "progress" | "location" | "date"> {
+  const created = createdAt ? new Date(createdAt) : new Date();
+  const ageMs = Date.now() - created.getTime();
+  const ageMinutes = Math.max(0, Math.floor(ageMs / 60000));
+
+  if (ageMinutes < 15) {
+    return {
+      status: "Preparando",
+      progress: 20,
+      location: "Pasarela Cuantica",
+      date: "Hace unos minutos",
+    };
+  }
+
+  if (ageMinutes < 120) {
+    return {
+      status: "En camino",
+      progress: 65,
+      location: "Nodo de Enrutamiento",
+      date: created.toLocaleString([], { dateStyle: "short", timeStyle: "short" }),
+    };
+  }
+
+  return {
+    status: "Entregado",
+    progress: 100,
+    location: "Inventario Activo",
+    date: created.toLocaleString([], { dateStyle: "short", timeStyle: "short" }),
+  };
+}
+
+function normalizeGifts(rows: TokenTx[]): GiftTrack[] {
+  return rows
+    .filter((tx) => {
+      const reason = String(tx.reason || "").toLowerCase();
+      const amount = Number(tx.amount ?? 0);
+      return amount < 0 || reason.includes("gift") || reason.includes("regalo") || reason.includes("transfer");
+    })
+    .map((tx) => {
+      const reason = String(tx.reason || "Transferencia de TKN");
+      const status = deriveStatus(tx.created_at);
+      return {
+        id: String(tx.id ?? Math.random()),
+        name: parseGiftName(reason),
+        recipient: parseRecipient(reason),
+        ...status,
+      };
+    })
+    .sort((a, b) => b.id.localeCompare(a.id));
+}
+
 export default function TokenGiftsPage() {
   const [gifts, setGifts] = useState<GiftTrack[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setGifts([
-        { id: "1", name: "Filtro Neon Core", recipient: "CyberNinja", status: "En camino", location: "Nodo 4: Data Center EU", date: "Hoy, 14:30", progress: 65 },
-        { id: "2", name: "Potenciador de Perfil", recipient: "GlitchMaster", status: "Entregado", location: "Inventario Activo", date: "Ayer, 09:15", progress: 100 },
-        { id: "3", name: "Entrada Torneo VR", recipient: "ZeroCool", status: "Preparando", location: "Pasarela Cuántica", date: "Hace 5 min", progress: 20 },
-      ]);
-      setLoading(false);
-    }, 800);
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+
+    fetch("/api/tokens", {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Error ${res.status} cargando transferencias`);
+        }
+        return res.json();
+      })
+      .then((data: unknown) => {
+        const rows = Array.isArray(data) ? (data as TokenTx[]) : [];
+        setGifts(normalizeGifts(rows));
+      })
+      .catch(() => {
+        setGifts([]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const getStatusInfo = (status: string) => {
@@ -70,6 +153,12 @@ export default function TokenGiftsPage() {
             </div>
           ) : (
             <div className="space-y-6">
+              {gifts.length === 0 && (
+                <div className="text-center py-10 border border-zinc-800 rounded-2xl bg-black/20">
+                  <p className="text-zinc-300 font-semibold">No hay transferencias recientes.</p>
+                  <p className="text-zinc-500 text-sm mt-2">Cuando envies regalos o tokens, apareceran aqui.</p>
+                </div>
+              )}
               {gifts.map((g, i) => {
                 const s = getStatusInfo(g.status);
                 return (

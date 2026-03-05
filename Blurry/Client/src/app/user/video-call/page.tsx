@@ -17,9 +17,15 @@ interface VideoCallPageProps {
 }
 
 function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
+  const getAuthHeaders = () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const [showReport, setShowReport] =useState(false);
   const [contact, setContact] =useState<Contact | null>(null);
   const [note, setNote] =useState("");
+  const [noteId, setNoteId] = useState<number | null>(null);
   const [saving, setSaving] =useState(false);
   const [showPanel, setShowPanel] =useState<"none"|"games"|"notes">("none");
   const [muted, setMuted] =useState(false);
@@ -54,36 +60,41 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   // Obtener datos de contacto, nota y juegos
   useEffect(() => {
     if (!contactId) return;
-    fetch(`/api/users`).then(res => res.json()).then((users: Contact[]) => {
+    const authHeaders = getAuthHeaders();
+
+    fetch(`/api/users`, { headers: authHeaders }).then(res => res.json()).then((users: Contact[]) => {
       const c = users.find((u: Contact) => String(u.id) === String(contactId));
       setContact(c || null);
     });
-    fetch(`/api/notes?userId=${userId}`).then(res => res.json()).then((notes: Note[]) => {
+    fetch(`/api/notes?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).then((notes: Note[]) => {
       const n = notes.find((n: Note) => String(n.contactId) === String(contactId));
       if (n) {
         setNote(n.content);
+        setNoteId(Number(n.id));
+      } else {
+        setNoteId(null);
       }
     });
-    fetch(`/api/games`).then(res => res.json()).then(setGames);
-    // Simular fetch de tokens del usuario
-    fetch(`/api/users/${userId}`).then(res => res.json()).then((u: User) => setTokens(u.tokens ?? 120));
-  }, [contactId]);
+    fetch(`/api/games`, { headers: authHeaders }).then(res => res.json()).then(setGames);
+    fetch(`/api/users/${userId}`, { headers: authHeaders }).then(res => res.json()).then((u: User) => setTokens(u.tokens ?? 0));
+  }, [contactId, userId]);
 
   // Obtener nota privada de la cita activa
   useEffect(() => {
     if (!contactId) return;
+    const authHeaders = getAuthHeaders();
     fetch(`/api/agenda?userId=${userId}`)
       .then(res => res.json())
       .then((agenda: AgendaEvent[]) => {
         const cita = agenda.find((e: AgendaEvent) => String(e.contactId) === String(contactId) && e.note);
         setAgendaNote(cita?.note ?? "");
       });
-  }, [contactId]);
+  }, [contactId, userId]);
 
   // Obtener productos de la tienda al abrir el store
   useEffect(() => {
     if (showStore) {
-      fetch("/api/products").then(res => res.json()).then(setProducts);
+      fetch("/api/products", { headers: getAuthHeaders() }).then(res => res.json()).then(setProducts);
     }
   }, [showStore]);
 
@@ -116,7 +127,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
             // Reporte automático al admin
             await fetch("/api/reports", {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: { "Content-Type": "application/json", ...getAuthHeaders() },
               body: JSON.stringify({
                 usuario: `ID ${userId}`,
                 motivo: `Infracción por voz: ${result.reason} en videollamada con usuario ${contact?.nombre || contactId}`,
@@ -155,10 +166,11 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   const handleSaveNote = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    const method = noteId ? "PATCH" : "POST";
     await fetch(`/api/notes`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: userId, contactId, content: note })
+      method,
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify({ id: noteId ?? undefined, userId: userId, contactId, content: note })
     });
     setSaving(false);
   };
@@ -170,7 +182,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
     // Actualización de tokens en backend
     await fetch(`/api/users/${userId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
       body: JSON.stringify({ tokens: (tokens !== null ? tokens - TOKEN_COST_PER_2MIN : 0) })
     });
   };
@@ -182,7 +194,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
     // Llamar al endpoint de misión
     const res = await fetch("/api/video-call/end", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
       body: JSON.stringify({ userId: userId, contactId })
     });
     const data = await res.json();
@@ -202,7 +214,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
     // Actualización de tokens en backend
     await fetch(`/api/users/${userId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
       body: JSON.stringify({ tokens: (tokens !== null ? tokens - product.price : 0) })
     });
     // (Opcional: simular registro de compra en purchases.json)
@@ -220,7 +232,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
     // Llamar al endpoint de misión
     const res = await fetch("/api/video-call/play-game", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
       body: JSON.stringify({ userId: userId, contactId })
     });
     const data = await res.json();
@@ -306,7 +318,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
             </div>
           </div>
         )}
-        {/* Mock video */}
+        {/* Video preview */}
         <div className="relative w-full flex justify-center items-center mb-4">
           {/* Video del otro usuario con blur */}
           <div className="w-64 h-64 bg-accent-400 rounded-xl flex items-center justify-center overflow-hidden relative">

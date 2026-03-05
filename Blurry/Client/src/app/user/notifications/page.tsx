@@ -25,16 +25,26 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
   useEffect(() => {
     if (notifications.length > 0) {
       setLocalNotifications(notifications);
-    } else {
-      // Mock data for UI testing if no backend
-      setLocalNotifications([
-        { id: 1, text: "Has recibido 50 Nexus Tokens.", type: "recompensa", timestamp: new Date().toISOString(), read: false },
-        { id: 2, text: "Tu racha ha subido a Nivel 5.", type: "actividad", timestamp: new Date(Date.now() - 3600000).toISOString(), read: false },
-        { id: 3, text: "Mantenimiento programado a las 00:00 UTC.", type: "sistema", timestamp: new Date(Date.now() - 7200000).toISOString(), read: true },
-        { id: 4, text: "Intento de login fallido en tu cuenta.", type: "alerta", timestamp: new Date(Date.now() - 86400000).toISOString(), read: true },
-      ]);
+      return;
     }
-  }, [notifications]);
+
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    fetch(`/api/notifications?userId=${encodeURIComponent(String(userId))}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Error ${res.status} cargando notificaciones`);
+        }
+        return res.json();
+      })
+      .then((data: unknown) => {
+        setLocalNotifications(Array.isArray(data) ? (data as Notification[]) : []);
+      })
+      .catch(() => {
+        setLocalNotifications([]);
+      });
+  }, [notifications, userId]);
 
   const handleMarkRead = async (id: number) => {
     try {
@@ -46,7 +56,7 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
           : { "Content-Type": "application/json" },
         body: JSON.stringify({ id, read: true })
       });
-    } catch (e) { console.error("Mock: Marked as read"); }
+    } catch {}
     setLocalNotifications((n: Notification[]) => n.map((notif: Notification) => 
       notif.id === id ? { ...notif, read: true } : notif
     ));
@@ -66,7 +76,7 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
           : { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
-    } catch (e) { console.error("Mock: Deleted"); }
+    } catch {}
     setLocalNotifications((n: Notification[]) => n.filter((notif: Notification) => notif.id !== id));
   };
 

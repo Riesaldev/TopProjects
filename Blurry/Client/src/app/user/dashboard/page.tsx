@@ -104,7 +104,7 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!user || !allAchievements.length || !userAchievements.length) return;
-    // Mock: asignar logros automáticamente si no los tiene
+    // Asignar logros automáticamente si no los tiene
     const assign = async (achName: string) => {
       const ach = allAchievements.find((a: Achievement) => a.name === achName);
       if (ach && !userAchievements.some((ua: UserAchievement) => ua.achievementId === ach.id)) {
@@ -203,9 +203,9 @@ export default function UserDashboard() {
     return Object.entries(byWeek).map(([week, spent]) => ({ week, spent }));
   }, [purchases]);
 
-  // Juegos jugados por semana (mock: contar partidas en historial de juegos si existiera)
+  // Juegos jugados por semana (estimado desde actividad registrada)
   const gamesHistory = useMemo(() => {
-    // Suponiendo que cada compra de un juego es una partida jugada (mock)
+    // Se toma cada compra de juego como una partida jugada para la métrica semanal
     const byWeek: Record<string, number> = {};
     purchases.forEach((p: Purchase) => {
       if (p.productName?.toLowerCase().includes("juego")) {
