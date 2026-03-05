@@ -7,6 +7,7 @@ function normalizeGame(game: unknown) {
     id: normalizedGame.id,
     name: normalizedGame.name,
     description: normalizedGame.description,
+    category: normalizedGame.category,
     imageUrl: normalizedGame.image_url ?? normalizedGame.imageUrl,
   };
 }

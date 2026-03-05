@@ -11,6 +11,9 @@ export class Game {
   @Column('text')
   description: string;
 
+  @Column({ default: 'game' })
+  category: string;
+
   @Column({ nullable: true })
   image_url: string;
 }

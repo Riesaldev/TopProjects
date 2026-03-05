@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 
 export class CreateGameDto {
   @IsString()
@@ -6,6 +6,11 @@ export class CreateGameDto {
 
   @IsString()
   description: string;
+
+  @IsOptional()
+  @IsString()
+  @IsIn(['game', 'test'])
+  category?: string;
 
   @IsOptional()
   @IsString()

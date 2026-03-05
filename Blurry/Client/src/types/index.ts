@@ -103,6 +103,7 @@ export interface Game {
   id: number | string;
   name: string;
   description: string;
+  category?: 'game' | 'test' | string;
   imageUrl?: string;
 }
 

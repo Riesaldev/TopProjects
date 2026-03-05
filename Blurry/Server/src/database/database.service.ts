@@ -10,6 +10,9 @@ export class DatabaseService implements OnModuleInit {
   async onModuleInit() {
     // Verificar si las tablas existen antes de crearlas
     await this.createTablesIfNotExist();
+    await this.ensureRuntimeSchemaAdjustments();
+    await this.seedGamesCatalogIfEmpty();
+    await this.seedProductsCatalogIfEmpty();
   }
 
   private async createTablesIfNotExist() {
@@ -110,10 +113,24 @@ export class DatabaseService implements OnModuleInit {
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
+            category VARCHAR(32) NOT NULL DEFAULT 'game',
             image_url VARCHAR(255) NULL
           );
         `);
         console.log('Tabla games creada exitosamente');
+      }
+
+      const productsTableExists = await this.tableExists('products');
+      if (!productsTableExists) {
+        await this.dataSource.query(`
+          CREATE TABLE products (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            description TEXT NOT NULL,
+            price DECIMAL(10,2) NOT NULL DEFAULT 0
+          );
+        `);
+        console.log('Tabla products creada exitosamente');
       }
 
       const notificationsTableExists = await this.tableExists('notifications');
@@ -233,5 +250,89 @@ export class DatabaseService implements OnModuleInit {
       [process.env.DB_NAME || 'blurry', tableName]
     );
     return result[0].count > 0;
+  }
+
+  private async columnExists(tableName: string, columnName: string): Promise<boolean> {
+    const result = await this.dataSource.query(
+      `SELECT COUNT(*) as count FROM information_schema.columns
+       WHERE table_schema = ? AND table_name = ? AND column_name = ?`,
+      [process.env.DB_NAME || 'blurry', tableName, columnName],
+    );
+    return Number(result?.[0]?.count ?? 0) > 0;
+  }
+
+  private async ensureRuntimeSchemaAdjustments() {
+    try {
+      const gamesExists = await this.tableExists('games');
+      if (gamesExists) {
+        const categoryExists = await this.columnExists('games', 'category');
+        if (!categoryExists) {
+          await this.dataSource.query(
+            `ALTER TABLE games ADD COLUMN category VARCHAR(32) NOT NULL DEFAULT 'game' AFTER description`,
+          );
+          console.log('Columna games.category creada exitosamente');
+        }
+
+        await this.dataSource.query(`
+          UPDATE games
+          SET category = CASE
+            WHEN name IN ('Quien Conoce Mejor a Quien', 'Preguntas Rompehielo', 'Test de Lenguajes del Amor') THEN 'test'
+            ELSE 'game'
+          END
+        `);
+      }
+    } catch (error) {
+      console.error('Error ajustando esquema runtime:', error);
+    }
+  }
+
+  private async seedGamesCatalogIfEmpty() {
+    try {
+      const gamesExists = await this.tableExists('games');
+      if (!gamesExists) return;
+
+      const result = await this.dataSource.query('SELECT COUNT(*) as count FROM games');
+      const count = Number(result?.[0]?.count ?? 0);
+      if (count > 0) return;
+
+      await this.dataSource.query(`
+        INSERT INTO games (name, description, category, image_url)
+        VALUES
+          ('3 en Raya para Parejas', 'Version cooperativa de tres en raya para romper el hielo y hablar entre turnos.', 'game', '/games/tres-en-raya.jpg'),
+          ('Hundir la Flota: Duelo Ligero', 'Mini partida por turnos con preguntas sorpresa cada vez que hay impacto.', 'game', '/games/hundir-la-flota.jpg'),
+          ('Quien Conoce Mejor a Quien', 'Test de 10 preguntas sobre gustos y rutinas para descubrir compatibilidad.', 'test', '/games/conoce-mejor.jpg'),
+          ('Preguntas Rompehielo', 'Cartas de conversacion rapidas para primeras videollamadas.', 'test', '/games/rompehielo.jpg'),
+          ('Test de Lenguajes del Amor', 'Cuestionario corto para entender como cada persona expresa afecto.', 'test', '/games/lenguajes-amor.jpg'),
+          ('Verdad o Reto Suave', 'Retos y preguntas en tono amable para crear confianza sin incomodar.', 'game', '/games/verdad-reto.jpg')
+      `);
+
+      console.log('Catalogo inicial de games/tests sembrado exitosamente');
+    } catch (error) {
+      console.error('Error sembrando catalogo de games:', error);
+    }
+  }
+
+  private async seedProductsCatalogIfEmpty() {
+    try {
+      const productsExists = await this.tableExists('products');
+      if (!productsExists) return;
+
+      const result = await this.dataSource.query('SELECT COUNT(*) as count FROM products');
+      const count = Number(result?.[0]?.count ?? 0);
+      if (count > 0) return;
+
+      await this.dataSource.query(`
+        INSERT INTO products (name, description, price)
+        VALUES
+          ('Pack Rompehielo Esencial', 'Acceso a preguntas guiadas para primeras conversaciones y dinamicas de confianza.', 4.99),
+          ('Pack Noche de Juegos', 'Incluye juegos para pareja como 3 en raya, retos y duelos ligeros durante videollamada.', 7.99),
+          ('Pack Test de Compatibilidad', 'Coleccion de tests para conocerse mejor: valores, comunicacion y estilo de relacion.', 9.99),
+          ('Pack Premium Date Night', 'Combina juegos, tests y bonus de dinamicas para una cita virtual mas divertida.', 14.99)
+      `);
+
+      console.log('Catalogo inicial de products sembrado exitosamente');
+    } catch (error) {
+      console.error('Error sembrando catalogo de products:', error);
+    }
   }
 }
