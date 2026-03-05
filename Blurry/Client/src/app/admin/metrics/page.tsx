@@ -18,6 +18,20 @@ interface DetailedMetric {
   value: string;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
+function pickDateLike(record: Record<string, unknown>): string | Date | undefined {
+  const created = record.created_at;
+  if (typeof created === "string" || created instanceof Date) return created;
+
+  const fallback = record.fecha;
+  if (typeof fallback === "string" || fallback instanceof Date) return fallback;
+
+  return undefined;
+}
+
 export default function AdminMetricsPage() {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -53,26 +67,26 @@ export default function AdminMetricsPage() {
           activityRes.json().catch(() => []),
         ]);
 
-        const users = Array.isArray(usersRaw) ? usersRaw : [];
-        const reports = Array.isArray(reportsRaw) ? reportsRaw : [];
-        const tokens = Array.isArray(tokensRaw) ? tokensRaw : [];
-        const activities = Array.isArray(activityRaw) ? activityRaw : [];
+        const users = Array.isArray(usersRaw) ? usersRaw.map(asRecord) : [];
+        const reports = Array.isArray(reportsRaw) ? reportsRaw.map(asRecord) : [];
+        const tokens = Array.isArray(tokensRaw) ? tokensRaw.map(asRecord) : [];
+        const activities = Array.isArray(activityRaw) ? activityRaw.map(asRecord) : [];
 
-        const activeUsers = users.filter((u: any) => {
-          const status = String(u?.estado || u?.status || "Activo").toLowerCase();
+        const activeUsers = users.filter((u) => {
+          const status = String(u.estado ?? u.status ?? "Activo").toLowerCase();
           return !status.includes("suspend");
         }).length;
 
-        const reportsThisMonth = reports.filter((r: any) => isCurrentMonth(r?.created_at || r?.fecha)).length;
-        const resolvedReports = reports.filter((r: any) => {
-          const status = String(r?.status || r?.estado || "").toLowerCase();
+        const reportsThisMonth = reports.filter((r) => isCurrentMonth(pickDateLike(r))).length;
+        const resolvedReports = reports.filter((r) => {
+          const status = String(r.status ?? r.estado ?? "").toLowerCase();
           return status.includes("resuelt") || status.includes("resolved");
         }).length;
 
-        const totalTokenVolume = tokens.reduce((acc: number, t: any) => acc + Math.abs(Number(t?.amount || 0)), 0);
+        const totalTokenVolume = tokens.reduce((acc: number, t) => acc + Math.abs(Number(t.amount ?? 0)), 0);
         const averageTokenMovement = tokens.length > 0 ? totalTokenVolume / tokens.length : 0;
 
-        const activityThisMonth = activities.filter((a: any) => isCurrentMonth(a?.created_at || a?.fecha)).length;
+        const activityThisMonth = activities.filter((a) => isCurrentMonth(pickDateLike(a))).length;
 
         setMainMetrics([
           {
@@ -113,7 +127,7 @@ export default function AdminMetricsPage() {
           { label: "Total de Usuarios", value: users.length.toLocaleString() },
           {
             label: "Usuarios Nuevos (Este Mes)",
-            value: users.filter((u: any) => isCurrentMonth(u?.created_at || u?.fechaRegistro)).length.toLocaleString(),
+            value: users.filter((u) => isCurrentMonth((u.created_at as string | Date | undefined) ?? (u.fechaRegistro as string | Date | undefined))).length.toLocaleString(),
           },
           { label: "Reportes Totales", value: reports.length.toLocaleString() },
           { label: "Logs de Actividad", value: activities.length.toLocaleString() },

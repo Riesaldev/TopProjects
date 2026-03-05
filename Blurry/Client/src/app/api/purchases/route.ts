@@ -2,6 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
+function normalizePurchase(raw: unknown) {
+  const purchase = (raw ?? {}) as Record<string, unknown>;
+
+  return {
+    id: Number(purchase.id ?? 0),
+    userId: Number(purchase.user_id ?? purchase.userId ?? 0),
+    productName: String(purchase.product_name ?? purchase.productName ?? ""),
+    price: Number(purchase.price ?? 0),
+    quantity: Number(purchase.quantity ?? 1),
+    total: Number(purchase.total ?? purchase.price ?? 0),
+    status: String(purchase.status ?? "pending"),
+    date: String(purchase.created_at ?? purchase.date ?? ""),
+  };
+}
+
 function authHeaders(req: NextRequest): Record<string, string> {
   return {
     "Content-Type": "application/json",
@@ -20,7 +35,12 @@ export async function GET(req: NextRequest) {
   });
 
   const data = await res.json().catch(() => []);
-  return NextResponse.json(data, { status: res.status });
+
+  if (Array.isArray(data)) {
+    return NextResponse.json(data.map(normalizePurchase), { status: res.status });
+  }
+
+  return NextResponse.json(normalizePurchase(data), { status: res.status });
 }
 
 export async function POST(req: NextRequest) {
@@ -32,7 +52,7 @@ export async function POST(req: NextRequest) {
   });
 
   const data = await res.json().catch(() => ({}));
-  return NextResponse.json(data, { status: res.status });
+  return NextResponse.json(normalizePurchase(data), { status: res.status });
 }
 
 export async function PATCH(req: NextRequest) {
@@ -48,7 +68,7 @@ export async function PATCH(req: NextRequest) {
   });
 
   const data = await res.json().catch(() => ({}));
-  return NextResponse.json(data, { status: res.status });
+  return NextResponse.json(normalizePurchase(data), { status: res.status });
 }
 
 export async function DELETE(req: NextRequest) {
