@@ -1,70 +1,63 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { User } from "@/types";
 
-const USERS_PATH = path.join(process.cwd(), "data", "users.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-export async function GET(req: NextRequest) {
-  try {
-    const url = new URL(req.url!);
-    const userId = url.searchParams.get("userId");
-    const data = await fs.readFile(USERS_PATH, "utf-8");
-    const users: User[] = JSON.parse(data);
-    
-    if (userId) {
-      const user = users.find((u: User) => String(u.id) === String(userId));
-      if (!user) {
-        return NextResponse.json(
-          { message: "Usuario no encontrado" },
-          { status: 404 }
-        );
-      }
-      return NextResponse.json(user);
-    }
-    
-    return NextResponse.json(users);
-  } catch (error) {
-    console.error("Error en GET /api/user:", error);
-    return NextResponse.json(
-      { message: "Error al obtener usuario" },
-      { status: 500 }
-    );
-  }
+function normalizeUser(user: any) {
+  if (!user || typeof user !== "object") return user;
+  return {
+    ...user,
+    nombre: user.display_name ?? user.nombre,
+    codigoPostal: user.location ?? user.codigoPostal,
+    actividad: user.is_suspended ? "Baja" : user.actividad ?? "Media",
+    estado: user.is_suspended ? "Suspendido" : user.estado ?? "Activo",
+  };
 }
 
-export async function PATCH(req: NextRequest) {
-  try {
-    const updates = await req.json();
-    const userId = updates.id;
-    
-    if (!userId) {
-      return NextResponse.json(
-        { message: "ID de usuario requerido" },
-        { status: 400 }
-      );
-    }
-    
-    const data = await fs.readFile(USERS_PATH, "utf-8");
-    const users: User[] = JSON.parse(data);
-    const userIndex = users.findIndex((u: User) => String(u.id) === String(userId));
-    
-    if (userIndex === -1) {
-      return NextResponse.json(
-        { message: "Usuario no encontrado" },
-        { status: 404 }
-      );
-    }
-    
-    users[userIndex] = { ...users[userIndex], ...updates };
-    await fs.writeFile(USERS_PATH, JSON.stringify(users, null, 2));
-    
-    return NextResponse.json(users[userIndex]);
-  } catch (error) {
-    console.error("Error en PATCH /api/user:", error);
-    return NextResponse.json(
-      { message: "Error al actualizar usuario" },
-      { status: 500 }
-    );
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const userId = url.searchParams.get("userId");
+
+  if (!userId) {
+    return NextResponse.json({ message: "userId es requerido" }, { status: 400 });
   }
+
+  const res = await fetch(`${BACKEND_URL}/users/${userId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(normalizeUser(data), { status: res.status });
+}
+
+// Legacy compatibility for callers sending { id, ...updates }.
+export async function PATCH(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ message: "ID de usuario requerido" }, { status: 400 });
+  }
+
+  const { id, ...updates } = payload;
+  const normalized = {
+    ...updates,
+    display_name: updates.display_name ?? updates.nombre,
+    gender:
+      updates.gender ??
+      (updates.genero === "Masculino" ? "male" : updates.genero === "Femenino" ? "female" : undefined),
+    location: updates.location ?? updates.codigoPostal,
+  };
+
+  const res = await fetch(`${BACKEND_URL}/users/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+    body: JSON.stringify(normalized),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(normalizeUser(data), { status: res.status });
 }

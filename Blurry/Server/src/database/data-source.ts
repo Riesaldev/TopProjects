@@ -15,6 +15,14 @@ import { Note } from './entities/note.entity';
 import { AgendaEvent } from './entities/agenda-event.entity';
 import { ServiceStatus } from './entities/service-status.entity';
 import { Sanction } from './entities/sanction.entity';
+import { Game } from './entities/game.entity';
+import { Product } from './entities/product.entity';
+import { ChatMessage } from './entities/chat-message.entity';
+import { Achievement } from './entities/achievement.entity';
+import { UserAchievement } from './entities/user-achievement.entity';
+import { Mission } from './entities/mission.entity';
+import { UserMission } from './entities/user-mission.entity';
+import { Streak } from './entities/streak.entity';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -43,6 +51,14 @@ export const AppDataSource = new DataSource({
     AgendaEvent,
     ServiceStatus,
     Sanction,
+    Game,
+    Product,
+    ChatMessage,
+    Achievement,
+    UserAchievement,
+    Mission,
+    UserMission,
+    Streak,
   ],
   synchronize: false, // Desactivamos la sincronización automática
   logging: false,

@@ -70,12 +70,14 @@ export default function UserDashboard() {
 
   useEffect(() => {
     if (!userId) return; // No hacer llamadas si no hay userId
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
     
     Promise.all([
-      fetch(`/api/user?userId=${userId}`).then(res => res.json()).catch(() => null),
-      fetch(`/api/purchases?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/user?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).catch(() => null),
+      fetch(`/api/purchases?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).catch(() => []),
       fetch(`/api/agenda?userId=${userId}`).then(res => res.json()).catch(() => []),
-      fetch(`/api/notifications?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/notifications?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).catch(() => []),
       fetch(`/api/notes?userId=${userId}`).then(res => res.json()).catch(() => []),
       fetch(`/api/games`).then(res => res.json()).catch(() => []),
       fetch(`/api/chats?userId=${userId}`).then(res => res.json()).catch(() => []),

@@ -38,9 +38,12 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
 
   const handleMarkRead = async (id: number) => {
     try {
+      const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
       await fetch("/api/notifications", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: token
+          ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+          : { "Content-Type": "application/json" },
         body: JSON.stringify({ id, read: true })
       });
     } catch (e) { console.error("Mock: Marked as read"); }
@@ -55,9 +58,12 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
 
   const handleDelete = async (id: number) => {
     try {
+      const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
       await fetch("/api/notifications", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: token
+          ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
+          : { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
     } catch (e) { console.error("Mock: Deleted"); }

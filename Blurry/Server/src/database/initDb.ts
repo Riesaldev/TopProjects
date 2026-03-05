@@ -17,6 +17,14 @@ import { Note } from './entities/note.entity';
 import { AgendaEvent } from './entities/agenda-event.entity';
 import { ServiceStatus } from './entities/service-status.entity';
 import { Sanction } from './entities/sanction.entity';
+import { Game } from './entities/game.entity';
+import { Product } from './entities/product.entity';
+import { ChatMessage } from './entities/chat-message.entity';
+import { Achievement } from './entities/achievement.entity';
+import { UserAchievement } from './entities/user-achievement.entity';
+import { Mission } from './entities/mission.entity';
+import { UserMission } from './entities/user-mission.entity';
+import { Streak } from './entities/streak.entity';
 import * as bcrypt from 'bcryptjs';
 
 // Cargar variables de entorno desde el archivo .env
@@ -107,6 +115,14 @@ export async function initializeDatabase(dataSource: DataSource) {
         AgendaEvent,
         ServiceStatus,
         Sanction,
+        Game,
+        Product,
+        ChatMessage,
+        Achievement,
+        UserAchievement,
+        Mission,
+        UserMission,
+        Streak,
       ],
       synchronize: true, // Solo para crear tablas si no existen
     });

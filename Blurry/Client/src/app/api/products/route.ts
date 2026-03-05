@@ -1,11 +1,6 @@
-import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { NextRequest } from "next/server";
+import { proxyRequest } from "../_proxy";
 
-const filePath = path.join(process.cwd(), "data", "products.json");
-
-export async function GET() {
-  const file = await fs.readFile(filePath, "utf-8");
-  const products = JSON.parse(file);
-  return NextResponse.json(products);
-} 
+export async function GET(req: NextRequest) {
+  return proxyRequest(req, "/products");
+}

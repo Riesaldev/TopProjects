@@ -1,74 +1,104 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { Notification } from "@/types";
+import { proxyRequest } from "../_proxy";
 
-const NOTIFICATIONS_PATH = path.join(process.cwd(), "data", "notifications.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
+
+function normalizeNotification(n: any) {
+  return {
+    id: n?.id,
+    userId: n?.user_id,
+    text: n?.message || n?.text || "",
+    type: n?.type,
+    timestamp: n?.created_at || n?.timestamp,
+    read: n?.read,
+  };
+}
 
 export async function GET(req: NextRequest) {
-  try {
-    const url = new URL(req.url!);
-    const userId = url.searchParams.get("userId");
-    const data = await fs.readFile(NOTIFICATIONS_PATH, "utf-8");
-    let notifications: Notification[] = JSON.parse(data);
-    
-    if (userId) {
-      notifications = notifications.filter((n: Notification) => String(n.userId) === String(userId));
-    }
-    
-    return NextResponse.json(notifications);
-  } catch (error) {
-    console.error("Error en GET /api/notifications:", error);
-    return NextResponse.json([]);
-  }
+  const url = new URL(req.url);
+  const userId = url.searchParams.get("userId");
+
+  const res = await fetch(`${BACKEND_URL}/notifications`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+  });
+
+  const data = await res.json().catch(() => []);
+  const normalized = Array.isArray(data) ? data.map(normalizeNotification) : [];
+  const filtered = userId
+    ? normalized.filter((n: any) => String(n.userId) === String(userId))
+    : normalized;
+
+  return NextResponse.json(filtered, { status: res.status });
 }
 
 export async function POST(req: NextRequest) {
-  try {
-    const newNotification = await req.json();
-    const data = await fs.readFile(NOTIFICATIONS_PATH, "utf-8");
-    const notifications: Notification[] = JSON.parse(data);
-    
-    newNotification.id = notifications.length ? Math.max(...notifications.map((n: Notification) => n.id)) + 1 : 1;
-    newNotification.date = newNotification.date || new Date().toISOString();
-    newNotification.read = false;
-    
-    notifications.push(newNotification);
-    await fs.writeFile(NOTIFICATIONS_PATH, JSON.stringify(notifications, null, 2));
-    
-    return NextResponse.json(newNotification);
-  } catch (error) {
-    console.error("Error en POST /api/notifications:", error);
-    return NextResponse.json(
-      { message: "Error al crear notificación" },
-      { status: 500 }
-    );
-  }
+  const payload = await req.json().catch(() => null);
+  const normalized = payload
+    ? {
+        user_id: payload.userId ?? payload.user_id,
+        message: payload.message ?? payload.text,
+        type: payload.type,
+      }
+    : payload;
+
+  const res = await fetch(`${BACKEND_URL}/notifications`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+    body: JSON.stringify(normalized),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data?.id ? normalizeNotification(data) : data, { status: res.status });
 }
 
+// Legacy compatibility for callers that send { id, ...updates } to /api/notifications.
 export async function PATCH(req: NextRequest) {
-  try {
-    const { id, ...updates } = await req.json();
-    const data = await fs.readFile(NOTIFICATIONS_PATH, "utf-8");
-    let notifications: Notification[] = JSON.parse(data);
-    
-    const notificationIndex = notifications.findIndex((n: Notification) => n.id === id);
-    if (notificationIndex === -1) {
-      return NextResponse.json(
-        { message: "Notificación no encontrada" },
-        { status: 404 }
-      );
-    }
-    
-    notifications[notificationIndex] = { ...notifications[notificationIndex], ...updates };
-    await fs.writeFile(NOTIFICATIONS_PATH, JSON.stringify(notifications, null, 2));
-    
-    return NextResponse.json(notifications[notificationIndex]);
-  } catch (error) {
-    console.error("Error en PATCH /api/notifications:", error);
-    return NextResponse.json(
-      { message: "Error al actualizar notificación" },
-      { status: 500 }
-    );
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ message: "id es requerido" }, { status: 400 });
   }
+
+  const { id, ...updates } = payload;
+  const normalized = {
+    ...updates,
+    user_id: updates.userId ?? updates.user_id,
+    message: updates.message ?? updates.text,
+  };
+
+  const res = await fetch(`${BACKEND_URL}/notifications/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+    body: JSON.stringify(normalized),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data?.id ? normalizeNotification(data) : data, { status: res.status });
+}
+
+// Legacy compatibility for callers that send { id } to /api/notifications.
+export async function DELETE(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ message: "id es requerido" }, { status: 400 });
+  }
+
+  const res = await fetch(`${BACKEND_URL}/notifications/${payload.id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+  });
+
+  const data = await res.json().catch(() => ({ success: res.ok }));
+  return NextResponse.json(data, { status: res.status });
 }
