@@ -284,6 +284,8 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
                         notification={n}
                         onMarkRead={() => handleMarkRead(n.id)}
                         onDelete={() => handleDelete(n.id)}
+                        markReadLoading={markReadInFlightRef.current.has(n.id)}
+                        deleteLoading={deleteInFlightRef.current.has(n.id)}
                       />
                     ))}
                   </AnimatePresence>

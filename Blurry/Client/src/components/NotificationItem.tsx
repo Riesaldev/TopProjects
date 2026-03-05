@@ -14,9 +14,17 @@ type Props = {
   notification: Notification;
   onMarkRead?: () => void;
   onDelete?: () => void;
+  markReadLoading?: boolean;
+  deleteLoading?: boolean;
 };
 
-export default function NotificationItem({ notification, onMarkRead, onDelete }: Props) {
+export default function NotificationItem({
+  notification,
+  onMarkRead,
+  onDelete,
+  markReadLoading = false,
+  deleteLoading = false,
+}: Props) {
   let colorClass = "bg-primary-500/10 border-primary-500/30 text-primary-400";
   let Icon = Bell;
 
@@ -64,7 +72,8 @@ export default function NotificationItem({ notification, onMarkRead, onDelete }:
             <button 
               onClick={onMarkRead} 
               title="Marcar como leída"
-              className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:bg-primary-500/20 hover:border-primary-500/50 hover:text-primary-400 transition-all text-zinc-400"
+              disabled={markReadLoading}
+              className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:bg-primary-500/20 hover:border-primary-500/50 hover:text-primary-400 transition-all text-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Check className="w-4 h-4" />
             </button>
@@ -73,7 +82,8 @@ export default function NotificationItem({ notification, onMarkRead, onDelete }:
             <button 
               onClick={onDelete} 
               title="Eliminar"
-              className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all text-zinc-400"
+              disabled={deleteLoading}
+              className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all text-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <X className="w-4 h-4" />
             </button>
