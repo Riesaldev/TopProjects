@@ -4,6 +4,8 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MatchesModule } from './modules/matches/matches.module';
+import { SettingsModule } from './modules/settings/settings.module';
+import { ActivityLogsModule } from './modules/activity-logs/activity-logs.module';
 import { HttpModule } from '@nestjs/axios';
 import { ChatGateway } from './gateways/chat.gateway';
 
@@ -17,6 +19,8 @@ import { ChatGateway } from './gateways/chat.gateway';
     UsersModule,
     AuthModule,
     MatchesModule,
+    SettingsModule,
+    ActivityLogsModule,
   ],
   providers: [ChatGateway],
 })

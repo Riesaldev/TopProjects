@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Hexagon, ArrowLeft, TerminalSquare } from "lucide-react";
 import Link from "next/link";
 import LoginForm from "@/components/LoginForm";
-import { AuthProvider } from '@/context/AuthContext';
 
 export default function LoginPage() {
   return (
@@ -59,9 +58,7 @@ export default function LoginPage() {
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500 to-transparent opacity-50" />
           
-          <AuthProvider>
-            <LoginForm />
-          </AuthProvider>
+          <LoginForm />
 
           <div className="mt-8 pt-6 border-t border-zinc-800/50 text-center">
             <p className="text-zinc-500 text-sm font-medium">
