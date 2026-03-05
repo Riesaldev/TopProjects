@@ -11,6 +11,19 @@ interface NotesPageProps {
 }
 
 export default function NotesPage({ userId }: Readonly<NotesPageProps>) {       
+  const getAuthHeaders = () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
+  const normalizeContact = (raw: unknown): Contact => {
+    const item = (raw ?? {}) as Record<string, unknown>;
+    return {
+      id: Number(item.id || 0),
+      nombre: String(item.nombre || item.display_name || `Usuario ${item.id ?? ""}`),
+    } as Contact;
+  };
+
   const realtimeContext = useRealtime();
   const notifications = realtimeContext?.notifications || [];
 
@@ -25,28 +38,29 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock Data to verify UI
-    setTimeout(() => {
-      setNotes([
-        { id: 1, contactId: 101, content: "Sujeto reporta interés en arquitectura cyberpunk. Preguntar por proyecto Orion.", date: new Date().toISOString() },
-        { id: 2, contactId: 102, content: "Asegurarse de revisar la última partida de Duelo de Código.", date: new Date(Date.now() - 86400000).toISOString() },
-      ]);
-      setContacts([
-        { id: 101, nombre: "CyberNinja" } as Contact,
-        { id: 102, nombre: "GlitchMaster" } as Contact
-      ]);
-      setLoading(false);
-    }, 800);
-    
-    // API real (Comentada y silenciosa en error para no romper UI en dev):
-    Promise.all([
-      fetch(`/api/notes?userId=${userId}`).then(res => res.ok ? res.json() : []),
-      fetch(`/api/users`).then(res => res.ok ? res.json() : [])
-    ]).then(([notesData, usersData]) => {
-      if(notesData && notesData.length > 0) setNotes(notesData);
-      if(usersData && usersData.length > 0) setContacts(usersData);
-    }).catch(e => console.error("Using mock data"));
-  }, []);
+    const loadNotes = async () => {
+      setLoading(true);
+      try {
+        const [notesRes, usersRes] = await Promise.all([
+          fetch(`/api/notes?userId=${userId}`, { headers: getAuthHeaders() }),
+          fetch(`/api/users`, { headers: getAuthHeaders() }),
+        ]);
+
+        const notesData = await notesRes.json().catch(() => []);
+        const usersData = await usersRes.json().catch(() => []);
+
+        setNotes(Array.isArray(notesData) ? notesData : []);
+        setContacts(Array.isArray(usersData) ? usersData.map(normalizeContact) : []);
+      } catch {
+        setNotes([]);
+        setContacts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadNotes();
+  }, [userId]);
 
   const getContactName = (contactId: string | number | undefined) => {
     if (!contactId) return "Sujeto Desconocido";
@@ -64,11 +78,14 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
 
     try {
       await fetch(`/api/notes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, contactId, content: editContent })
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({ id, userId, contactId, content: editContent })
       });
-    } catch(e) {}
+    } catch {}
     
     setNotes(n => n.map(note => note.id === id ? { ...note, content: editContent } : note));
     setEditingId(null);
@@ -79,10 +96,13 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
     try {
       await fetch(`/api/notes`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
         body: JSON.stringify({ id })
       });
-    } catch(e) {}
+    } catch {}
     
     setNotes(n => n.filter(note => note.id !== id));
   };

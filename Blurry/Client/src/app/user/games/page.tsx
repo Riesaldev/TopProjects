@@ -32,22 +32,22 @@ export default function GamesPage() {
   }, [gameInvite]);
 
   useEffect(() => {
-    // Fetch mocks para evitar errores si no hay backend activo
-    setTimeout(() => {
-      setGames([
-        { id: "1", name: "Rivalidad Rápida", description: "Encuentra la pareja antes de que acabe el tiempo.", imageUrl: "/globe.svg" },
-        { id: "2", name: "Quiz Neon", description: "Preguntas de cultura pop y tecnología.", imageUrl: "/globe.svg" },
-        { id: "3", name: "Duelo de Código", description: "Encuentra el bug en tiempo real.", imageUrl: "/globe.svg" },
-        { id: "4", name: "Atrapa el Token", description: "Juego de reflejos y velocidad extrema.", imageUrl: "/globe.svg" }
-      ]);
-      
-      setHistory([
-        { id: 1, game: "Rivalidad Rápida", date: "Hace 2h", score: 25, opponent: "CyberNinja", result: "win" },
-        { id: 2, game: "Quiz Neon", date: "Ayer", score: -10, opponent: "GlitchMaster", result: "loss" },
-        { id: 3, game: "Atrapa el Token", date: "Hace 2 días", score: 15, opponent: "ZeroCool", result: "win" }
-      ]);
-      setLoading(false);
-    }, 800);
+    const loadGames = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/games");
+        const data = await res.json().catch(() => []);
+        setGames(Array.isArray(data) ? data : []);
+        setHistory([]);
+      } catch {
+        setGames([]);
+        setHistory([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadGames();
   }, []);
 
   const handleGameSelect = (id: string) => {

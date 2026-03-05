@@ -8,6 +8,22 @@ import { Calendar as CalendarIcon, Filter, Clock, MapPin, Users, Video, Search, 
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {  
+  type ContactWithMeta = Contact & { distance?: number };
+
+  const getAuthHeaders = () => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
+  const normalizeContact = (raw: unknown): ContactWithMeta => {
+    const item = (raw ?? {}) as Record<string, unknown>;
+    return {
+      id: Number(item.id || 0),
+      nombre: String(item.nombre || item.display_name || `Usuario ${item.id ?? ""}`),
+      distance: typeof item.distance === "number" ? item.distance : undefined,
+    } as ContactWithMeta;
+  };
+
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);       
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);  
@@ -26,29 +42,47 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
   }, [notifications]);
 
   useEffect(() => {
-    // Mock for UI presentation
-    setTimeout(() => {
-      setMyUser({ id: userId, lat: 40.4168, lng: -3.7038 } as any);
-      setContacts([
-        { id: 1, nombre: "CyberNinja", distance: 5 },
-        { id: 2, nombre: "GlitchMaster", distance: 12 },
-        { id: 3, nombre: "ZeroCool", distance: 3 }
-      ] as any);
-      setFilteredContacts([
-        { id: 1, nombre: "CyberNinja", distance: 5 },
-        { id: 2, nombre: "GlitchMaster", distance: 12 },
-        { id: 3, nombre: "ZeroCool", distance: 3 }
-      ] as any);
-      setEvents([
-        { id: 1, title: "Duelo de Código", datetime: new Date(Date.now() + 86400000).toISOString(), contactId: 1, description: "Preparar estrategias para torneo." }
-      ] as any);
-      setLoading(false);
-    }, 800);
+    const loadAgenda = async () => {
+      setLoading(true);
+      try {
+        const [contactsRes, eventsRes] = await Promise.all([
+          fetch("/api/users", { headers: getAuthHeaders() }),
+          fetch(`/api/agenda?userId=${userId}`, { headers: getAuthHeaders() }),
+        ]);
+
+        const contactsData = await contactsRes.json().catch(() => []);
+        const eventsData = await eventsRes.json().catch(() => []);
+
+        const normalizedContacts = Array.isArray(contactsData)
+          ? contactsData.map(normalizeContact).filter((c) => c.id !== userId)
+          : [];
+
+        setContacts(normalizedContacts);
+        setFilteredContacts(normalizedContacts);
+        setEvents(Array.isArray(eventsData) ? eventsData : []);
+        setMyUser({ id: userId } as User);
+      } catch {
+        setContacts([]);
+        setFilteredContacts([]);
+        setEvents([]);
+        showToast("No se pudo cargar la agenda.", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadAgenda();
   }, [userId]);
 
   useEffect(() => {
-    let result = [...contacts];
-    // filter logic here...
+    let result = [...contacts] as ContactWithMeta[];
+    if (filters.actividad) {
+      const q = filters.actividad.toLowerCase();
+      result = result.filter((c) => c.nombre.toLowerCase().includes(q));
+    }
+    if (filters.cercania) {
+      result = result.sort((a, b) => (a.distance ?? Number.MAX_SAFE_INTEGER) - (b.distance ?? Number.MAX_SAFE_INTEGER));
+    }
     setFilteredContacts(result);
   }, [filters, contacts, myUser]);
 
@@ -59,12 +93,34 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
     
     setSaving(true);
     try {
-      // Mock save
-      setEvents(prev => [...prev, { id: Date.now(), ...form, contactId: selectedContact.id } as any]);
+      const res = await fetch("/api/agenda", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({
+          userId,
+          contactId: selectedContact.id,
+          title: form.title,
+          description: form.description,
+          datetime: form.datetime,
+          note: form.note,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status} creando evento`);
+      }
+
+      const created = await res.json().catch(() => null);
+      if (created) {
+        setEvents((prev) => [...prev, created]);
+      }
       showToast("Evento agendado exitosamente.", "success");
       setForm({ title: "", description: "", datetime: "", note: "" });
       setSelectedContact(null);
-    } catch (error) {
+    } catch {
       showToast("Error al sincronizar evento", "error");
     } finally {
       setSaving(false);
