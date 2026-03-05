@@ -23,9 +23,15 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
   useEffect(() => {
+    let cancelled = false;
+
     if (notifications.length > 0) {
-      setLocalNotifications(notifications);
-      return;
+      if (!cancelled) {
+        setLocalNotifications(notifications);
+      }
+      return () => {
+        cancelled = true;
+      };
     }
 
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
@@ -39,27 +45,40 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
         return res.json();
       })
       .then((data: unknown) => {
-        setLocalNotifications(Array.isArray(data) ? (data as Notification[]) : []);
+        if (!cancelled) {
+          setLocalNotifications(Array.isArray(data) ? (data as Notification[]) : []);
+        }
       })
       .catch(() => {
-        setLocalNotifications([]);
+        if (!cancelled) {
+          setLocalNotifications([]);
+        }
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [notifications, userId]);
 
   const handleMarkRead = async (id: number) => {
     try {
       const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-      await fetch("/api/notifications", {
+      const res = await fetch("/api/notifications", {
         method: "PATCH",
         headers: token
           ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
           : { "Content-Type": "application/json" },
         body: JSON.stringify({ id, read: true })
       });
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status} actualizando notificacion`);
+      }
+
+      setLocalNotifications((n: Notification[]) => n.map((notif: Notification) => 
+        notif.id === id ? { ...notif, read: true } : notif
+      ));
     } catch {}
-    setLocalNotifications((n: Notification[]) => n.map((notif: Notification) => 
-      notif.id === id ? { ...notif, read: true } : notif
-    ));
   };
 
   const handleMarkAllRead = () => {
@@ -69,15 +88,20 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
   const handleDelete = async (id: number) => {
     try {
       const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-      await fetch("/api/notifications", {
+      const res = await fetch("/api/notifications", {
         method: "DELETE",
         headers: token
           ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
           : { "Content-Type": "application/json" },
         body: JSON.stringify({ id })
       });
+
+      if (!res.ok) {
+        throw new Error(`Error ${res.status} eliminando notificacion`);
+      }
+
+      setLocalNotifications((n: Notification[]) => n.filter((notif: Notification) => notif.id !== id));
     } catch {}
-    setLocalNotifications((n: Notification[]) => n.filter((notif: Notification) => notif.id !== id));
   };
 
   const filteredNotifications = activeFilter === "all" 

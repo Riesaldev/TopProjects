@@ -44,11 +44,14 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
   };
 
   useEffect(() => {
+    let cancelled = false;
     const controller = new AbortController();
 
     const loadReports = async () => {
       try {
-        setLoading(true);
+        if (!cancelled) {
+          setLoading(true);
+        }
         const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
         const res = await fetch("/api/reports", {
           signal: controller.signal,
@@ -66,33 +69,46 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
           );
         });
 
-        setReports(myReports);
+        if (!cancelled) {
+          setReports(myReports);
+        }
 
-        myReports.forEach((r: Report) => {
-          if (
-            prevStatesRef.current[r.id] &&
-            prevStatesRef.current[r.id] !== r.estado &&
-            r.estado.toLowerCase().includes("resuelt")
-          ) {
-            showToast(`Tu reporte '${r.motivo}' ha sido resuelto.`, "success");
-          }
-        });
+        if (!cancelled) {
+          myReports.forEach((r: Report) => {
+            if (
+              prevStatesRef.current[r.id] &&
+              prevStatesRef.current[r.id] !== r.estado &&
+              r.estado.toLowerCase().includes("resuelt")
+            ) {
+              showToast(`Tu reporte '${r.motivo}' ha sido resuelto.`, "success");
+            }
+          });
+        }
 
-        prevStatesRef.current = Object.fromEntries(
-          myReports.map((r: Report) => [r.id, r.estado]),
-        );
+        if (!cancelled) {
+          prevStatesRef.current = Object.fromEntries(
+            myReports.map((r: Report) => [r.id, r.estado]),
+          );
+        }
       } catch (error) {
         if (!(error instanceof DOMException && error.name === "AbortError")) {
           console.error("Error cargando reportes:", error);
-          setReports([]);
+          if (!cancelled) {
+            setReports([]);
+          }
         }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
     loadReports();
-    return () => controller.abort();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [showToast, userId]);
 
   return (

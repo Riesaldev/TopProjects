@@ -42,8 +42,12 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
   }, [notifications]);
 
   useEffect(() => {
+    let cancelled = false;
+
     const loadAgenda = async () => {
-      setLoading(true);
+      if (!cancelled) {
+        setLoading(true);
+      }
       try {
         const [contactsRes, eventsRes] = await Promise.all([
           fetch("/api/users", { headers: getAuthHeaders() }),
@@ -57,21 +61,30 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
           ? contactsData.map(normalizeContact).filter((c) => c.id !== userId)
           : [];
 
-        setContacts(normalizedContacts);
-        setFilteredContacts(normalizedContacts);
-        setEvents(Array.isArray(eventsData) ? eventsData : []);
-        setMyUser({ id: userId } as User);
+        if (!cancelled) {
+          setContacts(normalizedContacts);
+          setFilteredContacts(normalizedContacts);
+          setEvents(Array.isArray(eventsData) ? eventsData : []);
+          setMyUser({ id: userId } as User);
+        }
       } catch {
-        setContacts([]);
-        setFilteredContacts([]);
-        setEvents([]);
-        showToast("No se pudo cargar la agenda.", "error");
+        if (!cancelled) {
+          setContacts([]);
+          setFilteredContacts([]);
+          setEvents([]);
+          showToast("No se pudo cargar la agenda.", "error");
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
 
     loadAgenda();
+    return () => {
+      cancelled = true;
+    };
   }, [userId]);
 
   useEffect(() => {

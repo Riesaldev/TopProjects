@@ -94,32 +94,93 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
 
   // Obtener datos de contacto, nota y juegos
   useEffect(() => {
-    if (!contactId) return;
+    let cancelled = false;
+
+    if (!contactId) {
+      if (!cancelled) {
+        setContact(null);
+        setNote("");
+        setNoteId(null);
+        setAgendaNote("");
+      }
+      return () => {
+        cancelled = true;
+      };
+    }
     const authHeaders = getAuthHeaders();
 
-    fetch(`/api/users`, { headers: authHeaders }).then(res => res.json()).then((users: Contact[]) => {
-      const c = users.find((u: Contact) => String(u.id) === String(contactId));
-      setContact(c || null);
-    });
-    fetch(`/api/notes?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).then((notes: Note[]) => {
-      const n = notes.find((n: Note) => String(n.contactId) === String(contactId));
-      if (n) {
-        setNote(n.content);
-        setNoteId(Number(n.id));
-      } else {
-        setNoteId(null);
-      }
-    });
+    fetch(`/api/users`, { headers: authHeaders })
+      .then(res => res.json())
+      .then((users: unknown) => {
+        const usersList = Array.isArray(users) ? (users as Contact[]) : [];
+        const c = usersList.find((u: Contact) => String(u.id) === String(contactId));
+        if (!cancelled) {
+          setContact(c || null);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setContact(null);
+        }
+      });
+    fetch(`/api/notes?userId=${userId}`, { headers: authHeaders })
+      .then(res => res.json())
+      .then((notes: unknown) => {
+        const notesList = Array.isArray(notes) ? (notes as Note[]) : [];
+        const n = notesList.find((noteItem: Note) => String(noteItem.contactId) === String(contactId));
+        if (n) {
+          if (!cancelled) {
+            setNote(n.content);
+            setNoteId(Number(n.id));
+          }
+          return;
+        }
+        if (!cancelled) {
+          setNote("");
+          setNoteId(null);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setNote("");
+          setNoteId(null);
+        }
+      });
     fetch(`/api/games`, { headers: authHeaders })
       .then(res => res.json())
       .then((data: unknown) => {
-        setGames(Array.isArray(data) ? data : []);
+        if (!cancelled) {
+          setGames(Array.isArray(data) ? data : []);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setGames([]);
+        }
       });
-    fetch(`/api/users/${userId}`, { headers: authHeaders }).then(res => res.json()).then((u: User) => setTokens(u.tokens ?? 0));
+    fetch(`/api/users/${userId}`, { headers: authHeaders })
+      .then(res => res.json())
+      .then((u: unknown) => {
+        const user = (u && typeof u === "object") ? (u as User) : null;
+        if (!cancelled) {
+          setTokens(user?.tokens ?? 0);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setTokens(0);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [contactId, userId]);
 
   // Obtener nota privada de la cita activa
   useEffect(() => {
+    let cancelled = false;
+
     if (!contactId) return;
     const authHeaders = getAuthHeaders();
     fetch(`/api/agenda?userId=${userId}`, { headers: authHeaders })
@@ -127,19 +188,43 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
       .then((agenda: unknown) => {
         const agendaList = Array.isArray(agenda) ? (agenda as AgendaEvent[]) : [];
         const cita = agendaList.find((e: AgendaEvent) => String(e.contactId) === String(contactId) && e.note);
-        setAgendaNote(cita?.note ?? "");
+        if (!cancelled) {
+          setAgendaNote(cita?.note ?? "");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAgendaNote("");
+        }
       });
+
+    return () => {
+      cancelled = true;
+    };
   }, [contactId, userId]);
 
   // Obtener productos de la tienda al abrir el store
   useEffect(() => {
+    let cancelled = false;
+
     if (showStore) {
       fetch("/api/products", { headers: getAuthHeaders() })
         .then(res => res.json())
         .then((data: unknown) => {
-          setProducts(Array.isArray(data) ? data : []);
+          if (!cancelled) {
+            setProducts(Array.isArray(data) ? data : []);
+          }
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setProducts([]);
+          }
         });
     }
+
+    return () => {
+      cancelled = true;
+    };
   }, [showStore]);
 
   // Iniciar/detener reconocimiento de voz
