@@ -177,14 +177,37 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
 
   const handleBuyTime = async () => {
     if (tokens === null || tokens < TOKEN_COST_PER_2MIN) return;
-    setTokens(t => (t !== null ? t - TOKEN_COST_PER_2MIN : 0));
-    setSecondsLeft(s => s + 120);
-    // Actualización de tokens en backend
-    await fetch(`/api/users/${userId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ tokens: (tokens !== null ? tokens - TOKEN_COST_PER_2MIN : 0) })
-    });
+
+    const newBalance = tokens - TOKEN_COST_PER_2MIN;
+
+    try {
+      const [userRes, tokenLogRes] = await Promise.all([
+        fetch(`/api/users/${userId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify({ tokens: newBalance })
+        }),
+        fetch(`/api/tokens`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify({
+            user_id: userId,
+            amount: -TOKEN_COST_PER_2MIN,
+            reason: "Extension de videollamada (+2 min)",
+          }),
+        }),
+      ]);
+
+      if (!userRes.ok || !tokenLogRes.ok) {
+        throw new Error("No se pudo registrar la compra de tiempo");
+      }
+
+      setTokens(newBalance);
+      setSecondsLeft(s => s + 120);
+      showToast("Tiempo extra comprado correctamente.", "success");
+    } catch {
+      showToast("No se pudo comprar tiempo extra.", "error");
+    }
   };
 
   const handleMute = () => setMuted(m => !m);
@@ -209,15 +232,52 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
       setPurchaseMsg("No tienes suficientes tokens.");
       return;
     }
-    setTokens(t => (t !== null ? t - product.price : 0));
-    setPurchaseMsg("¡Compra exitosa!");
-    // Actualización de tokens en backend
-    await fetch(`/api/users/${userId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify({ tokens: (tokens !== null ? tokens - product.price : 0) })
-    });
-    // (Opcional: simular registro de compra en purchases.json)
+
+    const amount = Number(product.price || 0);
+    const newBalance = tokens - amount;
+
+    try {
+      const [userRes, purchaseRes, tokenLogRes] = await Promise.all([
+        fetch(`/api/users/${userId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify({ tokens: newBalance })
+        }),
+        fetch(`/api/purchases`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify({
+            user_id: userId,
+            product_name: product.name,
+            price: amount,
+            quantity: 1,
+            total: amount,
+            status: "completed",
+          }),
+        }),
+        fetch(`/api/tokens`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+          body: JSON.stringify({
+            user_id: userId,
+            amount: -amount,
+            reason: `Compra en videollamada: ${product.name}`,
+          }),
+        }),
+      ]);
+
+      if (!userRes.ok || !purchaseRes.ok || !tokenLogRes.ok) {
+        throw new Error("No se pudo registrar la compra");
+      }
+
+      setTokens(newBalance);
+      setPurchaseMsg("¡Compra exitosa!");
+      showToast("Compra registrada correctamente.", "success");
+    } catch {
+      setPurchaseMsg("No se pudo completar la compra.");
+      showToast("Error al registrar la compra.", "error");
+    }
+
     setTimeout(() => setPurchaseMsg("") , 2000);
   };
 
