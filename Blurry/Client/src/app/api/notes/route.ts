@@ -1,54 +1,79 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { Note } from "@/types";
 
-const NOTES_PATH = path.join(process.cwd(), "data", "notes.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
+
+function normalizeNote(note: any) {
+  return {
+    id: note?.id,
+    userId: note?.user_id,
+    contactId: note?.contact_id,
+    content: note?.content,
+    date: note?.date,
+  };
+}
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url!);
+  const url = new URL(req.url);
   const userId = url.searchParams.get("userId");
-  const data = await fs.readFile(NOTES_PATH, "utf-8");
-  let notes: Note[] = JSON.parse(data);
-  if (userId) {
-    notes = notes.filter((n: Note) => String(n.userId) === String(userId));
-  }
-  return NextResponse.json(notes);
+  const res = await fetch(`${BACKEND_URL}/notes${userId ? `?userId=${encodeURIComponent(userId)}` : ""}`);
+  const data = await res.json().catch(() => []);
+  const normalized = Array.isArray(data) ? data.map(normalizeNote) : [];
+  return NextResponse.json(normalized, { status: res.status });
 }
 
 export async function POST(req: NextRequest) {
-  const newNote = await req.json();
-  const data = await fs.readFile(NOTES_PATH, "utf-8");
-  const notes: Note[] = JSON.parse(data);
-  // Si ya existe una nota para este userId y contactId, sobrescribirla
-  const idx = notes.findIndex((n: Note) => String(n.userId) === String(newNote.userId) && String(n.contactId) === String(newNote.contactId));
-  if (idx !== -1) {
-    notes[idx] = { ...notes[idx], ...newNote, id: notes[idx].id, date: new Date().toISOString() };
-    await fs.writeFile(NOTES_PATH, JSON.stringify(notes, null, 2));
-    return NextResponse.json(notes[idx]);
-  }
-  newNote.id = notes.length ? Math.max(...notes.map((n: Note) => n.id)) + 1 : 1;
-  newNote.date = new Date().toISOString();
-  notes.push(newNote);
-  await fs.writeFile(NOTES_PATH, JSON.stringify(notes, null, 2));
-  return NextResponse.json(newNote);
+  const payload = await req.json().catch(() => null);
+  const normalized = payload
+    ? {
+        user_id: Number(payload.userId ?? payload.user_id),
+        contact_id: payload.contactId ?? payload.contact_id,
+        content: payload.content,
+      }
+    : payload;
+
+  const res = await fetch(`${BACKEND_URL}/notes`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(normalized),
+  });
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data?.id ? normalizeNote(data) : data, { status: res.status });
 }
 
-
 export async function PATCH(req: NextRequest) {
-  const { id, ...rest } = await req.json();
-  const data = await fs.readFile(NOTES_PATH, "utf-8");
-  let notes: Note[] = JSON.parse(data);
-  notes = notes.map((n: Note) => n.id === id ? { ...n, ...rest } : n);
-  await fs.writeFile(NOTES_PATH, JSON.stringify(notes, null, 2));
-  return NextResponse.json({ success: true });
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const { id, ...rest } = payload;
+  const normalized = {
+    ...rest,
+    user_id: rest.userId ?? rest.user_id,
+    contact_id: rest.contactId ?? rest.contact_id,
+  };
+
+  const res = await fetch(`${BACKEND_URL}/notes/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(normalized),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data?.id ? normalizeNote(data) : data, { status: res.status });
 }
 
 export async function DELETE(req: NextRequest) {
-  const { id } = await req.json();
-  const data = await fs.readFile(NOTES_PATH, "utf-8");
-  let notes: Note[] = JSON.parse(data);
-  notes = notes.filter((n: Note) => n.id !== id);
-  await fs.writeFile(NOTES_PATH, JSON.stringify(notes, null, 2));
-  return NextResponse.json({ success: true });
-} 
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const res = await fetch(`${BACKEND_URL}/notes/${payload.id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const data = await res.json().catch(() => ({ success: res.ok }));
+  return NextResponse.json(data, { status: res.status });
+}

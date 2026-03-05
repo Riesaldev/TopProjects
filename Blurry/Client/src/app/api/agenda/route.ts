@@ -1,74 +1,84 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { AgendaEvent, Mission, UserMission } from "@/types";
 
-const AGENDA_PATH = path.join(process.cwd(), "data", "agenda.json");
-const USER_MISSIONS_PATH = path.join(process.cwd(), "data", "userMissions.json");
-const MISSIONS_PATH = path.join(process.cwd(), "data", "missions.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-async function updateMissionProgress(userId: number, action: string) {
-  const missions: Mission[] = JSON.parse(await fs.readFile(MISSIONS_PATH, "utf-8"));
-  const userMissions: UserMission[] = JSON.parse(await fs.readFile(USER_MISSIONS_PATH, "utf-8"));
-  const now = new Date();
-  for (const m of missions) {
-    if (m.action === action) {
-      const um = userMissions.find((userMission: UserMission) => userMission.userId === userId && userMission.missionId === m.id);
-      if (!um) continue;
-      if (!um.completed) {
-        um.progress = Math.min(um.progress + 1, m.goal);
-        if (um.progress >= m.goal) {
-          um.completed = true;
-          um.completedAt = now.toISOString();
-        }
-      }
-    }
-  }
-  await fs.writeFile(USER_MISSIONS_PATH, JSON.stringify(userMissions, null, 2));
+function normalizeEvent(event: any) {
+  return {
+    id: event?.id,
+    userId: event?.user_id,
+    title: event?.title,
+    description: event?.description,
+    datetime: event?.datetime,
+    note: event?.note,
+    contactId: event?.contact_id,
+    completed: event?.completed,
+  };
 }
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url!);
+  const url = new URL(req.url);
   const userId = url.searchParams.get("userId");
-  const data = await fs.readFile(AGENDA_PATH, "utf-8");
-  const agenda: AgendaEvent[] = JSON.parse(data);
-  if (userId) {
-    const filteredAgenda = agenda.filter((e: AgendaEvent) => String(e.userId) === String(userId));
-    return NextResponse.json(filteredAgenda);
-  }
-  return NextResponse.json(agenda);
+  const res = await fetch(`${BACKEND_URL}/agenda${userId ? `?userId=${encodeURIComponent(userId)}` : ""}`);
+  const data = await res.json().catch(() => []);
+  const normalized = Array.isArray(data) ? data.map(normalizeEvent) : [];
+  return NextResponse.json(normalized, { status: res.status });
 }
 
 export async function POST(req: NextRequest) {
-  const newEvent = await req.json();
-  const data = await fs.readFile(AGENDA_PATH, "utf-8");
-  const agenda: AgendaEvent[] = JSON.parse(data);
-  newEvent.id = agenda.length ? Math.max(...agenda.map((e: AgendaEvent) => e.id)) + 1 : 1;
-  agenda.push(newEvent);
-  await fs.writeFile(AGENDA_PATH, JSON.stringify(agenda, null, 2));
-  return NextResponse.json(newEvent);
+  const payload = await req.json().catch(() => null);
+  const normalized = payload
+    ? {
+        user_id: Number(payload.userId ?? payload.user_id),
+        title: payload.title,
+        description: payload.description,
+        datetime: payload.datetime,
+        note: payload.note,
+        contact_id: payload.contactId ?? payload.contact_id,
+        completed: Boolean(payload.completed),
+      }
+    : payload;
+
+  const res = await fetch(`${BACKEND_URL}/agenda`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(normalized),
+  });
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data?.id ? normalizeEvent(data) : data, { status: res.status });
 }
 
-
 export async function DELETE(req: NextRequest) {
-  const { id } = await req.json();
-  const data = await fs.readFile(AGENDA_PATH, "utf-8");
-  let agenda: AgendaEvent[] = JSON.parse(data);
-  agenda = agenda.filter((e: AgendaEvent) => e.id !== id);
-  await fs.writeFile(AGENDA_PATH, JSON.stringify(agenda, null, 2));
-  return NextResponse.json({ success: true });
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const res = await fetch(`${BACKEND_URL}/agenda/${payload.id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+  const data = await res.json().catch(() => ({ success: res.ok }));
+  return NextResponse.json(data, { status: res.status });
 }
 
 export async function PATCH(req: NextRequest) {
-  const { id, completed, userId } = await req.json();
-  const data = await fs.readFile(AGENDA_PATH, "utf-8");
-  const agenda: AgendaEvent[] = JSON.parse(data);
-  const idx = agenda.findIndex((e: AgendaEvent) => e.id === id);
-  if (idx === -1) return NextResponse.json({ success: false, message: "Cita no encontrada" });
-  agenda[idx].completed = completed;
-  await fs.writeFile(AGENDA_PATH, JSON.stringify(agenda, null, 2));
-  if (completed && userId) {
-    await updateMissionProgress(Number(userId), "complete_date");
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
   }
-  return NextResponse.json({ success: true });
-} 
+
+  const { id, ...rest } = payload;
+  const normalized = {
+    ...rest,
+    user_id: rest.userId ?? rest.user_id,
+    contact_id: rest.contactId ?? rest.contact_id,
+  };
+
+  const res = await fetch(`${BACKEND_URL}/agenda/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(normalized),
+  });
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data?.id ? normalizeEvent(data) : data, { status: res.status });
+}

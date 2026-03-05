@@ -1,32 +1,46 @@
-import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { Service } from "@/types";
+import { NextRequest, NextResponse } from "next/server";
+import { proxyRequest } from "../_proxy";
 
-const filePath = path.join(process.cwd(), "data", "services.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-export async function GET() {
-  try {
-    const file = await fs.readFile(filePath, "utf-8");
-    const services = JSON.parse(file);
-    return NextResponse.json(services);
-  } catch (error) {
-    console.error("Error reading services file:", error);
-    // Si el archivo no existe, devolver un array vacío
-    return NextResponse.json([]);
-  }
+export async function GET(req: NextRequest) {
+  return proxyRequest(req, "/services");
 }
 
-export async function PATCH(request: Request) {
-  try {
-    const { id, estado } = await request.json();
-    const file = await fs.readFile(filePath, "utf-8");
-    let services: Service[] = JSON.parse(file);
-    services = services.map((s: Service) => s.id === id ? { ...s, estado } : s);
-    await fs.writeFile(filePath, JSON.stringify(services, null, 2));
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error updating services:", error);
-    return NextResponse.json({ success: false, error: "Error updating services" }, { status: 500 });
+export async function POST(req: NextRequest) {
+  return proxyRequest(req, "/services");
+}
+
+// Legacy compatibility for callers that send { id, ...updates } to /api/services.
+export async function PATCH(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
   }
-} 
+
+  const { id, ...updates } = payload;
+  const res = await fetch(`${BACKEND_URL}/services/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data, { status: res.status });
+}
+
+// Legacy compatibility for callers that send { id } to /api/services.
+export async function DELETE(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const res = await fetch(`${BACKEND_URL}/services/${payload.id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const data = await res.json().catch(() => ({ success: res.ok }));
+  return NextResponse.json(data, { status: res.status });
+}

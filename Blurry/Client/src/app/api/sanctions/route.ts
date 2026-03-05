@@ -1,41 +1,46 @@
-import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { Sanction } from "@/types";
+import { NextRequest, NextResponse } from "next/server";
+import { proxyRequest } from "../_proxy";
 
-const filePath = path.join(process.cwd(), "data", "sanctions.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-export async function GET() {
-  try {
-    const file = await fs.readFile(filePath, "utf-8");
-    const sanctions: Sanction[] = JSON.parse(file);
-    return NextResponse.json(sanctions);
-  } catch (error) {
-    console.error("Error reading sanctions file:", error);
-    // Si el archivo no existe, devolver un array vacío
-    return NextResponse.json([]);
-  }
+export async function GET(req: NextRequest) {
+  return proxyRequest(req, "/sanctions");
 }
 
-export async function PATCH(request: Request) {
-  try {
-    const { id, estado } = await request.json();
-    const file = await fs.readFile(filePath, "utf-8");
-    const sanctions: Sanction[] = JSON.parse(file);
-    const updatedSanctions = sanctions.map((s: Sanction) => s.id === id ? { ...s, estado } : s);
-    await fs.writeFile(filePath, JSON.stringify(updatedSanctions, null, 2));
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Error updating sanctions:", error);
-    return NextResponse.json({ success: false, error: "Error updating sanctions" }, { status: 500 });
-  }
+export async function POST(req: NextRequest) {
+  return proxyRequest(req, "/sanctions");
 }
 
-export async function DELETE(request: Request) {
-  const { id } = await request.json();
-  const file = await fs.readFile(filePath, "utf-8");
-  const sanctions: Sanction[] = JSON.parse(file);
-  const filteredSanctions = sanctions.filter((s: Sanction) => s.id !== id);
-  await fs.writeFile(filePath, JSON.stringify(filteredSanctions, null, 2));
-  return NextResponse.json({ success: true });
-} 
+// Legacy compatibility for callers that send { id, ...updates } to /api/sanctions.
+export async function PATCH(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const { id, ...updates } = payload;
+  const res = await fetch(`${BACKEND_URL}/sanctions/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data, { status: res.status });
+}
+
+// Legacy compatibility for callers that send { id } to /api/sanctions.
+export async function DELETE(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const res = await fetch(`${BACKEND_URL}/sanctions/${payload.id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const data = await res.json().catch(() => ({ success: res.ok }));
+  return NextResponse.json(data, { status: res.status });
+}

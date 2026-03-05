@@ -13,6 +13,10 @@ import { Setting } from './entities/setting.entity';
 import { ActivityLog } from './entities/activity-log.entity';
 import { AdminInteraction } from './entities/admin-interaction.entity';
 import { Purchase } from './entities/purchase.entity';
+import { Note } from './entities/note.entity';
+import { AgendaEvent } from './entities/agenda-event.entity';
+import { ServiceStatus } from './entities/service-status.entity';
+import { Sanction } from './entities/sanction.entity';
 import * as bcrypt from 'bcryptjs';
 
 // Cargar variables de entorno desde el archivo .env
@@ -99,6 +103,10 @@ export async function initializeDatabase(dataSource: DataSource) {
         ActivityLog,
         AdminInteraction,
         Purchase,
+        Note,
+        AgendaEvent,
+        ServiceStatus,
+        Sanction,
       ],
       synchronize: true, // Solo para crear tablas si no existen
     });

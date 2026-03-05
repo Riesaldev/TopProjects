@@ -13,6 +13,10 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { ReportsGeneratedModule } from './modules/reports-generated/reports-generated.module';
 import { AdminInteractionsModule } from './modules/admin-interactions/admin-interactions.module';
 import { PurchasesModule } from './modules/purchases/purchases.module';
+import { NotesModule } from './modules/notes/notes.module';
+import { AgendaModule } from './modules/agenda/agenda.module';
+import { ServicesModule } from './modules/services/services.module';
+import { SanctionsModule } from './modules/sanctions/sanctions.module';
 import { HttpModule } from '@nestjs/axios';
 import { ChatGateway } from './gateways/chat.gateway';
 
@@ -35,6 +39,10 @@ import { ChatGateway } from './gateways/chat.gateway';
     ReportsGeneratedModule,
     AdminInteractionsModule,
     PurchasesModule,
+    NotesModule,
+    AgendaModule,
+    ServicesModule,
+    SanctionsModule,
   ],
   providers: [ChatGateway],
 })
