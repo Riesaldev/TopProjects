@@ -40,8 +40,6 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
     return () => {
       markReadInFlight.clear();
       deleteInFlight.clear();
-      setMarkReadInFlightIds(new Set());
-      setDeleteInFlightIds(new Set());
     };
   }, []);
 
@@ -59,6 +57,24 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
     setMarkReadInFlightIds((prev) => {
       const next = new Set(prev);
       next.delete(id);
+      return next;
+    });
+  };
+
+  const beginBatchMarkReadInFlight = (ids: number[]) => {
+    ids.forEach((id) => markReadInFlightRef.current.add(id));
+    setMarkReadInFlightIds((prev) => {
+      const next = new Set(prev);
+      ids.forEach((id) => next.add(id));
+      return next;
+    });
+  };
+
+  const endBatchMarkReadInFlight = (ids: number[]) => {
+    ids.forEach((id) => markReadInFlightRef.current.delete(id));
+    setMarkReadInFlightIds((prev) => {
+      const next = new Set(prev);
+      ids.forEach((id) => next.delete(id));
       return next;
     });
   };
@@ -179,6 +195,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
 
     try {
       setMarkingAllRead(true);
+      beginBatchMarkReadInFlight(unreadIds);
       const results = await Promise.allSettled(
         unreadIds.map(async (id) => {
           await patchNotificationRead(id);
@@ -210,6 +227,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
         showToast(`Se marcaron ${successfulIds.size} notificaciones, ${failedCount} fallaron.`, "info");
       }
     } finally {
+      endBatchMarkReadInFlight(unreadIds);
       setMarkingAllRead(false);
     }
   };
@@ -324,8 +342,8 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
                         notification={n}
                         onMarkRead={() => handleMarkRead(n.id)}
                         onDelete={() => handleDelete(n.id)}
-                        markReadLoading={markReadInFlightIds.has(n.id)}
-                        deleteLoading={deleteInFlightIds.has(n.id)}
+                        markReadLoading={markReadInFlightIds.has(n.id) || deleteInFlightIds.has(n.id)}
+                        deleteLoading={deleteInFlightIds.has(n.id) || markReadInFlightIds.has(n.id)}
                       />
                     ))}
                   </AnimatePresence>
