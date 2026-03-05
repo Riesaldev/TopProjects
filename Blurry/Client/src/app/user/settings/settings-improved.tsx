@@ -43,8 +43,12 @@ interface SettingsForm {
   receiveNotifications: boolean;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
 export default function UserSettingsPage({ userId }: Readonly<UserSettingsPageProps>) {
-  const { user, loading, updateUser, deleteUser } = useUserData(userId);
+  const { user, loading, updateUser, suspendUser, deleteUser } = useUserData(userId);
   const { showSuccess } = useNotifications();
   const [dark, setDark] = useDarkMode();
   const [size, setSize] = useFontSize();
@@ -81,11 +85,12 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
 
   useEffect(() => {
     if (user) {
+      const userRecord = asRecord(user as unknown);
       setValues({
         nombre: user.nombre || "",
         email: user.email || "",
-        showProfile: (user as any).showProfile ?? true,
-        receiveNotifications: (user as any).receiveNotifications ?? true,
+        showProfile: Boolean(userRecord.showProfile ?? true),
+        receiveNotifications: Boolean(userRecord.receiveNotifications ?? true),
       });
     }
   }, [user, setValues]);
@@ -107,7 +112,7 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
   const handleSuspendAccount = async () => {
     if (!confirm("¿Seguro que quieres suspender temporalmente tu cuenta?")) return;
     
-    const success = await updateUser({ is_suspended: true } as any);
+    const success = await suspendUser("Suspendido temporalmente por el usuario");
     if (success) {
       showSuccess("Cuenta suspendida temporalmente");
       // Redirect to login

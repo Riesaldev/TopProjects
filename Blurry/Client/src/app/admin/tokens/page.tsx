@@ -11,6 +11,10 @@ interface TokenRow {
   createdAt: string;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
 export default function AdminTokensPage() {
   const [rows, setRows] = React.useState<TokenRow[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -31,19 +35,24 @@ export default function AdminTokensPage() {
         const tokensRaw = await tokensRes.json().catch(() => []);
         const usersRaw = await usersRes.json().catch(() => []);
 
-        const users = Array.isArray(usersRaw) ? usersRaw : [];
+        const users = Array.isArray(usersRaw) ? usersRaw.map(asRecord) : [];
         const userNameMap = new Map(
-          users.map((u: any) => [String(u.id), u.nombre || u.name || `Usuario ${u.id}`]),
+          users.map((u) => [String(u.id ?? ""), String(u.nombre ?? u.name ?? `Usuario ${u.id ?? ""}`)]),
         );
 
-        const normalized: TokenRow[] = (Array.isArray(tokensRaw) ? tokensRaw : []).map((t: any) => ({
-          id: Number(t?.id || 0),
-          userId: Number(t?.user_id || 0),
-          userName: userNameMap.get(String(t?.user_id)) || `Usuario ${t?.user_id ?? "N/A"}`,
-          reason: String(t?.reason || "Movimiento"),
-          amount: Number(t?.amount || 0),
-          createdAt: t?.created_at ? new Date(t.created_at).toLocaleDateString() : "-",
-        }));
+        const normalized: TokenRow[] = (Array.isArray(tokensRaw) ? tokensRaw : []).map((tokenRow) => {
+          const t = asRecord(tokenRow);
+          const mappedUserId = Number(t.user_id ?? 0);
+
+          return {
+            id: Number(t.id ?? 0),
+            userId: mappedUserId,
+            userName: userNameMap.get(String(mappedUserId)) || `Usuario ${mappedUserId || "N/A"}`,
+            reason: String(t.reason ?? "Movimiento"),
+            amount: Number(t.amount ?? 0),
+            createdAt: t.created_at ? new Date(String(t.created_at)).toLocaleDateString() : "-",
+          };
+        });
 
         setRows(normalized);
         setError(null);

@@ -68,8 +68,8 @@ export default function RegisterForm() {
       
       showToast("Identidad creada. Acceso concedido.", "success");
       setTimeout(() => router.push("/auth/login"), 1500);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Error al enrolar");
     } finally {
       setLoading(false);
     }

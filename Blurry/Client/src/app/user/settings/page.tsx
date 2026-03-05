@@ -14,6 +14,20 @@ interface SettingsForm {
   profilePrivacy: "public" | "friends";
 }
 
+type UserSettingsShape = {
+  notificationsEnabled?: boolean;
+  twoFactorAuth?: boolean;
+  profilePrivacy?: "public" | "friends";
+};
+
+type AuthUserWithSettings = {
+  id: number;
+  nombre?: string;
+  display_name?: string;
+  bio?: string;
+  settings?: UserSettingsShape;
+};
+
 export default function SettingsPage() {
   const router = useRouter();
   const { user, isLoading, updateUser } = useAuth();
@@ -68,7 +82,7 @@ export default function SettingsPage() {
     }
 
     if (user) {
-      const settings = (user as any).settings || {};
+      const settings = (user as AuthUserWithSettings).settings || {};
       setValues({
         username: user.nombre || user.display_name || "",
         bio: user.bio || "",

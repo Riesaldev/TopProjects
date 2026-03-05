@@ -16,6 +16,37 @@ interface VideoCallPageProps {
   userId: number;
 }
 
+type SpeechRecognitionAlternativeLike = {
+  transcript: string;
+};
+
+type SpeechRecognitionResultLike = {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternativeLike;
+};
+
+type SpeechRecognitionEventLike = {
+  resultIndex: number;
+  results: ArrayLike<SpeechRecognitionResultLike>;
+};
+
+type SpeechRecognitionErrorEventLike = {
+  error?: string;
+};
+
+type SpeechRecognitionInstance = {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEventLike) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
+
 function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   const getAuthHeaders = () => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
@@ -41,7 +72,7 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   const { showToast } = useNotifications();
   const moderationActive = true;
   const [transcript, setTranscript] = useState("");
-  const recognitionRef =useRef<any>(null);
+  const recognitionRef =useRef<SpeechRecognitionInstance | null>(null);
   const [agendaNote, setAgendaNote] =useState<string>("");
   const realtimeContext = useRealtime();
   const videoCallInvite = realtimeContext?.videoCallInvite;
@@ -101,17 +132,16 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   // Iniciar/detener reconocimiento de voz
   useEffect(() => {
     // Moderación IA siempre activa
-            // @ts-expect-error: Complex WebRTC implementation
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
+    const SpeechRecognitionCtor = (window.SpeechRecognition || window.webkitSpeechRecognition) as SpeechRecognitionConstructor | undefined;
+    if (!SpeechRecognitionCtor) {
       showToast("Tu navegador no soporta reconocimiento de voz.", "error");
       return;
     }
-    const recognition = new SpeechRecognition();
+    const recognition = new SpeechRecognitionCtor();
     recognition.lang = "es-ES";
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.onresult = async (event: any) => { // SpeechRecognitionEvent - tipo del navegador
+    recognition.onresult = async (event: SpeechRecognitionEventLike) => {
       let interim = "";
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         const t = event.results[i][0].transcript;
@@ -142,8 +172,8 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
       }
       if (interim) setTranscript(prev => prev + " " + interim);
     };
-    recognition.onerror = (e: any) => { // SpeechRecognitionError - tipo del navegador
-      showToast("Error en reconocimiento de voz: " + e.error, "error");
+    recognition.onerror = (e: SpeechRecognitionErrorEventLike) => {
+      showToast("Error en reconocimiento de voz: " + String(e.error || "desconocido"), "error");
     };
     recognition.onend = () => {
       if (moderationActive) recognition.start(); // Reiniciar si se detuvo inesperadamente

@@ -71,7 +71,7 @@ export const apiService = {
     });
   },
   
-  register: (userData: any) => 
+  register: (userData: Record<string, unknown>) => 
     fetchApi('auth/register', { 
       method: 'POST', 
       body: JSON.stringify(userData) 
@@ -80,7 +80,7 @@ export const apiService = {
   // Users
   getUsers: () => fetchApi('users'),
   getUser: (id: string | number) => fetchApi(`users/${id}`),
-  updateUser: (id: string | number, data: any) => 
+  updateUser: (id: string | number, data: Record<string, unknown>) => 
     fetchApi(`users/${id}`, { 
       method: 'PUT', 
       body: JSON.stringify(data) 

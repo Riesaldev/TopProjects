@@ -3,30 +3,47 @@ import { useSocket } from './useSocket';
 import { SOCKET_URL } from '@/constants';
 import { toast } from 'react-toastify';
 
+type GameInvite = {
+  from?: string;
+  gameType?: string;
+};
+
+type VideoCallInvite = {
+  from?: string;
+  type?: string;
+};
+
+type MetricUpdate = {
+  metric?: string;
+  value?: number;
+};
+
 export function useRealtimeEvents(userId: string, jwt: string) {
   const socket = useSocket(SOCKET_URL, jwt);
-  const [gameInvite, setGameInvite] = useState<any>(null);
-  const [videoCallInvite, setVideoCallInvite] = useState<any>(null);
+  const [gameInvite, setGameInvite] = useState<GameInvite | null>(null);
+  const [videoCallInvite, setVideoCallInvite] = useState<VideoCallInvite | null>(null);
   const [adminAlert, setAdminAlert] = useState<string | null>(null);
-  const [metric, setMetric] = useState<any>(null);
+  const [metric, setMetric] = useState<MetricUpdate | null>(null);
   const [userStatus, setUserStatus] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!socket) return;
-    socket.on('receiveGameInvite', (data) => {
+    socket.on('receiveGameInvite', (data: GameInvite) => {
       setGameInvite(data);
-      toast.info(`${data.from} te ha invitado a jugar: ${data.gameType}`);
+      toast.info(`${data.from || 'Alguien'} te ha invitado a jugar: ${data.gameType || 'juego'}`);
     });
-    socket.on('receiveInvite', (data) => {
+    socket.on('receiveInvite', (data: VideoCallInvite) => {
       setVideoCallInvite(data);
-      toast.info(`${data.from} te ha invitado a una ${data.type}`);
+      toast.info(`${data.from || 'Alguien'} te ha invitado a una ${data.type || 'videollamada'}`);
     });
-    socket.on('receiveAdminAlert', (data) => {
-      setAdminAlert(data.alert);
-      toast.error(`Alerta admin: ${data.alert}`);
+    socket.on('receiveAdminAlert', (data: { alert?: string }) => {
+      const alertMessage = data.alert || 'Alerta sin detalle';
+      setAdminAlert(alertMessage);
+      toast.error(`Alerta admin: ${alertMessage}`);
     });
-    socket.on('metricUpdate', setMetric);
-    socket.on('userStatus', (data) => {
+    socket.on('metricUpdate', (data: MetricUpdate) => setMetric(data));
+    socket.on('userStatus', (data: { userId?: string; status?: string }) => {
+      if (!data.userId || !data.status) return;
       setUserStatus((prev) => ({ ...prev, [data.userId]: data.status }));
     });
     return () => {

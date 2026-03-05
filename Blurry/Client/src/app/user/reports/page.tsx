@@ -11,6 +11,10 @@ interface UserReportsPageProps {
   userId: number;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
 export default function UserReportsPage({ userId }: Readonly<UserReportsPageProps>) {
   const [reports, setReports] = useState<Report[]>([]);
   const prevStatesRef = useRef<Record<string, string>>({});
@@ -19,15 +23,16 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
   const userStatus = realtimeContext?.userStatus;
   const [loading, setLoading] = useState(true);
 
-  const normalizeReport = (raw: any): Report => {
-    const createdAt = raw?.created_at || raw?.fecha;
+  const normalizeReport = (raw: unknown): Report => {
+    const report = asRecord(raw);
+    const createdAt = report.created_at ?? report.fecha;
     return {
-      id: String(raw?.id ?? ""),
-      usuario: String(raw?.reported_user_id ?? raw?.usuario ?? ""),
-      motivo: String(raw?.type ?? raw?.motivo ?? "Sin motivo"),
+      id: String(report.id ?? ""),
+      usuario: String(report.reported_user_id ?? report.usuario ?? ""),
+      motivo: String(report.type ?? report.motivo ?? "Sin motivo"),
       fecha: createdAt ? new Date(createdAt).toLocaleString() : "-",
-      estado: String(raw?.status ?? raw?.estado ?? "Pendiente"),
-      detalles: raw?.admin_notes || raw?.detalles,
+      estado: String(report.status ?? report.estado ?? "Pendiente"),
+      detalles: String(report.admin_notes ?? report.detalles ?? ""),
     } as Report;
   };
 

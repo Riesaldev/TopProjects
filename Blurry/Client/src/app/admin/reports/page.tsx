@@ -11,6 +11,10 @@ interface Reporte {
   estado: string;
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
 export default function AdminReportsPage() {
   const [reportes, setReportes] = React.useState<Reporte[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -22,13 +26,16 @@ export default function AdminReportsPage() {
       : { "Content-Type": "application/json" };
   };
 
-  const normalizeReport = (raw: any): Reporte => ({
-    id: String(raw?.id ?? ""),
-    usuario: `ID ${raw?.reported_user_id ?? raw?.usuario ?? "N/A"}`,
-    motivo: String(raw?.type ?? raw?.motivo ?? "Sin motivo"),
-    fecha: raw?.created_at ? new Date(raw.created_at).toLocaleString() : String(raw?.fecha ?? "-"),
-    estado: String(raw?.status ?? raw?.estado ?? "Pendiente"),
-  });
+  const normalizeReport = (raw: unknown): Reporte => {
+    const report = asRecord(raw);
+    return {
+      id: String(report.id ?? ""),
+      usuario: `ID ${report.reported_user_id ?? report.usuario ?? "N/A"}`,
+      motivo: String(report.type ?? report.motivo ?? "Sin motivo"),
+      fecha: report.created_at ? new Date(String(report.created_at)).toLocaleString() : String(report.fecha ?? "-"),
+      estado: String(report.status ?? report.estado ?? "Pendiente"),
+    };
+  };
 
   const fetchReports = () => {
     setLoading(true);

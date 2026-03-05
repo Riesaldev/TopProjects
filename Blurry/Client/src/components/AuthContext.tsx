@@ -15,7 +15,7 @@ interface User {
   interests?: string;
   imagen_perfil?: string;
   tokens?: number;
-  values_profile?: any;
+  values_profile?: unknown;
   is_suspended?: boolean;
   suspension_reason?: string;
   suspension_until?: Date;

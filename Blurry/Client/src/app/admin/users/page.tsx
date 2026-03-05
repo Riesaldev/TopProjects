@@ -28,6 +28,10 @@ const GENEROS = ["Todos", "Masculino", "Femenino"];
 const ACTIVIDADES = ["Todas", "Alta", "Media", "Baja"];
 const ROLES = ["usuario", "admin"];
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
 function exportCSV(usuarios: Usuario[]) {
   const header = "ID,Nombre,Email,Estado,Género,Actividad,Registro,CP,Rol\n";
   const rows = usuarios.map(u => `${u.id},${u.nombre},${u.email},${u.estado},${u.genero},${u.actividad},${u.fechaRegistro},${u.codigoPostal},${u.rol || "usuario"}`).join("\n");
@@ -70,9 +74,10 @@ export default function AdminUsersPage() {
       : { "Content-Type": "application/json" };
   };
 
-  const normalizeUser = (raw: any): Usuario => {
-    const isSuspended = Boolean(raw?.is_suspended);
-    const genderRaw = String(raw?.gender || raw?.genero || "").toLowerCase();
+  const normalizeUser = (raw: unknown): Usuario => {
+    const user = asRecord(raw);
+    const isSuspended = Boolean(user.is_suspended);
+    const genderRaw = String(user.gender ?? user.genero ?? "").toLowerCase();
     const genero =
       genderRaw === "male" || genderRaw === "masculino"
         ? "Masculino"
@@ -81,17 +86,17 @@ export default function AdminUsersPage() {
           : "No especificado";
 
     return {
-      id: Number(raw?.id || 0),
-      nombre: String(raw?.display_name || raw?.nombre || `Usuario ${raw?.id ?? ""}`),
-      email: String(raw?.email || ""),
+      id: Number(user.id ?? 0),
+      nombre: String(user.display_name ?? user.nombre ?? `Usuario ${user.id ?? ""}`),
+      email: String(user.email ?? ""),
       estado: isSuspended ? "Suspendido" : "Activo",
       genero,
       actividad: isSuspended ? "Baja" : "Media",
-      fechaRegistro: raw?.created_at
-        ? new Date(raw.created_at).toLocaleDateString()
-        : String(raw?.fechaRegistro || "-"),
-      codigoPostal: String(raw?.location || raw?.codigoPostal || "-"),
-      rol: String(raw?.role || raw?.rol || "usuario"),
+      fechaRegistro: user.created_at
+        ? new Date(String(user.created_at)).toLocaleDateString()
+        : String(user.fechaRegistro ?? "-"),
+      codigoPostal: String(user.location ?? user.codigoPostal ?? "-"),
+      rol: String(user.role ?? user.rol ?? "usuario"),
     };
   };
 
@@ -184,11 +189,12 @@ export default function AdminUsersPage() {
         const res = await fetch("/api/activity-logs", { headers: getAuthHeaders() });
         const data = await res.json().catch(() => []);
         const history = (Array.isArray(data) ? data : [])
-          .filter((item: any) => Number(item?.user_id) === Number(modalUser.id))
-          .map((item: any) => ({
-            id: Number(item?.id || 0),
-            fecha: item?.created_at ? new Date(item.created_at).toLocaleString() : "-",
-            accion: String(item?.action || "Actividad"),
+          .map(asRecord)
+          .filter((item) => Number(item.user_id ?? 0) === Number(modalUser.id))
+          .map((item) => ({
+            id: Number(item.id ?? 0),
+            fecha: item.created_at ? new Date(String(item.created_at)).toLocaleString() : "-",
+            accion: String(item.action ?? "Actividad"),
           }));
         setActivityHistory(history);
       } catch (error) {
