@@ -1,111 +1,70 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-import { Streak } from "@/types";
 
-const STREAKS_PATH = path.join(process.cwd(), "data", "streaks.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-export async function GET(req: NextRequest) {
-  try {
-    const url = new URL(req.url!);
-    const userId = url.searchParams.get("userId");
-    
-    if (!userId) {
-      return NextResponse.json({ error: "userId es requerido" }, { status: 400 });
-    }
-    
-    const data = await fs.readFile(STREAKS_PATH, "utf-8");
-    const streaks: Streak[] = JSON.parse(data);
-    
-    // Buscar el streak del usuario
-    const userStreak = streaks.find((s: Streak) => String(s.userId) === String(userId));
-    
-    if (!userStreak) {
-      // Si no existe, crear uno nuevo
-      const newStreak = {
-        userId: parseInt(userId),
-        currentStreak: 0,
-        maxStreak: 0,
-        lastActivity: null
-      };
-      return NextResponse.json(newStreak);
-    }
-    
-    return NextResponse.json(userStreak);
-  } catch (error) {
-    console.error("Error reading streaks:", error);
-    // Si el archivo no existe, devolver valores por defecto
-    return NextResponse.json({
-      userId: parseInt(req.url!.split("userId=")[1]),
+function authHeaders(req: NextRequest) {
+  const authorization = req.headers.get("authorization");
+  return authorization ? { authorization } : {};
+}
+
+function normalizeStreak(data: unknown, userId: string) {
+  const streak = (data ?? {}) as Record<string, unknown>;
+
+  if (!data || streak.error) {
+    return {
+      userId: Number(userId),
       currentStreak: 0,
       maxStreak: 0,
-      lastActivity: null
+      lastActivity: null,
+    };
+  }
+
+  return {
+    userId: (streak.user_id as number | undefined) ?? Number(userId),
+    currentStreak: (streak.current_streak as number | undefined) ?? 0,
+    maxStreak: (streak.max_streak as number | undefined) ?? 0,
+    lastActivity: (streak.last_activity as string | null | undefined) ?? null,
+  };
+}
+
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url);
+  const userId = url.searchParams.get("userId");
+
+  if (!userId) {
+    return NextResponse.json({ error: "userId es requerido" }, { status: 400 });
+  }
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/streaks?userId=${encodeURIComponent(userId)}`, {
+      headers: {
+        ...authHeaders(req),
+      },
     });
+
+    const data = await res.json().catch(() => null);
+    return NextResponse.json(normalizeStreak(data, userId), { status: res.status });
+  } catch {
+    return NextResponse.json(normalizeStreak(null, userId), { status: 200 });
   }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { userId } = await req.json();
-    
-    if (!userId) {
-      return NextResponse.json({ error: "userId es requerido" }, { status: 400 });
-    }
-    
-    let streaks: Streak[] = [];
-    
-    try {
-      const data = await fs.readFile(STREAKS_PATH, "utf-8");
-      streaks = JSON.parse(data);
-    } catch {
-      // Si el archivo no existe, crear array vacío
-      streaks = [];
-    }
-    
-    const today = new Date().toISOString().split('T')[0];
-    const userStreakIndex = streaks.findIndex((s: Streak) => String(s.userId) === String(userId));
-    
-    if (userStreakIndex >= 0) {
-      const userStreak = streaks[userStreakIndex];
-      const lastActivity = userStreak.lastActivity;
-      
-      if (lastActivity === today) {
-        // Ya registró actividad hoy
-        return NextResponse.json(userStreak);
-      }
-      
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toISOString().split('T')[0];
-      
-      if (lastActivity === yesterdayStr) {
-        // Continúa el streak
-        userStreak.currentStreak += 1;
-        userStreak.maxStreak = Math.max(userStreak.maxStreak, userStreak.currentStreak);
-      } else {
-        // Rompe el streak
-        userStreak.currentStreak = 1;
-      }
-      
-      userStreak.lastActivity = today;
-      streaks[userStreakIndex] = userStreak;
-    } else {
-      // Crear nuevo streak
-      const newStreak = {
-        userId: parseInt(userId),
-        currentStreak: 1,
-        maxStreak: 1,
-        lastActivity: today
-      };
-      streaks.push(newStreak);
-    }
-    
-    await fs.writeFile(STREAKS_PATH, JSON.stringify(streaks, null, 2));
-    
-    const updatedStreak = streaks.find((s: Streak) => String(s.userId) === String(userId));
-    return NextResponse.json(updatedStreak);
-  } catch (error) {
-    console.error("Error updating streak:", error);
+    const payload = await req.json().catch(() => null);
+    const res = await fetch(`${BACKEND_URL}/streaks`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeaders(req),
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => null);
+    const userId = String(payload?.userId ?? "0");
+    return NextResponse.json(normalizeStreak(data, userId), { status: res.status });
+  } catch {
     return NextResponse.json({ error: "Error al actualizar streak" }, { status: 500 });
   }
 }
