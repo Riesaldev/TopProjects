@@ -72,11 +72,13 @@ function normalizeGifts(rows: TokenTx[]): GiftTrack[] {
       const amount = Number(tx.amount ?? 0);
       return amount < 0 || reason.includes("gift") || reason.includes("regalo") || reason.includes("transfer");
     })
-    .map((tx) => {
+    .map((tx, index) => {
       const reason = String(tx.reason || "Transferencia de TKN");
       const status = deriveStatus(tx.created_at);
+      const amount = Number(tx.amount ?? 0);
+      const fallbackId = `${tx.created_at ?? "sin-fecha"}-${Math.abs(amount)}-${index}`;
       return {
-        id: String(tx.id ?? Math.random()),
+        id: String(tx.id ?? fallbackId),
         name: parseGiftName(reason),
         recipient: parseRecipient(reason),
         ...status,

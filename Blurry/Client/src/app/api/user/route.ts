@@ -2,14 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-function normalizeUser(user: any) {
+function normalizeUser(user: unknown) {
   if (!user || typeof user !== "object") return user;
+  const normalizedUser = user as Record<string, unknown>;
+
+  const isSuspended = Boolean(normalizedUser.is_suspended);
   return {
-    ...user,
-    nombre: user.display_name ?? user.nombre,
-    codigoPostal: user.location ?? user.codigoPostal,
-    actividad: user.is_suspended ? "Baja" : user.actividad ?? "Media",
-    estado: user.is_suspended ? "Suspendido" : user.estado ?? "Activo",
+    ...normalizedUser,
+    nombre: normalizedUser.display_name ?? normalizedUser.nombre,
+    codigoPostal: normalizedUser.location ?? normalizedUser.codigoPostal,
+    actividad: isSuspended ? "Baja" : normalizedUser.actividad ?? "Media",
+    estado: isSuspended ? "Suspendido" : normalizedUser.estado ?? "Activo",
   };
 }
 

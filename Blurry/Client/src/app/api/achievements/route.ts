@@ -7,12 +7,13 @@ function authHeaders(req: NextRequest) {
   return authorization ? { authorization } : {};
 }
 
-function normalizeUserAchievement(a: any) {
+function normalizeUserAchievement(a: unknown) {
+  const achievement = (a ?? {}) as Record<string, unknown>;
   return {
-    id: a?.id,
-    userId: a?.user_id,
-    achievementId: a?.achievement_id,
-    date: a?.date,
+    id: achievement.id,
+    userId: achievement.user_id,
+    achievementId: achievement.achievement_id,
+    date: achievement.date,
   };
 }
 

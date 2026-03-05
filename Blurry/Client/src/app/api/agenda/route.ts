@@ -2,16 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-function normalizeEvent(event: any) {
+function normalizeEvent(event: unknown) {
+  const agendaEvent = (event ?? {}) as Record<string, unknown>;
   return {
-    id: event?.id,
-    userId: event?.user_id,
-    title: event?.title,
-    description: event?.description,
-    datetime: event?.datetime,
-    note: event?.note,
-    contactId: event?.contact_id,
-    completed: event?.completed,
+    id: agendaEvent.id,
+    userId: agendaEvent.user_id,
+    title: agendaEvent.title,
+    description: agendaEvent.description,
+    datetime: agendaEvent.datetime,
+    note: agendaEvent.note,
+    contactId: agendaEvent.contact_id,
+    completed: agendaEvent.completed,
   };
 }
 

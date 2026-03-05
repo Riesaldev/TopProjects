@@ -21,12 +21,13 @@ type TokenApiItem = {
 
 function normalizeTokenHistory(items: TokenApiItem[]): TokenHistoryItem[] {
   return items
-    .map((item) => {
+    .map((item, index) => {
       const amount = Number(item.amount ?? 0);
       const createdAt = item.created_at ? new Date(item.created_at) : null;
+      const fallbackId = `${item.created_at ?? "sin-fecha"}-${amount}-${index}`;
 
       return {
-        id: String(item.id ?? Math.random()),
+        id: String(item.id ?? fallbackId),
         concept: item.reason || "Movimiento de energia",
         amount,
         date: createdAt

@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { proxyRequest } from "../_proxy";
 
-function normalizeGame(game: any) {
+function normalizeGame(game: unknown) {
+  const normalizedGame = (game ?? {}) as Record<string, unknown>;
   return {
-    id: game?.id,
-    name: game?.name,
-    description: game?.description,
-    imageUrl: game?.image_url ?? game?.imageUrl,
+    id: normalizedGame.id,
+    name: normalizedGame.name,
+    description: normalizedGame.description,
+    imageUrl: normalizedGame.image_url ?? normalizedGame.imageUrl,
   };
 }
 

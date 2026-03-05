@@ -14,7 +14,7 @@ export async function proxyRequest(
     Authorization: req.headers.get("authorization") || "",
   };
 
-  let body: any = undefined;
+  let body: unknown = undefined;
   if (["POST", "PATCH", "PUT", "DELETE"].includes(method)) {
     body = await req.json().catch(() => undefined);
   }
@@ -22,7 +22,7 @@ export async function proxyRequest(
   const res = await fetch(url, {
     method,
     headers,
-    body: body ? JSON.stringify(body) : undefined,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
   const data = await res.json().catch(() => ({}));

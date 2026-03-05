@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-function normalizeMessage(m: any) {
+function normalizeMessage(m: unknown) {
+  const message = (m ?? {}) as Record<string, unknown>;
   return {
-    id: m?.id,
-    userId: m?.user_id,
-    contactId: m?.contact_id,
-    senderId: m?.sender_id,
-    content: m?.content,
-    timestamp: m?.timestamp,
+    id: message.id,
+    userId: message.user_id,
+    contactId: message.contact_id,
+    senderId: message.sender_id,
+    content: message.content,
+    timestamp: message.timestamp,
   };
 }
 
