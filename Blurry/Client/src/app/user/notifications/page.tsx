@@ -17,7 +17,11 @@ function groupByType(notifications: Notification[]): Record<string, Notification
   }, {} as Record<string, Notification[]>);
 }
 
-export default function NotificationsPage({ userId }: Readonly<{ userId: string; contactId: string }>) {
+interface NotificationsPageProps {
+  userId: string;
+}
+
+export default function NotificationsPage({ userId }: Readonly<NotificationsPageProps>) {
   const realtimeContext = useRealtime();
   const { showToast } = useNotifications();
   const notifications = realtimeContext?.notifications;
@@ -26,6 +30,38 @@ export default function NotificationsPage({ userId }: Readonly<{ userId: string;
   const [markingAllRead, setMarkingAllRead] = useState(false);
   const markReadInFlightRef = useRef<Set<number>>(new Set());
   const deleteInFlightRef = useRef<Set<number>>(new Set());
+
+  useEffect(() => {
+    const markReadInFlight = markReadInFlightRef.current;
+    const deleteInFlight = deleteInFlightRef.current;
+
+    return () => {
+      markReadInFlight.clear();
+      deleteInFlight.clear();
+    };
+  }, []);
+
+  const getAuthHeader = (): Record<string, string> => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
+  const getJsonAuthHeaders = (): Record<string, string> => ({
+    "Content-Type": "application/json",
+    ...getAuthHeader(),
+  });
+
+  const patchNotificationRead = async (id: number) => {
+    const res = await fetch("/api/notifications", {
+      method: "PATCH",
+      headers: getJsonAuthHeaders(),
+      body: JSON.stringify({ id, read: true }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error ${res.status} actualizando notificacion ${id}`);
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -39,9 +75,8 @@ export default function NotificationsPage({ userId }: Readonly<{ userId: string;
       };
     }
 
-    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
     fetch(`/api/notifications?userId=${encodeURIComponent(String(userId))}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: getAuthHeader(),
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -77,18 +112,7 @@ export default function NotificationsPage({ userId }: Readonly<{ userId: string;
 
     markReadInFlightRef.current.add(id);
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-      const res = await fetch("/api/notifications", {
-        method: "PATCH",
-        headers: token
-          ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-          : { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, read: true })
-      });
-
-      if (!res.ok) {
-        throw new Error(`Error ${res.status} actualizando notificacion`);
-      }
+      await patchNotificationRead(id);
 
       setLocalNotifications((n: Notification[]) => n.map((notif: Notification) => 
         notif.id === id ? { ...notif, read: true } : notif
@@ -106,30 +130,18 @@ export default function NotificationsPage({ userId }: Readonly<{ userId: string;
     }
 
     const unreadIds = localNotifications
-      .filter((notif: Notification) => !notif.read)
+      .filter((notif: Notification) => !notif.read && !markReadInFlightRef.current.has(notif.id))
       .map((notif: Notification) => notif.id);
 
     if (unreadIds.length === 0) {
       return;
     }
 
-    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    const headers = token
-      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-      : { "Content-Type": "application/json" };
-
     try {
       setMarkingAllRead(true);
       const results = await Promise.allSettled(
         unreadIds.map(async (id) => {
-          const res = await fetch("/api/notifications", {
-            method: "PATCH",
-            headers,
-            body: JSON.stringify({ id, read: true }),
-          });
-          if (!res.ok) {
-            throw new Error(`Error ${res.status} actualizando notificacion ${id}`);
-          }
+          await patchNotificationRead(id);
           return id;
         })
       );
@@ -169,12 +181,9 @@ export default function NotificationsPage({ userId }: Readonly<{ userId: string;
 
     deleteInFlightRef.current.add(id);
     try {
-      const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
       const res = await fetch("/api/notifications", {
         method: "DELETE",
-        headers: token
-          ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-          : { "Content-Type": "application/json" },
+        headers: getJsonAuthHeaders(),
         body: JSON.stringify({ id })
       });
 
