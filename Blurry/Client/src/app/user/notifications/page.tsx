@@ -1,11 +1,12 @@
 "use client";
 
 import NotificationItem from "@/components/NotificationItem";
+import { useNotifications } from "@/components/NotificationsContext";
 import { Notification } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
-import { useEffect, useState } from 'react';
-import { Bell, Flame, Filter, Zap } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from 'react';
+import { Bell, Filter, Zap } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
 function groupByType(notifications: Notification[]): Record<string, Notification[]> {
   return notifications.reduce((acc, n) => {
@@ -16,19 +17,22 @@ function groupByType(notifications: Notification[]): Record<string, Notification
   }, {} as Record<string, Notification[]>);
 }
 
-export default function NotificationsPage({ userId, contactId }: Readonly<{ userId: string; contactId: string }>) {
+export default function NotificationsPage({ userId }: Readonly<{ userId: string; contactId: string }>) {
   const realtimeContext = useRealtime();
-  const notifications = realtimeContext?.notifications || [];
+  const { showToast } = useNotifications();
+  const notifications = realtimeContext?.notifications;
   const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [markingAllRead, setMarkingAllRead] = useState(false);
+  const markReadInFlightRef = useRef<Set<number>>(new Set());
+  const deleteInFlightRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
 
-    if (notifications.length > 0) {
+    if ((notifications?.length ?? 0) > 0) {
       if (!cancelled) {
-        setLocalNotifications(notifications);
+        setLocalNotifications(notifications ?? []);
       }
       return () => {
         cancelled = true;
@@ -62,6 +66,16 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
   }, [notifications, userId]);
 
   const handleMarkRead = async (id: number) => {
+    const target = localNotifications.find((notif: Notification) => notif.id === id);
+    if (!target || target.read) {
+      return;
+    }
+
+    if (markReadInFlightRef.current.has(id)) {
+      return;
+    }
+
+    markReadInFlightRef.current.add(id);
     try {
       const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
       const res = await fetch("/api/notifications", {
@@ -79,7 +93,11 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
       setLocalNotifications((n: Notification[]) => n.map((notif: Notification) => 
         notif.id === id ? { ...notif, read: true } : notif
       ));
-    } catch {}
+    } catch {
+      showToast("No se pudo marcar la notificacion como leida.", "error");
+    } finally {
+      markReadInFlightRef.current.delete(id);
+    }
   };
 
   const handleMarkAllRead = async () => {
@@ -123,6 +141,7 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
       );
 
       if (successfulIds.size === 0) {
+        showToast("No se pudo marcar ninguna notificacion como leida.", "error");
         return;
       }
 
@@ -131,12 +150,24 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
           successfulIds.has(notif.id) ? { ...notif, read: true } : notif
         )
       );
+
+      const failedCount = unreadIds.length - successfulIds.size;
+      if (failedCount === 0) {
+        showToast("Todas las notificaciones fueron marcadas como leidas.", "success");
+      } else {
+        showToast(`Se marcaron ${successfulIds.size} notificaciones, ${failedCount} fallaron.`, "info");
+      }
     } finally {
       setMarkingAllRead(false);
     }
   };
 
   const handleDelete = async (id: number) => {
+    if (deleteInFlightRef.current.has(id)) {
+      return;
+    }
+
+    deleteInFlightRef.current.add(id);
     try {
       const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
       const res = await fetch("/api/notifications", {
@@ -152,7 +183,11 @@ export default function NotificationsPage({ userId, contactId }: Readonly<{ user
       }
 
       setLocalNotifications((n: Notification[]) => n.filter((notif: Notification) => notif.id !== id));
-    } catch {}
+    } catch {
+      showToast("No se pudo eliminar la notificacion.", "error");
+    } finally {
+      deleteInFlightRef.current.delete(id);
+    }
   };
 
   const filteredNotifications = activeFilter === "all" 
