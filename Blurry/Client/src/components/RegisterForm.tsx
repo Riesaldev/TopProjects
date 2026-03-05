@@ -6,20 +6,48 @@ import { Mail, Lock, User, Eye, EyeOff, Loader2, AlertCircle } from "lucide-reac
 import { useNotifications } from "./NotificationsContext";
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({ username: "", email: "", password: "", confirmPassword: "" });
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    age: "18",
+    gender: "other",
+    location: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const router = useRouter();
   const { showToast } = useNotifications();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFieldErrors({});
+    setError("");
+
+    const errors: Record<string, string> = {};
+    const parsedAge = Number(formData.age);
+    
+    if (!Number.isInteger(parsedAge) || parsedAge < 18 || parsedAge > 120) {
+      errors.age = "Edad debe ser un número entero entre 18 y 120.";
+    }
+
+    if (!formData.location.trim()) {
+      errors.location = "La ubicación es obligatoria.";
+    }
+
     if (formData.password !== formData.confirmPassword) {
-      setError("Los códigos de acceso no coinciden");
+      errors.confirmPassword = "Los códigos de acceso no coinciden.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setError("Por favor corrige los errores antes de continuar.");
       return;
     }
-    setError("");
+
     setLoading(true);
 
     try {
@@ -27,9 +55,12 @@ export default function RegisterForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          nombre: formData.username,
-          correo: formData.email,
-          contrasena: formData.password,
+          email: formData.email,
+          password: formData.password,
+          display_name: formData.username,
+          age: parsedAge,
+          gender: formData.gender,
+          location: formData.location.trim(),
         }),
       });
       const data = await res.json();
@@ -44,7 +75,7 @@ export default function RegisterForm() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -100,8 +131,68 @@ export default function RegisterForm() {
             <Lock className="h-4 w-4 text-zinc-500 group-focus-within:text-blue-400 transition-colors" />
           </div>
           <input type={showPassword ? "text" : "password"} name="confirmPassword" required value={formData.confirmPassword} onChange={handleChange} placeholder="••••••••"
-            className="w-full bg-black/40 border border-zinc-700/80 rounded-xl text-white pl-11 pr-11 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 transition-all font-medium placeholder:text-zinc-600 tracking-wider" />
+            className={`w-full bg-black/40 border rounded-xl text-white pl-11 pr-11 py-3 focus:outline-none transition-all font-medium placeholder:text-zinc-600 tracking-wider ${fieldErrors.confirmPassword ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500/50' : 'border-zinc-700/80 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50'}`} />
         </div>
+        {fieldErrors.confirmPassword && (
+          <p className="text-red-400 text-xs font-bold pl-1 flex items-center gap-1 mt-1">
+            <AlertCircle className="w-3 h-3" /> {fieldErrors.confirmPassword}
+          </p>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-1">
+          <label className="text-xs font-black text-zinc-400 uppercase tracking-widest pl-1">Edad</label>
+          <input
+            type="number"
+            name="age"
+            min={18}
+            max={120}
+            required
+            value={formData.age}
+            onChange={handleChange}
+            className={`w-full bg-black/40 border rounded-xl text-white px-4 py-3 focus:outline-none transition-all font-medium placeholder:text-zinc-600 ${fieldErrors.age ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500/50' : 'border-zinc-700/80 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50'}`}
+            placeholder="18"
+          />
+          {fieldErrors.age && (
+            <p className="text-red-400 text-xs font-bold pl-1 flex items-center gap-1 mt-1">
+              <AlertCircle className="w-3 h-3" /> {fieldErrors.age}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-xs font-black text-zinc-400 uppercase tracking-widest pl-1">Género</label>
+          <select
+            name="gender"
+            required
+            value={formData.gender}
+            onChange={handleChange}
+            className="w-full bg-black/40 border border-zinc-700/80 rounded-xl text-white px-4 py-3 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50 transition-all font-medium"
+          >
+            <option value="other" className="bg-zinc-900">Otro</option>
+            <option value="male" className="bg-zinc-900">Masculino</option>
+            <option value="female" className="bg-zinc-900">Femenino</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs font-black text-zinc-400 uppercase tracking-widest pl-1">Ubicación</label>
+        <input
+          type="text"
+          name="location"
+          required
+          value={formData.location}
+          onChange={handleChange}
+          className={`w-full bg-black/40 border rounded-xl text-white px-4 py-3 focus:outline-none transition-all font-medium placeholder:text-zinc-600 ${fieldErrors.location ? 'border-red-500/50 focus:border-red-500 focus:ring-1 focus:ring-red-500/50' : 'border-zinc-700/80 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/50'}`}
+          placeholder="Madrid, España"
+        />
+        {fieldErrors.location && (
+          <p className="text-red-400 text-xs font-bold pl-1 flex items-center gap-1 mt-1">
+            <AlertCircle className="w-3 h-3" /> {fieldErrors.location}
+          </p>
+        )}
       </div>
 
       <button

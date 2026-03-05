@@ -4,6 +4,7 @@ import AchievementsUser from "../dashboard/AchievementsUser";
 import { User, Achievement, UserAchievement } from "@/types";
 import { useEffect, useState } from 'react';
 import { useRealtime } from '@/context/RealtimeContext';
+import { useAuth } from '@/components/AuthContext';
 
 interface ProfileForm {
   nombre: string;
@@ -12,46 +13,50 @@ interface ProfileForm {
   interests: string;
 }
 
-
-
-interface UserProfilePageProps {
-  userId: number;
-}
-
-export default function UserProfilePage({ userId }: Readonly<UserProfilePageProps>) {
+export default function UserProfilePage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const userId = currentUser?.id;
   const realtimeContext = useRealtime();
   const notifications = realtimeContext?.notifications || [];
-  const [user, setUser] =useState<User | null>(null);
-  const [editing, setEditing] =useState(false);
-  const [form, setForm] =useState<ProfileForm>({
+  const [user, setUser] = useState<User | null>(null);
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState<ProfileForm>({
     nombre: "",
     avatar: "/globe.svg",
     bio: "",
     interests: ""
   });
-  const [loading, setLoading] =useState(true);
-  const [saving, setSaving] =useState(false);
-  const [error, setError] =useState("");
-  const [allAchievements, setAllAchievements] =useState<Achievement[]>([]);
-  const [userAchievements, setUserAchievements] =useState<UserAchievement[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [allAchievements, setAllAchievements] = useState<Achievement[]>([]);
+  const [userAchievements, setUserAchievements] = useState<UserAchievement[]>([]);
 
   useEffect(() => {
-    if (!userId) return;
-    fetch(`/api/users/${userId}`)
-      .then(res => res.json())
-      .then((data: User) => {
-        setUser(data);
+    if (!userId || authLoading) return;
+    
+    Promise.all([
+      fetch(`/api/users/${userId}`).then(res => res.json()).catch(() => null),
+      fetch(`/api/achievements/list`).then(res => res.json()).catch(() => []),
+      fetch(`/api/achievements?userId=${userId}`).then(res => res.json()).catch(() => [])
+    ]).then(([userData, achievements, userAch]) => {
+      if (userData) {
+        setUser(userData);
         setForm({
-          nombre: data.nombre || "",
-          avatar: data.avatar || "/globe.svg",
-          bio: data.bio || "",
-          interests: data.interests || "",
+          nombre: userData.nombre || "",
+          avatar: userData.avatar || "/globe.svg",
+          bio: userData.bio || "",
+          interests: userData.interests || "",
         });
-        setLoading(false);
-      });
-    fetch(`/api/achievements/list`).then(res => res.json()).then(setAllAchievements);
-    fetch(`/api/achievements?userId=${userId}`).then(res => res.json()).then(setUserAchievements);
-  }, [userId]);
+      }
+      setAllAchievements(achievements);
+      setUserAchievements(userAch);
+      setLoading(false);
+    }).catch((error) => {
+      console.error("Error cargando perfil:", error);
+      setLoading(false);
+    });
+  }, [userId, authLoading]);
 
   useEffect(() => {
     // Aquí puedes manejar notificaciones en tiempo real si las gestionas en el contexto
@@ -70,22 +75,30 @@ export default function UserProfilePage({ userId }: Readonly<UserProfilePageProp
     setSaving(true);
     setError("");
     if (!userId) return;
-    const res = await fetch(`/api/users/${userId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...user, ...form })
-    });
-    if (!res.ok) setError("Error al guardar cambios");
-    else {
-      if (user) {
-        setUser({ ...user, ...form });
+    
+    try {
+      const res = await fetch(`/api/users/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...user, ...form })
+      });
+      
+      if (!res.ok) {
+        setError("Error al guardar cambios");
+      } else {
+        const updatedUser = await res.json();
+        setUser(updatedUser);
+        setEditing(false);
       }
-      setEditing(false);
+    } catch (error) {
+      console.error("Error guardando perfil:", error);
+      setError("Error al conectar con el servidor");
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   };
 
-  if (loading) return (
+  if (authLoading || loading) return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
       <div className="animate-pulse flex flex-col items-center">
         <div className="w-16 h-16 border-4 border-t-primary-500 border-zinc-800 rounded-full animate-spin shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>

@@ -4,7 +4,7 @@ import path from "path";
 import { Mission, UserMission, User, Streak } from "@/types";
 
 const MISSIONS_PATH = path.join(process.cwd(), "data", "missions.json");
-const USER_MISSIONS_PATH = path.join(process.cwd(), "data", "userMissions.json");
+const USER_MISSIONS_PATH = path.join(process.cwd(), "data", "user-missions.json");
 const USERS_PATH = path.join(process.cwd(), "data", "users.json");
 const STREAKS_PATH = path.join(process.cwd(), "data", "streaks.json");
 
@@ -25,29 +25,30 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url!);
-  const userId = url.searchParams.get("userId");
-  const missions: Mission[] = JSON.parse(await fs.readFile(MISSIONS_PATH, "utf-8"));
-  if (!userId) return NextResponse.json(missions);
-  const userMissionsData: UserMission[] = JSON.parse(await fs.readFile(USER_MISSIONS_PATH, "utf-8"));
-  const userMissions = [...userMissionsData]; // Copia mutable para modificaciones
-  const today = getTodayStr();
-  const week = getCurrentWeekStr();
-  // Filtrar misiones asignadas para hoy/semana
-  const assignedDaily = userMissions.filter((um: UserMission) => String(um.userId) === String(userId) && missions.find((m: Mission) => m.id === um.missionId && m.type === "diaria") && um.assignedAt?.slice(0,10) === today);
-  const assignedWeekly = userMissions.filter((um: UserMission) => String(um.userId) === String(userId) && missions.find((m: Mission) => m.id === um.missionId && m.type === "semanal") && um.assignedAt?.startsWith(week));
-  // Asignar si faltan
-  let changed = false;
-  if (assignedDaily.length < 2) {
-    const available = shuffle(missions.filter((m: Mission) => m.type === "diaria" && !assignedDaily.some((um: UserMission) => um.missionId === m.id)));
-    for (let i = 0; i < 2 - assignedDaily.length && i < available.length; i++) {
-      const m = available[i];
-      const um: UserMission = { userId: Number(userId), missionId: m.id, progress: 0, completed: false, assignedAt: today, completedAt: null };
-      userMissions.push(um);
-      assignedDaily.push(um);
-      changed = true;
+  try {
+    const url = new URL(req.url!);
+    const userId = url.searchParams.get("userId");
+    const missions: Mission[] = JSON.parse(await fs.readFile(MISSIONS_PATH, "utf-8"));
+    if (!userId) return NextResponse.json(missions);
+    const userMissionsData: UserMission[] = JSON.parse(await fs.readFile(USER_MISSIONS_PATH, "utf-8"));
+    const userMissions = [...userMissionsData]; // Copia mutable para modificaciones
+    const today = getTodayStr();
+    const week = getCurrentWeekStr();
+    // Filtrar misiones asignadas para hoy/semana
+    const assignedDaily = userMissions.filter((um: UserMission) => String(um.userId) === String(userId) && missions.find((m: Mission) => m.id === um.missionId && m.type === "diaria") && um.assignedAt?.slice(0,10) === today);
+    const assignedWeekly = userMissions.filter((um: UserMission) => String(um.userId) === String(userId) && missions.find((m: Mission) => m.id === um.missionId && m.type === "semanal") && um.assignedAt?.startsWith(week));
+    // Asignar si faltan
+    let changed = false;
+    if (assignedDaily.length < 2) {
+      const available = shuffle(missions.filter((m: Mission) => m.type === "diaria" && !assignedDaily.some((um: UserMission) => um.missionId === m.id)));
+      for (let i = 0; i < 2 - assignedDaily.length && i < available.length; i++) {
+        const m = available[i];
+        const um: UserMission = { userId: Number(userId), missionId: m.id, progress: 0, completed: false, assignedAt: today, completedAt: null };
+        userMissions.push(um);
+        assignedDaily.push(um);
+        changed = true;
+      }
     }
-  }
   if (assignedWeekly.length < 1) {
     const available = shuffle(missions.filter((m: Mission) => m.type === "semanal" && !assignedWeekly.some((um: UserMission) => um.missionId === m.id)));
     if (available.length) {
@@ -69,14 +70,22 @@ export async function GET(req: NextRequest) {
     return false;
   });
   return NextResponse.json({ missions, userProgress });
+  } catch (error) {
+    console.error("Error en GET /api/missions:", error);
+    return NextResponse.json(
+      { missions: [], userProgress: [], error: "Error al cargar misiones" },
+      { status: 200 } // Devolver 200 con datos vacíos para no romper el dashboard
+    );
+  }
 }
 
 export async function POST(req: NextRequest) {
-  // Reclamar recompensa de misión
-  const { userId, missionId } = await req.json();
-  const missions: Mission[] = JSON.parse(await fs.readFile(MISSIONS_PATH, "utf-8"));
-  const userMissions: UserMission[] = JSON.parse(await fs.readFile(USER_MISSIONS_PATH, "utf-8"));
-  const users: User[] = JSON.parse(await fs.readFile(USERS_PATH, "utf-8"));
+  try {
+    // Reclamar recompensa de misión
+    const { userId, missionId } = await req.json();
+    const missions: Mission[] = JSON.parse(await fs.readFile(MISSIONS_PATH, "utf-8"));
+    const userMissions: UserMission[] = JSON.parse(await fs.readFile(USER_MISSIONS_PATH, "utf-8"));
+    const users: User[] = JSON.parse(await fs.readFile(USERS_PATH, "utf-8"));
   const streaks: Streak[] = JSON.parse(await fs.readFile(STREAKS_PATH, "utf-8"));
   const mission = missions.find((m: Mission) => m.id === missionId);
   const userMission = userMissions.find((um: UserMission) => String(um.userId) === String(userId) && um.missionId === missionId);
@@ -123,4 +132,11 @@ export async function POST(req: NextRequest) {
   await fs.writeFile(USERS_PATH, JSON.stringify(users, null, 2));
   await fs.writeFile(STREAKS_PATH, JSON.stringify(streaks, null, 2));
   return NextResponse.json({ success: true, reward: mission.reward, streak: streakInfo });
+  } catch (error) {
+    console.error("Error en POST /api/missions:", error);
+    return NextResponse.json(
+      { success: false, message: "Error al procesar la misión" },
+      { status: 500 }
+    );
+  }
 } 

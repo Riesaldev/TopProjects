@@ -72,16 +72,16 @@ export default function UserDashboard() {
     if (!userId) return; // No hacer llamadas si no hay userId
     
     Promise.all([
-      fetch(`/api/user?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/purchases?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/agenda?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/notifications?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/notes?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/games`).then(res => res.json()),
-      fetch(`/api/chats?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/achievements/list`).then(res => res.json()),
-      fetch(`/api/achievements?userId=${userId}`).then(res => res.json()),
-      fetch(`/api/missions?userId=${userId}`).then(res => res.json()),
+      fetch(`/api/user?userId=${userId}`).then(res => res.json()).catch(() => null),
+      fetch(`/api/purchases?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/agenda?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/notifications?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/notes?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/games`).then(res => res.json()).catch(() => []),
+      fetch(`/api/chats?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/achievements/list`).then(res => res.json()).catch(() => []),
+      fetch(`/api/achievements?userId=${userId}`).then(res => res.json()).catch(() => []),
+      fetch(`/api/missions?userId=${userId}`).then(res => res.json()).catch(() => ({ missions: [], userProgress: [] })),
     ]).then(([user, purchases, agenda, notifications, notes, games, chats, allAchievements, userAchievements, missionsData]) => {
       setUser(user);
       setPurchases(purchases);
@@ -93,6 +93,9 @@ export default function UserDashboard() {
       setUserAchievements(userAchievements);
       setMissions(missionsData.missions || []);
       setUserMissions(missionsData.userProgress || []);
+      setLoading(false);
+    }).catch((error) => {
+      console.error("Error cargando datos del dashboard:", error);
       setLoading(false);
     });
   }, [userId]);
@@ -121,19 +124,31 @@ export default function UserDashboard() {
   useEffect(() => {
     if (!user) return;
     const fetchMissions = async () => {
-      const res = await fetch(`/api/missions?userId=${userId}`);
-      const data = await res.json();
-      setMissions(data.missions);
-      setUserMissions(data.userProgress);
-      setMissionsLoading(false);
+      try {
+        const res = await fetch(`/api/missions?userId=${userId}`);
+        const data = await res.json();
+        setMissions(data.missions || []);
+        setUserMissions(data.userProgress || []);
+      } catch (error) {
+        console.error("Error cargando misiones:", error);
+        setMissions([]);
+        setUserMissions([]);
+      } finally {
+        setMissionsLoading(false);
+      }
     };
     fetchMissions();
   }, [user, userId]);
 
   useEffect(() => {
+    if (!userId) return;
     fetch(`/api/streaks?userId=${userId}`)
       .then(res => res.json())
-      .then(data => setStreak(data));
+      .then(data => setStreak(data))
+      .catch(error => {
+        console.error("Error cargando streak:", error);
+        setStreak(null);
+      });
   }, [userId]);
   const handleClaim = async (missionId: number) => {
     const res = await fetch(`/api/missions`, {

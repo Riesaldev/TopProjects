@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthContext";
 import { AlertCircle, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from 'next/link';
 
@@ -9,19 +10,38 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { login, error, loading } = useAuth();
+  const [localError, setLocalError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
+    setLocalError("");
+    setLoading(true);
+
+    try {
+      const result = await login(email, password);
+      
+      if (result.success) {
+        // Redirigir al dashboard después de login exitoso
+        router.push("/dashboard");
+      } else {
+        setLocalError(result.message || "Error al iniciar sesión");
+      }
+    } catch (error) {
+      setLocalError("Error al conectar con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 relative">
-      {error && (
+      {localError && (
         <div className="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-xl flex items-start text-sm font-bold shadow-[0_0_15px_rgba(239,68,68,0.2)]">
           <AlertCircle className="w-5 h-5 mr-2 shrink-0 mt-0.5" />
-          <p>{error}</p>
+          <p>{localError}</p>
         </div>
       )}
 
