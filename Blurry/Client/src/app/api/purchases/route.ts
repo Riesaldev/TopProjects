@@ -17,6 +17,10 @@ function normalizePurchase(raw: unknown) {
   };
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object";
+}
+
 function authHeaders(req: NextRequest): Record<string, string> {
   return {
     "Content-Type": "application/json",
@@ -36,11 +40,15 @@ export async function GET(req: NextRequest) {
 
   const data = await res.json().catch(() => []);
 
+  if (!res.ok) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
   if (Array.isArray(data)) {
     return NextResponse.json(data.map(normalizePurchase), { status: res.status });
   }
 
-  return NextResponse.json(normalizePurchase(data), { status: res.status });
+  return NextResponse.json(isRecord(data) ? normalizePurchase(data) : data, { status: res.status });
 }
 
 export async function POST(req: NextRequest) {
@@ -52,7 +60,12 @@ export async function POST(req: NextRequest) {
   });
 
   const data = await res.json().catch(() => ({}));
-  return NextResponse.json(normalizePurchase(data), { status: res.status });
+
+  if (!res.ok) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
+  return NextResponse.json(isRecord(data) ? normalizePurchase(data) : data, { status: res.status });
 }
 
 export async function PATCH(req: NextRequest) {
@@ -68,7 +81,12 @@ export async function PATCH(req: NextRequest) {
   });
 
   const data = await res.json().catch(() => ({}));
-  return NextResponse.json(normalizePurchase(data), { status: res.status });
+
+  if (!res.ok) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
+  return NextResponse.json(isRecord(data) ? normalizePurchase(data) : data, { status: res.status });
 }
 
 export async function DELETE(req: NextRequest) {

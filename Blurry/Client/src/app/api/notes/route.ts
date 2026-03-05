@@ -2,6 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
+function authHeaders(req: NextRequest): Record<string, string> {
+  return {
+    "Content-Type": "application/json",
+    Authorization: req.headers.get("authorization") || "",
+  };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object";
+}
+
 function normalizeNote(note: unknown) {
   const normalizedNote = (note ?? {}) as Record<string, unknown>;
   return {
@@ -16,10 +27,20 @@ function normalizeNote(note: unknown) {
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const userId = url.searchParams.get("userId");
-  const res = await fetch(`${BACKEND_URL}/notes${userId ? `?userId=${encodeURIComponent(userId)}` : ""}`);
+  const res = await fetch(`${BACKEND_URL}/notes${userId ? `?userId=${encodeURIComponent(userId)}` : ""}`, {
+    headers: authHeaders(req),
+  });
   const data = await res.json().catch(() => []);
-  const normalized = Array.isArray(data) ? data.map(normalizeNote) : [];
-  return NextResponse.json(normalized, { status: res.status });
+
+  if (!res.ok) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
+  if (Array.isArray(data)) {
+    return NextResponse.json(data.map(normalizeNote), { status: res.status });
+  }
+
+  return NextResponse.json(isRecord(data) ? normalizeNote(data) : data, { status: res.status });
 }
 
 export async function POST(req: NextRequest) {
@@ -34,10 +55,15 @@ export async function POST(req: NextRequest) {
 
   const res = await fetch(`${BACKEND_URL}/notes`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(req),
     body: JSON.stringify(normalized),
   });
   const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
   return NextResponse.json(data?.id ? normalizeNote(data) : data, { status: res.status });
 }
 
@@ -56,11 +82,16 @@ export async function PATCH(req: NextRequest) {
 
   const res = await fetch(`${BACKEND_URL}/notes/${id}`, {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(req),
     body: JSON.stringify(normalized),
   });
 
   const data = await res.json().catch(() => ({}));
+
+  if (!res.ok) {
+    return NextResponse.json(data, { status: res.status });
+  }
+
   return NextResponse.json(data?.id ? normalizeNote(data) : data, { status: res.status });
 }
 
@@ -72,7 +103,7 @@ export async function DELETE(req: NextRequest) {
 
   const res = await fetch(`${BACKEND_URL}/notes/${payload.id}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json" },
+    headers: authHeaders(req),
   });
 
   const data = await res.json().catch(() => ({ success: res.ok }));
