@@ -23,6 +23,8 @@ export default function GamesPage() {
   const gameInvite = realtimeContext?.gameInvite;
   const [activeTab, setActiveTab] = useState<"lobby" | "history">("lobby");
   const [games, setGames] = useState<Game[]>([]);
+  const [categoryFilter, setCategoryFilter] = useState<"all" | "game" | "test">("all");
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState<GameHistory[]>([]);
 
@@ -52,11 +54,22 @@ export default function GamesPage() {
     loadGames();
   }, []);
 
-  const handleGameSelect = (id: string) => {
-    const game = games.find(g => g.id === id);
+  const handleGameSelect = (id: string | number) => {
+    const game = games.find(g => String(g.id) === String(id));
     const query = new URLSearchParams({ gameId: String(id), gameName: game?.name || "Juego" });
     router.push(`/user/video-call?${query.toString()}`);
   };
+
+  const filteredGames = games.filter((game) => {
+    const currentCategory = game.category === "test" ? "test" : "game";
+    const byCategory = categoryFilter === "all" || currentCategory === categoryFilter;
+    const needle = query.trim().toLowerCase();
+    const byQuery =
+      !needle ||
+      String(game.name || "").toLowerCase().includes(needle) ||
+      String(game.description || "").toLowerCase().includes(needle);
+    return byCategory && byQuery;
+  });
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 animate-fade-in relative z-10 p-4 pb-20">
@@ -131,16 +144,39 @@ export default function GamesPage() {
             >
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <h2 className="text-xl font-bold flex items-center gap-2 text-white">
-                  <Gamepad2 className="w-5 h-5 text-zinc-400" /> Juegos Destacados
+                  <Gamepad2 className="w-5 h-5 text-zinc-400" /> Juegos y Tests Destacados
                 </h2>
                 <div className="relative w-full sm:w-auto">
                   <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
                   <input 
                     type="text" 
                     placeholder="Buscar juego..." 
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
                     className="pl-9 pr-4 py-2 w-full sm:w-64 bg-black/20 border border-zinc-800 rounded-xl text-sm text-white focus:outline-none focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/50 transition-all"
                   />
                 </div>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setCategoryFilter("all")}
+                  className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border transition-all ${categoryFilter === "all" ? "border-primary-400/60 text-primary-300 bg-primary-500/10" : "border-zinc-700 text-zinc-400 hover:text-zinc-200"}`}
+                >
+                  Todo
+                </button>
+                <button
+                  onClick={() => setCategoryFilter("game")}
+                  className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border transition-all ${categoryFilter === "game" ? "border-violet-400/60 text-violet-300 bg-violet-500/10" : "border-zinc-700 text-zinc-400 hover:text-zinc-200"}`}
+                >
+                  Juegos
+                </button>
+                <button
+                  onClick={() => setCategoryFilter("test")}
+                  className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider border transition-all ${categoryFilter === "test" ? "border-cyan-400/60 text-cyan-300 bg-cyan-500/10" : "border-zinc-700 text-zinc-400 hover:text-zinc-200"}`}
+                >
+                  Tests
+                </button>
               </div>
 
               {loading ? (
@@ -156,11 +192,17 @@ export default function GamesPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {games.map(game => (
+                  {filteredGames.map(game => (
                     <GameCard key={game.id} game={game} onSelect={handleGameSelect} />
                   ))}
                 </div>
               )}
+
+              {!loading && filteredGames.length === 0 ? (
+                <div className="text-center py-10 text-zinc-500">
+                  No hay resultados para ese filtro.
+                </div>
+              ) : null}
             </motion.div>
           ) : (
             <motion.div
