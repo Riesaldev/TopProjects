@@ -1,35 +1,49 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { proxyRequest } from "../_proxy";
 
-const filePath = path.join(process.cwd(), "data", "reports.json");
+const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
 export async function GET(req: NextRequest) {
-  try {
-    const file = await fs.readFile(filePath, "utf-8");
-    const reports = JSON.parse(file);
-    return NextResponse.json(reports);
-  } catch (error) {
-    console.error("Error reading reports file:", error);
-    return NextResponse.json([]);
-  }
+  return proxyRequest(req, "/reports");
 }
 
 export async function POST(req: NextRequest) {
-  try {
-    const newReport = await req.json();
-    const file = await fs.readFile(filePath, "utf-8");
-    const reports = JSON.parse(file);
-    
-    if (!newReport.id) {
-      newReport.id = `report_${Date.now()}`;
-    }
-    
-    reports.push(newReport);
-    await fs.writeFile(filePath, JSON.stringify(reports, null, 2));
-    return NextResponse.json(newReport, { status: 201 });
-  } catch (error) {
-    console.error("Error creating report:", error);
-    return NextResponse.json({ error: "Error creating report" }, { status: 500 });
+  return proxyRequest(req, "/reports");
+}
+
+export async function PATCH(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
   }
-} 
+
+  const res = await fetch(`${BACKEND_URL}/reports/${payload.id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await res.json().catch(() => ({}));
+  return NextResponse.json(data, { status: res.status });
+}
+
+export async function DELETE(req: NextRequest) {
+  const payload = await req.json().catch(() => null);
+  if (!payload?.id) {
+    return NextResponse.json({ error: "id es requerido" }, { status: 400 });
+  }
+
+  const res = await fetch(`${BACKEND_URL}/reports/${payload.id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: req.headers.get("authorization") || "",
+    },
+  });
+
+  const data = await res.json().catch(() => ({ success: res.ok }));
+  return NextResponse.json(data, { status: res.status });
+}

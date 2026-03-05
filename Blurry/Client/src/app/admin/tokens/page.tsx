@@ -2,35 +2,93 @@
 
 import React from "react";
 
-const mockTokenTransactions = [
-  { id: "1", user: "Carlos Pérez", type: "Compra", amount: 100, date: "2024-07-10" },
-  { id: "2", user: "Ana Torres", type: "Sanción compensada", amount: -50, date: "2024-07-12" },
-];
+interface TokenRow {
+  id: number;
+  userId: number;
+  userName: string;
+  reason: string;
+  amount: number;
+  createdAt: string;
+}
 
 export default function AdminTokensPage() {
+  const [rows, setRows] = React.useState<TokenRow[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+        const [tokensRes, usersRes] = await Promise.all([
+          fetch("/api/tokens", { headers }),
+          fetch("/api/users"),
+        ]);
+
+        const tokensRaw = await tokensRes.json().catch(() => []);
+        const usersRaw = await usersRes.json().catch(() => []);
+
+        const users = Array.isArray(usersRaw) ? usersRaw : [];
+        const userNameMap = new Map(
+          users.map((u: any) => [String(u.id), u.nombre || u.name || `Usuario ${u.id}`]),
+        );
+
+        const normalized: TokenRow[] = (Array.isArray(tokensRaw) ? tokensRaw : []).map((t: any) => ({
+          id: Number(t?.id || 0),
+          userId: Number(t?.user_id || 0),
+          userName: userNameMap.get(String(t?.user_id)) || `Usuario ${t?.user_id ?? "N/A"}`,
+          reason: String(t?.reason || "Movimiento"),
+          amount: Number(t?.amount || 0),
+          createdAt: t?.created_at ? new Date(t.created_at).toLocaleDateString() : "-",
+        }));
+
+        setRows(normalized);
+        setError(null);
+      } catch (err) {
+        console.error("Error cargando tokens:", err);
+        setRows([]);
+        setError("No se pudo cargar la gestión de tokens.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <h1 className="text-2xl font-bold mb-4">Gestión de Tokens</h1>
+      {loading ? <p className="mb-4">Cargando transacciones...</p> : null}
+      {error ? <p className="mb-4 text-red-600">{error}</p> : null}
+
       <table className="min-w-[350px] border rounded shadow bg-white">
         <thead>
           <tr className="bg-gray-100">
             <th className="p-2">Usuario</th>
-            <th className="p-2">Tipo</th>
+            <th className="p-2">Motivo</th>
             <th className="p-2">Cantidad</th>
             <th className="p-2">Fecha</th>
           </tr>
         </thead>
         <tbody>
-          {mockTokenTransactions.map((t) => (
+          {rows.map((t) => (
             <tr key={t.id} className="text-center border-t">
-              <td className="p-2">{t.user}</td>
-              <td className="p-2">{t.type}</td>
-              <td className="p-2">{t.amount}</td>
-              <td className="p-2">{t.date}</td>
+              <td className="p-2">{t.userName}</td>
+              <td className="p-2">{t.reason}</td>
+              <td className={`p-2 font-semibold ${t.amount >= 0 ? "text-emerald-600" : "text-rose-600"}`}>{t.amount}</td>
+              <td className="p-2">{t.createdAt}</td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {!loading && rows.length === 0 && !error ? (
+        <p className="mt-4 text-gray-600">No hay transacciones registradas.</p>
+      ) : null}
     </main>
   );
 } 

@@ -2,7 +2,7 @@
 
 import { useNotifications } from "@/components/NotificationsContext";
 import { Report } from "@/types";
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRealtime } from '@/context/RealtimeContext';
 import { ShieldAlert, CheckCircle2, Clock, Activity, FileWarning } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -13,12 +13,23 @@ interface UserReportsPageProps {
 
 export default function UserReportsPage({ userId }: Readonly<UserReportsPageProps>) {
   const [reports, setReports] = useState<Report[]>([]);
-  const [prevStates, setPrevStates] = useState<Record<string, string>>({});      
+  const prevStatesRef = useRef<Record<string, string>>({});
   const { showToast } = useNotifications();
   const realtimeContext = useRealtime();
-  const notifications = realtimeContext?.notifications || [];
   const userStatus = realtimeContext?.userStatus;
   const [loading, setLoading] = useState(true);
+
+  const normalizeReport = (raw: any): Report => {
+    const createdAt = raw?.created_at || raw?.fecha;
+    return {
+      id: String(raw?.id ?? ""),
+      usuario: String(raw?.reported_user_id ?? raw?.usuario ?? ""),
+      motivo: String(raw?.type ?? raw?.motivo ?? "Sin motivo"),
+      fecha: createdAt ? new Date(createdAt).toLocaleString() : "-",
+      estado: String(raw?.status ?? raw?.estado ?? "Pendiente"),
+      detalles: raw?.admin_notes || raw?.detalles,
+    } as Report;
+  };
 
   const getStatusInfo = (estado: string) => {
     const s = estado?.toLowerCase() || '';
@@ -28,24 +39,56 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
   };
 
   useEffect(() => {
-    // Replaced real fetch with a mocked delay mimicking the rest of the app for consistency
-    setTimeout(() => {
-      fetch(`/api/reports`)
-        .then(res => res.ok ? res.json() : [])
-        .then((data: Report[]) => {    
-          const myReports = data.filter((r: Report) => r.usuario && (String(r.usuario) === String(userId) || String(r.usuario).includes(String(userId)) || String(r.usuario).toLowerCase().includes("id "+userId)));
-          setReports(myReports);
-          myReports.forEach((r: Report) => {
-            if (prevStates[r.id] && prevStates[r.id] !== r.estado && r.estado === "Resuelta") {                                                                               
-              showToast(`Tu reporte '${r.motivo}' ha sido resuelto.`, "success");   
-            }
-          });
-          setPrevStates(Object.fromEntries(myReports.map((r: Report) => [r.id, r.estado])));                                                                            
-        })
-        .catch(err => console.log("Mock fallback:", err))
-        .finally(() => setLoading(false));
-    }, 600);
-  }, []); // Intentionally stripped prevStates/showToast from deps to avoid loop in mock
+    const controller = new AbortController();
+
+    const loadReports = async () => {
+      try {
+        setLoading(true);
+        const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+        const res = await fetch("/api/reports", {
+          signal: controller.signal,
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        const data = res.ok ? await res.json() : [];
+        const normalized = Array.isArray(data) ? data.map(normalizeReport) : [];
+        const myReports = normalized.filter((r: Report) => {
+          const reportUser = String(r.usuario || "").toLowerCase();
+          const targetUser = String(userId);
+          return (
+            reportUser === targetUser ||
+            reportUser.includes(targetUser) ||
+            reportUser.includes(`id ${targetUser}`)
+          );
+        });
+
+        setReports(myReports);
+
+        myReports.forEach((r: Report) => {
+          if (
+            prevStatesRef.current[r.id] &&
+            prevStatesRef.current[r.id] !== r.estado &&
+            r.estado.toLowerCase().includes("resuelt")
+          ) {
+            showToast(`Tu reporte '${r.motivo}' ha sido resuelto.`, "success");
+          }
+        });
+
+        prevStatesRef.current = Object.fromEntries(
+          myReports.map((r: Report) => [r.id, r.estado]),
+        );
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          console.error("Error cargando reportes:", error);
+          setReports([]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadReports();
+    return () => controller.abort();
+  }, [showToast, userId]);
 
   return (
     <main className="min-h-screen py-12 px-4 bg-zinc-950 text-slate-200 relative overflow-hidden flex flex-col items-center">

@@ -20,33 +20,31 @@ interface PurchaseHistoryPageProps {
 export default function PurchaseHistoryPage({ userId }: Readonly<PurchaseHistoryPageProps>) {
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const realtimeContext = useRealtime();
   const notifications = realtimeContext?.notifications || [];
 
   useEffect(() => {
-    fetch(`/api/purchases?userId=${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        // En caso de que no haya API, usamos datos mock mientras carga para la UI
-        if (!data || data.length === 0) {
-          const mockData = [
-            { id: 1, productName: "Token Neon Pack x100", quantity: 1, total: 9.99, date: new Date().toISOString(), status: "completed" },
-            { id: 2, productName: "Pase de Batalla Cyber", quantity: 1, total: 19.99, date: new Date(Date.now() - 86400000).toISOString(), status: "completed" },
-            { id: 3, productName: "Avatar Glitch Especial", quantity: 1, total: 4.99, date: new Date(Date.now() - 172800000).toISOString(), status: "pending" },
-          ];
-          setPurchases(mockData as any);
-        } else {
-          setPurchases(data);
+    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    fetch(`/api/purchases?userId=${userId}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Error ${res.status} cargando compras`);
         }
+        return res.json();
+      })
+      .then(data => {
+        setPurchases(Array.isArray(data) ? data : []);
+        setError(null);
         setLoading(false);
       })
       .catch((err) => {
-          console.error(err);
-          // Ocupamos fallback en modo dev
-          setPurchases([
-            { id: 1, productName: "Token Neon Pack x100", quantity: 1, total: 9.99, date: new Date().toISOString(), status: "completed" } as any
-          ]);
-          setLoading(false);
+        console.error(err);
+        setError("No se pudo cargar el historial de compras.");
+        setPurchases([]);
+        setLoading(false);
       });
   }, [userId]);
 
@@ -123,8 +121,8 @@ export default function PurchaseHistoryPage({ userId }: Readonly<PurchaseHistory
             ) : purchases.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-zinc-500 flex-1">
                 <ShoppingBag className="w-16 h-16 mb-4 opacity-20" />
-                <p className="font-bold text-lg">No hay transacciones registradas.</p>
-                <p className="text-sm">Tus futuras adquisiciones aparecerán aquí.</p>
+                <p className="font-bold text-lg">{error ? "Error de carga" : "No hay transacciones registradas."}</p>
+                <p className="text-sm">{error || "Tus futuras adquisiciones aparecerán aquí."}</p>
               </div>
             ) : (
               <div className="overflow-x-auto hide-scrollbar -mx-6 px-6 lg:mx-0 lg:px-0">
@@ -162,7 +160,7 @@ export default function PurchaseHistoryPage({ userId }: Readonly<PurchaseHistory
                         </td>
                         <td className="py-4 px-4">
                           <span className="font-black text-primary-400 font-mono text-lg">
-                            €{p.total.toFixed(2)}
+                            €{Number(p.total ?? p.price ?? 0).toFixed(2)}
                           </span>
                         </td>
                         <td className="py-4 px-4">
@@ -172,9 +170,9 @@ export default function PurchaseHistoryPage({ userId }: Readonly<PurchaseHistory
                           </div>
                         </td>
                         <td className="py-4 px-4">
-                          <div className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider mx-auto w-max shadow-sm ${getStatusStyle(p.status)}`}>
-                            {getStatusIcon(p.status)}
-                            {p.status}
+                          <div className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider mx-auto w-max shadow-sm ${getStatusStyle(p.status || "pending")}`}>
+                            {getStatusIcon(p.status || "pending")}
+                            {p.status || "pending"}
                           </div>
                         </td>
                       </motion.tr>

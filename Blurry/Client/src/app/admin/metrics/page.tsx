@@ -2,53 +2,137 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Users, AlertTriangle, Star, TrendingUp, Eye, Heart, MessageCircle, Shield } from "lucide-react";
+import { Users, AlertTriangle, Star, TrendingUp, Eye, Heart, Shield } from "lucide-react";
 
-const mockMetrics = [
-  { 
-    label: "Usuarios Activos", 
-    value: 1200, 
-    icon: Users, 
-    color: "from-primary-500 to-primary-600",
-    change: "+12%",
-    changeType: "positive"
-  },
-  { 
-    label: "Denuncias este Mes", 
-    value: 15, 
-    icon: AlertTriangle, 
-    color: "from-red-500 to-red-600",
-    change: "-8%",
-    changeType: "positive"
-  },
-  { 
-    label: "Valoración Media", 
-    value: 4.7, 
-    icon: Star, 
-    color: "from-yellow-500 to-yellow-600",
-    change: "+0.3",
-    changeType: "positive"
-  },
-  { 
-    label: "Citas Exitosas", 
-    value: 890, 
-    icon: Heart, 
-    color: "from-pink-500 to-pink-600",
-    change: "+18%",
-    changeType: "positive"
-  },
-];
+interface MetricCard {
+  label: string;
+  value: number | string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  change: string;
+  changeType: "positive" | "neutral";
+}
 
-const detailedMetrics = [
-  { label: "Total de Usuarios", value: "12,345" },
-  { label: "Usuarios Nuevos (Este Mes)", value: "1,234" },
-  { label: "Videollamadas Realizadas", value: "5,678" },
-  { label: "Mensajes Enviados", value: "98,765" },
-  { label: "Tiempo Promedio de Sesión", value: "24 min" },
-  { label: "Tasa de Retención", value: "78%" },
-];
+interface DetailedMetric {
+  label: string;
+  value: string;
+}
 
 export default function AdminMetricsPage() {
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const [mainMetrics, setMainMetrics] = React.useState<MetricCard[]>([]);
+  const [detailedMetrics, setDetailedMetrics] = React.useState<DetailedMetric[]>([]);
+
+  React.useEffect(() => {
+    const isCurrentMonth = (dateLike: string | Date | undefined) => {
+      if (!dateLike) return false;
+      const date = new Date(dateLike);
+      if (Number.isNaN(date.getTime())) return false;
+      const now = new Date();
+      return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
+    };
+
+    const loadMetrics = async () => {
+      try {
+        setLoading(true);
+        const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+        const [usersRes, reportsRes, tokensRes, activityRes] = await Promise.all([
+          fetch("/api/users"),
+          fetch("/api/reports", { headers }),
+          fetch("/api/tokens", { headers }),
+          fetch("/api/activity-logs", { headers }),
+        ]);
+
+        const [usersRaw, reportsRaw, tokensRaw, activityRaw] = await Promise.all([
+          usersRes.json().catch(() => []),
+          reportsRes.json().catch(() => []),
+          tokensRes.json().catch(() => []),
+          activityRes.json().catch(() => []),
+        ]);
+
+        const users = Array.isArray(usersRaw) ? usersRaw : [];
+        const reports = Array.isArray(reportsRaw) ? reportsRaw : [];
+        const tokens = Array.isArray(tokensRaw) ? tokensRaw : [];
+        const activities = Array.isArray(activityRaw) ? activityRaw : [];
+
+        const activeUsers = users.filter((u: any) => {
+          const status = String(u?.estado || u?.status || "Activo").toLowerCase();
+          return !status.includes("suspend");
+        }).length;
+
+        const reportsThisMonth = reports.filter((r: any) => isCurrentMonth(r?.created_at || r?.fecha)).length;
+        const resolvedReports = reports.filter((r: any) => {
+          const status = String(r?.status || r?.estado || "").toLowerCase();
+          return status.includes("resuelt") || status.includes("resolved");
+        }).length;
+
+        const totalTokenVolume = tokens.reduce((acc: number, t: any) => acc + Math.abs(Number(t?.amount || 0)), 0);
+        const averageTokenMovement = tokens.length > 0 ? totalTokenVolume / tokens.length : 0;
+
+        const activityThisMonth = activities.filter((a: any) => isCurrentMonth(a?.created_at || a?.fecha)).length;
+
+        setMainMetrics([
+          {
+            label: "Usuarios Activos",
+            value: activeUsers,
+            icon: Users,
+            color: "from-primary-500 to-primary-600",
+            change: `${users.length} total`,
+            changeType: "neutral",
+          },
+          {
+            label: "Denuncias Este Mes",
+            value: reportsThisMonth,
+            icon: AlertTriangle,
+            color: "from-red-500 to-red-600",
+            change: `${resolvedReports} resueltas`,
+            changeType: "neutral",
+          },
+          {
+            label: "Mov. Medio de Tokens",
+            value: Number(averageTokenMovement.toFixed(1)),
+            icon: Star,
+            color: "from-yellow-500 to-yellow-600",
+            change: `${tokens.length} transacciones`,
+            changeType: "neutral",
+          },
+          {
+            label: "Actividad Este Mes",
+            value: activityThisMonth,
+            icon: Heart,
+            color: "from-pink-500 to-pink-600",
+            change: `${activities.length} eventos`,
+            changeType: "neutral",
+          },
+        ]);
+
+        setDetailedMetrics([
+          { label: "Total de Usuarios", value: users.length.toLocaleString() },
+          {
+            label: "Usuarios Nuevos (Este Mes)",
+            value: users.filter((u: any) => isCurrentMonth(u?.created_at || u?.fechaRegistro)).length.toLocaleString(),
+          },
+          { label: "Reportes Totales", value: reports.length.toLocaleString() },
+          { label: "Logs de Actividad", value: activities.length.toLocaleString() },
+          { label: "Transacciones de Tokens", value: tokens.length.toLocaleString() },
+          { label: "Volumen de Tokens", value: totalTokenVolume.toLocaleString() },
+        ]);
+
+        setError(null);
+      } catch (err) {
+        console.error("Error cargando métricas:", err);
+        setError("No se pudieron cargar las métricas en tiempo real.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadMetrics();
+  }, []);
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -68,8 +152,20 @@ export default function AdminMetricsPage() {
         </motion.div>
 
         {/* Main Metrics Cards */}
+        {loading ? (
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 mb-8">
+            <p className="text-gray-600">Cargando métricas reales...</p>
+          </div>
+        ) : null}
+
+        {error ? (
+          <div className="bg-red-50 text-red-700 rounded-xl border border-red-100 px-4 py-3 mb-8">
+            {error}
+          </div>
+        ) : null}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {mockMetrics.map((metric, index) => (
+          {mainMetrics.map((metric, index) => (
             <motion.div
               key={metric.label}
               initial={{ opacity: 0, y: 20 }}
@@ -84,7 +180,7 @@ export default function AdminMetricsPage() {
                 <span className={`text-sm font-semibold px-2 py-1 rounded-full ${
                   metric.changeType === 'positive' 
                     ? 'text-green-600 bg-green-100' 
-                    : 'text-red-600 bg-red-100'
+                    : 'text-blue-700 bg-blue-100'
                 }`}>
                   {metric.change}
                 </span>
