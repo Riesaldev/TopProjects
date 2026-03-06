@@ -5,7 +5,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 
 ## Prioridad Alta (hacer primero)
 
-- [ ] Seguridad JWT: eliminar fallback `default_secret` y exigir `JWT_SECRET` obligatorio en backend.
+- [x] Seguridad JWT: eliminar fallback `default_secret` y exigir `JWT_SECRET` obligatorio en backend.
 - [ ] Calidad de build: desactivar `ignoreBuildErrors` y `ignoreDuringBuilds` en `Client/next.config.ts`.
 - [ ] Corregir todos los errores de TypeScript/ESLint que aparezcan al activar build estricto.
 - [ ] Centralizar control de acceso admin en middleware/layout (no confiar solo en checks en componentes).
