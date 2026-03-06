@@ -76,32 +76,28 @@ export default function Navbar() {
       <div className="flex gap-4 items-center">
         <Link
           href="/landing"
-          className="font-semibold text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus:outline-primary-400"
-          tabIndex={0}
+          className="font-semibold text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-400 rounded"
         >
           Inicio
         </Link>
         <Link
           href="/auth/login"
-          className="font-semibold text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus:outline-primary-400"
-          tabIndex={0}
+          className="font-semibold text-gray-600 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-400 transition-colors focus-visible:ring-2 focus-visible:ring-primary-400 rounded"
         >
           Iniciar sesión
         </Link>
         <Link
           href="/auth/register"
-          className="font-semibold bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 px-4 py-1.5 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors focus:outline-primary-400"
-          tabIndex={0}
+          className="font-semibold bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300 px-4 py-1.5 rounded-full hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors focus-visible:ring-2 focus-visible:ring-primary-400"
         >
           Registrarse
         </Link>
         <Link
           href="/user/notifications"
-          className="relative hover-lift p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           title="Notificaciones"
           aria-label="Notificaciones"
           onClick={markAllRead}
-          tabIndex={0}
+          className="relative hover-lift p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus-visible:ring-2 focus-visible:ring-primary-400"
         >
           <span className="text-xl" aria-hidden="true">
             🔔
@@ -149,16 +145,17 @@ export default function Navbar() {
           </select>
         </div>
         <button
-          className="ml-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-primary-400"
+          className="ml-2 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus-visible:ring-2 focus-visible:ring-primary-400"
           onClick={() => setDark((d) => !d)}
           title="Alternar modo oscuro"
           aria-label="Alternar modo oscuro"
+          aria-pressed={dark}
         >
           {dark ? "🌙" : "☀️"}
         </button>
         <Link
           href="/user/settings"
-          className="p-2 rounded-full text-gray-400 hover:text-primary-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all focus:outline-primary-400 hover:rotate-90"
+          className="p-2 rounded-full text-gray-400 hover:text-primary-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all focus-visible:ring-2 focus-visible:ring-primary-400 hover:rotate-90"
           title="Configuración"
           aria-label="Configuración"
         >

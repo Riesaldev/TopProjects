@@ -84,9 +84,17 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
     <NotificationsContext.Provider value={contextValue}>
       {children}
       {/* Toasts en el centro superior */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2">
+      <div
+        className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         {toasts.map(t => (
-          <div key={t.id} className={`px-6 py-3 rounded shadow-lg font-semibold text-white ${t.type === "success" ? "bg-green-600" : t.type === "error" ? "bg-red-600" : t.type === "warning" ? "bg-amber-600" : "bg-blue-600"} animate-fade-in-out`}>
+          <div
+            key={t.id}
+            role={t.type === "error" ? "alert" : "status"}
+            className={`px-6 py-3 rounded shadow-lg font-semibold text-white ${t.type === "success" ? "bg-green-600" : t.type === "error" ? "bg-red-600" : t.type === "warning" ? "bg-amber-600" : "bg-blue-600"} animate-fade-in-out`}
+          >
             {String(t.msg)}
           </div>
         ))}

@@ -1,4 +1,4 @@
-import  { forwardRef } from "react";
+import  { forwardRef, useId } from "react";
 import { motion } from "framer-motion";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
@@ -24,7 +24,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
   className = "",
   ...props
 }, ref) => {
-  const baseInputStyles = "transition-all duration-300 focus:outline-none";
+  const baseInputStyles = "transition-all duration-300";
+  const generatedId = useId();
+  const inputId = props.id || generatedId;
+  const helperId = helperText ? `${inputId}-helper` : undefined;
+  const errorId = error ? `${inputId}-error` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(" ") || undefined;
   
   const variantStyles = {
     default: `
@@ -64,7 +69,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
   const InputComponent = (
     <div className={`relative ${containerClassName}`}>
       {label && (
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <label htmlFor={inputId} className="block text-sm font-semibold text-gray-700 mb-2">
           {label}
         </label>
       )}
@@ -80,6 +85,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
         
         <input
           ref={ref}
+          id={inputId}
+          aria-invalid={Boolean(error)}
+          aria-describedby={describedBy}
           className={inputClassName}
           {...props}
         />
@@ -96,12 +104,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
       {(error || helperText) && (
         <div className="mt-2">
           {error && (
-            <p className="text-sm text-accent-600 font-medium">
+            <p id={errorId} className="text-sm text-accent-600 font-medium" role="alert">
               {error}
             </p>
           )}
           {!error && helperText && (
-            <p className="text-sm text-gray-500">
+            <p id={helperId} className="text-sm text-gray-500">
               {helperText}
             </p>
           )}

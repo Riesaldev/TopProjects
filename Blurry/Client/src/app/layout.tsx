@@ -62,9 +62,12 @@ export default function RootLayout({
   return (
     <html lang="es" className="antialiased">
       <body className={`${inter.className} min-h-screen flex flex-col selection:bg-indigo-200 selection:text-indigo-900`}>
+        <a href="#main-content" className="skip-link">Saltar al contenido principal</a>
         <AuthProvider>
           <NotificationsProvider>
-            {children}
+            <div id="main-content" tabIndex={-1}>
+              {children}
+            </div>
           </NotificationsProvider>
         </AuthProvider>
       </body>

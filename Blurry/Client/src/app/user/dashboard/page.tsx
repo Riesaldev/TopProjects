@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { 
   Coins, 
   Calendar, 
@@ -373,7 +374,7 @@ export default function UserDashboard() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, delay: 0.1 * index }}
               >
-                <div onClick={() => window.location.href = link.href} className="glass-panel hover:bg-zinc-800/80 hover:border-primary-500/50 hover:shadow-neon p-4 rounded-2xl text-center group cursor-pointer transition-all duration-300 relative overflow-hidden backdrop-blur-md border border-zinc-800/50 flex flex-col items-center justify-center min-h-[120px]">
+                <Link href={link.href} className="glass-panel hover:bg-zinc-800/80 hover:border-primary-500/50 hover:shadow-neon p-4 rounded-2xl text-center group cursor-pointer transition-all duration-300 relative overflow-hidden backdrop-blur-md border border-zinc-800/50 flex flex-col items-center justify-center min-h-[120px] focus-visible:ring-4 focus-visible:ring-primary-300/40" aria-label={`Abrir ${link.label}`}>
                   <div className="absolute inset-0 bg-gradient-to-b from-primary-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="bg-zinc-900 ring-1 ring-zinc-800 p-3 rounded-xl mb-3 group-hover:bg-primary-500/20 group-hover:ring-primary-500/50 transition-all duration-300 relative z-10">
                     <IconComponent className="h-6 w-6 text-zinc-400 group-hover:text-primary-400 transition-colors drop-shadow-sm" />
@@ -381,7 +382,7 @@ export default function UserDashboard() {
                   <p className="text-sm font-bold text-zinc-300 group-hover:text-white transition-colors relative z-10 tracking-wide">
                     {link.label}
                   </p>
-                </div>
+                </Link>
               </motion.div>
             );
           })}

@@ -12,6 +12,8 @@ type ViewStateProps = {
 };
 
 export default function ViewState({ variant, title, description, className = "", action }: ViewStateProps) {
+  const role = variant === "error" ? "alert" : "status";
+
   const config =
     variant === "loading"
       ? {
@@ -32,7 +34,7 @@ export default function ViewState({ variant, title, description, className = "",
           };
 
   return (
-    <div className={`flex min-h-[220px] w-full flex-col items-center justify-center rounded-2xl border border-zinc-800/60 bg-zinc-900/40 p-6 text-center ${className}`}>
+    <div role={role} aria-live={variant === "loading" ? "polite" : "assertive"} className={`flex min-h-[220px] w-full flex-col items-center justify-center rounded-2xl border border-zinc-800/60 bg-zinc-900/40 p-6 text-center ${className}`}>
       <div className={`mb-4 rounded-xl p-3 ring-1 ${config.bg} ${config.ring}`}>{config.icon}</div>
       <h3 className="text-lg font-bold text-white">{title}</h3>
       {description ? <p className="mt-2 max-w-md text-sm text-zinc-400">{description}</p> : null}

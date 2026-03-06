@@ -23,7 +23,7 @@ export default function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseStyles = "relative inline-flex items-center justify-center font-semibold rounded-xl focus:outline-none focus:ring-4 transition-all duration-300 overflow-hidden disabled:cursor-not-allowed disabled:opacity-45 disabled:saturate-50 disabled:shadow-none disabled:ring-0";
+  const baseStyles = "relative inline-flex items-center justify-center font-semibold rounded-xl focus-visible:ring-4 transition-all duration-300 overflow-hidden disabled:cursor-not-allowed disabled:opacity-45 disabled:saturate-50 disabled:shadow-none disabled:ring-0";
   
   const sizeStyles = {
     sm: "px-3 py-2 text-sm gap-1.5",
@@ -95,6 +95,7 @@ export default function Button({
     <motion.button 
       className={combinedClassName} 
       disabled={disabled || isLoading}
+      aria-busy={isLoading}
       whileHover={disabled ? {} : { scale: 1.02 }}
       whileTap={disabled ? {} : { scale: 0.98 }}
       {...props}
