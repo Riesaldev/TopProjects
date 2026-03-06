@@ -6,14 +6,13 @@ import {
   Coins, 
   Calendar, 
   Bell, 
-  FileText, 
   Trophy, 
-  Users, 
   Video,
-  MessageCircle,
   Target,
   Flame,
-  ArrowRight,
+  ShoppingBag,
+  ShieldAlert,
+  UserCircle,
   Activity
 } from "lucide-react";
 import Button from "@/components/Button";
@@ -237,14 +236,13 @@ export default function UserDashboard() {
     return Object.entries(byWeek).map(([week, v]) => ({ week, ...v }));
   }, [agenda, chats, purchases]);
 
-  // Accesos rápidos modernos
+  // Accesos contextuales (evita duplicar rutas ya visibles en la barra superior)
   const quickLinksModern = [
-    { label: "Perfil", href: "/user/profile", icon: Users },
-    { label: "Agenda", href: "/user/agenda", icon: Calendar },
-    { label: "Chat", href: "/user/chat", icon: MessageCircle },
+    { label: "Perfil", href: "/user/profile", icon: UserCircle },
     { label: "Videollamada", href: "/user/video-call", icon: Video },
-    { label: "Notas", href: "/user/notes", icon: FileText },
-    { label: "Tienda", href: "/user/store", icon: Coins },
+    { label: "Tienda", href: "/user/store", icon: ShoppingBag },
+    { label: "Reportar", href: "/user/reports", icon: ShieldAlert },
+    { label: "Notificaciones", href: "/user/notifications", icon: Bell },
   ];
 
   // Mostrar loading si está autenticando o cargando datos
@@ -296,10 +294,11 @@ export default function UserDashboard() {
               </div>
               <h3 className="text-3xl font-black text-white mb-2 tracking-tight">{user?.tokens}</h3>
               <p className="text-zinc-400 mb-6 font-medium text-sm uppercase tracking-wider">Available Tokens</p>
-              <Button variant="gamified" size="sm" className="w-full relative z-10">
-                <ArrowRight className="h-4 w-4 mr-2" />
-                Store
-              </Button>
+              <Link href="/user/store" className="block">
+                <Button variant="gamified" size="sm" className="w-full relative z-10">
+                  Ir a tienda
+                </Button>
+              </Link>
             </div>
           </motion.div>
 
@@ -363,8 +362,8 @@ export default function UserDashboard() {
           </motion.div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 lg:grid-cols-6 gap-4 mb-16 relative z-10">
+        {/* Context Shortcuts */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16 relative z-10">
           {quickLinksModern.map((link, index) => {
             const IconComponent = link.icon;
             return (

@@ -17,6 +17,29 @@ function normalizeGame(game: unknown) {
   };
 }
 
+function dedupeGames(games: unknown[]) {
+  const seen = new Set<string>();
+  const deduped: ReturnType<typeof normalizeGame>[] = [];
+
+  for (const game of games) {
+    const normalized = normalizeGame(game);
+
+    // Prefer id when available. Fallback to semantic fields to avoid repeated cards.
+    const key = normalized.id != null
+      ? `id:${String(normalized.id)}`
+      : `sig:${String(normalized.name ?? "").trim().toLowerCase()}|${String(normalized.category ?? "").trim().toLowerCase()}|${String(normalized.description ?? "").trim().toLowerCase()}`;
+
+    if (seen.has(key)) {
+      continue;
+    }
+
+    seen.add(key);
+    deduped.push(normalized);
+  }
+
+  return deduped;
+}
+
 export async function GET(req: NextRequest) {
   try {
     const res = await proxyRequest(req, "/games");
@@ -27,7 +50,7 @@ export async function GET(req: NextRequest) {
     }
 
     if (Array.isArray(data)) {
-      return NextResponse.json(data.map(normalizeGame), { status: res.status });
+      return NextResponse.json(dedupeGames(data), { status: res.status });
     }
 
     return NextResponse.json(isRecord(data) ? normalizeGame(data) : data, { status: res.status });

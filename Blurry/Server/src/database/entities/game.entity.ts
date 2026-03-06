@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 
 @Entity('games')
+@Unique('UQ_games_name_category', ['name', 'category'])
 export class Game {
   @PrimaryGeneratedColumn()
   id: number;

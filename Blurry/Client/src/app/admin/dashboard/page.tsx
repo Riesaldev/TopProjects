@@ -208,9 +208,9 @@ export default function AdminDashboard() {
       
       {/* Dashboard principal */}
       {!isLoading && user && user.role === 'admin' && (
-        <main className="min-h-screen w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4 py-6">
-      <h1 className="text-2xl font-bold mb-4 text-center">Dashboard de Administrador</h1>
-      <p className="mb-4 text-center">Bienvenido al panel de administración. Desde aquí puedes gestionar usuarios, servicios y monitorear la app.</p>
+        <main className="min-h-screen w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4 py-6 text-zinc-200">
+      <h1 className="text-2xl font-black mb-3 text-center tracking-tight text-white">Dashboard de Administrador</h1>
+      <p className="mb-6 text-center text-zinc-400 max-w-3xl">Bienvenido al panel de administración. Desde aquí puedes gestionar usuarios, servicios y monitorear la app.</p>
       <AdminCharts
         usuarios={usuariosData}
         denuncias={denunciasData}
@@ -221,70 +221,70 @@ export default function AdminDashboard() {
       />
       {/* Métricas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full">
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-primary-600 mb-2">{usuarios ?? '...'}</span>
-          <span className="text-gray-700">Usuarios registrados</span>
-          <Link href="/admin/users" className="text-primary-600 text-sm mt-2 hover:underline">Ver gestión</Link>
+          <span className="text-zinc-300">Usuarios registrados</span>
+          <Link href="/admin/users" className="text-primary-400 text-sm mt-2 hover:underline">Ver gestion</Link>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-secondary-600 mb-2">{usuariosActivos ?? '...'}</span>
-          <span className="text-gray-700">Usuarios activos hoy</span>
+          <span className="text-zinc-300">Usuarios activos hoy</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-accent-500 mb-2">{denunciasPendientes ?? '...'}</span>
-          <span className="text-gray-700">Denuncias pendientes</span>
-          <Link href="/admin/reports" className="text-primary-600 text-sm mt-2 hover:underline">Ver denuncias</Link>
+          <span className="text-zinc-300">Denuncias pendientes</span>
+          <Link href="/admin/reports" className="text-primary-400 text-sm mt-2 hover:underline">Ver denuncias</Link>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-accent-400 mb-2">{denunciasMes ?? '...'}</span>
-          <span className="text-gray-700">Denuncias este mes</span>
+          <span className="text-zinc-300">Denuncias este mes</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-accent-600 mb-2">{sancionesActivas ?? '...'}</span>
-          <span className="text-gray-700">Sanciones activas</span>
-          <Link href="/admin/sanctions" className="text-primary-600 text-sm mt-2 hover:underline">Ver sanciones</Link>
+          <span className="text-zinc-300">Sanciones activas</span>
+          <Link href="/admin/sanctions" className="text-primary-400 text-sm mt-2 hover:underline">Ver sanciones</Link>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-secondary-600 mb-2">{ratingMedio ?? '...'}</span>
-          <span className="text-gray-700">Rating medio</span>
+          <span className="text-zinc-300">Rating medio</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
+        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-primary-400 mb-2">{tiempoMedio !== null ? tiempoMedio + ' min' : '...'}</span>
-          <span className="text-gray-700">Tiempo medio en app</span>
+          <span className="text-zinc-300">Tiempo medio en app</span>
         </div>
       </div>
       {/* Mini-panel de matching */}
-      <section className="w-full max-w-2xl bg-white rounded shadow p-6 mb-8">
-        <h2 className="text-lg font-bold mb-4">Ajuste rápido de Matching</h2>
+      <section className="w-full max-w-2xl rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 mb-8">
+        <h2 className="text-lg font-bold mb-4 text-white">Ajuste rapido de Matching</h2>
         <div className="flex flex-col gap-4">
           <div>
-            <label htmlFor="edad-slider" className="block font-semibold mb-1">Peso Edad: {matching.edad}%</label>
+            <label htmlFor="edad-slider" className="block font-semibold mb-1 text-zinc-300">Peso Edad: {matching.edad}%</label>
             <input id="edad-slider" type="range" min={0} max={100} value={matching.edad} onChange={e => setMatching(m => ({ ...m, edad: Number(e.target.value) }))} className="w-full" />
           </div>
           <div>
-            <label htmlFor="distancia-slider" className="block font-semibold mb-1">Peso Distancia: {matching.distancia}%</label>
+            <label htmlFor="distancia-slider" className="block font-semibold mb-1 text-zinc-300">Peso Distancia: {matching.distancia}%</label>
             <input id="distancia-slider" type="range" min={0} max={100} value={matching.distancia} onChange={e => setMatching(m => ({ ...m, distancia: Number(e.target.value) }))} className="w-full" />
           </div>
           <div>
-            <label htmlFor="intereses-slider" className="block font-semibold mb-1">Peso Intereses: {matching.intereses}%</label>
+            <label htmlFor="intereses-slider" className="block font-semibold mb-1 text-zinc-300">Peso Intereses: {matching.intereses}%</label>
             <input id="intereses-slider" type="range" min={0} max={100} value={matching.intereses} onChange={e => setMatching(m => ({ ...m, intereses: Number(e.target.value) }))} className="w-full" />
           </div>
           <Button variant="primary" className="mt-2">Probar configuración</Button>
         </div>
       </section>
       {/* Gestión de servicios */}
-      <section className="w-full max-w-2xl bg-white rounded shadow p-6 mb-8">
-        <h2 className="text-lg font-bold mb-4">Gestión de Servicios</h2>
+      <section className="w-full max-w-2xl rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 mb-8">
+        <h2 className="text-lg font-bold text-white mb-4">Gestion de Servicios</h2>
         <form className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4" onSubmit={agregarServicio}>
           <input
-            className="border p-2 rounded flex-1"
+            className="border border-zinc-700 bg-zinc-950/70 text-zinc-100 p-2 rounded flex-1 placeholder:text-zinc-500"
             placeholder="Nombre del nuevo servicio"
             value={nuevoServicio.nombre}
             onChange={e => setNuevoServicio(s => ({ ...s, nombre: e.target.value }))}
             required
           />
           <select
-            className="border p-2 rounded"
+            className="border border-zinc-700 bg-zinc-950/70 text-zinc-100 p-2 rounded"
             value={nuevoServicio.estado}
             onChange={e => setNuevoServicio(s => ({ ...s, estado: e.target.value }))}
             aria-label="Estado del servicio"
@@ -302,7 +302,7 @@ export default function AdminDashboard() {
           <div className="w-full overflow-x-auto">
           <table className="w-full min-w-[520px]">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-zinc-800/80 text-zinc-200">
                 <th className="p-2">Servicio</th>
                 <th className="p-2">Estado</th>
                 <th className="p-2">Acciones</th>
@@ -310,7 +310,7 @@ export default function AdminDashboard() {
             </thead>
             <tbody>
               {services.map((s) => (
-                <tr key={s.id} className="text-center border-t">
+                <tr key={s.id} className="text-center border-t border-zinc-800 text-zinc-300">
                   <td className="p-2">{s.nombre}</td>
                   <td className="p-2">{s.estado}</td>
                   <td className="p-2">
@@ -331,13 +331,13 @@ export default function AdminDashboard() {
         )}
       </section>
       {/* Logs de actividad */}
-      <section className="w-full max-w-2xl bg-white rounded shadow p-6 mb-8">
-        <h2 className="text-lg font-bold mb-4">Logs de Actividad</h2>
-        <ul className="divide-y divide-gray-200">
+      <section className="w-full max-w-2xl rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 mb-8">
+        <h2 className="text-lg font-bold mb-4 text-white">Logs de Actividad</h2>
+        <ul className="divide-y divide-zinc-800">
           {logs.map((log) => (
             <li key={log.id} className="py-2 text-sm flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-              <span>{log.mensaje}</span>
-              <span className="text-gray-400 sm:ml-4">{log.fecha}</span>
+              <span className="text-zinc-200">{log.mensaje}</span>
+              <span className="text-zinc-500 sm:ml-4">{log.fecha}</span>
             </li>
           ))}
         </ul>
