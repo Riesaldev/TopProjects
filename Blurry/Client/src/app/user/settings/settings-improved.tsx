@@ -53,7 +53,8 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
   const [dark, setDark] = useDarkMode();
   const [size, setSize] = useFontSize();
   const [lang, setLang] = useLanguage();
-  const { notifications, userStatus } = useRealtime();
+  const realtimeContext = useRealtime();
+  const userStatus = realtimeContext?.userStatus ?? {};
 
   const { values, handleChange, handleSubmit, isSubmitting, setValues } = useForm<SettingsForm>({
     initialValues: {
@@ -97,7 +98,7 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
 
   useEffect(() => {
     // Aquí puedes manejar notificaciones en tiempo real si las gestionas en el contexto
-  }, [notifications]);
+  }, [userStatus]);
 
   const handleDeleteAccount = async () => {
     if (!confirm("¿Seguro que quieres eliminar tu cuenta? Esta acción es irreversible.")) return;

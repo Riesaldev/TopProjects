@@ -15,9 +15,13 @@ function normalizeAchievement(item: unknown) {
   };
 }
 
-function authHeaders(req: NextRequest) {
+function authHeaders(req: NextRequest): Record<string, string> {
   const authorization = req.headers.get("authorization");
-  return authorization ? { authorization } : {};
+  const headers: Record<string, string> = {};
+  if (authorization) {
+    headers.authorization = authorization;
+  }
+  return headers;
 }
 
 export async function GET(req: NextRequest) {

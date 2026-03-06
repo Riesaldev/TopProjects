@@ -3,10 +3,10 @@
 import NotificationItem from "@/components/NotificationItem";
 import { useNotifications } from "@/components/NotificationsContext";
 import { Notification } from "@/types";
-import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useRef, useState } from 'react';
 import { Bell, Filter, Zap } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+import { useAuth } from "@/components/AuthContext";
 
 function groupByType(notifications: Notification[]): Record<string, Notification[]> {
   return notifications.reduce((acc, n) => {
@@ -17,14 +17,10 @@ function groupByType(notifications: Notification[]): Record<string, Notification
   }, {} as Record<string, Notification[]>);
 }
 
-interface NotificationsPageProps {
-  userId: string;
-}
-
-export default function NotificationsPage({ userId }: Readonly<NotificationsPageProps>) {
-  const realtimeContext = useRealtime();
+export default function NotificationsPage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const userId = currentUser?.id;
   const { showToast } = useNotifications();
-  const notifications = realtimeContext?.notifications;
   const [localNotifications, setLocalNotifications] = useState<Notification[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [markingAllRead, setMarkingAllRead] = useState(false);
@@ -122,10 +118,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
   useEffect(() => {
     let cancelled = false;
 
-    if ((notifications?.length ?? 0) > 0) {
-      if (!cancelled) {
-        setLocalNotifications(notifications ?? []);
-      }
+    if (authLoading || !userId) {
       return () => {
         cancelled = true;
       };
@@ -154,7 +147,7 @@ export default function NotificationsPage({ userId }: Readonly<NotificationsPage
     return () => {
       cancelled = true;
     };
-  }, [notifications, userId]);
+  }, [authLoading, userId]);
 
   const handleMarkRead = async (id: number) => {
     const target = localNotifications.find((notif: Notification) => notif.id === id);

@@ -2,9 +2,9 @@
 
 import { Purchase } from "@/types";
 import { useEffect, useState } from 'react';
-import { useRealtime } from '@/context/RealtimeContext';
 import { Download, ShoppingBag, CheckCircle, Clock, AlertCircle, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/components/AuthContext";
 
 function toCSV(rows: Purchase[]) {
   if (!rows.length) return "";
@@ -13,21 +13,22 @@ function toCSV(rows: Purchase[]) {
   return header + "\n" + body;
 }
 
-interface PurchaseHistoryPageProps {
-  userId: number;
-}
-
-export default function PurchaseHistoryPage({ userId }: Readonly<PurchaseHistoryPageProps>) {
+export default function PurchaseHistoryPage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const userId = currentUser?.id;
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const realtimeContext = useRealtime();
-  const notifications = realtimeContext?.notifications || [];
 
   useEffect(() => {
+    if (authLoading || !userId) {
+      return;
+    }
+
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const authHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
     fetch(`/api/purchases?userId=${userId}`, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: authHeaders,
     })
       .then(async (res) => {
         if (!res.ok) {
@@ -46,11 +47,7 @@ export default function PurchaseHistoryPage({ userId }: Readonly<PurchaseHistory
         setPurchases([]);
         setLoading(false);
       });
-  }, [userId]);
-
-  useEffect(() => {
-    // Manejo de notificaciones realtime
-  }, [notifications]);
+  }, [authLoading, userId]);
 
   const handleDownload = () => {
     const csv = toCSV(purchases);

@@ -1,19 +1,22 @@
 "use client";
 
 import { Note, Contact } from "@/types";
-import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
 import { FileText, Edit2, Trash2, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/components/AuthContext";
 
-interface NotesPageProps {
-  userId: number;
-}
+export default function NotesPage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const userId = currentUser?.id;
 
-export default function NotesPage({ userId }: Readonly<NotesPageProps>) {       
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
   };
 
   const normalizeContact = (raw: unknown): Contact => {
@@ -24,13 +27,6 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
     } as Contact;
   };
 
-  const realtimeContext = useRealtime();
-  const notifications = realtimeContext?.notifications || [];
-
-  useEffect(() => {
-    // Aquí puedes manejar notificaciones en tiempo real si las gestionas en el contexto
-  }, [notifications]);
-
   const [notes, setNotes] = useState<Note[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [editingId, setEditingId] = useState<number|null>(null);
@@ -38,6 +34,10 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading || !userId) {
+      return;
+    }
+
     const loadNotes = async () => {
       setLoading(true);
       try {
@@ -60,7 +60,7 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
     };
 
     loadNotes();
-  }, [userId]);
+  }, [authLoading, userId]);
 
   const getContactName = (contactId: string | number | undefined) => {
     if (!contactId) return "Sujeto Desconocido";
@@ -197,7 +197,7 @@ export default function NotesPage({ userId }: Readonly<NotesPageProps>) {
                               ) : (
                                 <>
                                   <div className="text-zinc-300 text-sm leading-relaxed mt-2 p-3 bg-black/20 rounded-xl border border-zinc-800 font-medium">
-                                    "{note.content}"
+                                    &quot;{note.content}&quot;
                                   </div>
                                   
                                   <div className="flex gap-2 mt-auto pt-2 opacity-0 group-hover:opacity-100 transition-opacity justify-end">

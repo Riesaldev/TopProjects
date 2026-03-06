@@ -11,7 +11,7 @@ import {
   Legend,
   PointElement,
   LineElement,
-  ChartOptions
+  ChartOptions,
 } from "chart.js";
 
 ChartJS.register(
@@ -33,7 +33,35 @@ export default function ChartsUser({ tokensHistory, gamesHistory, activityHistor
   gamesHistory: { week: string; played: number }[];
   activityHistory: { week: string; citas: number; chats: number; compras: number }[];
 }) {
-  const commonOptions: ChartOptions = {
+  const barOptions: ChartOptions<"bar"> = {
+    responsive: true,
+    scales: {
+      y: {
+        grid: {
+          color: 'rgba(255, 255, 255, 0.05)',
+        },
+        border: { dash: [4, 4] }
+      },
+      x: {
+        grid: {
+          display: false
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false,
+        labels: {
+          color: '#e2e8f0', // text-slate-200
+          font: {
+            weight: 600
+          }
+        }
+      }
+    }
+  };
+
+  const lineOptions: ChartOptions<"line"> = {
     responsive: true,
     scales: {
       y: {
@@ -51,7 +79,7 @@ export default function ChartsUser({ tokensHistory, gamesHistory, activityHistor
     plugins: {
       legend: {
         labels: {
-          color: '#e2e8f0', // text-slate-200
+          color: '#e2e8f0',
           font: {
             weight: 600
           }
@@ -120,15 +148,15 @@ export default function ChartsUser({ tokensHistory, gamesHistory, activityHistor
     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 relative z-10">
       <div className="bg-zinc-900/40 rounded-2xl shadow-inner border border-zinc-800/50 p-6 backdrop-blur-sm">
         <h3 className="font-bold text-white mb-4 tracking-tight">Tokens Spent</h3>
-        <Bar data={tokensBar} options={{ ...commonOptions, plugins: { ...commonOptions.plugins, legend: { display: false } } }} />
+        <Bar data={tokensBar} options={barOptions} />
       </div>
       <div className="bg-zinc-900/40 rounded-2xl shadow-inner border border-zinc-800/50 p-6 backdrop-blur-sm">
         <h3 className="font-bold text-white mb-4 tracking-tight">Games Played</h3>
-        <Line data={gamesLine} options={commonOptions} />
+        <Line data={gamesLine} options={lineOptions} />
       </div>
       <div className="bg-zinc-900/40 rounded-2xl shadow-inner border border-zinc-800/50 p-6 md:col-span-2 backdrop-blur-sm">
         <h3 className="font-bold text-white mb-4 tracking-tight">Weekly Activity</h3>
-        <Bar data={activityBar} options={commonOptions} />
+        <Bar data={activityBar} options={barOptions} />
       </div>
     </div>
   );

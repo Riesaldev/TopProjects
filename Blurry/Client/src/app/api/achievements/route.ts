@@ -2,9 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
-function authHeaders(req: NextRequest) {
+function authHeaders(req: NextRequest): Record<string, string> {
   const authorization = req.headers.get("authorization");
-  return authorization ? { authorization } : {};
+  const headers: Record<string, string> = {};
+  if (authorization) {
+    headers.authorization = authorization;
+  }
+  return headers;
 }
 
 function normalizeUserAchievement(a: unknown) {

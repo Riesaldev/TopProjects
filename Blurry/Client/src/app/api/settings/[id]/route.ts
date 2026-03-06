@@ -1,14 +1,19 @@
 import { NextRequest } from "next/server";
 import { proxyRequest } from "../../_proxy";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  return proxyRequest(req, `/settings/${params.id}`);
+type RouteContext = { params: Promise<{ id: string }> };
+
+export async function GET(req: NextRequest, { params }: RouteContext) {
+  const { id } = await params;
+  return proxyRequest(req, `/settings/${id}`);
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-  return proxyRequest(req, `/settings/${params.id}`);
+export async function PATCH(req: NextRequest, { params }: RouteContext) {
+  const { id } = await params;
+  return proxyRequest(req, `/settings/${id}`);
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-  return proxyRequest(req, `/settings/${params.id}`);
+export async function DELETE(req: NextRequest, { params }: RouteContext) {
+  const { id } = await params;
+  return proxyRequest(req, `/settings/${id}`);
 } 

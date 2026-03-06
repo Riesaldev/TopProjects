@@ -19,11 +19,13 @@ export default function AdminReportsPage() {
   const [reportes, setReportes] = React.useState<Reporte[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    return token
-      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-      : { "Content-Type": "application/json" };
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
   };
 
   const normalizeReport = (raw: unknown): Reporte => {

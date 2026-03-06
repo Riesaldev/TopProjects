@@ -51,7 +51,7 @@ export default function AdminMetricsPage() {
       try {
         setLoading(true);
         const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
         const [usersRes, reportsRes, tokensRes, activityRes] = await Promise.all([
           fetch("/api/users"),

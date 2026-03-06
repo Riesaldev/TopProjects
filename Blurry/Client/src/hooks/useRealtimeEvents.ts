@@ -43,8 +43,10 @@ export function useRealtimeEvents(userId: string, jwt: string) {
     });
     socket.on('metricUpdate', (data: MetricUpdate) => setMetric(data));
     socket.on('userStatus', (data: { userId?: string; status?: string }) => {
-      if (!data.userId || !data.status) return;
-      setUserStatus((prev) => ({ ...prev, [data.userId]: data.status }));
+      const currentUserId = data.userId;
+      const currentStatus = data.status;
+      if (typeof currentUserId !== 'string' || typeof currentStatus !== 'string') return;
+      setUserStatus((prev) => ({ ...prev, [currentUserId]: currentStatus }));
     });
     return () => {
       socket.off('receiveGameInvite');

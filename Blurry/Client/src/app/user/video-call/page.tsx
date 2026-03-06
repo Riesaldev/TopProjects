@@ -6,16 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { checkModeration } from "@/utils/moderation";
 import { useNotifications } from "@/components/NotificationsContext";
+import { useAuth } from "@/components/AuthContext";
 import { Contact, Game, Product, Note, AgendaEvent, User } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
 import { Brain, Swords } from "lucide-react";
 
 const CALL_DURATION = 8 * 60; // 8 minutos en segundos
 const TOKEN_COST_PER_2MIN = 10; // 10 tokens por 2 minutos extra
-
-interface VideoCallPageProps {
-  userId: number;
-}
 
 type SpeechRecognitionAlternativeLike = {
   transcript: string;
@@ -48,11 +45,15 @@ type SpeechRecognitionInstance = {
 
 type SpeechRecognitionConstructor = new () => SpeechRecognitionInstance;
 
-function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
+function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
   const router = useRouter();
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
   };
 
   const [showReport, setShowReport] =useState(false);
@@ -230,7 +231,11 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   // Iniciar/detener reconocimiento de voz
   useEffect(() => {
     // Moderación IA siempre activa
-    const SpeechRecognitionCtor = (window.SpeechRecognition || window.webkitSpeechRecognition) as SpeechRecognitionConstructor | undefined;
+    const speechWindow = window as Window & {
+      SpeechRecognition?: SpeechRecognitionConstructor;
+      webkitSpeechRecognition?: SpeechRecognitionConstructor;
+    };
+    const SpeechRecognitionCtor = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
     if (!SpeechRecognitionCtor) {
       showToast("Tu navegador no soporta reconocimiento de voz.", "error");
       return;
@@ -599,10 +604,20 @@ function VideoCallContent({ userId }: Readonly<VideoCallPageProps>) {
   );
 }
 
-export default function VideoCallPage({ userId }: Readonly<VideoCallPageProps>) {
+export default function VideoCallPage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+
+  if (authLoading) {
+    return <div>Cargando videollamada...</div>;
+  }
+
+  if (!currentUser?.id) {
+    return <div>No se pudo identificar usuario.</div>;
+  }
+
   return (
     <Suspense fallback={<div>Cargando videollamada...</div>}>
-      <VideoCallContent userId={userId} />
+      <VideoCallContent userId={currentUser.id} />
     </Suspense>
   );
 }

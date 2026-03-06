@@ -71,7 +71,7 @@ export default function UserDashboard() {
   useEffect(() => {
     if (!userId) return; // No hacer llamadas si no hay userId
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+    const authHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
     
     Promise.all([
       fetch(`/api/user?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).catch(() => null),

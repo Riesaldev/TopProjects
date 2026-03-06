@@ -91,7 +91,7 @@ export default function TermsOfService() {
             <section className="mb-8">
               <h2 className="text-xl font-bold text-primary-900 mb-4">8. Limitación de Responsabilidad</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Blurry se proporciona "tal como está". No garantizamos que el servicio esté libre de errores 
+                Blurry se proporciona &quot;tal como está&quot;. No garantizamos que el servicio esté libre de errores 
                 o interrupciones. Tu uso de la plataforma es bajo tu propio riesgo.
               </p>
             </section>

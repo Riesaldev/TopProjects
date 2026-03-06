@@ -2,17 +2,24 @@
 
 import { useNotifications } from "@/components/NotificationsContext";
 import { Contact, AgendaEvent, User } from "@/types";
-import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
 import { Calendar as CalendarIcon, Filter, Clock, MapPin, Users, Video, Search, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/components/AuthContext";
 
-export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {  
+export default function AgendaPage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const userId = currentUser?.id;
+
   type ContactWithMeta = Contact & { distance?: number };
 
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    return token ? { Authorization: `Bearer ${token}` } : {};
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
   };
 
   const normalizeContact = (raw: unknown): ContactWithMeta => {
@@ -34,14 +41,12 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
   const [filters, setFilters] = useState({ genero: "", actividad: "", cercania: false });                                                                          
   const [myUser, setMyUser] = useState<User | null>(null);
   const { showToast } = useNotifications();
-  const realtimeContext = useRealtime();
-  const notifications = realtimeContext?.notifications || [];
 
   useEffect(() => {
-    // Aquí puedes manejar notificaciones en tiempo real si las gestionas en el contexto                                                                          
-  }, [notifications]);
+    if (authLoading || !userId) {
+      return;
+    }
 
-  useEffect(() => {
     let cancelled = false;
 
     const loadAgenda = async () => {
@@ -85,7 +90,7 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
     return () => {
       cancelled = true;
     };
-  }, [userId]);
+  }, [authLoading, userId, showToast]);
 
   useEffect(() => {
     let result = [...contacts] as ContactWithMeta[];
@@ -142,7 +147,8 @@ export default function AgendaPage({ userId }: Readonly<{ userId: number }>) {
 
   const isUpcoming = (dt: string) => new Date(dt).getTime() > Date.now();
 
-  const getContactName = (cid: string | number) => {
+  const getContactName = (cid: string | number | undefined) => {
+    if (cid === undefined) return "Desconocido";
     const c = contacts.find(u => String(u.id) === String(cid));
     return c ? c.nombre : "Desconocido";
   };

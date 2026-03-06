@@ -93,9 +93,10 @@ export default function TokenGiftsPage() {
 
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const authHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
 
     fetch("/api/tokens", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: authHeaders,
     })
       .then(async (res) => {
         if (!res.ok) {

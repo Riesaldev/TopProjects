@@ -175,6 +175,15 @@ export interface TokenTransaction {
   estado: string;
 }
 
+export interface TokenPackage {
+  id: number;
+  name: string;
+  tokens: number;
+  price: number;
+  isPopular: boolean;
+  bonus?: string;
+}
+
 export interface Report {
   id: string;
   usuario_reportado: string;

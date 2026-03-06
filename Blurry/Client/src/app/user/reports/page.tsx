@@ -1,39 +1,47 @@
 "use client";
 
 import { useNotifications } from "@/components/NotificationsContext";
-import { Report } from "@/types";
 import { useEffect, useRef, useState } from 'react';
 import { useRealtime } from '@/context/RealtimeContext';
 import { ShieldAlert, CheckCircle2, Clock, Activity, FileWarning } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/components/AuthContext";
 
-interface UserReportsPageProps {
-  userId: number;
-}
+type UserReportItem = {
+  id: string;
+  usuario: string;
+  motivo: string;
+  fecha: string;
+  estado: string;
+  detalles: string;
+};
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
 }
 
-export default function UserReportsPage({ userId }: Readonly<UserReportsPageProps>) {
-  const [reports, setReports] = useState<Report[]>([]);
+export default function UserReportsPage() {
+  const { user: currentUser, isLoading: authLoading } = useAuth();
+  const userId = currentUser?.id;
+  const [reports, setReports] = useState<UserReportItem[]>([]);
   const prevStatesRef = useRef<Record<string, string>>({});
   const { showToast } = useNotifications();
   const realtimeContext = useRealtime();
   const userStatus = realtimeContext?.userStatus;
   const [loading, setLoading] = useState(true);
+  const currentUserStatus = userId ? userStatus?.[String(userId)] : undefined;
 
-  const normalizeReport = (raw: unknown): Report => {
+  const normalizeReport = (raw: unknown): UserReportItem => {
     const report = asRecord(raw);
     const createdAt = report.created_at ?? report.fecha;
     return {
       id: String(report.id ?? ""),
       usuario: String(report.reported_user_id ?? report.usuario ?? ""),
       motivo: String(report.type ?? report.motivo ?? "Sin motivo"),
-      fecha: createdAt ? new Date(createdAt).toLocaleString() : "-",
+      fecha: createdAt ? new Date(String(createdAt)).toLocaleString() : "-",
       estado: String(report.status ?? report.estado ?? "Pendiente"),
       detalles: String(report.admin_notes ?? report.detalles ?? ""),
-    } as Report;
+    };
   };
 
   const getStatusInfo = (estado: string) => {
@@ -44,6 +52,10 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
   };
 
   useEffect(() => {
+    if (authLoading || !userId) {
+      return;
+    }
+
     let cancelled = false;
     const controller = new AbortController();
 
@@ -53,13 +65,14 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
           setLoading(true);
         }
         const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+        const authHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
         const res = await fetch("/api/reports", {
           signal: controller.signal,
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: authHeaders,
         });
         const data = res.ok ? await res.json() : [];
         const normalized = Array.isArray(data) ? data.map(normalizeReport) : [];
-        const myReports = normalized.filter((r: Report) => {
+        const myReports = normalized.filter((r: UserReportItem) => {
           const reportUser = String(r.usuario || "").toLowerCase();
           const targetUser = String(userId);
           return (
@@ -74,7 +87,7 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
         }
 
         if (!cancelled) {
-          myReports.forEach((r: Report) => {
+          myReports.forEach((r: UserReportItem) => {
             if (
               prevStatesRef.current[r.id] &&
               prevStatesRef.current[r.id] !== r.estado &&
@@ -87,7 +100,7 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
 
         if (!cancelled) {
           prevStatesRef.current = Object.fromEntries(
-            myReports.map((r: Report) => [r.id, r.estado]),
+            myReports.map((r: UserReportItem) => [r.id, r.estado]),
           );
         }
       } catch (error) {
@@ -109,7 +122,7 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
       cancelled = true;
       controller.abort();
     };
-  }, [showToast, userId]);
+  }, [authLoading, showToast, userId]);
 
   return (
     <main className="min-h-screen py-12 px-4 bg-zinc-950 text-slate-200 relative overflow-hidden flex flex-col items-center">
@@ -134,8 +147,8 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
           </div>
           
           <div className="flex items-center gap-2 px-4 py-2 bg-zinc-900/80 rounded-full border border-zinc-800">
-             <div className={`w-2.5 h-2.5 rounded-full animate-pulse ${userStatus?.[userId] === 'online' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-zinc-600'}`} />
-             <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">{userStatus?.[userId] || 'SISTEMA ACTIVO'}</span>
+             <div className={`w-2.5 h-2.5 rounded-full animate-pulse ${currentUserStatus === 'online' ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : 'bg-zinc-600'}`} />
+             <span className="text-xs font-bold text-zinc-300 uppercase tracking-wider">{currentUserStatus || 'SISTEMA ACTIVO'}</span>
           </div>
         </div>
 
@@ -163,7 +176,7 @@ export default function UserReportsPage({ userId }: Readonly<UserReportsPageProp
               </motion.div>
             ) : (
               <motion.div key="list" className="space-y-4" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
-                {reports.map((r: Report) => {
+                {reports.map((r: UserReportItem) => {
                   const status = getStatusInfo(r.estado);
                   return (
                     <motion.div 

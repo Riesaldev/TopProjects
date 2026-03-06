@@ -1,7 +1,7 @@
 
-import { motion } from 'framer-motion';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = HTMLMotionProps<'button'> & {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "gamified";
   size?: "sm" | "md" | "lg" | "xl";

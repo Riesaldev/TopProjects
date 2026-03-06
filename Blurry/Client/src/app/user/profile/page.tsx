@@ -3,7 +3,6 @@
 import AchievementsUser from "../dashboard/AchievementsUser";
 import { User, Achievement, UserAchievement } from "@/types";
 import { useEffect, useState } from 'react';
-import { useRealtime } from '@/context/RealtimeContext';
 import { useAuth } from '@/components/AuthContext';
 
 interface ProfileForm {
@@ -16,8 +15,6 @@ interface ProfileForm {
 export default function UserProfilePage() {
   const { user: currentUser, isLoading: authLoading } = useAuth();
   const userId = currentUser?.id;
-  const realtimeContext = useRealtime();
-  const notifications = realtimeContext?.notifications || [];
   const [user, setUser] = useState<User | null>(null);
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<ProfileForm>({
@@ -57,10 +54,6 @@ export default function UserProfilePage() {
       setLoading(false);
     });
   }, [userId, authLoading]);
-
-  useEffect(() => {
-    // Aquí puedes manejar notificaciones en tiempo real si las gestionas en el contexto
-  }, [notifications]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });

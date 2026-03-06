@@ -18,7 +18,7 @@ interface UseFormReturn<T> {
   setValues: (values: T) => void;
 }
 
-export function useForm<T extends Record<string, unknown>>({
+export function useForm<T extends object>({
   initialValues,
   onSubmit,
   validate,

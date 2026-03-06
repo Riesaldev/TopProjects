@@ -29,7 +29,7 @@ ChartJS.register(
   LineElement
 );
 
-export default function AdminCharts({ usuarios, denuncias, sanciones, matches, tokens }: Readonly<{
+export default function AdminCharts({ usuarios, denuncias, sanciones, matches, tokens, feedback }: Readonly<{
   usuarios: readonly User[];
   denuncias: readonly Report[];
   sanciones: readonly Sanction[];
@@ -43,7 +43,7 @@ export default function AdminCharts({ usuarios, denuncias, sanciones, matches, t
 
   useEffect(() => {
     if (metric && metric.metric === 'usuarios_online') {
-      setUsuariosOnline(metric.value);
+      setUsuariosOnline(typeof metric.value === "number" ? metric.value : 0);
     }
   }, [metric]);
 
@@ -133,9 +133,24 @@ export default function AdminCharts({ usuarios, denuncias, sanciones, matches, t
   };
 
   // Ventas de productos (tokens)
-  const productos = Array.from(new Set(tokens.map(t => t.producto)));
-  const ventasPorProducto = productos.map(prod =>
-    tokens.filter(t => t.producto === prod && t.tipo === "Compra").length
+  const getProductName = (transaction: TokenTransaction): string => {
+    const maybeWithProduct = transaction as TokenTransaction & { producto?: string };
+    if (typeof maybeWithProduct.producto === "string" && maybeWithProduct.producto.trim().length > 0) {
+      return maybeWithProduct.producto;
+    }
+    return transaction.transaccion || "Sin detalle";
+  };
+
+  const isPurchase = (transaction: TokenTransaction): boolean => {
+    const maybeWithType = transaction as TokenTransaction & { tipo?: string };
+    const typeValue = maybeWithType.tipo || transaction.transaccion;
+    return String(typeValue || "").toLowerCase().includes("compra");
+  };
+
+  const purchaseTokens = tokens.filter(isPurchase);
+  const productos = Array.from(new Set(purchaseTokens.map(getProductName)));
+  const ventasPorProducto = productos.map((prod) =>
+    purchaseTokens.filter((t) => getProductName(t) === prod).length
   );
   const ventasBar = {
     labels: productos,

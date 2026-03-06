@@ -67,11 +67,13 @@ export default function AdminUsersPage() {
   const [actividad, setActividad] = useState("Todas");
   const [codigoPostal, setCodigoPostal] = useState("");
 
-  const getAuthHeaders = () => {
+  const getAuthHeaders = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    return token
-      ? { "Content-Type": "application/json", Authorization: `Bearer ${token}` }
-      : { "Content-Type": "application/json" };
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    return headers;
   };
 
   const normalizeUser = (raw: unknown): Usuario => {

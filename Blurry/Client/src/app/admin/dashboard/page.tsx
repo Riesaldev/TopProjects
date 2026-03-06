@@ -12,6 +12,11 @@ import { useRouter } from 'next/navigation';
 type FeedbackItem = { rating?: number };
 type ActivityLogItem = { metadata?: Record<string, unknown> };
 
+function getAuthHeaders(): Record<string, string> {
+  const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export default function AdminDashboard() {
   const { user, isLoading } = useAuth();
   const router = useRouter();
@@ -60,8 +65,7 @@ export default function AdminDashboard() {
   }, [adminAlert]);
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
-    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+    const authHeaders = getAuthHeaders();
 
     fetch("/api/users", { headers: authHeaders })
       .then((res) => res.json())
@@ -143,17 +147,17 @@ export default function AdminDashboard() {
 
   // Actualizar estado de servicio
   const cambiarEstadoServicio = async (id: string, estado: string) => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const authHeaders = getAuthHeaders();
     await fetch("/api/services", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...authHeaders,
       },
       body: JSON.stringify({ id, estado })
     });
     const res = await fetch("/api/services", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: authHeaders,
     });
     setServices(await res.json());
     setLogs((prev) => [
@@ -165,13 +169,13 @@ export default function AdminDashboard() {
   // Añadir nuevo servicio
   const agregarServicio = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
+    const authHeaders = getAuthHeaders();
 
     const res = await fetch("/api/services", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...authHeaders,
       },
       body: JSON.stringify(nuevoServicio),
     });
@@ -181,7 +185,7 @@ export default function AdminDashboard() {
     }
 
     const refetch = await fetch("/api/services", {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      headers: authHeaders,
     });
     const refreshed = await refetch.json().catch(() => []);
     setServices(Array.isArray(refreshed) ? refreshed : []);
