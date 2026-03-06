@@ -13,12 +13,14 @@ Blurry es una plataforma de citas moderna, orientada a la privacidad, las videol
 ## ��� Stack Tecnológico
 
 ### Frontend (Client)
+
 - **Next.js (App Router)** + React
 - **Tailwind CSS** (Tema oscuro por defecto) + Tailwind Merge
 - **Framer Motion** (Animaciones interactivas)
 - Socket.io Client
 
 ### Backend (Server)
+
 - **NestJS** (Framework robusto y modular)
 - **PostgreSQL + TypeORM** (Base de datos relacional)
 - **Socket.io** (Gateways en tiempo real)

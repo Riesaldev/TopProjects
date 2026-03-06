@@ -26,6 +26,7 @@ Objetivo: validar consistencia, claridad y resiliencia en escenarios felices y n
 - [ ] El usuario sabe que cuenta fue creada (mensaje de exito explicito).
 
 Escenarios a probar:
+
 - [ ] Registro valido completo.
 - [ ] Email duplicado.
 - [ ] Password debil.
@@ -40,6 +41,7 @@ Escenarios a probar:
 - [ ] La sesion persistida se refleja en navbar/estado autenticado.
 
 Escenarios a probar:
+
 - [ ] Login correcto con usuario normal.
 - [ ] Login correcto con admin.
 - [ ] Password incorrecta.
@@ -55,6 +57,7 @@ Escenarios a probar:
 - [ ] Si saldo insuficiente, se informa como estado parcial/no bloqueante.
 
 Escenarios a probar:
+
 - [ ] Compra exitosa.
 - [ ] Falla backend en registro de compra.
 - [ ] Usuario sin token JWT.
@@ -69,6 +72,7 @@ Escenarios a probar:
 - [ ] El flujo evita duplicados accidentales.
 
 Escenarios a probar:
+
 - [ ] Creacion de reporte valida.
 - [ ] Error de red al enviar.
 - [ ] Visualizacion de reporte resuelto.
@@ -83,6 +87,7 @@ Escenarios a probar:
 - [ ] Finalizacion de llamada confirma recompensa/mision cuando aplica.
 
 Escenarios a probar:
+
 - [ ] Llamada basica completa.
 - [ ] Compra de +2 min con saldo suficiente.
 - [ ] Compra de +2 min con saldo insuficiente.

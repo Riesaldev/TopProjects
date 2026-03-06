@@ -167,8 +167,7 @@ body {
   transform: translateY(0);
 }
 
-:where(
-  button,
+:where(button,
   [type="button"],
   [type="submit"],
   [type="reset"],
@@ -177,8 +176,7 @@ body {
   textarea,
   a,
   [role="button"],
-  [tabindex]:not([tabindex="-1"])
-):focus-visible {
+  [tabindex]:not([tabindex="-1"])):focus-visible {
   outline: 3px solid #f065e4;
   outline-offset: 2px;
 }
