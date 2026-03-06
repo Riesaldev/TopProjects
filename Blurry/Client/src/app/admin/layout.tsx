@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthContext";
+import AdminSectionNav from "@/components/AdminSectionNav";
 
 export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const router = useRouter();
@@ -31,5 +32,10 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <AdminSectionNav />
+      {children}
+    </>
+  );
 }
