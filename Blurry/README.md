@@ -31,3 +31,7 @@ Blurry es una plataforma de citas moderna, orientada a la privacidad, las videol
 
 ---
 _Nota: Cada proyecto tiene su propio README con instrucciones de despliegue._
+
+## Checklist UX
+
+- Ver `UX_CHECKLIST.md` para la validacion manual de flujos criticos (registro, login, compra de tokens, reportes y videollamada).

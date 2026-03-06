@@ -18,7 +18,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [x] Estandarizar feedback al usuario (toasts y mensajes) para operaciones exitosas, parciales y fallidas.
 - [x] Validar responsive real (mobile/tablet/desktop) en dashboard, videollamada, juegos y admin.
 - [x] Mejorar accesibilidad global: `aria-*`, foco visible, navegacion por teclado y contraste.
-- [ ] Crear checklist de UX para acciones criticas (registro, login, compra tokens, reporte, videollamada).
+- [x] Crear checklist de UX para acciones criticas (registro, login, compra tokens, reporte, videollamada).
 - [ ] Revisar y mejorar estilos generales de la aplicación siguiendo estandares actuales (registro, login, compra tokens, reporte, videollamada, admin, ...).
 
 ## Seguridad
