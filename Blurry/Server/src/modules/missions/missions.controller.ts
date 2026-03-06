@@ -9,10 +9,11 @@ export class MissionsController {
 
   @Get()
   get(@Query('userId') userId?: string) {
-    if (!userId) {
+    const parsedUserId = userId ? Number(userId) : NaN;
+    if (!userId || !Number.isFinite(parsedUserId) || parsedUserId <= 0) {
       return { missions: [], userProgress: [] };
     }
-    return this.missionsService.getForUser(Number(userId));
+    return this.missionsService.getForUser(parsedUserId);
   }
 
   @Post('claim')

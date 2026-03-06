@@ -15,7 +15,8 @@ function authHeaders(req: NextRequest): Record<string, string> {
 export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
-    const userId = url.searchParams.get("userId");
+    const rawUserId = url.searchParams.get("userId");
+    const userId = rawUserId && /^\d+$/.test(rawUserId) ? rawUserId : null;
 
     const res = await fetch(`${BACKEND_URL}/missions${userId ? `?userId=${encodeURIComponent(userId)}` : ""}`, {
       headers: {

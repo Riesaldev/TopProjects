@@ -71,11 +71,12 @@ export default function AdminDashboard() {
     fetch("/api/users", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: User[]) => {
-        setUsuarios(data.length);
+        const rows = Array.isArray(data) ? data : [];
+        setUsuarios(rows.length);
         setUsuariosActivos(
-          data.filter((u: User) => String((u as unknown as { estado?: string }).estado || "").toLowerCase() !== "suspendido").length
+          rows.filter((u: User) => String((u as unknown as { estado?: string }).estado || "").toLowerCase() !== "suspendido").length
         );
-        setUsuariosData(data);
+        setUsuariosData(rows);
       });
 
     fetch("/api/feedback", { headers: authHeaders })
@@ -121,26 +122,28 @@ export default function AdminDashboard() {
     fetch("/api/reports", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Report[]) => {
-        setDenunciasPendientes(data.filter((d: Report) => d.estado === "Pendiente").length);
-        setDenunciasMes(data.length);
-        setDenunciasData(data);
+        const rows = Array.isArray(data) ? data : [];
+        setDenunciasPendientes(rows.filter((d: Report) => d.estado === "Pendiente").length);
+        setDenunciasMes(rows.length);
+        setDenunciasData(rows);
       });
     fetch("/api/sanctions", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Sanction[]) => {
-        setSancionesActivas(data.filter((s: Sanction) => s.estado === "Activa").length);
-        setSancionesData(data);
+        const rows = Array.isArray(data) ? data : [];
+        setSancionesActivas(rows.filter((s: Sanction) => s.estado === "Activa").length);
+        setSancionesData(rows);
       });
     fetch("/api/matches", { headers: authHeaders })
       .then((res) => res.json())
-      .then((data: Match[]) => setMatchesData(data));
+      .then((data: Match[]) => setMatchesData(Array.isArray(data) ? data : []));
     fetch("/api/tokens", { headers: authHeaders })
       .then((res) => res.json())
-      .then((data: TokenTransaction[]) => setTokensData(data));
+      .then((data: TokenTransaction[]) => setTokensData(Array.isArray(data) ? data : []));
     fetch("/api/services", { headers: authHeaders })
       .then((res) => res.json())
       .then((data: Service[]) => {
-        setServices(data);
+        setServices(Array.isArray(data) ? data : []);
         setLoadingServices(false);
       })
       .catch(() => setLoadingServices(false));
