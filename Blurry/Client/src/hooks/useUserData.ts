@@ -16,7 +16,7 @@ export function useUserData(userId: number | string): UseUserDataReturn {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { showError, showSuccess } = useNotifications();
+  const { showOperationFeedback } = useNotifications();
 
   const fetchUser = useCallback(async () => {
     if (!userId) return;
@@ -35,11 +35,11 @@ export function useUserData(userId: number | string): UseUserDataReturn {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
       setError(errorMessage);
-      showError(errorMessage);
+      showOperationFeedback('Carga de usuario', 'error', errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [userId, showError]);
+  }, [userId, showOperationFeedback]);
 
   const updateUser = useCallback(async (userData: Partial<User>): Promise<boolean> => {
     if (!userId) return false;
@@ -57,15 +57,15 @@ export function useUserData(userId: number | string): UseUserDataReturn {
       
       const updatedUser = await response.json();
       setUser(updatedUser);
-      showSuccess('Usuario actualizado correctamente');
+      showOperationFeedback('Actualizacion de usuario', 'success', 'Los cambios del perfil fueron guardados.');
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al actualizar usuario';
       setError(errorMessage);
-      showError(errorMessage);
+      showOperationFeedback('Actualizacion de usuario', 'error', errorMessage);
       return false;
     }
-  }, [userId, showError, showSuccess]);
+  }, [userId, showOperationFeedback]);
 
   const suspendUser = useCallback(async (reason?: string): Promise<boolean> => {
     if (!userId) return false;
@@ -83,15 +83,15 @@ export function useUserData(userId: number | string): UseUserDataReturn {
       
       const updatedUser = await response.json();
       setUser(updatedUser);
-      showSuccess('Usuario suspendido correctamente');
+      showOperationFeedback('Suspension de usuario', 'success', 'La cuenta quedo suspendida temporalmente.');
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al suspender usuario';
       setError(errorMessage);
-      showError(errorMessage);
+      showOperationFeedback('Suspension de usuario', 'error', errorMessage);
       return false;
     }
-  }, [userId, showError, showSuccess]);
+  }, [userId, showOperationFeedback]);
 
   const deleteUser = useCallback(async (): Promise<boolean> => {
     if (!userId) return false;
@@ -106,15 +106,15 @@ export function useUserData(userId: number | string): UseUserDataReturn {
       }
       
       setUser(null);
-      showSuccess('Usuario eliminado correctamente');
+      showOperationFeedback('Eliminacion de usuario', 'success', 'Tu cuenta fue eliminada.');
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al eliminar usuario';
       setError(errorMessage);
-      showError(errorMessage);
+      showOperationFeedback('Eliminacion de usuario', 'error', errorMessage);
       return false;
     }
-  }, [userId, showError, showSuccess]);
+  }, [userId, showOperationFeedback]);
 
   const refreshUser = useCallback(async () => {
     await fetchUser();

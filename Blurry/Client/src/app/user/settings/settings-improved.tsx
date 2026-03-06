@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useRealtime } from '@/context/RealtimeContext';
 import { useUserData } from '@/hooks/useUserData';
 import { useForm } from '@/hooks/useForm';
-import { useNotifications } from '@/hooks/useNotifications';
 
 function useDarkMode() {
   const [dark, setDark] = useState(false);
@@ -49,7 +48,6 @@ function asRecord(value: unknown): Record<string, unknown> {
 
 export default function UserSettingsPage({ userId }: Readonly<UserSettingsPageProps>) {
   const { user, loading, updateUser, suspendUser, deleteUser } = useUserData(userId);
-  const { showSuccess } = useNotifications();
   const [dark, setDark] = useDarkMode();
   const [size, setSize] = useFontSize();
   const [lang, setLang] = useLanguage();
@@ -64,10 +62,7 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
       receiveNotifications: true,
     },
     onSubmit: async (formValues) => {
-      const success = await updateUser(formValues);
-      if (success) {
-        showSuccess("Configuración guardada correctamente");
-      }
+      await updateUser(formValues);
     },
     validate: (formValues) => {
       const errors: Record<string, string> = {};
@@ -115,7 +110,6 @@ export default function UserSettingsPage({ userId }: Readonly<UserSettingsPagePr
     
     const success = await suspendUser("Suspendido temporalmente por el usuario");
     if (success) {
-      showSuccess("Cuenta suspendida temporalmente");
       // Redirect to login
       setTimeout(() => {
         window.location.href = "/auth/login";

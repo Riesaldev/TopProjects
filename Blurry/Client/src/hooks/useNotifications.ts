@@ -1,50 +1,29 @@
 import { useCallback } from 'react';
-import { toast } from 'react-toastify';
-
-type NotificationType = 'success' | 'error' | 'info' | 'warning';
+import { useNotifications as useNotificationsContext, FeedbackOutcome, ToastType } from '@/components/NotificationsContext';
 
 interface UseNotificationsReturn {
-  showToast: (message: string, type: NotificationType) => void;
+  showToast: (message: string, type?: ToastType) => void;
   showSuccess: (message: string) => void;
   showError: (message: string) => void;
   showInfo: (message: string) => void;
   showWarning: (message: string) => void;
+  showPartial: (message: string) => void;
+  showOperationFeedback: (action: string, outcome: FeedbackOutcome, detail?: string) => void;
 }
 
 export function useNotifications(): UseNotificationsReturn {
-  const showToast = useCallback((message: string, type: NotificationType = 'info') => {
-    switch (type) {
-      case 'success':
-        toast.success(message);
-        break;
-      case 'error':
-        toast.error(message);
-        break;
-      case 'warning':
-        toast.warning(message);
-        break;
-      case 'info':
-      default:
-        toast.info(message);
-        break;
-    }
-  }, []);
+  const {
+    showToast,
+    showSuccess,
+    showError,
+    showInfo,
+    showWarning,
+    showOperationFeedback,
+  } = useNotificationsContext();
 
-  const showSuccess = useCallback((message: string) => {
-    showToast(message, 'success');
-  }, [showToast]);
-
-  const showError = useCallback((message: string) => {
-    showToast(message, 'error');
-  }, [showToast]);
-
-  const showInfo = useCallback((message: string) => {
-    showToast(message, 'info');
-  }, [showToast]);
-
-  const showWarning = useCallback((message: string) => {
-    showToast(message, 'warning');
-  }, [showToast]);
+  const showPartial = useCallback((message: string) => {
+    showWarning(message);
+  }, [showWarning]);
 
   return {
     showToast,
@@ -52,5 +31,7 @@ export function useNotifications(): UseNotificationsReturn {
     showError,
     showInfo,
     showWarning,
+    showPartial,
+    showOperationFeedback,
   };
 }

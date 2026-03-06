@@ -27,7 +27,7 @@ export default function UserReportsPage() {
   const userId = currentUser?.id;
   const [reports, setReports] = useState<UserReportItem[]>([]);
   const prevStatesRef = useRef<Record<string, string>>({});
-  const { showToast } = useNotifications();
+  const { showOperationFeedback } = useNotifications();
   const realtimeContext = useRealtime();
   const userStatus = realtimeContext?.userStatus;
   const [loading, setLoading] = useState(true);
@@ -95,7 +95,7 @@ export default function UserReportsPage() {
               prevStatesRef.current[r.id] !== r.estado &&
               r.estado.toLowerCase().includes("resuelt")
             ) {
-              showToast(`Tu reporte '${r.motivo}' ha sido resuelto.`, "success");
+              showOperationFeedback("Seguimiento de reportes", "success", `Tu reporte '${r.motivo}' fue resuelto.`);
             }
           });
         }
@@ -124,7 +124,7 @@ export default function UserReportsPage() {
       cancelled = true;
       controller.abort();
     };
-  }, [authLoading, showToast, userId]);
+  }, [authLoading, showOperationFeedback, userId]);
 
   return (
     <main className="min-h-screen py-12 px-4 bg-zinc-950 text-slate-200 relative overflow-hidden flex flex-col items-center">

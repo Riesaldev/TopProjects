@@ -55,7 +55,7 @@ function getUserIdFromToken(token: string | null): number | null {
 
 export default function TokenStorePage() {
   const [packages, setPackages] = useState<TokenPackage[]>([]);
-  const { showToast } = useNotifications();
+  const { showToast, showOperationFeedback } = useNotifications();
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -114,9 +114,9 @@ export default function TokenStorePage() {
         throw new Error(`Error ${res.status} registrando compra`);
       }
 
-      showToast(`Transaccion aprobada: ${pkg.tokens} TKN añadidos a tu billetera.`, "success");
+      showOperationFeedback("Compra de tokens", "success", `${pkg.tokens} TKN acreditados en tu billetera.`);
     } catch {
-      showToast("No se pudo completar la compra.", "error");
+      showOperationFeedback("Compra de tokens", "error", "No se pudo completar la transaccion.");
     } finally {
       setBuying(null);
     }

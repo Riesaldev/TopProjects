@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSocket } from '@/hooks/useSocket';
 import { SOCKET_URL } from '@/constants';
-import { toast } from 'react-toastify';
+import { useNotifications } from '@/components/NotificationsContext';
 import { Send, Bell, Video, Gamepad2, Settings, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -22,6 +22,7 @@ export const ChatBox: React.FC<{ userId: string; contactId: string; jwt: string 
   const [gameInvite, setGameInvite] = useState<string | null>(null);
   const [metric, setMetric] = useState<{ metric: string; value: number } | null>(null);
   const [adminAlert, setAdminAlert] = useState<string | null>(null);
+  const { showInfo, showError } = useNotifications();
   const socket = useSocket(SOCKET_URL, jwt);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -37,13 +38,13 @@ export const ChatBox: React.FC<{ userId: string; contactId: string; jwt: string 
     const onNotify = (data: { to: string; notification: string }) => {
       if (data.to === userId) {
         setNotifications((prev) => [...prev, data.notification]);
-        toast.info(data.notification);
+        showInfo(data.notification);
       }
     };
     const onInvite = (data: { to: string; from: string; type: string }) => {
       if (data.to === userId) {
         setInvite(`${data.from} te ha invitado a una ${data.type}`);
-        toast.info(`${data.from} te ha invitado a una ${data.type}`);
+        showInfo(`${data.from} te ha invitado a una ${data.type}`);
       }
     };
     const onUserStatus = (data: { userId: string; status: 'online' | 'offline' | 'typing' }) => {
@@ -52,17 +53,17 @@ export const ChatBox: React.FC<{ userId: string; contactId: string; jwt: string 
     const onGameInvite = (data: { to: string; from: string; gameType: string }) => {
       if (data.to === userId) {
         setGameInvite(`${data.from} te ha invitado a jugar: ${data.gameType}`);
-        toast.info(`${data.from} te ha invitado a jugar: ${data.gameType}`);
+        showInfo(`${data.from} te ha invitado a jugar: ${data.gameType}`);
       }
     };
     const onMetricUpdate = (data: { metric: string; value: number }) => {
       setMetric(data);
-      toast.info(`Métrica actualizada: ${data.metric} = ${data.value}`);
+      showInfo(`Metrica actualizada: ${data.metric} = ${data.value}`);
     };
     const onAdminAlert = (data: { to: string; alert: string }) => {
       if (data.to === userId) {
         setAdminAlert(data.alert);
-        toast.error(`Alerta admin: ${data.alert}`);
+        showError(`Alerta admin: ${data.alert}`);
       }
     };
     socket.on('receiveMessage', onReceive);
@@ -81,7 +82,7 @@ export const ChatBox: React.FC<{ userId: string; contactId: string; jwt: string 
       socket.off('metricUpdate', onMetricUpdate);
       socket.off('receiveAdminAlert', onAdminAlert);
     };
-  }, [socket, userId, contactId]);
+  }, [contactId, showError, showInfo, socket, userId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -75,7 +75,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
   const [showStore, setShowStore] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
   const [purchaseMsg, setPurchaseMsg] = useState("");
-  const { showToast } = useNotifications();
+  const { showToast, showOperationFeedback } = useNotifications();
   const moderationActive = true;
   const [transcript, setTranscript] = useState("");
   const recognitionRef =useRef<SpeechRecognitionInstance | null>(null);
@@ -238,7 +238,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
     };
     const SpeechRecognitionCtor = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
     if (!SpeechRecognitionCtor) {
-      showToast("Tu navegador no soporta reconocimiento de voz.", "error");
+      showOperationFeedback("Moderacion de voz", "partial", "Tu navegador no soporta reconocimiento de voz.");
       return;
     }
     const recognition = new SpeechRecognitionCtor();
@@ -277,7 +277,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
       if (interim) setTranscript(prev => prev + " " + interim);
     };
     recognition.onerror = (e: SpeechRecognitionErrorEventLike) => {
-      showToast("Error en reconocimiento de voz: " + String(e.error || "desconocido"), "error");
+      showOperationFeedback("Moderacion de voz", "partial", `Reconocimiento interrumpido (${String(e.error || "desconocido")}).`);
     };
     recognition.onend = () => {
       if (moderationActive) recognition.start(); // Reiniciar si se detuvo inesperadamente
@@ -288,7 +288,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
       recognition.stop();
       recognitionRef.current = null;
     };
-  }, [contact, contactId, showToast]);
+  }, [contact, contactId, moderationActive, showOperationFeedback, showToast, userId]);
 
   useEffect(() => {
     if (videoCallInvite) {
@@ -338,9 +338,9 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
 
       setTokens(newBalance);
       setSecondsLeft(s => s + 120);
-      showToast("Tiempo extra comprado correctamente.", "success");
+      showOperationFeedback("Compra de tiempo extra", "success", "+2 minutos aplicados a la videollamada.");
     } catch {
-      showToast("No se pudo comprar tiempo extra.", "error");
+      showOperationFeedback("Compra de tiempo extra", "error", "No se pudo registrar la compra.");
     }
   };
 
@@ -356,7 +356,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
     });
     const data = await res.json();
     if (data.completed) {
-      showToast(`¡Misión completada! +${data.reward.tokens} tokens`, "success");
+      showOperationFeedback("Mision de videollamada", "success", `+${data.reward.tokens} tokens acreditados.`);
       // refreshMissions(); // Opcional: podrías emitir un evento global o usar SWR/mutación si usas un sistema de datos reactivo
     }
   };
@@ -364,6 +364,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
   const handleBuyProduct = async (product: Product) => {
     if (tokens === null || tokens < product.price) {
       setPurchaseMsg("No tienes suficientes tokens.");
+      showOperationFeedback("Compra en videollamada", "partial", "No tienes tokens suficientes para este producto.");
       return;
     }
 
@@ -406,10 +407,10 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
 
       setTokens(newBalance);
       setPurchaseMsg("¡Compra exitosa!");
-      showToast("Compra registrada correctamente.", "success");
+      showOperationFeedback("Compra en videollamada", "success", `${product.name} se registro correctamente.`);
     } catch {
       setPurchaseMsg("No se pudo completar la compra.");
-      showToast("Error al registrar la compra.", "error");
+      showOperationFeedback("Compra en videollamada", "error", "No se pudo registrar la compra.");
     }
 
     setTimeout(() => setPurchaseMsg("") , 2000);
@@ -437,7 +438,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
     });
     const data = await res.json();
     if (data.completed) {
-      showToast(`¡Misión completada! +${data.reward.tokens} tokens`, "success");
+      showOperationFeedback("Mision de juego", "success", `+${data.reward.tokens} tokens acreditados.`);
       refreshMissions();
     }
   };

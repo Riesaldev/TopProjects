@@ -33,7 +33,7 @@ type AuthUserWithSettings = {
 export default function SettingsPage() {
   const router = useRouter();
   const { user, isLoading, updateUser } = useAuth();
-  const { showSuccess, showError } = useNotifications();
+  const { showError, showOperationFeedback } = useNotifications();
 
   const { values, handleChange, handleSubmit, isSubmitting, setValues } = useForm<SettingsForm>({
     initialValues: {
@@ -70,9 +70,13 @@ export default function SettingsPage() {
 
         const updated = await response.json();
         updateUser(updated);
-        showSuccess("Configuracion guardada correctamente");
+        showOperationFeedback("Actualizacion de configuracion", "success", "Los cambios ya estan activos.");
       } catch (error) {
-        showError(error instanceof Error ? error.message : "Error guardando configuracion");
+        showOperationFeedback(
+          "Actualizacion de configuracion",
+          "error",
+          error instanceof Error ? error.message : "No se pudieron guardar los cambios.",
+        );
       }
     },
   });

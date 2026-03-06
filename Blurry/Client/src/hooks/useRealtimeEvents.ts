@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSocket } from './useSocket';
 import { SOCKET_URL } from '@/constants';
-import { toast } from 'react-toastify';
+import { useNotifications } from './useNotifications';
 
 type GameInvite = {
   from?: string;
@@ -20,6 +20,7 @@ type MetricUpdate = {
 
 export function useRealtimeEvents(userId: string, jwt: string) {
   const socket = useSocket(SOCKET_URL, jwt);
+  const { showInfo, showError } = useNotifications();
   const [gameInvite, setGameInvite] = useState<GameInvite | null>(null);
   const [videoCallInvite, setVideoCallInvite] = useState<VideoCallInvite | null>(null);
   const [adminAlert, setAdminAlert] = useState<string | null>(null);
@@ -30,16 +31,16 @@ export function useRealtimeEvents(userId: string, jwt: string) {
     if (!socket) return;
     socket.on('receiveGameInvite', (data: GameInvite) => {
       setGameInvite(data);
-      toast.info(`${data.from || 'Alguien'} te ha invitado a jugar: ${data.gameType || 'juego'}`);
+      showInfo(`${data.from || 'Alguien'} te ha invitado a jugar: ${data.gameType || 'juego'}`);
     });
     socket.on('receiveInvite', (data: VideoCallInvite) => {
       setVideoCallInvite(data);
-      toast.info(`${data.from || 'Alguien'} te ha invitado a una ${data.type || 'videollamada'}`);
+      showInfo(`${data.from || 'Alguien'} te ha invitado a una ${data.type || 'videollamada'}`);
     });
     socket.on('receiveAdminAlert', (data: { alert?: string }) => {
       const alertMessage = data.alert || 'Alerta sin detalle';
       setAdminAlert(alertMessage);
-      toast.error(`Alerta admin: ${alertMessage}`);
+      showError(`Alerta admin: ${alertMessage}`);
     });
     socket.on('metricUpdate', (data: MetricUpdate) => setMetric(data));
     socket.on('userStatus', (data: { userId?: string; status?: string }) => {
@@ -55,7 +56,7 @@ export function useRealtimeEvents(userId: string, jwt: string) {
       socket.off('metricUpdate');
       socket.off('userStatus');
     };
-  }, [socket]);
+  }, [showError, showInfo, socket]);
 
   // Métodos para emitir eventos
   const sendGameInvite = (to: string, gameType: string) => {

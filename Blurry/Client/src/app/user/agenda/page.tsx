@@ -2,7 +2,7 @@
 
 import { useNotifications } from "@/components/NotificationsContext";
 import { Contact, AgendaEvent, User } from "@/types";
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Calendar as CalendarIcon, Filter, Clock, MapPin, Users, Video, Search, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
@@ -23,14 +23,14 @@ export default function AgendaPage() {
     return headers;
   };
 
-  const normalizeContact = (raw: unknown): ContactWithMeta => {
+  const normalizeContact = useCallback((raw: unknown): ContactWithMeta => {
     const item = (raw ?? {}) as Record<string, unknown>;
     return {
       id: Number(item.id || 0),
       nombre: String(item.nombre || item.display_name || `Usuario ${item.id ?? ""}`),
       distance: typeof item.distance === "number" ? item.distance : undefined,
     } as ContactWithMeta;
-  };
+  }, []);
 
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);       
@@ -41,7 +41,7 @@ export default function AgendaPage() {
   const [saving, setSaving] = useState(false);
   const [filters, setFilters] = useState({ genero: "", actividad: "", cercania: false });                                                                          
   const [myUser, setMyUser] = useState<User | null>(null);
-  const { showToast } = useNotifications();
+  const { showToast, showOperationFeedback } = useNotifications();
 
   useEffect(() => {
     if (authLoading || !userId) {
@@ -78,7 +78,7 @@ export default function AgendaPage() {
           setContacts([]);
           setFilteredContacts([]);
           setEvents([]);
-          showToast("No se pudo cargar la agenda.", "error");
+          showOperationFeedback("Carga de agenda", "error", "No se pudieron recuperar tus eventos.");
         }
       } finally {
         if (!cancelled) {
@@ -91,7 +91,7 @@ export default function AgendaPage() {
     return () => {
       cancelled = true;
     };
-  }, [authLoading, userId, showToast]);
+  }, [authLoading, normalizeContact, showOperationFeedback, userId]);
 
   useEffect(() => {
     let result = [...contacts] as ContactWithMeta[];
@@ -136,11 +136,11 @@ export default function AgendaPage() {
       if (created) {
         setEvents((prev) => [...prev, created]);
       }
-      showToast("Evento agendado exitosamente.", "success");
+      showOperationFeedback("Creacion de evento", "success", "Tu agenda fue sincronizada.");
       setForm({ title: "", description: "", datetime: "", note: "" });
       setSelectedContact(null);
     } catch {
-      showToast("Error al sincronizar evento", "error");
+      showOperationFeedback("Creacion de evento", "error", "No se pudo sincronizar el evento.");
     } finally {
       setSaving(false);
     }
