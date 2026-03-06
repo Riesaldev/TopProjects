@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { backendNetworkError, parseJsonSafely } from "../../_errors";
 
 const SERVER_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const data = await response.json();
+    const data = await parseJsonSafely(response, {} as Record<string, unknown>);
 
     if (!response.ok) {
       return NextResponse.json(
@@ -25,10 +26,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error en proxy de login:", error);
-    return NextResponse.json(
-      { message: "Error en el servidor" },
-      { status: 500 }
-    );
+    return backendNetworkError(error);
   }
 }

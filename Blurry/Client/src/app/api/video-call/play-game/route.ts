@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { backendNetworkError, parseJsonSafely } from "../../_errors";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
@@ -28,9 +29,9 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(payload),
     });
 
-    const data = await res.json().catch(() => ({ success: false, completed: false, reward: null }));
+    const data = await parseJsonSafely(res, { success: false, completed: false, reward: null });
     return NextResponse.json(data, { status: res.status });
-  } catch {
-    return NextResponse.json({ success: false, completed: false, reward: null }, { status: 500 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }

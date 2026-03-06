@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { backendNetworkError, parseJsonSafely } from "../_errors";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
@@ -22,10 +23,10 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const data = await res.json().catch(() => ({ missions: [], userProgress: [] }));
+    const data = await parseJsonSafely(res, { missions: [], userProgress: [] });
     return NextResponse.json(data, { status: res.status });
-  } catch {
-    return NextResponse.json({ missions: [], userProgress: [] }, { status: 200 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }
 
@@ -41,9 +42,9 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(payload),
     });
 
-    const data = await res.json().catch(() => ({ success: false, message: "Error al procesar la mision" }));
+    const data = await parseJsonSafely(res, { success: false, message: "Error al procesar la mision" });
     return NextResponse.json(data, { status: res.status });
-  } catch {
-    return NextResponse.json({ success: false, message: "Error al procesar la mision" }, { status: 500 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }

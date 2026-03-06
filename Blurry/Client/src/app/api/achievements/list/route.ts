@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { backendNetworkError, parseJsonSafely } from "../../_errors";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
@@ -31,11 +32,11 @@ export async function GET(req: NextRequest) {
         ...authHeaders(req),
       },
     });
-    const data = await res.json().catch(() => []);
+    const data = await parseJsonSafely(res, [] as unknown[]);
 
     const normalized = Array.isArray(data) ? data.map(normalizeAchievement) : [];
     return NextResponse.json(normalized, { status: res.status });
-  } catch {
-    return NextResponse.json([], { status: 200 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }

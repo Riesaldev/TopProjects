@@ -9,7 +9,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [x] Calidad de build: desactivar `ignoreBuildErrors` y `ignoreDuringBuilds` en `Client/next.config.ts`.
 - [x] Corregir todos los errores de TypeScript/ESLint que aparezcan al activar build estricto.
 - [x] Centralizar control de acceso admin en middleware/layout (no confiar solo en checks en componentes).
-- [ ] Definir y aplicar manejo uniforme de errores en API routes (status, shape, mensajes).
+- [x] Definir y aplicar manejo uniforme de errores en API routes (status, shape, mensajes).
 
 ## UX/UI
 
@@ -19,7 +19,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [ ] Validar responsive real (mobile/tablet/desktop) en dashboard, videollamada, juegos y admin.
 - [ ] Mejorar accesibilidad global: `aria-*`, foco visible, navegacion por teclado y contraste.
 - [ ] Crear checklist de UX para acciones criticas (registro, login, compra tokens, reporte, videollamada).
-- [ ] Revisar y mejorar estilos generales de la aplicación siguiendo estandares actuales (registro, login, compra tokens, reporte, videollamada).
+- [ ] Revisar y mejorar estilos generales de la aplicación siguiendo estandares actuales (registro, login, compra tokens, reporte, videollamada, admin, ...).
 
 ## Seguridad
 

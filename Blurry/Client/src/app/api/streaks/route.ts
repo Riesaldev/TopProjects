@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { backendNetworkError, badRequestError, parseJsonSafely } from "../_errors";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
@@ -36,7 +37,7 @@ export async function GET(req: NextRequest) {
   const userId = url.searchParams.get("userId");
 
   if (!userId) {
-    return NextResponse.json({ error: "userId es requerido" }, { status: 400 });
+    return badRequestError("userId es requerido");
   }
 
   try {
@@ -46,10 +47,10 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const data = await res.json().catch(() => null);
+    const data = await parseJsonSafely(res, null);
     return NextResponse.json(normalizeStreak(data, userId), { status: res.status });
-  } catch {
-    return NextResponse.json(normalizeStreak(null, userId), { status: 200 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }
 
@@ -65,10 +66,10 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify(payload),
     });
 
-    const data = await res.json().catch(() => null);
+    const data = await parseJsonSafely(res, null);
     const userId = String(payload?.userId ?? "0");
     return NextResponse.json(normalizeStreak(data, userId), { status: res.status });
-  } catch {
-    return NextResponse.json({ error: "Error al actualizar streak" }, { status: 500 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }

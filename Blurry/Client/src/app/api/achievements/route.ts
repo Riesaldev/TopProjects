@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { backendNetworkError, parseJsonSafely } from "../_errors";
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
@@ -30,15 +31,15 @@ export async function GET(req: NextRequest) {
         ...authHeaders(req),
       },
     });
-    const data = await res.json().catch(() => []);
+    const data = await parseJsonSafely(res, [] as unknown[]);
 
     const normalized = userId && Array.isArray(data)
       ? data.map(normalizeUserAchievement)
       : data;
 
     return NextResponse.json(normalized, { status: res.status });
-  } catch {
-    return NextResponse.json([], { status: 200 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }
 
@@ -53,9 +54,9 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify(payload),
     });
-    const data = await res.json().catch(() => ({}));
+    const data = await parseJsonSafely(res, {} as Record<string, unknown>);
     return NextResponse.json(data, { status: res.status });
-  } catch {
-    return NextResponse.json({ success: false, message: "Error al reclamar logro" }, { status: 500 });
+  } catch (error) {
+    return backendNetworkError(error);
   }
 }
