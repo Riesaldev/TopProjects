@@ -1,5 +1,5 @@
 
-import { Bell, Trophy, Activity, AlertCircle, X, Check } from "lucide-react";
+import { Bell, Trophy, Activity, AlertCircle, X, Check, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 type Notification = {
@@ -25,6 +25,7 @@ export default function NotificationItem({
   markReadLoading = false,
   deleteLoading = false,
 }: Props) {
+  const hasActionLoading = markReadLoading || deleteLoading;
   let colorClass = "bg-primary-500/10 border-primary-500/30 text-primary-400";
   let Icon = Bell;
 
@@ -67,25 +68,31 @@ export default function NotificationItem({
           </span>
         </div>
 
-        <div className="flex gap-2 items-center shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className={`flex gap-2 items-center shrink-0 transition-opacity ${hasActionLoading ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
           {onMarkRead && !notification.read && (
             <button 
+              type="button"
               onClick={onMarkRead} 
               title="Marcar como leída"
+              aria-label="Marcar notificacion como leida"
+              aria-busy={markReadLoading}
               disabled={markReadLoading}
               className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:bg-primary-500/20 hover:border-primary-500/50 hover:text-primary-400 transition-all text-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Check className="w-4 h-4" />
+              {markReadLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
             </button>
           )}
           {onDelete && (
             <button 
+              type="button"
               onClick={onDelete} 
               title="Eliminar"
+              aria-label="Eliminar notificacion"
+              aria-busy={deleteLoading}
               disabled={deleteLoading}
               className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-400 transition-all text-zinc-400 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <X className="w-4 h-4" />
+              {deleteLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <X className="w-4 h-4" />}
             </button>
           )}
         </div>
