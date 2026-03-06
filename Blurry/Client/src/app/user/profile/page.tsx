@@ -4,6 +4,7 @@ import AchievementsUser from "../dashboard/AchievementsUser";
 import { User, Achievement, UserAchievement } from "@/types";
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/components/AuthContext';
+import ViewState from "@/components/ViewState";
 
 interface ProfileForm {
   nombre: string;
@@ -93,13 +94,16 @@ export default function UserProfilePage() {
 
   if (authLoading || loading) return (
     <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
-      <div className="animate-pulse flex flex-col items-center">
-        <div className="w-16 h-16 border-4 border-t-primary-500 border-zinc-800 rounded-full animate-spin shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
-        <p className="mt-4 text-primary-400 font-black tracking-widest text-sm">DECRYPTING PROFILE</p>
-      </div>
+      <ViewState variant="loading" title="Decrypting profile" description="Sincronizando identidad de usuario." className="max-w-md" />
     </div>
   );
-  if (!user) return <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-8 text-red-500 font-bold">User Not Found</div>;
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-8">
+        <ViewState variant="error" title="User not found" description="No se pudo cargar la identidad solicitada." className="max-w-md" />
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center py-12 px-4 bg-zinc-950 text-slate-200">

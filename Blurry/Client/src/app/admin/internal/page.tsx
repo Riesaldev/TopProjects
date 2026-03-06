@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ViewState from "@/components/ViewState";
 
 type AdminItem = {
   id: string;
@@ -60,9 +61,14 @@ export default function AdminInternalPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <h1 className="text-2xl font-bold mb-4">Interacción Interna</h1>
+      {loading ? (
+        <ViewState variant="loading" title="Cargando administradores" description="Validando equipo interno." className="w-full max-w-md mb-6" />
+      ) : null}
       <ul className="w-full max-w-md divide-y divide-gray-200 bg-white rounded shadow mb-6">
         {!loading && admins.length === 0 && (
-          <li className="p-4 text-sm text-gray-500">No hay administradores disponibles.</li>
+          <li className="p-0">
+            <ViewState variant="empty" title="Sin administradores disponibles" description="No hay perfiles admin habilitados ahora mismo." className="min-h-[160px] rounded-none border-0" />
+          </li>
         )}
         {admins.map((admin) => (
           <li key={admin.id} className="p-4 flex justify-between items-center">

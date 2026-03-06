@@ -2,6 +2,7 @@
 
 import React from "react";
 import Button from "@/components/Button";
+import ViewState from "@/components/ViewState";
 
 interface Reporte {
   id: string;
@@ -18,6 +19,7 @@ function asRecord(value: unknown): Record<string, unknown> {
 export default function AdminReportsPage() {
   const [reportes, setReportes] = React.useState<Reporte[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
   const getAuthHeaders = (): Record<string, string> => {
     const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
@@ -41,11 +43,18 @@ export default function AdminReportsPage() {
 
   const fetchReports = () => {
     setLoading(true);
+    setError(null);
     fetch("/api/reports", { headers: getAuthHeaders() })
       .then((res) => res.json())
       .then((data) => {
         const normalized = Array.isArray(data) ? data.map(normalizeReport) : [];
         setReportes(normalized);
+      })
+      .catch(() => {
+        setReportes([]);
+        setError("No se pudieron cargar las denuncias.");
+      })
+      .finally(() => {
         setLoading(false);
       });
   };
@@ -75,7 +84,11 @@ export default function AdminReportsPage() {
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <h1 className="text-2xl font-bold mb-4">Revisión de Denuncias</h1>
       {loading ? (
-        <p>Cargando denuncias...</p>
+        <ViewState variant="loading" title="Cargando denuncias" description="Sincronizando reportes del sistema." className="w-full max-w-md" />
+      ) : error ? (
+        <ViewState variant="error" title="Error al cargar denuncias" description={error} className="w-full max-w-md" />
+      ) : reportes.length === 0 ? (
+        <ViewState variant="empty" title="Sin denuncias registradas" description="Cuando lleguen nuevas incidencias apareceran aqui." className="w-full max-w-md" />
       ) : (
         <ul className="w-full max-w-md divide-y divide-gray-200 bg-white rounded shadow">
           {reportes.map((report) => (

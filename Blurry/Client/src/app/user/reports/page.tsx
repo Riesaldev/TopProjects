@@ -3,9 +3,10 @@
 import { useNotifications } from "@/components/NotificationsContext";
 import { useEffect, useRef, useState } from 'react';
 import { useRealtime } from '@/context/RealtimeContext';
-import { ShieldAlert, CheckCircle2, Clock, Activity, FileWarning } from "lucide-react";
+import { ShieldAlert, CheckCircle2, Clock, Activity } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 
 type UserReportItem = {
   id: string;
@@ -156,23 +157,12 @@ export default function UserReportsPage() {
         <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-zinc-800/50 bg-zinc-900/40 backdrop-blur-md">
           <AnimatePresence mode="wait">
             {loading ? (
-              <motion.div 
-                key="loading"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="flex flex-col items-center justify-center py-20"
-              >
-                 <div className="w-12 h-12 border-4 border-zinc-800 border-t-primary-500 rounded-full animate-spin shadow-neon" />
-                 <p className="mt-4 text-primary-400 font-bold tracking-widest text-xs uppercase">Conectando con Overwatch...</p>
+              <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <ViewState variant="loading" title="Cargando incidencias" description="Conectando con base de reportes." />
               </motion.div>
             ) : reports.length === 0 ? (
-              <motion.div 
-                key="empty"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col items-center justify-center py-16 px-4 text-center border border-dashed border-zinc-800 rounded-2xl bg-black/20"
-              >
-                <FileWarning className="w-16 h-16 text-zinc-700 mb-4 opacity-50" />
-                <h3 className="text-xl font-black text-zinc-300 mb-2">SISTEMA LIMPIO</h3>
-                <p className="text-zinc-500 max-w-sm text-sm">No tienes incidencias registradas en la base de datos actual. Tu expediente está impecable.</p>
+              <motion.div key="empty" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <ViewState variant="empty" title="Sistema limpio" description="No tienes incidencias registradas. Tu expediente esta impecable." />
               </motion.div>
             ) : (
               <motion.div key="list" className="space-y-4" initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>

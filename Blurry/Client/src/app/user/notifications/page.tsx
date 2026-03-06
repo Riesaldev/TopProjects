@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Bell, Filter, Zap } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 
 function groupByType(notifications: Notification[]): Record<string, Notification[]> {
   return notifications.reduce((acc, n) => {
@@ -316,11 +317,7 @@ export default function NotificationsPage() {
         {/* Notifications List */}
         <div className="space-y-8">
           {Object.keys(grouped).length === 0 ? (
-            <div className="glass-panel p-12 rounded-3xl border border-zinc-800/50 flex flex-col items-center justify-center text-center">
-               <Bell className="w-16 h-16 text-zinc-700 mb-4 opacity-50" />
-               <h3 className="text-xl font-bold text-white mb-2">Bandeja Vacía</h3>
-               <p className="text-zinc-500">No hay alertas en esta categoría.</p>
-            </div>
+            <ViewState variant="empty" title="Bandeja vacia" description="No hay alertas en esta categoria." className="glass-panel" />
           ) : (
             Object.entries(grouped).map(([type, notifs]) => (
               <div key={type} className="animate-fade-in">

@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, Suspense } from "react";
 import { checkModeration } from "@/utils/moderation";
 import { useNotifications } from "@/components/NotificationsContext";
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 import { Contact, Game, Product, Note, AgendaEvent, User } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
 import { Brain, Swords } from "lucide-react";
@@ -608,15 +609,15 @@ export default function VideoCallPage() {
   const { user: currentUser, isLoading: authLoading } = useAuth();
 
   if (authLoading) {
-    return <div>Cargando videollamada...</div>;
+    return <ViewState variant="loading" title="Cargando videollamada" description="Inicializando sala de conexion." className="m-6" />;
   }
 
   if (!currentUser?.id) {
-    return <div>No se pudo identificar usuario.</div>;
+    return <ViewState variant="error" title="No se pudo identificar usuario" description="Inicia sesion nuevamente para continuar." className="m-6" />;
   }
 
   return (
-    <Suspense fallback={<div>Cargando videollamada...</div>}>
+    <Suspense fallback={<ViewState variant="loading" title="Cargando videollamada" description="Preparando recursos de llamada." className="m-6" />}>
       <VideoCallContent userId={currentUser.id} />
     </Suspense>
   );

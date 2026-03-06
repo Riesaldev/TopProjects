@@ -23,6 +23,7 @@ import { useNotifications } from "@/components/NotificationsContext";
 import { User, Purchase, AgendaEvent, Notification, Note, ChatMessage, Achievement, UserAchievement, Mission, UserMission, Streak } from "@/types";
 import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 
 function getWeek(dateStr: string) {
   const d = new Date(dateStr);
@@ -250,12 +251,11 @@ export default function UserDashboard() {
     return (
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
         <Card variant="gamified" padding="lg">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500 shadow-neon"></div>
-            <span className="text-lg font-medium text-primary-400">
-              {authLoading ? "Decrypting profile..." : "Summoning dashboard..."}
-            </span>
-          </div>
+          <ViewState
+            variant="loading"
+            title={authLoading ? "Decrypting profile" : "Summoning dashboard"}
+            description="Cargando datos de usuario y actividad." className="min-h-[140px] border-0 bg-transparent"
+          />
         </Card>
       </div>
     );
@@ -530,7 +530,7 @@ export default function UserDashboard() {
                 
                 <div className="space-y-3 relative z-10">
                   {notifications.length === 0 ? (
-                    <div className="text-center py-6 text-zinc-500 text-sm font-medium">No alerts at this time.</div>
+                    <ViewState variant="empty" title="Sin alertas" description="No hay notificaciones activas por ahora." className="min-h-[120px]" />
                   ) : (
                     notifications.slice(0, 5).map((n: Notification) => (
                       <div key={n.id} className="group flex items-start space-x-3 p-3 bg-zinc-900/50 rounded-xl hover:bg-zinc-800/80 transition-all duration-300 border border-zinc-800/50 hover:border-accent-500/30 hover:shadow-[0_0_10px_rgba(236,72,153,0.1)]">
@@ -561,7 +561,7 @@ export default function UserDashboard() {
                 
                 <div className="space-y-4 relative z-10">
                   {agenda.length === 0 ? (
-                    <div className="text-center py-6 text-zinc-500 text-sm font-medium">Timeline empty. Schedule a connection!</div>
+                    <ViewState variant="empty" title="Timeline vacio" description="Programa una conexion para ver eventos aqui." className="min-h-[120px]" />
                   ) : (
                     agenda.slice(0, 3).map((a: AgendaEvent) => (
                       <div key={a.id} className="p-4 bg-zinc-900/40 border border-zinc-800/50 rounded-xl hover:border-blue-500/40 hover:bg-zinc-800/80 transition-all duration-300 group hover:shadow-[0_0_15px_rgba(59,130,246,0.1)] relative overflow-hidden">

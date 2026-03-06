@@ -7,6 +7,7 @@ import { ChatBox } from '@/components/ChatBox';
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, AlertTriangle, X } from "lucide-react";
 import Button from "@/components/Button";
+import ViewState from "@/components/ViewState";
 
 function ChatContent() {
   const [showReport, setShowReport] = useState(false);
@@ -108,8 +109,7 @@ export default function ChatPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500 shadow-[0_0_15px_rgba(168,85,247,0.5)]" />
-        <p className="text-primary-400 font-bold uppercase tracking-widest text-xs mt-4 animate-pulse">Establishing Connection...</p>
+        <ViewState variant="loading" title="Establishing connection" description="Inicializando canal seguro de chat." className="max-w-md" />
       </div>
     }>
       <ChatContent />

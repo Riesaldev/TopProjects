@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Button from "@/components/Button";
 import AdminCharts from "./Charts";
+import ViewState from "@/components/ViewState";
 import { User, Report, Sanction, Match, TokenTransaction, Service } from "@/types";
 import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
@@ -201,10 +202,7 @@ export default function AdminDashboard() {
       {/* Loading state mientras se verifica autenticación */}
       {isLoading && (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-900 via-primary-800 to-accent-900">
-          <div className="flex flex-col items-center space-y-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-            <p className="text-white text-lg">Verificando permisos...</p>
-          </div>
+          <ViewState variant="loading" title="Verificando permisos" description="Comprobando acceso de administrador." className="max-w-md border-white/20 bg-black/20" />
         </div>
       )}
       
@@ -297,7 +295,9 @@ export default function AdminDashboard() {
           <Button type="submit">Añadir</Button>
         </form>
         {loadingServices ? (
-          <p>Cargando servicios...</p>
+          <ViewState variant="loading" title="Cargando servicios" description="Sincronizando estado operativo." className="w-full" />
+        ) : services.length === 0 ? (
+          <ViewState variant="empty" title="Sin servicios configurados" description="Agrega un servicio para comenzar a monitorear estado." className="w-full" />
         ) : (
           <table className="w-full">
             <thead>

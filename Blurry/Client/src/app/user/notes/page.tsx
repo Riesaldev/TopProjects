@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { FileText, Edit2, Trash2, CheckCircle2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 
 export default function NotesPage() {
   const { user: currentUser, isLoading: authLoading } = useAuth();
@@ -132,18 +133,11 @@ export default function NotesPage() {
         <div className="glass-panel p-1 rounded-3xl border border-zinc-800/50 relative backdrop-blur-md">
           <div className="bg-zinc-900/60 rounded-[22px] p-6 lg:p-10 flex flex-col min-h-[400px]">
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-20 flex-1">
-                <div className="w-16 h-16 border-4 border-t-primary-500 border-zinc-800 rounded-full animate-spin shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
-                <p className="mt-4 text-primary-400 font-black tracking-widest text-sm uppercase">Desencriptando Logs...</p>
-              </div>
+              <ViewState variant="loading" title="Cargando notas" description="Desencriptando registros privados." />
             ) : (
                 <div className="w-full">
                   {notes.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-20 text-zinc-500 flex-1">
-                      <FileText className="w-16 h-16 mb-4 opacity-20" />
-                      <p className="font-bold text-lg">No hay intel registrado.</p>
-                      <p className="text-sm">Tus anotaciones de videollamada aparecerán aquí.</p>
-                    </div>
+                    <ViewState variant="empty" title="No hay intel registrado" description="Tus anotaciones de videollamada apareceran aqui." />
                   ) : (
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <AnimatePresence>

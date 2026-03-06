@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Calendar as CalendarIcon, Filter, Clock, MapPin, Users, Video, Search, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 
 export default function AgendaPage() {
   const { user: currentUser, isLoading: authLoading } = useAuth();
@@ -173,10 +174,7 @@ export default function AgendaPage() {
         </div>
 
         {loading ? (
-           <div className="flex flex-col items-center justify-center py-20 w-full glass-panel rounded-3xl border border-zinc-800/50">
-             <div className="w-16 h-16 border-4 border-t-primary-500 border-zinc-800 rounded-full animate-spin shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
-             <p className="mt-4 text-primary-400 font-black tracking-widest text-sm uppercase">Cargando Cronograma...</p>
-           </div>
+            <ViewState variant="loading" title="Cargando cronograma" description="Recuperando contactos y eventos agendados." className="glass-panel rounded-3xl" />
         ) : (
           <div className="flex flex-col lg:flex-row gap-6">
             
@@ -287,10 +285,7 @@ export default function AgendaPage() {
               
               <div className="space-y-4">
                 {events.filter(e => isUpcoming(e.datetime)).length === 0 ? (
-                  <div className="text-center py-12 bg-black/20 rounded-2xl border border-zinc-800 border-dashed">
-                     <CalendarIcon className="w-12 h-12 text-zinc-700 mx-auto mb-3 opacity-50" />
-                     <p className="font-bold text-zinc-500">No hay enlaces programados.</p>
-                  </div>
+                  <ViewState variant="empty" title="No hay enlaces programados" description="Agenda tu proximo encuentro desde el panel lateral." className="bg-black/20" />
                 ) : (
                   events.filter(e => isUpcoming(e.datetime)).sort((a,b) => new Date(a.datetime).getTime() - new Date(b.datetime).getTime()).map(e => (
                     <motion.div 

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Download, ShoppingBag, CheckCircle, Clock, AlertCircle, Calendar } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
+import ViewState from "@/components/ViewState";
 
 function toCSV(rows: Purchase[]) {
   if (!rows.length) return "";
@@ -111,16 +112,13 @@ export default function PurchaseHistoryPage() {
           <div className="bg-zinc-900/60 rounded-[22px] p-6 lg:p-10 flex flex-col min-h-[400px]">
             
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-20 flex-1">
-                <div className="w-16 h-16 border-4 border-t-primary-500 border-zinc-800 rounded-full animate-spin shadow-[0_0_15px_rgba(168,85,247,0.5)]"></div>
-                <p className="mt-4 text-primary-400 font-black tracking-widest text-sm uppercase">Cargando Registros...</p>
-              </div>
+              <ViewState variant="loading" title="Cargando registros" description="Sincronizando historial de compras." />
             ) : purchases.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-zinc-500 flex-1">
-                <ShoppingBag className="w-16 h-16 mb-4 opacity-20" />
-                <p className="font-bold text-lg">{error ? "Error de carga" : "No hay transacciones registradas."}</p>
-                <p className="text-sm">{error || "Tus futuras adquisiciones aparecerán aquí."}</p>
-              </div>
+              <ViewState
+                variant={error ? "error" : "empty"}
+                title={error ? "Error de carga" : "No hay transacciones registradas"}
+                description={error || "Tus futuras adquisiciones apareceran aqui."}
+              />
             ) : (
               <div className="overflow-x-auto hide-scrollbar -mx-6 px-6 lg:mx-0 lg:px-0">
                 <table className="w-full text-left whitespace-nowrap">

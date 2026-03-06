@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import ViewState from "@/components/ViewState";
 
 interface TokenRow {
   id: number;
@@ -71,8 +72,10 @@ export default function AdminTokensPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <h1 className="text-2xl font-bold mb-4">Gestión de Tokens</h1>
-      {loading ? <p className="mb-4">Cargando transacciones...</p> : null}
-      {error ? <p className="mb-4 text-red-600">{error}</p> : null}
+      {loading ? (
+        <ViewState variant="loading" title="Cargando transacciones" description="Sincronizando movimientos de tokens." className="mb-4 w-full max-w-md" />
+      ) : null}
+      {error ? <ViewState variant="error" title="Error en tokens" description={error} className="mb-4 w-full max-w-md" /> : null}
 
       <table className="min-w-[350px] border rounded shadow bg-white">
         <thead>
@@ -96,7 +99,7 @@ export default function AdminTokensPage() {
       </table>
 
       {!loading && rows.length === 0 && !error ? (
-        <p className="mt-4 text-gray-600">No hay transacciones registradas.</p>
+        <ViewState variant="empty" title="Sin transacciones registradas" description="Cuando existan movimientos se mostraran aqui." className="mt-4 w-full max-w-md" />
       ) : null}
     </main>
   );

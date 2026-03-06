@@ -13,7 +13,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 
 ## UX/UI
 
-- [ ] Unificar estados de carga/error/vacio en todas las vistas de usuario y admin.
+- [x] Unificar estados de carga/error/vacio en todas las vistas de usuario y admin.
 - [ ] Revisar consistencia visual de badges, botones y estados deshabilitados en todas las pantallas.
 - [ ] Estandarizar feedback al usuario (toasts y mensajes) para operaciones exitosas, parciales y fallidas.
 - [ ] Validar responsive real (mobile/tablet/desktop) en dashboard, videollamada, juegos y admin.

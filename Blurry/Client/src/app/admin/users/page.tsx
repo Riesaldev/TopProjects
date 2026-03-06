@@ -2,6 +2,7 @@
 
 import Modal from "@/components/Modal";
 import Button from "@/components/Button";
+import ViewState from "@/components/ViewState";
 import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
 
@@ -60,6 +61,7 @@ export default function AdminUsersPage() {
   const [modalUser, setModalUser] = useState<Usuario | null>(null);
   const [editUser, setEditUser] = useState<Usuario | null>(null);
   const [activityHistory, setActivityHistory] = useState<ActivityItem[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Filtros
   const [estado, setEstado] = useState("Todos");
@@ -104,6 +106,7 @@ export default function AdminUsersPage() {
 
   const fetchUsers = async () => {
     setLoading(true);
+    setError(null);
     try {
       const res = await fetch("/api/users", { headers: getAuthHeaders() });
       const data = await res.json().catch(() => []);
@@ -112,6 +115,7 @@ export default function AdminUsersPage() {
     } catch (error) {
       console.error("Error cargando usuarios:", error);
       setUsuarios([]);
+      setError("No se pudo cargar la lista de usuarios.");
     } finally {
       setLoading(false);
     }
@@ -240,7 +244,11 @@ export default function AdminUsersPage() {
         <Button variant="primary" onClick={() => exportCSV(usuariosFiltrados)}>Exportar CSV</Button>
       </section>
       {loading ? (
-        <p>Cargando usuarios...</p>
+        <ViewState variant="loading" title="Cargando usuarios" description="Consultando perfiles y estado de actividad." className="w-full max-w-md" />
+      ) : error ? (
+        <ViewState variant="error" title="Error al cargar usuarios" description={error} className="w-full max-w-md" />
+      ) : usuariosFiltrados.length === 0 ? (
+        <ViewState variant="empty" title="Sin usuarios para este filtro" description="Prueba ajustando estado, genero o actividad." className="w-full max-w-md" />
       ) : (
         <table className="min-w-[350px] border rounded shadow bg-white">
           <thead>

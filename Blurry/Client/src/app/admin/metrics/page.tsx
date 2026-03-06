@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Users, AlertTriangle, Star, TrendingUp, Eye, Heart, Shield } from "lucide-react";
+import ViewState from "@/components/ViewState";
 
 interface MetricCard {
   label: string;
@@ -167,16 +168,10 @@ export default function AdminMetricsPage() {
 
         {/* Main Metrics Cards */}
         {loading ? (
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 mb-8">
-            <p className="text-gray-600">Cargando métricas reales...</p>
-          </div>
+          <ViewState variant="loading" title="Cargando metricas" description="Agregando informacion en tiempo real." className="mb-8 bg-white" />
         ) : null}
 
-        {error ? (
-          <div className="bg-red-50 text-red-700 rounded-xl border border-red-100 px-4 py-3 mb-8">
-            {error}
-          </div>
-        ) : null}
+        {error ? <ViewState variant="error" title="Error de metricas" description={error} className="mb-8 bg-white" /> : null}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {mainMetrics.map((metric, index) => (

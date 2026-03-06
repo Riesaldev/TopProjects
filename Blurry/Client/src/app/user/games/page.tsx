@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import GameCard from "@/components/GameCard";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gamepad2, Trophy, Clock, Search, Activity, Flame, ArrowUpRight } from "lucide-react";
+import ViewState from "@/components/ViewState";
 
 type GameHistory = {
   id: number | string;
@@ -216,16 +217,7 @@ export default function GamesPage() {
               </div>
 
               {loading ? (
-                <div className="flex gap-4 overflow-x-auto pb-4 hide-scrollbar">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="glass-card animate-pulse w-full sm:w-60 h-[260px] p-5 rounded-2xl flex flex-col items-center border border-zinc-800/30 flex-shrink-0">
-                      <div className="w-20 h-20 bg-zinc-800/50 rounded-2xl mb-4"></div>
-                      <div className="w-3/4 h-5 bg-zinc-800/50 rounded-md mb-2"></div>
-                      <div className="w-full h-8 bg-zinc-800/30 rounded-md mb-4 mt-2"></div>
-                      <div className="w-full h-10 bg-zinc-800/80 rounded-xl mt-auto"></div>
-                    </div>
-                  ))}
-                </div>
+                <ViewState variant="loading" title="Cargando juegos" description="Preparando lobby y catalogo." />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {filteredGames.map(game => (
@@ -235,9 +227,7 @@ export default function GamesPage() {
               )}
 
               {!loading && filteredGames.length === 0 ? (
-                <div className="text-center py-10 text-zinc-500">
-                  No hay resultados para ese filtro.
-                </div>
+                <ViewState variant="empty" title="Sin resultados" description="No hay juegos para ese filtro." className="min-h-[150px]" />
               ) : null}
             </motion.div>
           ) : (
@@ -285,10 +275,7 @@ export default function GamesPage() {
                 ))}
                 
                 {history.length === 0 && !loading && (
-                    <div className="text-center py-12 text-zinc-500">
-                        <Trophy className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                        <p>Aún no has jugado ninguna partida.</p>
-                    </div>
+                  <ViewState variant="empty" title="Sin partidas registradas" description="Juega una partida para ver tu historial." className="min-h-[160px]" />
                 )}
               </div>
             </motion.div>

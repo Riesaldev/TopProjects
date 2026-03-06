@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthContext";
 import { useForm } from "@/hooks/useForm";
 import { useNotifications } from "@/hooks/useNotifications";
+import ViewState from "@/components/ViewState";
 
 interface SettingsForm {
   username: string;
@@ -94,7 +95,11 @@ export default function SettingsPage() {
   }, [isLoading, router, setValues, user]);
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Cargando configuracion...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-zinc-950">
+        <ViewState variant="loading" title="Cargando configuracion" description="Preparando ajustes de usuario." className="max-w-md" />
+      </div>
+    );
   }
 
   if (!user) {
