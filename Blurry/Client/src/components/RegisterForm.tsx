@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, User, Eye, EyeOff, Loader2, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useNotifications } from "./NotificationsContext";
+import Button from "./Button";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -195,17 +196,9 @@ export default function RegisterForm() {
         )}
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-3 mt-6 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] hover:shadow-[0_0_20px_rgba(59,130,246,0.5)] disabled:opacity-50 flex justify-center items-center gap-2"
-      >
-        {loading ? (
-          <>
-             <Loader2 className="w-5 h-5 animate-spin" /> PROCESANDO...
-          </>
-        ) : "GENERAR IDENTIDAD"}
-      </button>
+      <Button type="submit" fullWidth variant="secondary" isLoading={loading} className="mt-6 uppercase tracking-widest text-sm">
+        {loading ? "PROCESANDO..." : "GENERAR IDENTIDAD"}
+      </Button>
     </form>
   );
 }

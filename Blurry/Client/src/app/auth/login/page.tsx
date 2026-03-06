@@ -16,7 +16,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center text-zinc-500 hover:text-primary-400 mb-8 transition-colors text-sm font-bold uppercase tracking-widest">
+          <Link href="/" className="inline-flex items-center text-zinc-500 hover:text-primary-400 mb-8 transition-colors text-sm font-bold uppercase tracking-widest focus-visible:ring-2 focus-visible:ring-primary-400 rounded-lg px-2 py-1">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Abortar Protocolo
           </Link>
@@ -73,9 +73,9 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="text-center mt-10 text-xs text-zinc-600 font-medium">
           Al conectarte, acatas nuestros{" "}
-          <a href="/legal/terms" className="text-primary-500/70 hover:text-primary-400 underline decoration-zinc-800 underline-offset-4">Protocolos</a>
+          <Link href="/legal/terms" className="text-primary-500/70 hover:text-primary-400 underline decoration-zinc-800 underline-offset-4">Protocolos</Link>
           {" "}y{" "}
-          <a href="/legal/privacy" className="text-primary-500/70 hover:text-primary-400 underline decoration-zinc-800 underline-offset-4">Privacidad</a>
+          <Link href="/legal/privacy" className="text-primary-500/70 hover:text-primary-400 underline decoration-zinc-800 underline-offset-4">Privacidad</Link>
         </div>
       </div>
     </main>

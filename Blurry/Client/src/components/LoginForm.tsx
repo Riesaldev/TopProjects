@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthContext";
-import { AlertCircle, Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { AlertCircle, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from 'next/link';
+import Button from "@/components/Button";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function LoginForm() {
       } else {
         setLocalError(result.message || "Error al iniciar sesión");
       }
-    } catch (error) {
+    } catch {
       setLocalError("Error al conectar con el servidor");
     } finally {
       setLoading(false);
@@ -91,17 +92,9 @@ export default function LoginForm() {
         </div>
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full py-3 mt-4 bg-primary-600 hover:bg-primary-500 text-white rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] disabled:opacity-50 flex justify-center items-center gap-2"
-      >
-        {loading ? (
-          <>
-             <Loader2 className="w-5 h-5 animate-spin" /> VERIFICANDO...
-          </>
-        ) : "INICIAR ENLACE"}
-      </button>
+      <Button type="submit" fullWidth variant="primary" isLoading={loading} className="mt-4 uppercase tracking-widest text-sm">
+        {loading ? "VERIFICANDO..." : "INICIAR ENLACE"}
+      </Button>
     </form>
   );
 }

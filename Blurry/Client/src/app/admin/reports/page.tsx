@@ -81,8 +81,12 @@ export default function AdminReportsPage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      <h1 className="text-2xl font-bold mb-4">Revisión de Denuncias</h1>
+    <main className="min-h-screen bg-zinc-950 text-slate-200 px-4 py-8">
+      <div className="max-w-4xl mx-auto space-y-6">
+      <header className="glass-panel rounded-3xl border border-zinc-800/60 p-6">
+        <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">Revision de Denuncias</h1>
+        <p className="text-zinc-400 text-sm mt-2">Gestiona incidencias activas y cierra reportes resueltos.</p>
+      </header>
       {loading ? (
         <ViewState variant="loading" title="Cargando denuncias" description="Sincronizando reportes del sistema." className="w-full max-w-md" />
       ) : error ? (
@@ -90,14 +94,14 @@ export default function AdminReportsPage() {
       ) : reportes.length === 0 ? (
         <ViewState variant="empty" title="Sin denuncias registradas" description="Cuando lleguen nuevas incidencias apareceran aqui." className="w-full max-w-md" />
       ) : (
-        <ul className="w-full max-w-md divide-y divide-gray-200 bg-white rounded shadow">
+        <ul className="w-full divide-y divide-zinc-800/70 glass-panel rounded-3xl border border-zinc-800/60 overflow-hidden">
           {reportes.map((report) => (
-            <li key={report.id} className="p-4 flex flex-col gap-2">
-              <span className="font-semibold">Usuario: {report.usuario}</span>
-              <span>Motivo: {report.motivo}</span>
-              <span className="text-xs text-gray-400">Fecha: {report.fecha}</span>
-              <span className="text-xs text-gray-500">Estado: {report.estado}</span>
-              <div className="flex gap-2 mt-2">
+            <li key={report.id} className="p-4 sm:p-5 flex flex-col gap-2 bg-zinc-900/30 hover:bg-zinc-900/50 transition-colors">
+              <span className="font-semibold text-zinc-100">Usuario: {report.usuario}</span>
+              <span className="text-zinc-200">Motivo: {report.motivo}</span>
+              <span className="text-xs text-zinc-400">Fecha: {report.fecha}</span>
+              <span className="text-xs text-zinc-500">Estado: {report.estado}</span>
+              <div className="flex flex-wrap gap-2 mt-2">
                 {(String(report.estado).toLowerCase().includes("resuelt") || String(report.estado).toLowerCase().includes("resolved")) ? null : (
                   <Button variant="primary" onClick={() => marcarResuelta(report.id)}>Marcar como resuelta</Button>
                 )}
@@ -107,6 +111,7 @@ export default function AdminReportsPage() {
           ))}
         </ul>
       )}
+      </div>
     </main>
   );
 } 

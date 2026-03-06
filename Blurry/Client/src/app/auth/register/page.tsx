@@ -16,7 +16,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md relative z-10 py-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center text-zinc-500 hover:text-blue-400 mb-8 transition-colors text-sm font-bold uppercase tracking-widest">
+          <Link href="/" className="inline-flex items-center text-zinc-500 hover:text-blue-400 mb-8 transition-colors text-sm font-bold uppercase tracking-widest focus-visible:ring-2 focus-visible:ring-blue-400 rounded-lg px-2 py-1">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Cancelar Enrolamiento
           </Link>
@@ -73,7 +73,7 @@ export default function RegisterPage() {
         {/* Footer */}
         <div className="text-center mt-10 text-xs text-zinc-600 font-medium">
           Al enrolarte, confirmas tu adherencia a las{" "}
-          <a href="/legal/terms" className="text-blue-500/70 hover:text-blue-400 underline decoration-zinc-800 underline-offset-4">Directivas del Servidor</a>
+          <Link href="/legal/terms" className="text-blue-500/70 hover:text-blue-400 underline decoration-zinc-800 underline-offset-4">Directivas del Servidor</Link>
         </div>
       </div>
     </main>
