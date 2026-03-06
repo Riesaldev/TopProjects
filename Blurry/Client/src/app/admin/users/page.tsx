@@ -216,8 +216,8 @@ export default function AdminUsersPage() {
     <main className="min-h-screen flex flex-col items-center justify-center px-4">
       <h1 className="text-2xl font-bold mb-4">Gestión de Usuarios</h1>
       {/* Panel de filtros y exportar */}
-      <section className="mb-6 w-full max-w-3xl bg-white rounded shadow p-4 flex flex-wrap gap-4 items-end justify-between">
-        <div className="flex gap-4 flex-wrap">
+      <section className="mb-6 w-full max-w-6xl bg-white rounded shadow p-4 flex flex-wrap gap-4 items-end justify-between">
+        <div className="flex gap-4 flex-wrap flex-1">
           <div>
             <label htmlFor="estado-select" className="block text-sm font-semibold mb-1">Estado</label>
             <select id="estado-select" value={estado} onChange={e => setEstado(e.target.value)} className="border p-2 rounded" title="Filtrar por estado">
@@ -238,10 +238,10 @@ export default function AdminUsersPage() {
           </div>
           <div>
             <label htmlFor="codigo-postal-input" className="block text-sm font-semibold mb-1">Código Postal</label>
-            <input id="codigo-postal-input" value={codigoPostal} onChange={e => setCodigoPostal(e.target.value)} className="border p-2 rounded" placeholder="Buscar..." />
+            <input id="codigo-postal-input" value={codigoPostal} onChange={e => setCodigoPostal(e.target.value)} className="border p-2 rounded w-full sm:w-auto" placeholder="Buscar..." />
           </div>
         </div>
-        <Button variant="primary" onClick={() => exportCSV(usuariosFiltrados)}>Exportar CSV</Button>
+        <Button variant="primary" className="w-full sm:w-auto" onClick={() => exportCSV(usuariosFiltrados)}>Exportar CSV</Button>
       </section>
       {loading ? (
         <ViewState variant="loading" title="Cargando usuarios" description="Consultando perfiles y estado de actividad." className="w-full max-w-md" />
@@ -250,7 +250,8 @@ export default function AdminUsersPage() {
       ) : usuariosFiltrados.length === 0 ? (
         <ViewState variant="empty" title="Sin usuarios para este filtro" description="Prueba ajustando estado, genero o actividad." className="w-full max-w-md" />
       ) : (
-        <table className="min-w-[350px] border rounded shadow bg-white">
+        <div className="w-full max-w-6xl overflow-x-auto border rounded shadow bg-white">
+        <table className="min-w-[980px] w-full">
           <thead>
             <tr className="bg-gray-100">
               <th className="p-2">ID</th>
@@ -291,6 +292,7 @@ export default function AdminUsersPage() {
             ))}
           </tbody>
         </table>
+        </div>
       )}
       {/* Modal de detalles */}
       <Modal open={!!modalUser} onClose={() => setModalUser(null)} title="Detalles del usuario">

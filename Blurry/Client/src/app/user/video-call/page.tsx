@@ -463,9 +463,9 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
     : "border-violet-300 bg-violet-50 text-violet-800";
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      <h1 className="text-2xl font-bold mb-4">Videollamada</h1>
-      <div className={`w-full max-w-2xl bg-white rounded shadow p-6 flex flex-col items-center relative border ${cardAccentClass}`}>
+    <main className="min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-4 sm:py-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-center">Videollamada</h1>
+      <div className={`w-full max-w-2xl bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col items-center relative border ${cardAccentClass}`}>
         {(activeGame || gameName) && (
           <div className="mb-4 w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3 flex flex-wrap items-center justify-between gap-2">
             <div className="text-sm text-zinc-700">
@@ -481,12 +481,12 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
         )}
         {/* Panel lateral */}
         {showPanel !== "none" && (
-          <aside className="absolute right-0 top-0 h-full w-80 bg-accent-400 border-l shadow-lg z-10 p-4 flex flex-col gap-4">
+          <aside className="fixed inset-x-0 bottom-0 h-[72vh] rounded-t-2xl bg-accent-400 shadow-2xl z-20 p-4 flex flex-col gap-4 border-t sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-0 sm:right-0 sm:h-full sm:w-80 sm:rounded-t-none sm:rounded-r-xl sm:border-t-0 sm:border-l">
             <button className="self-end text-accent-600" onClick={() => setShowPanel("none")}>✕</button>
             {showPanel === "games" && (
               <>
                 <h2 className="font-semibold mb-2">Juegos y tests</h2>
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-2 overflow-y-auto pr-1">
                   {games.map(g => (
                     <li key={g.id} className="bg-white rounded shadow p-2 flex flex-col">
                       <div className="flex items-center justify-between gap-2">
@@ -530,8 +530,8 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
         )}
         {/* Modal de tienda de juegos/tests */}
         {showStore && (
-          <div className="fixed inset-0 bg-black/30 z-20 flex items-center justify-center">
-            <div className="bg-white rounded shadow-lg p-6 w-80 relative">
+          <div className="fixed inset-0 bg-black/30 z-30 flex items-center justify-center px-4">
+            <div className="bg-white rounded shadow-lg p-5 sm:p-6 w-full max-w-sm max-h-[85vh] overflow-y-auto relative">
               <button className="absolute top-2 right-2 text-accent-600" onClick={() => setShowStore(false)}>✕</button>
               <h2 className="font-semibold mb-4">Tienda de juegos/tests</h2>
               {purchaseMsg && <div className={`mb-2 text-center ${purchaseMsg.includes('exitosa') ? 'text-green-600' : 'text-red-600'}`}>{purchaseMsg}</div>}
@@ -554,13 +554,13 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
         {/* Video preview */}
         <div className="relative w-full flex justify-center items-center mb-4">
           {/* Video del otro usuario con blur */}
-          <div className="w-64 h-64 bg-accent-400 rounded-xl flex items-center justify-center overflow-hidden relative">
+          <div className="w-full max-w-[16rem] sm:max-w-[18rem] aspect-square bg-accent-400 rounded-xl flex items-center justify-center overflow-hidden relative">
             <div className="absolute inset-0 bg-black/10 z-10" />
             <div className="w-full h-full flex items-center justify-center text-2xl text-accent-600 font-bold blur-xl select-none">{contact?.nombre?.charAt(0) || "U"}</div>
             <div className="absolute bottom-2 right-2 bg-white/80 text-xs px-2 py-1 rounded">{contact?.nombre || "Usuario"}</div>
           </div>
           {/* Miniatura propia sin blur */}
-          <div className="absolute bottom-2 left-2 w-20 h-20 bg-accent-400 rounded-full flex items-center justify-center border-2 border-primary-400 text-lg font-bold z-20">
+          <div className="absolute bottom-2 left-2 w-16 h-16 sm:w-20 sm:h-20 bg-accent-400 rounded-full flex items-center justify-center border-2 border-primary-400 text-sm sm:text-lg font-bold z-20">
             Tú
           </div>
         </div>
@@ -570,7 +570,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
           if (tokens === null) buyTimeTitle = "Cargando tokens...";
           else if (tokens < TOKEN_COST_PER_2MIN) buyTimeTitle = "No tienes suficientes tokens";
           return (
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex flex-wrap items-center gap-3 mb-4 justify-center sm:justify-start">
               <span className={`text-xl font-mono font-bold ${timerClass}`}>{min}:{sec}</span>
               <span className="text-sm text-accent-600">Tokens: <span className="font-bold text-primary-600">{tokens ?? <span className="italic text-gray-400">Cargando...</span>}</span></span>
               <button
@@ -585,7 +585,7 @@ function VideoCallContent({ userId }: Readonly<{ userId: number }>) {
           );
         })()}
         {/* Controles de llamada */}
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4 justify-center sm:justify-start">
           <Button variant={muted ? "secondary" : "primary"} onClick={handleMute}>{muted ? "Activar micrófono" : "Silenciar"}</Button>
           <Button variant="secondary" onClick={() => setShowPanel("games")}>Juegos/Tests</Button>
           <Button variant="secondary" onClick={() => setShowPanel("notes")}>Notas</Button>

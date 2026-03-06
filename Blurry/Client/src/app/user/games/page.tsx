@@ -112,19 +112,19 @@ export default function GamesPage() {
     <div className="max-w-6xl mx-auto space-y-6 animate-fade-in relative z-10 p-4 pb-20">
       
       {/* Header Section */}
-      <div className="glass-panel p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group">
+      <div className="glass-panel p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden group">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/10 rounded-full blur-[100px] -z-10 group-hover:bg-primary-500/20 transition-all duration-700" />
         
         <div>
-          <h1 className="text-4xl font-black text-white flex items-center gap-3 tracking-tight mb-2">
+          <h1 className="text-3xl sm:text-4xl font-black text-white flex items-center gap-3 tracking-tight mb-2">
             <Gamepad2 className="w-10 h-10 text-primary-500 animate-pulse-slow" /> 
             ARCADE <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 drop-shadow-sm">NEXUS</span>
           </h1>
-          <p className="text-zinc-400 text-lg max-w-xl font-medium">Selecciona un juego, encuentra un rival y suma puntos para liderar la clasificación global.</p>
+          <p className="text-zinc-400 text-base sm:text-lg max-w-xl font-medium">Selecciona un juego, encuentra un rival y suma puntos para liderar la clasificación global.</p>
         </div>
 
-        <div className="flex gap-4">
-          <div className="glass-card px-5 py-3 flex items-center gap-4 min-w-[140px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full md:w-auto">
+          <div className="glass-card px-5 py-3 flex items-center gap-4 min-w-0">
             <div className="bg-green-500/20 p-2 rounded-xl border border-green-500/30 shadow-[0_0_15px_rgba(34,197,94,0.15)]">
               <Activity className="w-5 h-5 text-green-400" />
             </div>
@@ -134,7 +134,7 @@ export default function GamesPage() {
             </div>
           </div>
           
-          <div className="glass-card px-5 py-3 flex items-center gap-4 min-w-[140px]">
+          <div className="glass-card px-5 py-3 flex items-center gap-4 min-w-0">
             <div className="bg-orange-500/20 p-2 rounded-xl border border-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)]">
               <Flame className="w-5 h-5 text-orange-400" />
             </div>
@@ -147,10 +147,10 @@ export default function GamesPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-4 border-b border-zinc-800/80 pb-px">
+      <div className="flex gap-2 sm:gap-4 border-b border-zinc-800/80 pb-px overflow-x-auto">
         <button
           onClick={() => setActiveTab("lobby")}
-          className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${activeTab === 'lobby' ? 'text-primary-400' : 'text-zinc-500 hover:text-zinc-300'}`}
+          className={`px-4 sm:px-6 py-3 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all relative whitespace-nowrap ${activeTab === 'lobby' ? 'text-primary-400' : 'text-zinc-500 hover:text-zinc-300'}`}
         >
           Lobby Principal
           {activeTab === 'lobby' && (
@@ -159,7 +159,7 @@ export default function GamesPage() {
         </button>
         <button
           onClick={() => setActiveTab("history")}
-          className={`px-6 py-3 font-bold text-sm uppercase tracking-wider transition-all relative ${activeTab === 'history' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
+          className={`px-4 sm:px-6 py-3 font-bold text-xs sm:text-sm uppercase tracking-wider transition-all relative whitespace-nowrap ${activeTab === 'history' ? 'text-white' : 'text-zinc-500 hover:text-zinc-300'}`}
         >
           Historial de Partidas
           {activeTab === 'history' && (

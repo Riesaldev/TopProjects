@@ -208,9 +208,9 @@ export default function AdminDashboard() {
       
       {/* Dashboard principal */}
       {!isLoading && user && user.role === 'admin' && (
-        <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard de Administrador</h1>
-      <p className="mb-4">Bienvenido al panel de administración. Desde aquí puedes gestionar usuarios, servicios y monitorear la app.</p>
+        <main className="min-h-screen w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4 py-6">
+      <h1 className="text-2xl font-bold mb-4 text-center">Dashboard de Administrador</h1>
+      <p className="mb-4 text-center">Bienvenido al panel de administración. Desde aquí puedes gestionar usuarios, servicios y monitorear la app.</p>
       <AdminCharts
         usuarios={usuariosData}
         denuncias={denunciasData}
@@ -220,35 +220,35 @@ export default function AdminDashboard() {
         feedback={feedbackData}
       />
       {/* Métricas */}
-      <div className="flex flex-wrap gap-6 mb-8">
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-primary-600 mb-2">{usuarios ?? '...'}</span>
           <span className="text-gray-700">Usuarios registrados</span>
           <Link href="/admin/users" className="text-primary-600 text-sm mt-2 hover:underline">Ver gestión</Link>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-secondary-600 mb-2">{usuariosActivos ?? '...'}</span>
           <span className="text-gray-700">Usuarios activos hoy</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-accent-500 mb-2">{denunciasPendientes ?? '...'}</span>
           <span className="text-gray-700">Denuncias pendientes</span>
           <Link href="/admin/reports" className="text-primary-600 text-sm mt-2 hover:underline">Ver denuncias</Link>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-accent-400 mb-2">{denunciasMes ?? '...'}</span>
           <span className="text-gray-700">Denuncias este mes</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-accent-600 mb-2">{sancionesActivas ?? '...'}</span>
           <span className="text-gray-700">Sanciones activas</span>
           <Link href="/admin/sanctions" className="text-primary-600 text-sm mt-2 hover:underline">Ver sanciones</Link>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-secondary-600 mb-2">{ratingMedio ?? '...'}</span>
           <span className="text-gray-700">Rating medio</span>
         </div>
-        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-[180px]">
+        <div className="bg-white rounded shadow p-6 flex flex-col items-center min-w-0">
           <span className="text-3xl font-bold text-primary-400 mb-2">{tiempoMedio !== null ? tiempoMedio + ' min' : '...'}</span>
           <span className="text-gray-700">Tiempo medio en app</span>
         </div>
@@ -275,7 +275,7 @@ export default function AdminDashboard() {
       {/* Gestión de servicios */}
       <section className="w-full max-w-2xl bg-white rounded shadow p-6 mb-8">
         <h2 className="text-lg font-bold mb-4">Gestión de Servicios</h2>
-        <form className="flex gap-4 mb-4" onSubmit={agregarServicio}>
+        <form className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4" onSubmit={agregarServicio}>
           <input
             className="border p-2 rounded flex-1"
             placeholder="Nombre del nuevo servicio"
@@ -299,7 +299,8 @@ export default function AdminDashboard() {
         ) : services.length === 0 ? (
           <ViewState variant="empty" title="Sin servicios configurados" description="Agrega un servicio para comenzar a monitorear estado." className="w-full" />
         ) : (
-          <table className="w-full">
+          <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[520px]">
             <thead>
               <tr className="bg-gray-100">
                 <th className="p-2">Servicio</th>
@@ -312,18 +313,21 @@ export default function AdminDashboard() {
                 <tr key={s.id} className="text-center border-t">
                   <td className="p-2">{s.nombre}</td>
                   <td className="p-2">{s.estado}</td>
-                  <td className="p-2 flex gap-2 justify-center">
+                  <td className="p-2">
+                    <div className="flex flex-wrap gap-2 justify-center">
                     {s.estado !== "Activo" && (
                       <Button variant="primary" onClick={() => cambiarEstadoServicio(s.id, "Activo")}>Activar</Button>
                     )}
                     {s.estado !== "Mantenimiento" && (
                       <Button variant="secondary" onClick={() => cambiarEstadoServicio(s.id, "Mantenimiento")}>Mantenimiento</Button>
                     )}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </section>
       {/* Logs de actividad */}
@@ -331,9 +335,9 @@ export default function AdminDashboard() {
         <h2 className="text-lg font-bold mb-4">Logs de Actividad</h2>
         <ul className="divide-y divide-gray-200">
           {logs.map((log) => (
-            <li key={log.id} className="py-2 text-sm flex justify-between">
+            <li key={log.id} className="py-2 text-sm flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
               <span>{log.mensaje}</span>
-              <span className="text-gray-400 ml-4">{log.fecha}</span>
+              <span className="text-gray-400 sm:ml-4">{log.fecha}</span>
             </li>
           ))}
         </ul>
