@@ -6,6 +6,7 @@ import { useAuth } from "@/components/AuthContext";
 import { useForm } from "@/hooks/useForm";
 import { useNotifications } from "@/hooks/useNotifications";
 import ViewState from "@/components/ViewState";
+import Button from "@/components/Button";
 
 interface SettingsForm {
   username: string;
@@ -167,13 +168,9 @@ export default function SettingsPage() {
           </select>
         </div>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-3 rounded-xl bg-primary-600 hover:bg-primary-500 font-bold disabled:opacity-50"
-        >
+        <Button type="submit" variant="primary" fullWidth isLoading={isSubmitting}>
           {isSubmitting ? "Guardando..." : "Guardar cambios"}
-        </button>
+        </Button>
       </form>
     </main>
   );

@@ -4,6 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Users, AlertTriangle, Star, TrendingUp, Eye, Heart, Shield } from "lucide-react";
 import ViewState from "@/components/ViewState";
+import Badge from "@/components/Badge";
+import Button from "@/components/Button";
 
 interface MetricCard {
   label: string;
@@ -186,13 +188,9 @@ export default function AdminMetricsPage() {
                 <div className={`bg-gradient-to-r ${metric.color} p-3 rounded-xl`}>
                   <metric.icon className="h-6 w-6 text-white" />
                 </div>
-                <span className={`text-sm font-semibold px-2 py-1 rounded-full ${
-                  metric.changeType === 'positive' 
-                    ? 'text-green-600 bg-green-100' 
-                    : 'text-blue-700 bg-blue-100'
-                }`}>
+                <Badge variant={metric.changeType === "positive" ? "success" : "info"} size="sm">
                   {metric.change}
-                </span>
+                </Badge>
               </div>
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-1">
@@ -217,7 +215,7 @@ export default function AdminMetricsPage() {
             Estadísticas Detalladas
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {detailedMetrics.map((metric, index) => (
+            {detailedMetrics.map((metric) => (
               <div key={metric.label} className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
                 <span className="text-gray-600 font-medium">{metric.label}</span>
                 <span className="text-gray-900 font-bold text-lg">{metric.value}</span>
@@ -245,9 +243,7 @@ export default function AdminMetricsPage() {
             <p className="text-gray-600 mb-4">
               Visualiza la actividad de usuarios en tiempo real
             </p>
-            <button className="w-full px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-200">
-              Ver Actividad
-            </button>
+            <Button fullWidth size="sm" variant="secondary">Ver Actividad</Button>
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
@@ -262,9 +258,7 @@ export default function AdminMetricsPage() {
             <p className="text-gray-600 mb-4">
               Genera reportes detallados de uso y rendimiento
             </p>
-            <button className="w-full px-4 py-2 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-200">
-              Generar Reporte
-            </button>
+            <Button fullWidth size="sm" variant="primary">Generar Reporte</Button>
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
@@ -279,9 +273,7 @@ export default function AdminMetricsPage() {
             <p className="text-gray-600 mb-4">
               Configura alertas y parámetros de seguridad
             </p>
-            <button className="w-full px-4 py-2 bg-gradient-to-r from-orange-600 to-orange-700 text-white rounded-xl hover:from-orange-700 hover:to-orange-800 transition-all duration-200">
-              Configurar
-            </button>
+            <Button fullWidth size="sm" variant="outline">Configurar</Button>
           </div>
         </motion.div>
       </div>

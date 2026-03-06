@@ -6,6 +6,7 @@ import { Download, ShoppingBag, CheckCircle, Clock, AlertCircle, Calendar } from
 import { motion } from "framer-motion";
 import { useAuth } from "@/components/AuthContext";
 import ViewState from "@/components/ViewState";
+import Badge from "@/components/Badge";
 
 function toCSV(rows: Purchase[]) {
   if (!rows.length) return "";
@@ -149,9 +150,7 @@ export default function PurchaseHistoryPage() {
                           </div>
                         </td>
                         <td className="py-4 px-4 text-center">
-                          <span className="inline-block bg-zinc-800 text-zinc-300 font-bold px-2.5 py-1 rounded-md text-xs border border-zinc-700">
-                            x{p.quantity}
-                          </span>
+                          <Badge variant="neutral" size="sm">x{p.quantity}</Badge>
                         </td>
                         <td className="py-4 px-4">
                           <span className="font-black text-primary-400 font-mono text-lg">
@@ -165,9 +164,9 @@ export default function PurchaseHistoryPage() {
                           </div>
                         </td>
                         <td className="py-4 px-4">
-                          <div className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wider mx-auto w-max shadow-sm ${getStatusStyle(p.status || "pending")}`}>
+                          <div className={`mx-auto w-max shadow-sm ${getStatusStyle(p.status || "pending")}`}>
                             {getStatusIcon(p.status || "pending")}
-                            {p.status || "pending"}
+                            <Badge variant="neutral" size="md" className="border-0 bg-transparent text-current px-0 py-0">{p.status || "pending"}</Badge>
                           </div>
                         </td>
                       </motion.tr>

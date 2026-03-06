@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ViewState from "@/components/ViewState";
+import Button from "@/components/Button";
 
 type AdminItem = {
   id: string;
@@ -77,8 +78,10 @@ export default function AdminInternalPage() {
               <span className="ml-2 text-xs text-gray-400">{admin.online ? '● Online' : 'Offline'}</span>
               <div className="text-sm text-gray-600">{admin.lastMessage}</div>
             </div>
-            <button className="bg-primary-600 text-white px-3 py-1 rounded hover:bg-primary-700">Mensaje</button>
-            <button className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 ml-2">Videollamada</button>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="secondary">Mensaje</Button>
+              <Button size="sm" variant="primary">Videollamada</Button>
+            </div>
           </li>
         ))}
       </ul>
