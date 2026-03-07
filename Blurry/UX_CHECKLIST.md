@@ -6,16 +6,16 @@ Objetivo: validar consistencia, claridad y resiliencia en escenarios felices y n
 
 ## Criterios Globales (aplican a todos los flujos)
 
-- [ ] El usuario entiende objetivo de la pantalla en menos de 5 segundos (titulo + descripcion clara).
-- [ ] Campos obligatorios y opcionales se distinguen visualmente.
-- [ ] Validaciones en cliente aparecen cerca del campo y con mensaje accionable.
-- [ ] Errores de servidor se muestran en lenguaje claro (sin codigos tecnicos).
-- [ ] Estados de carga muestran feedback visible y bloquean dobles envios.
-- [ ] Accion exitosa devuelve confirmacion explicita (toast/banner/estado final).
-- [ ] Flujo es usable con teclado (tab, enter, escape cuando aplique).
-- [ ] Controles tienen foco visible y contraste suficiente.
-- [ ] Flujo funciona en mobile (<640), tablet (640-1024) y desktop (>1024).
-- [ ] CTA principal se mantiene visible sin confusion en todos los breakpoints.
+- [x] El usuario entiende objetivo de la pantalla en menos de 5 segundos (titulo + descripcion clara).
+- [x] Campos obligatorios y opcionales se distinguen visualmente.
+- [x] Validaciones en cliente aparecen cerca del campo y con mensaje accionable.
+- [x] Errores de servidor se muestran en lenguaje claro (sin codigos tecnicos).
+- [x] Estados de carga muestran feedback visible y bloquean dobles envios.
+- [x] Accion exitosa devuelve confirmacion explicita (toast/banner/estado final).
+- [x] Flujo es usable con teclado (tab, enter, escape cuando aplique).
+- [x] Controles tienen foco visible y contraste suficiente.
+- [x] Flujo funciona en mobile (<640), tablet (640-1024) y desktop (>1024).
+- [x] CTA principal se mantiene visible sin confusion en todos los breakpoints.
 
 ## 1. Registro (`/auth/register`)
 

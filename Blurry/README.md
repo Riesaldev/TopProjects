@@ -6,9 +6,10 @@ Blurry es una plataforma de citas moderna, orientada a la privacidad, las videol
 
 - **Premium UI/UX:** Interfaz en modo oscuro profundo (`zinc-950`), efectos de glassmorphism y animaciones fluidas con `framer-motion`.
 - **Blurry Effect:** Sistema único de revelación de perfiles (Blur to Clear) mediante interacciones o tokens.
-- **Videollamadas y Chat:** Integración en tiempo real (WebSockets) para citas virtuales.
+- **Videollamadas y Chat:** Integración en tiempo real (WebSockets) para citas virtuales con analizador automático de toxicidad.
+- **Agenda y Contactos:** Dashboard centralizado para los usuarios donde gestionar citas y el listado de matches/contactos guardados.
 - **Sistema de Tokens:** Economía virtual para enviar regalos, habilitar características exclusivas y potenciar el perfil.
-- **Panel de Administración Completo:** Control total sobre usuarios, métricas, denuncias y configuración del sistema.
+- **Panel de Administración Completo:** Control total sobre usuarios, métricas, denuncias, moderación de chat en tiempo real y configuración del sistema.
 
 ## ��� Stack Tecnológico
 
@@ -22,7 +23,7 @@ Blurry es una plataforma de citas moderna, orientada a la privacidad, las videol
 ### Backend (Server)
 
 - **NestJS** (Framework robusto y modular)
-- **PostgreSQL + TypeORM** (Base de datos relacional)
+- **MySQL + TypeORM** (Base de datos relacional)
 - **Socket.io** (Gateways en tiempo real)
 - Seguridad Integral (JWT, Roles, Rate Limiting)
 

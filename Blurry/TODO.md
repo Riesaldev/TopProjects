@@ -20,14 +20,15 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [x] Mejorar accesibilidad global: `aria-*`, foco visible, navegacion por teclado y contraste.
 - [x] Crear checklist de UX para acciones criticas (registro, login, compra tokens, reporte, videollamada).
 - [x] Revisar y mejorar estilos generales de la aplicación siguiendo estandares actuales (registro, login, compra tokens, reporte, videollamada, admin, ...).
-- [x] Hecho en falta un nav o boton de retroceso para poder moverme por las diferentes pantallas por lo menos como user.
+- [x] Construir Dashboard de Agenda/Contactos para usuario final (ver calendario y libreta de matches).
+- [x] Helper visual nav o boton de retroceso para poder moverme por las diferentes pantallas por lo menos como user.
 
 ## Funcionales Core Pendientes (Historias de Usuario)
 
 - [x] **HU02 (Completar perfil)**: Implementar la carga y visualización de hasta 6 fotos (actualmente limitados a 1).
 - [x] **HU03 (Descubrir perfiles)**: Crear la interfaz interactiva con mecánica de "Swipe" y tarjetas nativas para que los usuarios aprueben coincidiencias.
-- [ ] **HU09 (Editar perfil)**: Añadir sección / endpoint para permitir cambiar la contraseña al usuario desde la interfaz de su perfil.
-- [ ] **HU15 (Admin / Chat)**: Construir un parseador/blacklist automático para detectar malas conductas en los sockets que avise directo al administrador.
+- [x] **HU09 (Editar perfil)**: Añadir sección / endpoint para permitir cambiar la contraseña al usuario desde la interfaz de su perfil.
+- [x] **HU15 (Admin / Chat)**: Construir un parseador/blacklist automático para detectar malas conductas en los sockets que avise directo al administrador.
 - [x] **HU16 (Motor Matching)**: Desarrollar el cálculo lógico base del algoritmo de sugerencias (Scoring avanzado / compatibilidad), sustituyendo el simple CRUD actual de base de datos.
 - [ ] **HU17 (Notificaciones)**: Integrar sistema de emails (ej. NodeMailer/Sendgrid) y librerías de Queue (ej. Bull) para encolamiento asíncrono.
 - [ ] **HU18 (Infraestructura)**: Confeccionar CRON jobs de automatización para backups de la base de datos MySQL y estandarizar la capa de audit-logs.
@@ -109,7 +110,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 
 ## Go/No-Go para owner review
 
-- [ ] Build de `Client` y `Server` en verde sin ignorar errores de lint/typescript.
+- [x] Build de `Client` y `Server` en verde sin ignorar errores de lint/typescript.
 - [ ] Variables criticas definidas y validadas al arranque (`JWT_SECRET`, DB, CORS, etc.).
 - [ ] Flujos core verificados de punta a punta: registro, login, match, chat, videollamada, compra de tokens.
 - [ ] Endpoints admin protegidos por rol y validados con pruebas de autorizacion.
