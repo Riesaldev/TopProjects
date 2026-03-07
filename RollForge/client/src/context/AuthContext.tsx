@@ -67,8 +67,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async (data: RegisterRequest) => {
       setIsLoading(true);
       try {
-        await authService.register(data);
-        navigate('/');
+        const { user: registeredUser } = await authService.register(data);
+        setUser(registeredUser);
+        navigate('/campaigns');
       } finally {
         setIsLoading(false);
       }

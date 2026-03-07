@@ -1,5 +1,6 @@
 
 import { Brain, Play, Swords, Star } from "lucide-react";
+import Image from "next/image";
 
 type Game = {
   id: string | number;
@@ -32,7 +33,7 @@ export default function GameCard({ game, onSelect }: Props) {
       
       <div className="relative mb-4 group-hover:rotate-3 transition-transform duration-300 z-10 w-20 h-20 perspective-500">
         <div className={`absolute inset-0 ${iconGlowClass} rounded-2xl blur-[15px] opacity-20 group-hover:opacity-50 transition-opacity`} />
-        <img
+        <Image
           src={game.imageUrl || "/globe.svg"}
           alt={game.name}
           className="w-full h-full object-cover rounded-2xl border-2 border-zinc-700/80 shadow-xl relative z-10 p-1 bg-zinc-900"

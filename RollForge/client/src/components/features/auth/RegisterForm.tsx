@@ -1,11 +1,15 @@
-import { ArrowRight, Mail, LockKeyhole, Eye, EyeOff } from 'lucide-react';
+import { ArrowRight, Mail, User, LockKeyhole, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
 import AuthFooter from "./AuthFooter";
 import { useRegisterForm } from '../../../hooks/useAuthForm';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function RegisterForm() {
+  const navigate = useNavigate();
+  const { register } = useAuth();
   const {
     formData,
     errors,
@@ -31,19 +35,15 @@ export default function RegisterForm() {
     setIsSubmitting(true);
 
     try {
-      // TODO: Implementar lógica de registro con API
-      console.log('Form submitted:', {
+      await register({
+        username: formData.username.trim(),
         email: formData.email.trim(),
         password: formData.password,
       });
-
-      // Simular petición API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Redirigir o mostrar mensaje de éxito
-    } catch (error) {
+      // The register method in AuthContext already navigates to /campaigns upon success
+    } catch (error: any) {
       console.error('Registration error:', error);
-      setErrors({ email: 'Registration failed. Please try again.' });
+      setErrors({ email: error?.message || 'Registration failed. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -67,6 +67,34 @@ export default function RegisterForm() {
 
       {/* Register Form */}
       <form onSubmit={handleSubmit} className="w-full max-w-120 flex flex-col gap-4" noValidate>
+        {/* Username Field */}
+        <div className="flex flex-col">
+          <label htmlFor="username" className="text-text-primary">
+            Username
+          </label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-text-secondary/40" />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              value={formData.username}
+              onChange={handleInputChange}
+              placeholder="Gamer123"
+              required
+              aria-invalid={!!errors.username}
+              aria-describedby={errors.username ? "username-error" : undefined}
+              className={`w-full border-text-secondary/20 text-text-muted rounded-md border pl-10 pr-3 py-2 bg-border-dark-heavy/10 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors ${(errors as any).username ? 'border-red-500 focus:ring-red-500/50' : ''
+                }`}
+            />
+          </div>
+          {(errors as any).username && (
+            <p id="username-error" className="text-red-500 text-sm" role="alert">
+              {(errors as any).username}
+            </p>
+          )}
+        </div>
+
         {/* Email Field */}
         <div className="flex flex-col">
           <label htmlFor="email" className="text-text-primary">

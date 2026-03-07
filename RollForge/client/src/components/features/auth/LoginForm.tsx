@@ -6,11 +6,11 @@ import AuthMedia from "./AuthMedia";
 import AuthFooter from "./AuthFooter";
 import { useLoginForm } from '../../../hooks/useAuthForm';
 import { AUTH_MESSAGES } from '../../../data/authConstants';
-import { mockUserData as mockAuthData } from '@/data/mockUser';
-import { mockUserData as mockProfileData } from '@/data/mockProfile';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const {
     formData,
     errors,
@@ -35,44 +35,27 @@ export default function LoginForm() {
     setIsSubmitting(true);
 
     try {
-      const trimmedInput = formData.email.trim().toLowerCase();
+      const trimmedInput = formData.email.trim();
 
-      // Validate credentials against mock data
-      const isValidEmail = trimmedInput === mockAuthData.email.toLowerCase();
-      const isValidUsername = mockAuthData.username && trimmedInput === mockAuthData.username.toLowerCase();
-      const isValidPassword = formData.password === mockAuthData.password;
+      await login({
+        email: trimmedInput, // Can be email or username in backend
+        password: formData.password,
+      });
 
-      if ((isValidEmail || isValidUsername) && isValidPassword) {
-        console.log('Login successful:', {
-          input: trimmedInput,
-          remember: formData.remember,
-        });
-
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        // Store user session in localStorage
-        if (formData.remember) {
-          localStorage.setItem('rememberMe', JSON.stringify({
-            email: trimmedInput,
-            timestamp: new Date().toISOString(),
-          }));
-        }
-
-        // Store authenticated user profile data
-        localStorage.setItem('userProfile', JSON.stringify(mockProfileData));
-        localStorage.setItem('isAuthenticated', 'true');
-
-        // Redirect to profile page
-        navigate('/campaigns');
+      if (formData.remember) {
+        localStorage.setItem('rememberMe', JSON.stringify({
+          email: trimmedInput,
+          timestamp: new Date().toISOString(),
+        }));
       } else {
-        // Invalid credentials
-        console.error('Login failed: Invalid credentials');
-        setErrors({ email: AUTH_MESSAGES.INVALID_CREDENTIALS });
+        localStorage.removeItem('rememberMe');
       }
-    } catch (error) {
+
+      // Redirect to profile page on successful login
+      navigate('/campaigns');
+    } catch (error: any) {
       console.error('Login error:', error);
-      setErrors({ email: AUTH_MESSAGES.INVALID_CREDENTIALS });
+      setErrors({ email: error?.message || AUTH_MESSAGES.INVALID_CREDENTIALS });
     } finally {
       setIsSubmitting(false);
     }

@@ -70,6 +70,7 @@ export const useLoginForm = () => {
 
 export const useRegisterForm = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -106,7 +107,7 @@ export const useRegisterForm = () => {
   }, []);
 
   const reset = useCallback(() => {
-    setFormData({ email: '', password: '', confirmPassword: '' });
+    setFormData({ username: '', email: '', password: '', confirmPassword: '' });
     setErrors({});
     setShowPassword(false);
     setShowConfirmPassword(false);

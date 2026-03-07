@@ -71,6 +71,13 @@ export const validateRegisterForm = (
 ): Partial<Record<keyof RegisterFormData, string>> => {
   const errors: Partial<Record<keyof RegisterFormData, string>> = {};
 
+  // Validar username
+  if (!formData.username.trim()) {
+    errors.username = 'Username is required';
+  } else if (formData.username.trim().length < 3) {
+    errors.username = 'Username must be at least 3 characters';
+  }
+
   // Validar email
   if (!formData.email.trim()) {
     errors.email = AUTH_MESSAGES.EMAIL_REQUIRED;

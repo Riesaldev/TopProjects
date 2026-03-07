@@ -14,7 +14,7 @@ export const authService = {
    * Inicia sesión. Guarda el token en localStorage si tiene éxito.
    */
   login: async (data: LoginRequest): Promise<LoginResponse> => {
-    const res = await api.post<ApiResponse<LoginResponse>>('/api/users/login', data);
+    const res = await api.post<ApiResponse<LoginResponse>>('/api/auth/login', data);
     if (res.data?.token) {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -23,10 +23,14 @@ export const authService = {
   },
 
   /**
-   * Registra un nuevo usuario.
+   * Registra un nuevo usuario y lo loguea automáticamente.
    */
-  register: async (data: RegisterRequest): Promise<ApiUser> => {
-    const res = await api.post<ApiResponse<ApiUser>>('/api/users/register', data);
+  register: async (data: RegisterRequest): Promise<LoginResponse> => {
+    const res = await api.post<ApiResponse<LoginResponse>>('/api/auth/register', data);
+    if (res.data?.token) {
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('user', JSON.stringify(res.data.user));
+    }
     return res.data;
   },
 
@@ -34,14 +38,14 @@ export const authService = {
    * Solicita código de recuperación de contraseña por email.
    */
   recoverPassword: async (data: RecoverPasswordRequest): Promise<void> => {
-    await api.post('/api/users/password/recover', data);
+    await api.post('/api/auth/recover-password', data);
   },
 
   /**
    * Resetea la contraseña con el código recibido por email.
    */
   resetPassword: async (data: ResetPasswordRequest): Promise<void> => {
-    await api.post('/api/users/password/reset', data);
+    await api.post('/api/auth/reset-password', data);
   },
 
   /**
