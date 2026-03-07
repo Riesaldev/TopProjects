@@ -25,6 +25,7 @@ import { MissionsModule } from './modules/missions/missions.module';
 import { StreaksModule } from './modules/streaks/streaks.module';
 import { HttpModule } from '@nestjs/axios';
 import { ChatGateway } from './gateways/chat.gateway';
+import { ContactsModule } from './modules/contacts/contacts.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { ChatGateway } from './gateways/chat.gateway';
     AchievementsModule,
     MissionsModule,
     StreaksModule,
+    ContactsModule,
   ],
   providers: [ChatGateway],
 })

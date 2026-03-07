@@ -4,6 +4,10 @@ import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
+  @IsString()
+  password?: string;
+
+  @IsOptional()
   @IsBoolean()
   is_suspended?: boolean;
 
@@ -25,6 +29,9 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()
   @IsString()
   imagen_perfil?: string;
+
+  @IsOptional()
+  photos?: string[];
 
   @IsOptional()
   @IsNumber()

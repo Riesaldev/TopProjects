@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { MatchesService } from './matches.service';
+import { MatchingService } from './matching.service';
 import { CreateMatchDto } from './dto/create-match.dto';
 import { UpdateMatchDto } from './dto/update-match.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -7,7 +8,20 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @UseGuards(JwtAuthGuard)
 @Controller('matches')
 export class MatchesController {
-  constructor(private readonly matchesService: MatchesService) {}
+  constructor(
+    private readonly matchesService: MatchesService,
+    private readonly matchingAlgorithmService: MatchingService
+  ) {}
+
+  @Post('swipe')
+  async handleSwipe(@Body() body: { userIdA: number, userIdB: number, action: 'like' | 'dislike' | 'superlike' }) {
+    return this.matchesService.handleSwipe(body.userIdA, body.userIdB, body.action);
+  }
+
+  @Get('recommendations/:userId')
+  async getRecommendations(@Param('userId', ParseIntPipe) userId: number) {
+    return this.matchingAlgorithmService.getRecommendations(userId);
+  }
 
   @Get()
   findAll() {

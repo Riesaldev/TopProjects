@@ -11,6 +11,7 @@ interface ProfileForm {
   email: string;
   nombre: string;
   avatar: string;
+  photos: string[];
   bio: string;
   interests: string;
   age: string;
@@ -29,6 +30,7 @@ interface ProfileForm {
   billingCity: string;
   billingPostalCode: string;
   billingCountry: string;
+  password?: string;
 }
 
 type BillingData = {
@@ -65,6 +67,7 @@ export default function UserProfilePage() {
     email: "",
     nombre: "",
     avatar: "/globe.svg",
+    photos: [],
     bio: "",
     interests: "",
     age: "",
@@ -114,6 +117,7 @@ export default function UserProfilePage() {
           email: userData.email || "",
           nombre: userData.nombre || userData.display_name || "",
           avatar: userData.avatar || userData.imagen_perfil || "/globe.svg",
+          photos: userData.photos || [],
           bio: userData.bio || "",
           interests: userData.interests || "",
           age: userData.age != null ? String(userData.age) : (userData.edad != null ? String(userData.edad) : ""),
@@ -149,6 +153,23 @@ export default function UserProfilePage() {
 
   const handleAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, avatar: e.target.value });
+  };
+
+  const handlePhotoChange = (index: number, value: string) => {
+    const newPhotos = [...form.photos];
+    newPhotos[index] = value;
+    setForm({ ...form, photos: newPhotos });
+  };
+
+  const handleRemovePhoto = (index: number) => {
+    const newPhotos = form.photos.filter((_, i) => i !== index);
+    setForm({ ...form, photos: newPhotos });
+  };
+
+  const handleAddPhoto = () => {
+    if (form.photos.length < 6) {
+      setForm({ ...form, photos: [...form.photos, ""] });
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -192,27 +213,34 @@ export default function UserProfilePage() {
         updatedAt: new Date().toISOString(),
       };
 
+      const payload: Record<string, unknown> = {
+        email: form.email,
+        display_name: form.nombre,
+        age: form.age ? parsedAge : null,
+        gender: form.gender || null,
+        location: form.location,
+        imagen_perfil: form.avatar,
+        photos: form.photos,
+        bio: form.bio,
+        interests: form.interests,
+        values_profile: {
+          ...existingValuesProfile,
+          matching: matchingPayload,
+          billing: billingPayload,
+        },
+      };
+
+      if (form.password) {
+        payload.password = form.password;
+      }
+
       const res = await fetch(`/api/users/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           ...getAuthHeaders(),
         },
-        body: JSON.stringify({
-          email: form.email,
-          display_name: form.nombre,
-          age: form.age ? parsedAge : null,
-          gender: form.gender || null,
-          location: form.location,
-          imagen_perfil: form.avatar,
-          bio: form.bio,
-          interests: form.interests,
-          values_profile: {
-            ...existingValuesProfile,
-            matching: matchingPayload,
-            billing: billingPayload,
-          },
-        }),
+        body: JSON.stringify(payload),
       });
       
       if (!res.ok) {
@@ -283,6 +311,10 @@ export default function UserProfilePage() {
                     <input name="email" type="email" value={form.email} onChange={handleChange} className="bg-zinc-900/80 border border-zinc-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50 transition-all font-sans normal-case tracking-normal" />
                   </label>
                   <label className="flex flex-col text-xs font-bold text-zinc-400 uppercase tracking-widest gap-2">
+                    New Password (leave blank to keep current)
+                    <input name="password" type="password" value={form.password || ""} onChange={handleChange} className="bg-zinc-900/80 border border-zinc-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50 transition-all font-sans normal-case tracking-normal" />
+                  </label>
+                  <label className="flex flex-col text-xs font-bold text-zinc-400 uppercase tracking-widest gap-2">
                     Display Name
                     <input name="nombre" value={form.nombre} onChange={handleChange} className="bg-zinc-900/80 border border-zinc-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50 transition-all font-sans normal-case tracking-normal" />
                   </label>
@@ -290,6 +322,34 @@ export default function UserProfilePage() {
                     Avatar Data Source (URL)
                     <input name="avatar" value={form.avatar} onChange={handleAvatar} className="bg-zinc-900/80 border border-zinc-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50 transition-all font-sans normal-case tracking-normal" />
                   </label>
+                  
+                  <div className="rounded-2xl border border-zinc-800/70 bg-zinc-950/60 p-4">
+                    <div className="flex justify-between items-center mb-3">
+                      <p className="text-xs font-black uppercase tracking-widest text-zinc-400">Extra Photos ({form.photos.length}/6)</p>
+                      {form.photos.length < 6 && (
+                        <button type="button" onClick={handleAddPhoto} className="text-xs font-bold text-primary-400 hover:text-primary-300 uppercase">+ Add</button>
+                      )}
+                    </div>
+                    <div className="flex flex-col gap-3">
+                      {form.photos.map((photo, index) => (
+                        <div key={index} className="flex gap-2 items-center">
+                          <input 
+                            value={photo} 
+                            onChange={(e) => handlePhotoChange(index, e.target.value)} 
+                            placeholder={`Photo URL ${index + 1}`}
+                            className="flex-1 rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 normal-case"
+                          />
+                          <button type="button" onClick={() => handleRemovePhoto(index)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-red-500/20 text-red-500 hover:bg-red-500/40">
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                      {form.photos.length === 0 && (
+                        <p className="text-[11px] text-zinc-500 italic">No extra photos added.</p>
+                      )}
+                    </div>
+                  </div>
+
                   <label className="flex flex-col text-xs font-bold text-zinc-400 uppercase tracking-widest gap-2">
                     Biography Fragment
                     <textarea name="bio" value={form.bio} onChange={handleChange} rows={3} className="bg-zinc-900/80 border border-zinc-700/50 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50 transition-all font-sans normal-case tracking-normal resize-none" />
@@ -411,6 +471,23 @@ export default function UserProfilePage() {
                   <p className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 border-b border-zinc-800/50 pb-2">Bio</p>
                   <p className="text-zinc-300 font-medium leading-relaxed">{user.bio || <span className="opacity-40 italic">Signal lost...</span>}</p>
                 </div>
+                
+                {form.photos.length > 0 && (
+                  <div className="w-full bg-zinc-900/50 border border-zinc-800/50 rounded-2xl p-5 mb-4 text-left">
+                    <p className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-3 border-b border-zinc-800/50 pb-2">Gallery</p>
+                    <div className="grid grid-cols-3 gap-3">
+                      {form.photos.map((photo, i) => (
+                        <div key={i} className="aspect-square relative rounded-xl overflow-hidden border border-zinc-800/80">
+                          {photo ? (
+                            <Imagen src={photo} alt={`Photo ${i+1}`} fill className="object-cover hover:scale-110 transition-transform duration-500" />
+                          ) : (
+                            <div className="w-full h-full bg-zinc-800/40 animate-pulse" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 
                 <div className="w-full bg-zinc-900/50 border border-zinc-800/50 rounded-2xl p-5 mb-6 text-left">
                   <p className="text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 border-b border-zinc-800/50 pb-2">Interests</p>

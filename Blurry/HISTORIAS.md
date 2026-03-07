@@ -28,7 +28,7 @@
 
 - ✅ Formulario multi-paso con validación
 - ✅ Campos: edad, género, bio, intereses, fotos
-- ⬜ Carga de hasta 6 fotos
+- ✅ Carga de hasta 6 fotos
 - ✅ Selección de preferencias de matching
 - ✅ Vista previa del perfil
 
@@ -43,7 +43,7 @@
 **Criterios de aceptación:**
 
 - ✅ Vista de tarjetas con perfiles sugeridos
-- ⬜ Swipe para like/dislike
+- ✅ Swipe para like/dislike
 - ✅ Información básica visible (fotos, edad, bio)
 - ✅ Algoritmo de compatibilidad
 - ✅ Indicador de tokens disponibles
@@ -270,8 +270,8 @@
 
 **Criterios de aceptación:**
 
-- ⬜ Análisis de preferencias
-- ⬜ Scoring de compatibilidad
+- ✅ Análisis de preferencias
+- ✅ Scoring de compatibilidad
 - ⬜ Machine Learning para mejorar sugerencias
 - ⬜ Cache de resultados
 - ✅ Actualización periódica

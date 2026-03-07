@@ -14,6 +14,12 @@ export class ChatsController {
     return this.chatsService.findAll(parsedUserId, parsedContactId);
   }
 
+  @Get('search/all')
+  searchAll(@Query('q') query: string) {
+    if (!query) return [];
+    return this.chatsService.search(query);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.chatsService.findOne(id);

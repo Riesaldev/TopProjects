@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { User } from '../../database/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -85,6 +86,11 @@ export class UsersService {
       if (existingDisplayName) {
         throw new ConflictException('Display name already exists');
       }
+    }
+
+    if (updateUserDto.password) {
+      user.password_hash = await bcrypt.hash(updateUserDto.password, 10);
+      delete updateUserDto.password; // Remove from dto so it doesn't overwrite anything if it matches accidentally
     }
 
     Object.assign(user, updateUserDto);

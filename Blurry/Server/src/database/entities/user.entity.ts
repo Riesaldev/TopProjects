@@ -38,6 +38,9 @@ export class User {
   @Column({ nullable: true })
   imagen_perfil?: string;
 
+  @Column('json', { nullable: true })
+  photos?: string[];
+
   @Column({ default: 0 })
   tokens?: number;
 

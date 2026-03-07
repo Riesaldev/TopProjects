@@ -60,6 +60,7 @@ export const AppDataSource = new DataSource({
     UserMission,
     Streak,
   ],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
   synchronize: false, // Desactivamos la sincronización automática
   logging: false,
 });

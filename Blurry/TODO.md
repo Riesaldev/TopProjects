@@ -24,11 +24,11 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 
 ## Funcionales Core Pendientes (Historias de Usuario)
 
-- [ ] **HU02 (Completar perfil)**: Implementar la carga y visualización de hasta 6 fotos (actualmente limitados a 1).
-- [ ] **HU03 (Descubrir perfiles)**: Crear la interfaz interactiva con mecánica de "Swipe" y tarjetas nativas para que los usuarios aprueben coincidiencias.
+- [x] **HU02 (Completar perfil)**: Implementar la carga y visualización de hasta 6 fotos (actualmente limitados a 1).
+- [x] **HU03 (Descubrir perfiles)**: Crear la interfaz interactiva con mecánica de "Swipe" y tarjetas nativas para que los usuarios aprueben coincidiencias.
 - [ ] **HU09 (Editar perfil)**: Añadir sección / endpoint para permitir cambiar la contraseña al usuario desde la interfaz de su perfil.
 - [ ] **HU15 (Admin / Chat)**: Construir un parseador/blacklist automático para detectar malas conductas en los sockets que avise directo al administrador.
-- [ ] **HU16 (Motor Matching)**: Desarrollar el cálculo lógico base del algoritmo de sugerencias (Scoring avanzado / compatibilidad), sustituyendo el simple CRUD actual de base de datos.
+- [x] **HU16 (Motor Matching)**: Desarrollar el cálculo lógico base del algoritmo de sugerencias (Scoring avanzado / compatibilidad), sustituyendo el simple CRUD actual de base de datos.
 - [ ] **HU17 (Notificaciones)**: Integrar sistema de emails (ej. NodeMailer/Sendgrid) y librerías de Queue (ej. Bull) para encolamiento asíncrono.
 - [ ] **HU18 (Infraestructura)**: Confeccionar CRON jobs de automatización para backups de la base de datos MySQL y estandarizar la capa de audit-logs.
 
@@ -101,7 +101,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 
 - [x] Bloque 1: Seguridad JWT + build estricto (Hecho).
 - [x] Bloque 2: Corregir errores emergentes de lint/typescript (Hecho).
-- [ ] Bloque 3: Completar UX Core de HUs (Fotos de array, Swipe animado).
+- [x] Bloque 3: Completar UX Core de HUs (Fotos de array, Swipe animado).
 - [ ] Bloque 4: Motor de Matching avanzado y colas de notificación automática.
 - [ ] Bloque 5: Middleware de acceso admin + validacion de roles backend.
 - [ ] Bloque 6: Limpieza arquitectura (AuthContext unico + proxy/API estandar).

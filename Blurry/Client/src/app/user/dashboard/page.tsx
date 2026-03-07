@@ -233,8 +233,8 @@ export default function UserDashboard() {
 
   // Accesos contextuales (evita duplicar rutas ya visibles en la barra superior)
   const quickLinksModern = [
-    { label: "Perfil", href: "/user/profile", icon: UserCircle },
-    { label: "Videollamada", href: "/user/video-call", icon: Video },
+    { label: "Descubrir", href: "/user/discover", icon: Flame },
+    { label: "Perfil", href: "/user/profile", icon: UserCircle },    { label: "Agenda y Contactos", href: "/user/agenda", icon: Calendar },    { label: "Videollamada", href: "/user/video-call", icon: Video },
     { label: "Tienda", href: "/user/store", icon: ShoppingBag },
     { label: "Reportar", href: "/user/reports", icon: ShieldAlert },
     { label: "Notificaciones", href: "/user/notifications", icon: Bell },

@@ -7,6 +7,7 @@ export interface User {
   email: string;
   avatar?: string;
   imagen_perfil?: string;
+  photos?: string[];
   bio?: string;
   interests?: string;
   ubicacion?: string;

@@ -30,6 +30,15 @@ export class ChatsService {
     return all;
   }
 
+  async search(keyword: string): Promise<any[]> {
+    return this.chatsRepository.createQueryBuilder('chat')
+      .leftJoinAndSelect('users', 'user', 'user.id = chat.sender_id')
+      .select(['chat.*', 'user.display_name as sender_name'])
+      .where('LOWER(chat.content) LIKE LOWER(:keyword)', { keyword: `%${keyword}%` })
+      .orderBy('chat.timestamp', 'DESC')
+      .getRawMany();
+  }
+
   async findOne(id: number): Promise<ChatMessage> {
     const msg = await this.chatsRepository.findOneBy({ id });
     if (!msg) throw new NotFoundException('Chat message not found');
