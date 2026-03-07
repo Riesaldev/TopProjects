@@ -15,6 +15,9 @@ export class Game {
   @Column({ default: 'game' })
   category: string;
 
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
+  price: number;
+
   @Column({ nullable: true })
   image_url: string;
 }

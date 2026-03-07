@@ -3,8 +3,10 @@
 export interface User {
   id: number;
   nombre: string;
+  display_name?: string;
   email: string;
   avatar?: string;
+  imagen_perfil?: string;
   bio?: string;
   interests?: string;
   ubicacion?: string;
@@ -16,6 +18,7 @@ export interface User {
   actividad?: string;
   estado?: string;
   rol?: string;
+  values_profile?: unknown;
 }
 
 export interface Toast {

@@ -11,6 +11,9 @@ export class ServiceStatus {
   @Column({ default: 'Activo' })
   estado: string;
 
+  @Column('decimal', { precision: 10, scale: 2, default: 0 })
+  price: number;
+
   @UpdateDateColumn()
   updated_at: Date;
 }

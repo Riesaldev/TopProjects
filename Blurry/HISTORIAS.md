@@ -28,7 +28,7 @@
 
 - ✅ Formulario multi-paso con validación
 - ✅ Campos: edad, género, bio, intereses, fotos
-- ✅ Carga de hasta 6 fotos
+- ⬜ Carga de hasta 6 fotos
 - ✅ Selección de preferencias de matching
 - ✅ Vista previa del perfil
 
@@ -43,7 +43,7 @@
 **Criterios de aceptación:**
 
 - ✅ Vista de tarjetas con perfiles sugeridos
-- ✅ Swipe para like/dislike
+- ⬜ Swipe para like/dislike
 - ✅ Información básica visible (fotos, edad, bio)
 - ✅ Algoritmo de compatibilidad
 - ✅ Indicador de tokens disponibles
@@ -158,7 +158,7 @@
 - ✅ Validación de cambios
 - ✅ Actualización en tiempo real
 - ✅ Confirmación de guardado
-- ✅ Opción de cambiar contraseña
+- ⬜ Opción de cambiar contraseña
 
 ---
 
@@ -253,9 +253,9 @@
 **Criterios de aceptación:**
 
 - ✅ Acceso a chats reportados
-- ✅ Búsqueda por palabras clave
+- ⬜ Búsqueda por palabras clave
 - ✅ Herramientas de moderación
-- ✅ Sistema de alertas automáticas
+- ⬜ Sistema de alertas automáticas
 - ✅ Registro de acciones tomadas
 
 ---
@@ -270,10 +270,10 @@
 
 **Criterios de aceptación:**
 
-- ✅ Análisis de preferencias
-- ✅ Scoring de compatibilidad
-- ✅ Machine Learning para mejorar sugerencias
-- ✅ Cache de resultados
+- ⬜ Análisis de preferencias
+- ⬜ Scoring de compatibilidad
+- ⬜ Machine Learning para mejorar sugerencias
+- ⬜ Cache de resultados
 - ✅ Actualización periódica
 
 ---
@@ -286,11 +286,11 @@
 
 **Criterios de aceptación:**
 
-- ✅ Notificaciones push
+- ⬜ Notificaciones push
 - ✅ Notificaciones en app
-- ✅ Email notifications
+- ⬜ Email notifications
 - ✅ Configuración por usuario
-- ✅ Queue de procesamiento
+- ⬜ Queue de procesamiento
 
 ---
 
@@ -302,8 +302,8 @@
 
 **Criterios de aceptación:**
 
-- ✅ Backup diario automático
+- ⬜ Backup diario automático
 - ✅ Encriptación de datos sensibles
-- ✅ Logs de auditoría
-- ✅ Plan de recuperación
-- ✅ Monitoreo de seguridad
+- ⬜ Logs de auditoría
+- ⬜ Plan de recuperación
+- ⬜ Monitoreo de seguridad

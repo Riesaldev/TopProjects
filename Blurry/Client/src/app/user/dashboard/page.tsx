@@ -46,10 +46,6 @@ function getProgressBarWidth(progressPercentage: number): string {
   return "w-0";
 }
 
-interface UserDashboardProps {
-  userId: number;
-}
-
 export default function UserDashboard() {
   const { user: currentUser, isLoading: authLoading } = useAuth();
   const userId = currentUser?.id;
@@ -80,12 +76,11 @@ export default function UserDashboard() {
       fetch(`/api/agenda?userId=${userId}`).then(res => res.json()).catch(() => []),
       fetch(`/api/notifications?userId=${userId}`, { headers: authHeaders }).then(res => res.json()).catch(() => []),
       fetch(`/api/notes?userId=${userId}`).then(res => res.json()).catch(() => []),
-      fetch(`/api/games`).then(res => res.json()).catch(() => []),
       fetch(`/api/chats?userId=${userId}`).then(res => res.json()).catch(() => []),
       fetch(`/api/achievements/list`).then(res => res.json()).catch(() => []),
       fetch(`/api/achievements?userId=${userId}`).then(res => res.json()).catch(() => []),
       fetch(`/api/missions?userId=${userId}`).then(res => res.json()).catch(() => ({ missions: [], userProgress: [] })),
-    ]).then(([user, purchases, agenda, notifications, notes, games, chats, allAchievements, userAchievements, missionsData]) => {
+    ]).then(([user, purchases, agenda, notifications, notes, chats, allAchievements, userAchievements, missionsData]) => {
       setUser(user);
       setPurchases(purchases);
       setAgenda(agenda);

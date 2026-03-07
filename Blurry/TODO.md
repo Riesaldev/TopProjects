@@ -22,6 +22,16 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [x] Revisar y mejorar estilos generales de la aplicación siguiendo estandares actuales (registro, login, compra tokens, reporte, videollamada, admin, ...).
 - [x] Hecho en falta un nav o boton de retroceso para poder moverme por las diferentes pantallas por lo menos como user.
 
+## Funcionales Core Pendientes (Historias de Usuario)
+
+- [ ] **HU02 (Completar perfil)**: Implementar la carga y visualización de hasta 6 fotos (actualmente limitados a 1).
+- [ ] **HU03 (Descubrir perfiles)**: Crear la interfaz interactiva con mecánica de "Swipe" y tarjetas nativas para que los usuarios aprueben coincidiencias.
+- [ ] **HU09 (Editar perfil)**: Añadir sección / endpoint para permitir cambiar la contraseña al usuario desde la interfaz de su perfil.
+- [ ] **HU15 (Admin / Chat)**: Construir un parseador/blacklist automático para detectar malas conductas en los sockets que avise directo al administrador.
+- [ ] **HU16 (Motor Matching)**: Desarrollar el cálculo lógico base del algoritmo de sugerencias (Scoring avanzado / compatibilidad), sustituyendo el simple CRUD actual de base de datos.
+- [ ] **HU17 (Notificaciones)**: Integrar sistema de emails (ej. NodeMailer/Sendgrid) y librerías de Queue (ej. Bull) para encolamiento asíncrono.
+- [ ] **HU18 (Infraestructura)**: Confeccionar CRON jobs de automatización para backups de la base de datos MySQL y estandarizar la capa de audit-logs.
+
 ## Seguridad
 
 - [ ] Rotar secretos y moverlos a variables de entorno seguras por ambiente (dev/staging/prod).
@@ -30,6 +40,7 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [ ] Validar autorizacion por rol en endpoints admin (guardas y tests de autorizacion).
 - [ ] Auditar logs para no exponer datos sensibles (tokens, contrasenas, datos personales).
 - [ ] Revisar expiracion/refresco de JWT y estrategia de revocacion.
+- [x] Seguridad de datos de pago: no almacenar CVV, usar formato enmascarado para tarjetas, cumplir PCI DSS minimo. (Hecho en UI de profile).
 
 ## Arquitectura
 
@@ -88,11 +99,13 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 
 ## Orden sugerido para manana
 
-- [ ] Bloque 1: Seguridad JWT + build estricto.
-- [ ] Bloque 2: Corregir errores emergentes de lint/typescript.
-- [ ] Bloque 3: Middleware de acceso admin + validacion de roles backend.
-- [ ] Bloque 4: SEO base (`robots.ts`, `sitemap.ts`, `metadataBase`).
-- [ ] Bloque 5: Limpieza arquitectura (AuthContext unico + proxy/API estandar).
+- [x] Bloque 1: Seguridad JWT + build estricto (Hecho).
+- [x] Bloque 2: Corregir errores emergentes de lint/typescript (Hecho).
+- [ ] Bloque 3: Completar UX Core de HUs (Fotos de array, Swipe animado).
+- [ ] Bloque 4: Motor de Matching avanzado y colas de notificación automática.
+- [ ] Bloque 5: Middleware de acceso admin + validacion de roles backend.
+- [ ] Bloque 6: Limpieza arquitectura (AuthContext unico + proxy/API estandar).
+- [ ] Bloque 7: SEO base y pipelines CI finales.
 
 ## Go/No-Go para owner review
 

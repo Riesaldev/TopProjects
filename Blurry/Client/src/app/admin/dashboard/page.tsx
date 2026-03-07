@@ -9,9 +9,19 @@ import { useRealtime } from '@/context/RealtimeContext';
 import { useEffect, useState } from 'react';
 import { useAuth } from "@/components/AuthContext";
 import { useRouter } from 'next/navigation';
+import { Activity, AlertTriangle, Gauge, ShieldAlert, Star, Timer, Users, Wrench } from "lucide-react";
 
 type FeedbackItem = { rating?: number };
 type ActivityLogItem = { metadata?: Record<string, unknown> };
+type MetricCard = {
+  label: string;
+  value: number | string;
+  hint: string;
+  icon: typeof Users;
+  tone: string;
+  href?: string;
+  cta?: string;
+};
 
 function getAuthHeaders(): Record<string, string> {
   const token = typeof window !== "undefined" ? localStorage.getItem("jwt-token") : null;
@@ -43,6 +53,72 @@ export default function AdminDashboard() {
 
   const realtimeContext = useRealtime();
   const adminAlert = realtimeContext?.adminAlert;
+  const serviciosMantenimiento = services.filter((service) => service.estado === "Mantenimiento").length;
+
+  const metricCards: MetricCard[] = [
+    {
+      label: "Usuarios registrados",
+      value: usuarios ?? "...",
+      hint: "Total acumulado",
+      href: "/admin/users",
+      cta: "Gestionar",
+      icon: Users,
+      tone: "text-primary-300",
+    },
+    {
+      label: "Usuarios activos",
+      value: usuariosActivos ?? "...",
+      hint: "Estado operativo",
+      icon: Activity,
+      tone: "text-emerald-300",
+    },
+    {
+      label: "Denuncias pendientes",
+      value: denunciasPendientes ?? "...",
+      hint: "Requieren revision",
+      href: "/admin/reports",
+      cta: "Revisar",
+      icon: AlertTriangle,
+      tone: "text-amber-300",
+    },
+    {
+      label: "Sanciones activas",
+      value: sancionesActivas ?? "...",
+      hint: "Casos abiertos",
+      href: "/admin/sanctions",
+      cta: "Auditar",
+      icon: ShieldAlert,
+      tone: "text-rose-300",
+    },
+    {
+      label: "Rating medio",
+      value: ratingMedio ?? "...",
+      hint: "Satisfaccion global",
+      icon: Star,
+      tone: "text-violet-300",
+    },
+    {
+      label: "Tiempo medio",
+      value: tiempoMedio !== null ? `${tiempoMedio} min` : "...",
+      hint: "Duracion de sesiones",
+      icon: Timer,
+      tone: "text-cyan-300",
+    },
+    {
+      label: "Matches registrados",
+      value: matchesData.length,
+      hint: "Actividad social",
+      icon: Gauge,
+      tone: "text-sky-300",
+    },
+    {
+      label: "Servicios en mantenimiento",
+      value: serviciosMantenimiento,
+      hint: "Estado de plataforma",
+      icon: Wrench,
+      tone: "text-orange-300",
+    },
+  ];
 
   // Protección de rutas - verificar autenticación y permisos de admin
   useEffect(() => {
@@ -211,140 +287,165 @@ export default function AdminDashboard() {
       
       {/* Dashboard principal */}
       {!isLoading && user && user.role === 'admin' && (
-        <main className="min-h-screen w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-4 py-6 text-zinc-200">
-      <h1 className="text-2xl font-black mb-3 text-center tracking-tight text-white">Dashboard de Administrador</h1>
-      <p className="mb-6 text-center text-zinc-400 max-w-3xl">Bienvenido al panel de administración. Desde aquí puedes gestionar usuarios, servicios y monitorear la app.</p>
-      <AdminCharts
-        usuarios={usuariosData}
-        denuncias={denunciasData}
-        sanciones={sancionesData}
-        matches={matchesData}
-        tokens={tokensData}
-        feedback={feedbackData}
-      />
-      {/* Métricas */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full">
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-primary-600 mb-2">{usuarios ?? '...'}</span>
-          <span className="text-zinc-300">Usuarios registrados</span>
-          <Link href="/admin/users" className="text-primary-400 text-sm mt-2 hover:underline">Ver gestion</Link>
-        </div>
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-secondary-600 mb-2">{usuariosActivos ?? '...'}</span>
-          <span className="text-zinc-300">Usuarios activos hoy</span>
-        </div>
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-accent-500 mb-2">{denunciasPendientes ?? '...'}</span>
-          <span className="text-zinc-300">Denuncias pendientes</span>
-          <Link href="/admin/reports" className="text-primary-400 text-sm mt-2 hover:underline">Ver denuncias</Link>
-        </div>
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-accent-400 mb-2">{denunciasMes ?? '...'}</span>
-          <span className="text-zinc-300">Denuncias este mes</span>
-        </div>
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-accent-600 mb-2">{sancionesActivas ?? '...'}</span>
-          <span className="text-zinc-300">Sanciones activas</span>
-          <Link href="/admin/sanctions" className="text-primary-400 text-sm mt-2 hover:underline">Ver sanciones</Link>
-        </div>
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-secondary-600 mb-2">{ratingMedio ?? '...'}</span>
-          <span className="text-zinc-300">Rating medio</span>
-        </div>
-        <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 flex flex-col items-center min-w-0">
-          <span className="text-3xl font-bold text-primary-400 mb-2">{tiempoMedio !== null ? tiempoMedio + ' min' : '...'}</span>
-          <span className="text-zinc-300">Tiempo medio en app</span>
-        </div>
-      </div>
-      {/* Mini-panel de matching */}
-      <section className="w-full max-w-2xl rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 mb-8">
-        <h2 className="text-lg font-bold mb-4 text-white">Ajuste rapido de Matching</h2>
-        <div className="flex flex-col gap-4">
-          <div>
-            <label htmlFor="edad-slider" className="block font-semibold mb-1 text-zinc-300">Peso Edad: {matching.edad}%</label>
-            <input id="edad-slider" type="range" min={0} max={100} value={matching.edad} onChange={e => setMatching(m => ({ ...m, edad: Number(e.target.value) }))} className="w-full" />
-          </div>
-          <div>
-            <label htmlFor="distancia-slider" className="block font-semibold mb-1 text-zinc-300">Peso Distancia: {matching.distancia}%</label>
-            <input id="distancia-slider" type="range" min={0} max={100} value={matching.distancia} onChange={e => setMatching(m => ({ ...m, distancia: Number(e.target.value) }))} className="w-full" />
-          </div>
-          <div>
-            <label htmlFor="intereses-slider" className="block font-semibold mb-1 text-zinc-300">Peso Intereses: {matching.intereses}%</label>
-            <input id="intereses-slider" type="range" min={0} max={100} value={matching.intereses} onChange={e => setMatching(m => ({ ...m, intereses: Number(e.target.value) }))} className="w-full" />
-          </div>
-          <Button variant="primary" className="mt-2">Probar configuración</Button>
-        </div>
-      </section>
-      {/* Gestión de servicios */}
-      <section className="w-full max-w-2xl rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 mb-8">
-        <h2 className="text-lg font-bold text-white mb-4">Gestion de Servicios</h2>
-        <form className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4" onSubmit={agregarServicio}>
-          <input
-            className="border border-zinc-700 bg-zinc-950/70 text-zinc-100 p-2 rounded flex-1 placeholder:text-zinc-500"
-            placeholder="Nombre del nuevo servicio"
-            value={nuevoServicio.nombre}
-            onChange={e => setNuevoServicio(s => ({ ...s, nombre: e.target.value }))}
-            required
-          />
-          <select
-            className="border border-zinc-700 bg-zinc-950/70 text-zinc-100 p-2 rounded"
-            value={nuevoServicio.estado}
-            onChange={e => setNuevoServicio(s => ({ ...s, estado: e.target.value }))}
-            aria-label="Estado del servicio"
-          >
-            <option value="Activo">Activo</option>
-            <option value="Mantenimiento">Mantenimiento</option>
-          </select>
-          <Button type="submit">Añadir</Button>
-        </form>
-        {loadingServices ? (
-          <ViewState variant="loading" title="Cargando servicios" description="Sincronizando estado operativo." className="w-full" />
-        ) : services.length === 0 ? (
-          <ViewState variant="empty" title="Sin servicios configurados" description="Agrega un servicio para comenzar a monitorear estado." className="w-full" />
-        ) : (
-          <div className="w-full overflow-x-auto">
-          <table className="w-full min-w-[520px]">
-            <thead>
-              <tr className="bg-zinc-800/80 text-zinc-200">
-                <th className="p-2">Servicio</th>
-                <th className="p-2">Estado</th>
-                <th className="p-2">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {services.map((s) => (
-                <tr key={s.id} className="text-center border-t border-zinc-800 text-zinc-300">
-                  <td className="p-2">{s.nombre}</td>
-                  <td className="p-2">{s.estado}</td>
-                  <td className="p-2">
-                    <div className="flex flex-wrap gap-2 justify-center">
-                    {s.estado !== "Activo" && (
-                      <Button variant="primary" onClick={() => cambiarEstadoServicio(s.id, "Activo")}>Activar</Button>
-                    )}
-                    {s.estado !== "Mantenimiento" && (
-                      <Button variant="secondary" onClick={() => cambiarEstadoServicio(s.id, "Mantenimiento")}>Mantenimiento</Button>
-                    )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
-        )}
-      </section>
-      {/* Logs de actividad */}
-      <section className="w-full max-w-2xl rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-lg shadow-black/20 backdrop-blur p-6 mb-8">
-        <h2 className="text-lg font-bold mb-4 text-white">Logs de Actividad</h2>
-        <ul className="divide-y divide-zinc-800">
-          {logs.map((log) => (
-            <li key={log.id} className="py-2 text-sm flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-2">
-              <span className="text-zinc-200">{log.mensaje}</span>
-              <span className="text-zinc-500 sm:ml-4">{log.fecha}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+        <main className="relative min-h-screen w-full max-w-7xl mx-auto px-4 py-6 text-zinc-200">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.16),_transparent_45%),radial-gradient(circle_at_top_left,_rgba(236,72,153,0.14),_transparent_42%)]" />
+
+          <section className="rounded-3xl border border-zinc-800/80 bg-zinc-950/70 p-6 shadow-2xl shadow-black/40 backdrop-blur">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-zinc-500">Control Center</p>
+                <h1 className="mt-2 text-3xl font-black tracking-tight text-white sm:text-4xl">Dashboard de Administracion</h1>
+                <p className="mt-2 max-w-3xl text-sm text-zinc-400 sm:text-base">
+                  Vista unificada para monitorear riesgo, salud operativa y actividad de la comunidad en tiempo real.
+                </p>
+              </div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900/70 px-4 py-2 text-xs font-bold uppercase tracking-wider text-zinc-300">
+                <span className={`h-2.5 w-2.5 rounded-full ${adminAlert ? "bg-rose-400" : "bg-emerald-400"}`} />
+                {adminAlert ? "Alerta en curso" : "Sistema estable"}
+              </div>
+            </div>
+          </section>
+
+          <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {metricCards.map((card) => {
+              const Icon = card.icon;
+              return (
+                <article key={card.label} className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-5 shadow-lg shadow-black/20 backdrop-blur transition-colors hover:border-zinc-700">
+                  <div className="mb-4 flex items-center justify-between">
+                    <span className="text-[11px] font-black uppercase tracking-[0.16em] text-zinc-500">{card.label}</span>
+                    <Icon className={`h-4 w-4 ${card.tone}`} />
+                  </div>
+                  <p className={`text-3xl font-black tracking-tight ${card.tone}`}>{card.value}</p>
+                  <div className="mt-3 flex items-center justify-between gap-2">
+                    <p className="text-xs text-zinc-500">{card.hint}</p>
+                    {card.href ? (
+                      <Link href={card.href} className="text-xs font-bold uppercase tracking-wide text-primary-300 hover:text-primary-200">
+                        {card.cta}
+                      </Link>
+                    ) : null}
+                  </div>
+                </article>
+              );
+            })}
+          </section>
+
+          <section className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-12">
+            <div className="space-y-6 xl:col-span-8">
+              <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/60 p-4 shadow-lg shadow-black/20 backdrop-blur sm:p-5">
+                <AdminCharts
+                  usuarios={usuariosData}
+                  denuncias={denunciasData}
+                  sanciones={sancionesData}
+                  matches={matchesData}
+                  tokens={tokensData}
+                  feedback={feedbackData}
+                />
+              </div>
+
+              <section className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-6 shadow-lg shadow-black/20 backdrop-blur">
+                <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+                  <h2 className="text-lg font-black text-white">Gestion de Servicios</h2>
+                  <p className="text-xs uppercase tracking-wide text-zinc-500">Ops and uptime</p>
+                </div>
+
+                <form className="mb-4 flex flex-col gap-3 sm:flex-row sm:gap-4" onSubmit={agregarServicio}>
+                  <input
+                    className="flex-1 rounded-xl border border-zinc-700 bg-zinc-950/70 p-2 text-zinc-100 placeholder:text-zinc-500"
+                    placeholder="Nombre del nuevo servicio"
+                    value={nuevoServicio.nombre}
+                    onChange={e => setNuevoServicio(s => ({ ...s, nombre: e.target.value }))}
+                    required
+                  />
+                  <select
+                    className="rounded-xl border border-zinc-700 bg-zinc-950/70 p-2 text-zinc-100"
+                    value={nuevoServicio.estado}
+                    onChange={e => setNuevoServicio(s => ({ ...s, estado: e.target.value }))}
+                    aria-label="Estado del servicio"
+                  >
+                    <option value="Activo">Activo</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                  </select>
+                  <Button type="submit">Anadir</Button>
+                </form>
+
+                {loadingServices ? (
+                  <ViewState variant="loading" title="Cargando servicios" description="Sincronizando estado operativo." className="w-full" />
+                ) : services.length === 0 ? (
+                  <ViewState variant="empty" title="Sin servicios configurados" description="Agrega un servicio para comenzar a monitorear estado." className="w-full" />
+                ) : (
+                  <div className="w-full overflow-x-auto">
+                    <table className="w-full min-w-[520px]">
+                      <thead>
+                        <tr className="bg-zinc-800/80 text-zinc-200">
+                          <th className="p-2">Servicio</th>
+                          <th className="p-2">Estado</th>
+                          <th className="p-2">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {services.map((s) => (
+                          <tr key={s.id} className="border-t border-zinc-800 text-center text-zinc-300">
+                            <td className="p-2">{s.nombre}</td>
+                            <td className="p-2">{s.estado}</td>
+                            <td className="p-2">
+                              <div className="flex flex-wrap justify-center gap-2">
+                                {s.estado !== "Activo" && (
+                                  <Button variant="primary" onClick={() => cambiarEstadoServicio(s.id, "Activo")}>Activar</Button>
+                                )}
+                                {s.estado !== "Mantenimiento" && (
+                                  <Button variant="secondary" onClick={() => cambiarEstadoServicio(s.id, "Mantenimiento")}>Mantenimiento</Button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </section>
+            </div>
+
+            <div className="space-y-6 xl:col-span-4">
+              <section className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-6 shadow-lg shadow-black/20 backdrop-blur">
+                <h2 className="mb-4 text-lg font-black text-white">Ajuste rapido de Matching</h2>
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <label htmlFor="edad-slider" className="mb-1 block text-xs font-bold uppercase tracking-wide text-zinc-400">Edad · {matching.edad}%</label>
+                    <input id="edad-slider" type="range" min={0} max={100} value={matching.edad} onChange={e => setMatching(m => ({ ...m, edad: Number(e.target.value) }))} className="w-full accent-primary-500" />
+                  </div>
+                  <div>
+                    <label htmlFor="distancia-slider" className="mb-1 block text-xs font-bold uppercase tracking-wide text-zinc-400">Distancia · {matching.distancia}%</label>
+                    <input id="distancia-slider" type="range" min={0} max={100} value={matching.distancia} onChange={e => setMatching(m => ({ ...m, distancia: Number(e.target.value) }))} className="w-full accent-primary-500" />
+                  </div>
+                  <div>
+                    <label htmlFor="intereses-slider" className="mb-1 block text-xs font-bold uppercase tracking-wide text-zinc-400">Intereses · {matching.intereses}%</label>
+                    <input id="intereses-slider" type="range" min={0} max={100} value={matching.intereses} onChange={e => setMatching(m => ({ ...m, intereses: Number(e.target.value) }))} className="w-full accent-primary-500" />
+                  </div>
+                  <Button variant="primary" className="mt-2 w-full">Probar configuracion</Button>
+                </div>
+              </section>
+
+              <section className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-6 shadow-lg shadow-black/20 backdrop-blur">
+                <div className="mb-4 flex items-center justify-between">
+                  <h2 className="text-lg font-black text-white">Logs de Actividad</h2>
+                  <span className="text-xs uppercase tracking-wide text-zinc-500">{logs.length} eventos</span>
+                </div>
+                {logs.length === 0 ? (
+                  <p className="text-sm text-zinc-500">Aun no hay eventos recientes.</p>
+                ) : (
+                  <ul className="space-y-3">
+                    {logs.slice(0, 8).map((log) => (
+                      <li key={log.id} className="rounded-xl border border-zinc-800/80 bg-zinc-950/70 p-3">
+                        <p className="text-sm text-zinc-200">{log.mensaje}</p>
+                        <p className="mt-1 text-xs text-zinc-500">{log.fecha}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            </div>
+          </section>
         </main>
       )}
     </>

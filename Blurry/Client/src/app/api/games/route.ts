@@ -13,6 +13,7 @@ function normalizeGame(game: unknown) {
     name: normalizedGame.name,
     description: normalizedGame.description,
     category: normalizedGame.category,
+    price: normalizedGame.price,
     imageUrl: normalizedGame.image_url ?? normalizedGame.imageUrl,
   };
 }

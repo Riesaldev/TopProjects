@@ -21,7 +21,23 @@ export class UsersService {
   async findOne(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
-      select: ['id', 'email', 'display_name', 'age', 'gender', 'location', 'role', 'is_suspended', 'values_profile', 'created_at'],
+      select: [
+        'id',
+        'email',
+        'display_name',
+        'age',
+        'gender',
+        'location',
+        'role',
+        'is_suspended',
+        'values_profile',
+        'bio',
+        'interests',
+        'imagen_perfil',
+        'tokens',
+        'created_at',
+        'updated_at',
+      ],
     });
     if (!user) throw new NotFoundException('User not found');
     return user;

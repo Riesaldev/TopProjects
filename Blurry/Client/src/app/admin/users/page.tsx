@@ -213,36 +213,88 @@ export default function AdminUsersPage() {
   }, [modalUser]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-4">
-      <h1 className="text-2xl font-bold mb-4">Gestión de Usuarios</h1>
-      {/* Panel de filtros y exportar */}
-      <section className="mb-6 w-full max-w-6xl bg-white rounded shadow p-4 flex flex-wrap gap-4 items-end justify-between">
-        <div className="flex gap-4 flex-wrap flex-1">
+    <main className="min-h-screen bg-zinc-950 px-4 py-8 text-zinc-100">
+      <div className="mx-auto w-full max-w-6xl">
+        <section className="mb-6 rounded-3xl border border-zinc-800/70 bg-gradient-to-br from-zinc-900 to-zinc-950 p-6 shadow-xl shadow-black/25">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-primary-400">Admin Panel</p>
+          <h1 className="mt-2 text-3xl font-black tracking-tight text-white">Gestion de Usuarios</h1>
+          <p className="mt-2 max-w-2xl text-sm text-zinc-400">
+            Filtra, revisa actividad y aplica acciones administrativas desde una sola vista.
+          </p>
+        </section>
+
+        <section className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-4">
+            <p className="text-xs uppercase tracking-wider text-zinc-500">Total</p>
+            <p className="mt-1 text-2xl font-black text-white">{usuarios.length}</p>
+          </div>
+          <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-4">
+            <p className="text-xs uppercase tracking-wider text-zinc-500">Activos</p>
+            <p className="mt-1 text-2xl font-black text-emerald-300">{usuarios.filter((u) => u.estado === "Activo").length}</p>
+          </div>
+          <div className="rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-4">
+            <p className="text-xs uppercase tracking-wider text-zinc-500">Suspendidos</p>
+            <p className="mt-1 text-2xl font-black text-amber-300">{usuarios.filter((u) => u.estado === "Suspendido").length}</p>
+          </div>
+        </section>
+
+        {/* Panel de filtros y exportar */}
+        <section className="mb-6 w-full rounded-2xl border border-zinc-800/70 bg-zinc-900/70 p-4 shadow-lg shadow-black/20">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="flex flex-1 flex-wrap gap-4">
           <div>
-            <label htmlFor="estado-select" className="block text-sm font-semibold mb-1">Estado</label>
-            <select id="estado-select" value={estado} onChange={e => setEstado(e.target.value)} className="border p-2 rounded" title="Filtrar por estado">
+            <label htmlFor="estado-select" className="mb-1 block text-xs font-bold uppercase tracking-wider text-zinc-400">Estado</label>
+            <select
+              id="estado-select"
+              value={estado}
+              onChange={e => setEstado(e.target.value)}
+              className="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+              title="Filtrar por estado"
+            >
               {ESTADOS.map(e => <option key={e} value={e}>{e}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="genero-select" className="block text-sm font-semibold mb-1">Género</label>
-            <select id="genero-select" value={genero} onChange={e => setGenero(e.target.value)} className="border p-2 rounded" title="Filtrar por género">
+            <label htmlFor="genero-select" className="mb-1 block text-xs font-bold uppercase tracking-wider text-zinc-400">Genero</label>
+            <select
+              id="genero-select"
+              value={genero}
+              onChange={e => setGenero(e.target.value)}
+              className="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+              title="Filtrar por genero"
+            >
               {GENEROS.map(g => <option key={g} value={g}>{g}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="actividad-select" className="block text-sm font-semibold mb-1">Actividad</label>
-            <select id="actividad-select" value={actividad} onChange={e => setActividad(e.target.value)} className="border p-2 rounded" title="Filtrar por actividad">
+            <label htmlFor="actividad-select" className="mb-1 block text-xs font-bold uppercase tracking-wider text-zinc-400">Actividad</label>
+            <select
+              id="actividad-select"
+              value={actividad}
+              onChange={e => setActividad(e.target.value)}
+              className="rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100"
+              title="Filtrar por actividad"
+            >
               {ACTIVIDADES.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
           </div>
           <div>
-            <label htmlFor="codigo-postal-input" className="block text-sm font-semibold mb-1">Código Postal</label>
-            <input id="codigo-postal-input" value={codigoPostal} onChange={e => setCodigoPostal(e.target.value)} className="border p-2 rounded w-full sm:w-auto" placeholder="Buscar..." />
+            <label htmlFor="codigo-postal-input" className="mb-1 block text-xs font-bold uppercase tracking-wider text-zinc-400">Codigo Postal</label>
+            <input
+              id="codigo-postal-input"
+              value={codigoPostal}
+              onChange={e => setCodigoPostal(e.target.value)}
+              className="w-full rounded-xl border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 sm:w-auto"
+              placeholder="Buscar..."
+            />
           </div>
+            </div>
+            <Button variant="outline" className="w-full border-zinc-600 text-zinc-200 hover:bg-zinc-800 sm:w-auto" onClick={() => exportCSV(usuariosFiltrados)}>
+              Exportar CSV
+            </Button>
         </div>
-        <Button variant="primary" className="w-full sm:w-auto" onClick={() => exportCSV(usuariosFiltrados)}>Exportar CSV</Button>
-      </section>
+        </section>
+
       {loading ? (
         <ViewState variant="loading" title="Cargando usuarios" description="Consultando perfiles y estado de actividad." className="w-full max-w-md" />
       ) : error ? (
@@ -250,43 +302,53 @@ export default function AdminUsersPage() {
       ) : usuariosFiltrados.length === 0 ? (
         <ViewState variant="empty" title="Sin usuarios para este filtro" description="Prueba ajustando estado, genero o actividad." className="w-full max-w-md" />
       ) : (
-        <div className="w-full max-w-6xl overflow-x-auto border rounded shadow bg-white">
-        <table className="min-w-[980px] w-full">
+        <div className="w-full overflow-x-auto rounded-2xl border border-zinc-800/70 bg-zinc-900/70 shadow-xl shadow-black/20">
+        <table className="w-full min-w-[980px]">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2">ID</th>
-              <th className="p-2">Nombre</th>
-              <th className="p-2">Email</th>
-              <th className="p-2">Estado</th>
-              <th className="p-2">Género</th>
-              <th className="p-2">Actividad</th>
-              <th className="p-2">Registro</th>
-              <th className="p-2">CP</th>
-              <th className="p-2">Rol</th>
-              <th className="p-2">Acciones</th>
+            <tr className="bg-zinc-800/90 text-zinc-200">
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">ID</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Nombre</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Email</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Estado</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Genero</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Actividad</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Registro</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">CP</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Rol</th>
+              <th className="p-3 text-left text-xs font-bold uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
           <tbody>
             {usuariosFiltrados.map((user) => (
-              <tr key={user.id} className="text-center border-t">
-                <td className="p-2">{user.id}</td>
-                <td className="p-2">{user.nombre}</td>
-                <td className="p-2">{user.email}</td>
-                <td className="p-2">{user.estado}</td>
-                <td className="p-2">{user.genero}</td>
-                <td className="p-2">{user.actividad}</td>
-                <td className="p-2">{user.fechaRegistro}</td>
-                <td className="p-2">{user.codigoPostal}</td>
-                <td className="p-2">{user.rol || "usuario"}</td>
-                <td className="p-2 flex flex-col gap-2">
+              <tr key={user.id} className="border-t border-zinc-800/80 text-sm text-zinc-200">
+                <td className="p-3 align-top text-zinc-400">{user.id}</td>
+                <td className="p-3 align-top font-semibold text-white">{user.nombre}</td>
+                <td className="p-3 align-top text-zinc-300">{user.email}</td>
+                <td className="p-3 align-top">
+                  <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-wider ${
+                    user.estado === "Activo"
+                      ? "bg-emerald-500/15 text-emerald-300"
+                      : "bg-amber-500/15 text-amber-300"
+                  }`}>
+                    {user.estado}
+                  </span>
+                </td>
+                <td className="p-3 align-top text-zinc-300">{user.genero}</td>
+                <td className="p-3 align-top text-zinc-300">{user.actividad}</td>
+                <td className="p-3 align-top text-zinc-400">{user.fechaRegistro}</td>
+                <td className="p-3 align-top text-zinc-400">{user.codigoPostal}</td>
+                <td className="p-3 align-top text-zinc-300">{user.rol || "usuario"}</td>
+                <td className="p-3 align-top">
+                  <div className="flex flex-wrap gap-2">
                   {user.estado === "Activo" ? (
-                    <Button variant="secondary" onClick={() => cambiarEstado(user.id, "Suspendido")}>Suspender</Button>
+                    <Button size="sm" variant="secondary" onClick={() => cambiarEstado(user.id, "Suspendido")}>Suspender</Button>
                   ) : (
-                    <Button variant="primary" onClick={() => cambiarEstado(user.id, "Activo")}>Reactivar</Button>
+                    <Button size="sm" variant="primary" onClick={() => cambiarEstado(user.id, "Activo")}>Reactivar</Button>
                   )}
-                  <Button variant="secondary" onClick={() => setModalUser(user)}>Ver detalles</Button>
-                  <Button variant="secondary" onClick={() => setEditUser(user)}>Editar</Button>
-                  <Button variant="secondary" onClick={() => eliminarUsuario(user.id)}>Eliminar</Button>
+                  <Button size="sm" variant="outline" className="border-zinc-600 text-zinc-200 hover:bg-zinc-800" onClick={() => setModalUser(user)}>Detalles</Button>
+                  <Button size="sm" variant="outline" className="border-zinc-600 text-zinc-200 hover:bg-zinc-800" onClick={() => setEditUser(user)}>Editar</Button>
+                  <Button size="sm" variant="danger" onClick={() => eliminarUsuario(user.id)}>Eliminar</Button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -294,73 +356,82 @@ export default function AdminUsersPage() {
         </table>
         </div>
       )}
+      </div>
       {/* Modal de detalles */}
-      <Modal open={!!modalUser} onClose={() => setModalUser(null)} title="Detalles del usuario">
+      <Modal open={!!modalUser} onClose={() => setModalUser(null)} title="Detalles del usuario" theme="dark">
         {modalUser && (
-          <div className="flex flex-col gap-2">
-            <span><b>ID:</b> {modalUser.id}</span>
-            <span><b>Nombre:</b> {modalUser.nombre}</span>
-            <span><b>Email:</b> {modalUser.email}</span>
-            <span><b>Estado:</b> {modalUser.estado}</span>
-            <span><b>Género:</b> {modalUser.genero}</span>
-            <span><b>Actividad:</b> {modalUser.actividad}</span>
-            <span><b>Fecha de registro:</b> {modalUser.fechaRegistro}</span>
-            <span><b>Código Postal:</b> {modalUser.codigoPostal}</span>
-            <span><b>Rol:</b> {modalUser.rol || "usuario"}</span>
-            <div className="mt-4">
-              <b>Historial de actividad:</b>
-              <ul className="list-disc ml-6 text-sm mt-1">
-                {activityHistory.map((h) => <li key={h.id}>{h.fecha} - {h.accion}</li>)}
-                {activityHistory.length === 0 ? <li>Sin registros</li> : null}
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-2 rounded-xl border border-zinc-800 bg-zinc-900/70 p-4 text-sm sm:grid-cols-2">
+              <p><span className="font-bold text-zinc-400">ID:</span> {modalUser.id}</p>
+              <p><span className="font-bold text-zinc-400">Estado:</span> {modalUser.estado}</p>
+              <p><span className="font-bold text-zinc-400">Nombre:</span> {modalUser.nombre}</p>
+              <p><span className="font-bold text-zinc-400">Genero:</span> {modalUser.genero}</p>
+              <p className="sm:col-span-2"><span className="font-bold text-zinc-400">Email:</span> {modalUser.email}</p>
+              <p><span className="font-bold text-zinc-400">Actividad:</span> {modalUser.actividad}</p>
+              <p><span className="font-bold text-zinc-400">Registro:</span> {modalUser.fechaRegistro}</p>
+              <p><span className="font-bold text-zinc-400">Codigo Postal:</span> {modalUser.codigoPostal}</p>
+              <p><span className="font-bold text-zinc-400">Rol:</span> {modalUser.rol || "usuario"}</p>
+            </div>
+
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/70 p-4">
+              <p className="mb-2 text-xs font-black uppercase tracking-wider text-zinc-500">Historial de actividad</p>
+              <ul className="space-y-2 text-sm text-zinc-300">
+                {activityHistory.map((h) => (
+                  <li key={h.id} className="rounded-lg border border-zinc-800 bg-zinc-950/70 px-3 py-2">
+                    <span className="font-semibold text-zinc-200">{h.accion}</span>
+                    <span className="block text-xs text-zinc-500">{h.fecha}</span>
+                  </li>
+                ))}
+                {activityHistory.length === 0 ? <li className="text-zinc-500">Sin registros</li> : null}
               </ul>
             </div>
           </div>
         )}
       </Modal>
       {/* Modal de edición */}
-      <Modal open={!!editUser} onClose={() => setEditUser(null)} title="Editar usuario">
+      <Modal open={!!editUser} onClose={() => setEditUser(null)} title="Editar usuario" theme="dark">
         {editUser && (
           <form className="flex flex-col gap-3" onSubmit={e => { e.preventDefault(); guardarEdicion(); }}>
-            <label className="font-semibold">
+            <label className="text-sm font-semibold text-zinc-300">
               Nombre
               <input 
-                className="border p-2 rounded w-full" 
+                className="mt-1 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-zinc-100" 
                 value={editUser.nombre} 
                 onChange={e => setEditUser(u => u ? { ...u, nombre: e.target.value } : u)} 
               />
             </label>
-            <label className="font-semibold">
+            <label className="text-sm font-semibold text-zinc-300">
               Email
               <input 
-                className="border p-2 rounded w-full" 
+                className="mt-1 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-zinc-100" 
                 value={editUser.email} 
                 onChange={e => setEditUser(u => u ? { ...u, email: e.target.value } : u)} 
               />
             </label>
-            <label className="font-semibold">
+            <label className="text-sm font-semibold text-zinc-300">
               Actividad
               <select 
-                className="border p-2 rounded w-full" 
+                className="mt-1 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-zinc-100" 
                 value={editUser.actividad} 
                 onChange={e => setEditUser(u => u ? { ...u, actividad: e.target.value } : u)}
               >
                 {ACTIVIDADES.slice(1).map(a => <option key={a} value={a}>{a}</option>)}
               </select>
             </label>
-            <label className="font-semibold">
-              Género
+            <label className="text-sm font-semibold text-zinc-300">
+              Genero
               <select 
-                className="border p-2 rounded w-full" 
+                className="mt-1 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-zinc-100" 
                 value={editUser.genero} 
                 onChange={e => setEditUser(u => u ? { ...u, genero: e.target.value } : u)}
               >
                 {GENEROS.slice(1).map(g => <option key={g} value={g}>{g}</option>)}
               </select>
             </label>
-            <label className="font-semibold">
+            <label className="text-sm font-semibold text-zinc-300">
               Rol
               <select 
-                className="border p-2 rounded w-full" 
+                className="mt-1 w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-zinc-100" 
                 value={editUser.rol || "usuario"} 
                 onChange={e => setEditUser(u => u ? { ...u, rol: e.target.value } : u)}
               >
@@ -369,7 +440,7 @@ export default function AdminUsersPage() {
             </label>
             <div className="flex gap-2 mt-2">
               <Button type="submit" variant="primary">Guardar</Button>
-              <Button type="button" variant="secondary" onClick={() => setEditUser(null)}>Cancelar</Button>
+              <Button type="button" variant="outline" className="border-zinc-600 text-zinc-200 hover:bg-zinc-800" onClick={() => setEditUser(null)}>Cancelar</Button>
             </div>
           </form>
         )}

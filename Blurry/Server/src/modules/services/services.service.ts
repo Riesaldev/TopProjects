@@ -26,6 +26,7 @@ export class ServicesService {
     const service = this.servicesRepository.create({
       ...createServiceDto,
       estado: createServiceDto.estado || 'Activo',
+      price: createServiceDto.price ?? 6.99,
     });
     return this.servicesRepository.save(service);
   }
