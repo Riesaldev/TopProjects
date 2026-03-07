@@ -66,7 +66,7 @@ export default function DiscoverPage() {
     }
   };
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: { offset: { x: number } }) => {
     if (info.offset.x > 100) {
       handleSwipe("right");
     } else if (info.offset.x < -100) {
@@ -182,7 +182,7 @@ export default function DiscoverPage() {
                   </h2>
                   <div className="flex gap-2 items-center text-sm font-bold text-primary-300 mt-2 tracking-widest uppercase mb-3">
                     <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
-                    {(currentProfile as any).location || "Unknown Layer"}
+                    {(currentProfile as User & { location?: string }).location || "Unknown Layer"}
                   </div>
                   {currentProfile.bio && (
                     <p className="text-sm text-zinc-300 line-clamp-2 leading-relaxed">

@@ -76,7 +76,7 @@ export default function UserAgendaPage() {
       if (usersRes.ok) {
         const allUsers = await usersRes.json();
         // Filter out myself and people already in contacts
-        setDiscoverUsers(allUsers.filter((u: any) => 
+        setDiscoverUsers(allUsers.filter((u: { id: number; role?: string; display_name: string }) => 
           u.id !== user?.id && u.role !== 'admin'
         ));
       }
@@ -127,7 +127,7 @@ export default function UserAgendaPage() {
     e.preventDefault();
     try {
       const isoDate = new Date(`${selectedDateForEvent}T${newEvent.time}:00`).toISOString();
-      const payload: any = {
+      const payload: Record<string, string | number | undefined> = {
         title: newEvent.title,
         note: newEvent.note,
         datetime: isoDate,

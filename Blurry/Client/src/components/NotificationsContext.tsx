@@ -36,7 +36,7 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
   const [unread, setUnread] = useState<number>(0);
 
   const showToast = useCallback((msg: string, type: ToastType = "info") => {
-    const id = Date.now();
+    const id = Date.now() + Math.random();
     setToasts(t => [...t, { id, msg, type }]);
     setUnread(u => u + 1);
     setTimeout(() => setToasts(t => t.filter(toast => toast.id !== id)), 3500);

@@ -43,8 +43,9 @@ export default function ChatMonitorPage() {
       if (!res.ok) throw new Error("Error al buscar en los chats");
       const data = await res.json();
       setResults(data || []);
-    } catch (err: any) {
-      setError(err.message || "Ocurrió un error.");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Ocurrió un error.";
+      setError(errorMessage);
       setResults([]);
     } finally {
       setLoading(false);
@@ -62,8 +63,9 @@ export default function ChatMonitorPage() {
       });
       if (!res.ok) throw new Error("Error al suspender usuario");
       alert("Usuario suspendido exitosamente por 7 días.");
-    } catch (err: any) {
-      alert("Error: " + err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      alert("Error: " + errorMessage);
     }
   };
 

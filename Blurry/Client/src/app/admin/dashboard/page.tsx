@@ -248,7 +248,7 @@ export default function AdminDashboard() {
     });
     setServices(await res.json());
     setLogs((prev) => [
-      { id: Date.now(), mensaje: `Servicio actualizado: ${id} → ${estado}`, fecha: new Date().toLocaleString() },
+      { id: Date.now() + Math.random(), mensaje: `Servicio actualizado: ${id} → ${estado}`, fecha: new Date().toLocaleString() },
       ...prev
     ]);
   };
@@ -278,7 +278,7 @@ export default function AdminDashboard() {
     setServices(Array.isArray(refreshed) ? refreshed : []);
     setNuevoServicio({ nombre: "", estado: "Activo" });
     setLogs((prev) => [
-      { id: Date.now(), mensaje: `Nuevo servicio añadido: ${nuevoServicio.nombre}`, fecha: new Date().toLocaleString() },
+      { id: Date.now() + Math.random(), mensaje: `Nuevo servicio añadido: ${nuevoServicio.nombre}`, fecha: new Date().toLocaleString() },
       ...prev
     ]);
   };

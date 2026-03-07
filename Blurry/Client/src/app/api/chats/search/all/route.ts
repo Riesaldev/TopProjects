@@ -30,9 +30,10 @@ export async function GET(req: NextRequest) {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Desconocido";
     return NextResponse.json(
-      { error: "Fetch to backend failed", message: error.message },
+      { error: "Fetch to backend failed", message: message },
       { status: 500 }
     );
   }
