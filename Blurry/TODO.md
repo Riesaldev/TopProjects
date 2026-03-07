@@ -30,8 +30,12 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [x] **HU09 (Editar perfil)**: Añadir sección / endpoint para permitir cambiar la contraseña al usuario desde la interfaz de su perfil.
 - [x] **HU15 (Admin / Chat)**: Construir un parseador/blacklist automático para detectar malas conductas en los sockets que avise directo al administrador.
 - [x] **HU16 (Motor Matching)**: Desarrollar el cálculo lógico base del algoritmo de sugerencias (Scoring avanzado / compatibilidad), sustituyendo el simple CRUD actual de base de datos.
-- [ ] **HU17 (Notificaciones)**: Integrar sistema de emails (ej. NodeMailer/Sendgrid) y librerías de Queue (ej. Bull) para encolamiento asíncrono.
+- [ ] **HU17 (Notificaciones)**: Integrar sistema de emails (ej. NodeMailer/Sendgrid) y librerías de Queue (ej. Bull) para encolamiento asíncrono y notificaciones Push.
 - [ ] **HU18 (Infraestructura)**: Confeccionar CRON jobs de automatización para backups de la base de datos MySQL y estandarizar la capa de audit-logs.
+- [ ] **HU19 (Reportes/Sanciones)**: Implementar sistema End-to-End de reportes de usuarios, permitiendo revisión y aplicación de sanciones preventivas/baneos.
+- [ ] **HU20 (Onboarding/Tour)**: Crear un recorrido inicial guiado (Tooltips/Steps) para explicar a los nuevos usuarios cómo ganar tokens, usar la agenda y comprar tiempo en videollamadas.
+- [ ] **HU21 (Filtros de Búsqueda Avanzados)**: Añadir filtros granulares (rango de edad exacto, intereses específicos, ubicación/distancia real) en la vista de descubrimiento con soporte de consultas geoespaciales.
+- [ ] **HU22 (Bloqueos Automáticos por Actividad Anómala)**: Sistemas anti-spam y rate-limiting agresivos para prevenir la creación de bots o scraping masivo de perfiles en pocos segundos.
 
 ## Seguridad
 
@@ -104,9 +108,10 @@ Objetivo: cerrar gaps para pasar de MVP funcional a producto estable y presentab
 - [x] Bloque 2: Corregir errores emergentes de lint/typescript (Hecho).
 - [x] Bloque 3: Completar UX Core de HUs (Fotos de array, Swipe animado).
 - [ ] Bloque 4: Motor de Matching avanzado y colas de notificación automática.
-- [ ] Bloque 5: Middleware de acceso admin + validacion de roles backend.
-- [ ] Bloque 6: Limpieza arquitectura (AuthContext unico + proxy/API estandar).
-- [ ] Bloque 7: SEO base y pipelines CI finales.
+- [ ] Bloque 5: Sistema de Reportes/Sanciones y revisión por administradores.
+- [ ] Bloque 6: Middleware de acceso admin + validacion de roles backend.
+- [ ] Bloque 7: Limpieza arquitectura (AuthContext unico + proxy/API estandar).
+- [ ] Bloque 8: SEO base y pipelines CI finales.
 
 ## Go/No-Go para owner review
 
