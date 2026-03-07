@@ -23,7 +23,7 @@ export async function login(req: AuthRequest, res: Response, next: NextFunction)
   try {
     const { email, password } = loginSchema.parse(req.body);
 
-    const [rows] = await pool.query<any[]>('SELECT * FROM users WHERE email = ?', [email]);
+    const [rows] = await pool.query<any[]>('SELECT * FROM users WHERE email = ? OR username = ?', [email, email]);
     const user: DbUser | undefined = rows[0];
 
     if (!user || !(await bcrypt.compare(password, user.password_hash))) {
