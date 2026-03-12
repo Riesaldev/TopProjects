@@ -56,14 +56,11 @@ const Header = () => {
     <header className="sticky top-0 z-50 border-b border-white/5 bg-[#05060f]/80 backdrop-blur-2xl">
       <nav aria-label="Navegación principal" className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-6">
         <Link to="/" aria-label="Ir a inicio" className="flex items-center gap-3 text-white">
-          <span className="flex items-center gap-2 text-2xl font-semibold tracking-wide">
-            <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00e1d9] to-[#7f5af0] text-[#05060f] font-bold shadow-[0_10px_30px_rgba(0,225,217,0.25)]">
+          <span className="flex items-center gap- text-2xl font-semibold tracking-wide">
+            <span className="inline-flex mr-2 h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#00e1d9] to-[#7f5af0] text-[#05060f] font-bold shadow-[0_10px_30px_rgba(0,225,217,0.25)]">
               /
             </span>
-            Mini<span className="text-[#00e1d9]">X</span>
-          </span>
-          <span className="hidden md:inline-flex text-xs font-medium uppercase tracking-[0.3em] text-white/50 px-3 py-1 rounded-full border border-white/10">
-            Social OS
+            Min<span className="text-[#00e1d9]">X</span>
           </span>
         </Link>
 
@@ -91,7 +88,7 @@ const Header = () => {
                 Login
               </Link>
               <Link to="/register" className="btn-primary !px-4 !py-2 text-sm">
-                Join MiniX
+                Join MinX
               </Link>
             </>
           )}

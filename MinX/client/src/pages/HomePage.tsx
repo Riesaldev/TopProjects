@@ -26,11 +26,10 @@ const Home = () => {
             <div className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.4em] text-white/60">
               New drop
               <span className="inline-flex h-2 w-2 rounded-full bg-[#00e1d9] animate-pulse" />
-              Studio OS
             </div>
 
             <h1 className="text-4xl leading-tight font-semibold sm:text-5xl lg:text-6xl text-balance">
-              Diseña conversaciones memorables con la nueva experiencia MiniX.
+              Diseña conversaciones memorables con la nueva experiencia MinX.
             </h1>
 
             <p className="text-lg text-white/70 max-w-2xl leading-relaxed">

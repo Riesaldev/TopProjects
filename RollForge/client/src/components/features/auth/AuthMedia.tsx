@@ -3,7 +3,7 @@ export default function AuthMedia () {
   return (
     <div>
       {/* Social media login options */}
-      <section className="w-full max-w-120 flex text-text-primary text-xl font-medium my-10 justify-around gap-4 overflow-x-hidden">
+      <section className="w-full max-w-120 flex text-text-primary text-xl font-medium my-4 justify-around gap-4 overflow-x-hidden">
         <div className="flex items-center gap-2 mt-6 border border-text-secondary/20 rounded-md px-18 py-3 cursor-pointer active:scale-95 transition-transform duration-100 bg-border-dark-heavy/10">
           <img src="/Discord.svg"
             alt="Discord"

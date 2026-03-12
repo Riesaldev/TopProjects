@@ -59,7 +59,7 @@ const Footer = () => {
               </span>
               <div>
                 <p className="text-2xl font-semibold tracking-wide leading-none">
-                  Mini<span className="text-[#00e1d9]">X</span>
+                  Min<span className="text-[#00e1d9]">X</span>
                 </p>
                 <p className="text-xs uppercase tracking-[0.4em] text-white/60">Create bold conversations</p>
               </div>
