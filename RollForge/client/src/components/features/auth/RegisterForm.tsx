@@ -1,5 +1,4 @@
 import { ArrowRight, Mail, User, LockKeyhole, Eye, EyeOff } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 
 import AuthTabs from "./AuthTabs";
 import AuthMedia from "./AuthMedia";
@@ -8,7 +7,6 @@ import { useRegisterForm } from '../../../hooks/useAuthForm';
 import { useAuth } from '../../../context/AuthContext';
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
   const { register } = useAuth();
   const {
     formData,
@@ -41,9 +39,9 @@ export default function RegisterForm() {
         password: formData.password,
       });
       // The register method in AuthContext already navigates to /campaigns upon success
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration error:', error);
-      setErrors({ email: error?.message || 'Registration failed. Please try again.' });
+      setErrors({ email: (error as { message: string })?.message || 'Registration failed. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -82,15 +80,15 @@ export default function RegisterForm() {
               onChange={handleInputChange}
               placeholder="Gamer123"
               required
-              aria-invalid={!!errors.username}
-              aria-describedby={errors.username ? "username-error" : undefined}
-              className={`w-full border-text-secondary/20 text-text-muted rounded-md border pl-10 pr-3 py-2 bg-border-dark-heavy/10 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors ${(errors as any).username ? 'border-red-500 focus:ring-red-500/50' : ''
+              aria-invalid={!!(errors as { username?: string }).username}
+              aria-describedby={(errors as { username?: string }).username ? "username-error" : undefined}
+              className={`w-full border-text-secondary/20 text-text-muted rounded-md border pl-10 pr-3 py-2 bg-border-dark-heavy/10 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors ${(errors as { username?: string }).username ? 'border-red-500 focus:ring-red-500/50' : ''
                 }`}
             />
           </div>
-          {(errors as any).username && (
+          {(errors as { username?: string }).username && (
             <p id="username-error" className="text-red-500 text-sm" role="alert">
-              {(errors as any).username}
+              {(errors as { username?: string }).username}
             </p>
           )}
         </div>

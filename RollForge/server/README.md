@@ -1,95 +1,98 @@
+
 # RollForge Server
 
-Express + Socket.io REST API for the RollForge TTRPG platform.
+Backend Express + Socket.io para la plataforma RollForge (juegos de rol online).
 
-## Stack
+## 🚀 Stack Tecnológico
 
-- **Runtime**: Node.js + TypeScript (NodeNext modules)
-- **Framework**: Express 5
-- **Database**: MySQL 8 via `mysql2`
-- **Auth**: JWT (`jsonwebtoken`) + bcrypt
-- **Realtime**: Socket.io
-- **Validation**: Zod
-- **Email**: Nodemailer
+- **Node.js** + **TypeScript** (ESM)
+- **Express 5**
+- **MySQL 8** (`mysql2`)
+- **JWT** (`jsonwebtoken`) + **bcryptjs**
+- **Socket.io** (tiempo real)
+- **Zod** (validación)
+- **Nodemailer** (emails)
 
-## Setup
+## ⚡ Instalación y uso
 
 ```bash
-# 1. Install dependencies
+# 1. Instala dependencias
 cd server
-npm install   # or pnpm install
+pnpm install   # o npm install
 
-# 2. Configure environment
+# 2. Configura el entorno
 cp .env.example .env
-# Edit .env — fill in DB credentials, JWT secret, SMTP settings
+# Edita .env con tus credenciales de DB, JWT y SMTP
 
-# 3. Create the database
-mysql -u root -p < schema.sql
+# 3. Inicializa la base de datos (crea tablas y estructura)
+pnpm run initDb
+# o manualmente:
+# mysql -u root -p < schema.sql
 
-# 4. Start development server
-npm run dev   # runs on http://localhost:3001
+# 4. Inicia el servidor de desarrollo
+pnpm run dev   # http://localhost:3001
 ```
 
-## Project Structure
+## 📂 Estructura del proyecto
 
 ```
 server/
-├── schema.sql              # Database schema (run once)
-├── .env.example            # Environment variable template
+├── schema.sql              # Esquema de la base de datos
+├── .env.example            # Variables de entorno ejemplo
 └── src/
-    ├── index.ts            # App bootstrap + Socket.io
-    ├── config/
-    │   ├── database.ts     # MySQL pool
-    │   └── environment.ts  # Zod-validated env vars
-    ├── types/
-    │   └── entities.ts     # DB row TypeScript interfaces
-    ├── middlewares/
-    │   ├── auth.middleware.ts   # JWT authenticate / requireRole
-    │   └── errorHandler.ts     # Global error handler + AppError
-    ├── utils/
-    │   └── schemas.ts      # Zod request validation schemas
-    ├── controllers/
-    │   ├── authController.ts
-    │   ├── campaignController.ts
-    │   ├── characterController.ts
-    │   └── resourceController.ts
-    └── routes/
-        ├── index.ts        # Mounts all route groups under /api
-        ├── auth.ts
-        ├── campaigns.ts
-        ├── characters.ts
-        └── resources.ts
+    ├── index.ts            # Bootstrap + Socket.io
+    ├── config/             # DB y entorno
+    ├── types/              # Tipos TypeScript
+    ├── middlewares/        # Middlewares Express
+    ├── utils/              # Utilidades y validaciones
+    ├── controllers/        # Lógica de rutas
+    └── routes/             # Endpoints agrupados
 ```
 
-## API Endpoints
+## 🛠️ Scripts útiles
 
-| Method | Path | Auth | Description |
+- `pnpm run dev` — Servidor en modo desarrollo
+- `pnpm run build` — Compila a dist/
+- `pnpm run start` — Ejecuta el build
+- `pnpm run lint` — Linting del código fuente
+- `pnpm run initDb` — Inicializa la base de datos (estructura)
+
+## 🔐 Usuario demo
+
+Por defecto **NO** se crea ningún usuario demo automáticamente en la base de datos. Si quieres un usuario de pruebas (por ejemplo, <demo@rollforge.com> / demo1234), créalo manualmente o añade un script de seed.
+
+## 📑 Endpoints principales
+
+| Método | Ruta | Auth | Descripción |
 |--------|------|------|-------------|
 | POST | `/api/auth/login` | ✗ | Login |
-| POST | `/api/auth/register` | ✗ | Register |
-| POST | `/api/auth/recover-password` | ✗ | Request password reset email |
-| POST | `/api/auth/reset-password` | ✗ | Reset password with token |
-| GET | `/api/auth/me` | ✓ | Get current user |
-| GET | `/api/campaigns` | ✓ | List own + joined campaigns |
-| POST | `/api/campaigns` | ✓ | Create campaign |
-| GET | `/api/campaigns/:id` | ✓ | Get campaign |
-| PATCH | `/api/campaigns/:id` | ✓ | Update campaign (owner only) |
-| DELETE | `/api/campaigns/:id` | ✓ | Delete campaign (owner only) |
-| GET | `/api/characters[?campaign_id=X]` | ✓ | List own characters |
-| POST | `/api/characters` | ✓ | Create character |
-| GET | `/api/characters/:id` | ✓ | Get character |
-| PATCH | `/api/characters/:id` | ✓ | Update character |
-| DELETE | `/api/characters/:id` | ✓ | Delete character |
-| GET | `/api/resources?campaign_id=X[&type=Y]` | ✓ | List campaign resources |
-| POST | `/api/resources` | ✓ | Upload resource (multipart/form-data) |
-| DELETE | `/api/resources/:id` | ✓ | Delete resource |
+| POST | `/api/auth/register` | ✗ | Registro |
+| POST | `/api/auth/recover-password` | ✗ | Solicitar reset password |
+| POST | `/api/auth/reset-password` | ✗ | Reset password con token |
+| GET | `/api/auth/me` | ✓ | Usuario actual |
+| GET | `/api/campaigns` | ✓ | Listar campañas |
+| POST | `/api/campaigns` | ✓ | Crear campaña |
+| GET | `/api/campaigns/:id` | ✓ | Ver campaña |
+| PATCH | `/api/campaigns/:id` | ✓ | Editar campaña (owner) |
+| DELETE | `/api/campaigns/:id` | ✓ | Eliminar campaña (owner) |
+| GET | `/api/characters[?campaign_id=X]` | ✓ | Listar personajes |
+| POST | `/api/characters` | ✓ | Crear personaje |
+| GET | `/api/characters/:id` | ✓ | Ver personaje |
+| PATCH | `/api/characters/:id` | ✓ | Editar personaje |
+| DELETE | `/api/characters/:id` | ✓ | Eliminar personaje |
+| GET | `/api/resources?campaign_id=X[&type=Y]` | ✓ | Listar recursos |
+| POST | `/api/resources` | ✓ | Subir recurso (multipart) |
+| DELETE | `/api/resources/:id` | ✓ | Eliminar recurso |
 | GET | `/health` | ✗ | Health check |
 
-## Socket.io Events
+## 🔄 Eventos Socket.io
 
-| Event (emit) | Payload | Description |
+| Evento (emit) | Payload | Descripción |
 |---|---|---|
-| `join:campaign` | `campaignId` | Join campaign room |
-| `leave:campaign` | `campaignId` | Leave campaign room |
-| `dice:roll` | `{ campaign_id, roll, result }` | Broadcast dice roll |
-| `dice:result` | `{ campaign_id, roll, result, user_id }` | Received by all in room |
+| `join:campaign` | `campaignId` | Unirse a sala de campaña |
+| `leave:campaign` | `campaignId` | Salir de sala de campaña |
+| `dice:roll` | `{ campaign_id, roll, result }` | Tirada de dados |
+| `dice:result` | `{ campaign_id, roll, result, user_id }` | Resultado de tirada |
+
+---
+Desarrollado para la comunidad rolera.

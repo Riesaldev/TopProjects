@@ -1,4 +1,85 @@
-# RollForge - Especificaciones Técnicas
+
+# RollForge
+
+Plataforma web colaborativa para jugar juegos de rol de mesa online. Incluye mapas hexagonales interactivos, gestión de campañas y personajes, chat, tiradas de dados y recursos compartidos en tiempo real.
+
+---
+
+## 📦 Estructura del repositorio
+
+- `client/` — Frontend React + Vite ([ver README](client/README.md))
+- `server/` — Backend Express + Socket.io ([ver README](server/README.md))
+- `docs/` — Documentación técnica y de API
+- `HISTORIAS.md` — Historias de usuario y backlog
+
+---
+
+## 🚀 Inicio rápido
+
+### 1. Clona el repositorio
+
+```bash
+git clone https://github.com/Riesaldev/TopProjects.git
+cd RollForge
+```
+
+### 2. Instala dependencias
+
+```bash
+cd server && pnpm install # o npm install
+cd ../client && pnpm install # o npm install
+```
+
+### 3. Configura variables de entorno
+
+Sigue los ejemplos `.env.example` en `server/` y configura tu base de datos, JWT y SMTP.
+
+### 4. Inicializa la base de datos
+
+```bash
+cd server
+pnpm run initDb # o npm run initDb
+```
+
+### 5. Ejecuta backend y frontend
+
+```bash
+cd server && pnpm run dev
+cd ../client && pnpm run dev
+```
+
+---
+
+## 🛠️ Stack principal
+
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, Socket.io-client
+- **Backend:** Node.js, Express, TypeScript, MySQL, Socket.io, JWT, Zod, Nodemailer
+
+---
+
+## 📚 Documentación
+
+- [README Frontend](client/README.md)
+- [README Backend](server/README.md)
+- [docs/API.md](docs/API.md) — Endpoints y ejemplos
+- [docs/SOCKET_EVENTS.md](docs/SOCKET_EVENTS.md) — Eventos en tiempo real
+
+---
+
+## 🧪 Testing y calidad
+
+- Backend: Vitest, Supertest, ESLint, TypeScript strict
+- Frontend: (pendiente)
+
+---
+
+## 📝 Licencia
+
+MIT
+
+---
+
+Desarrollado con ❤️ para la comunidad rolera.
 
 ## 📋 Descripción del Proyecto
 

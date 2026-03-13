@@ -1,75 +1,65 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# RollForge - Cliente Web
 
-Currently, two official plugins are available:
+RollForge es una plataforma web colaborativa para jugar juegos de rol de mesa en línea. Este cliente está construido con React, TypeScript y Vite, y ofrece una experiencia moderna, rápida y responsiva para jugadores y Game Masters.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Características principales
 
-## React Compiler
+- Autenticación de usuarios (registro, login, recuperación de contraseña)
+- Gestión de campañas, personajes y compendio
+- Mapas hexagonales interactivos
+- Chat y sistema de tiradas de dados en tiempo real
+- Notificaciones visuales y sonoras
+- Panel de usuario y preferencias de perfil
+- Interfaz adaptable para escritorio y móvil
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## 🛠️ Stack Tecnológico
 
-Note: This will impact Vite dev & build performances.
+- **React** + **TypeScript** + **Vite**
+- **Tailwind CSS** para estilos
+- **Socket.io-client** para comunicación en tiempo real
+- **React Context API** para estado global
+- **Lucide React** para iconos
 
-## Expanding the ESLint configuration
+## 📂 Estructura del proyecto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/components/` — Componentes reutilizables y de features (auth, dashboard, chat, mapas, perfil, etc.)
+- `src/context/` — Contextos globales (auth, notificaciones, juego)
+- `src/services/` — Servicios para interactuar con la API
+- `src/hooks/` — Hooks personalizados
+- `src/types/` — Tipos y contratos TypeScript
+- `src/utils/` — Utilidades y validaciones
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ▶️ Scripts útiles
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- `pnpm install` — Instala las dependencias
+- `pnpm dev` — Inicia el servidor de desarrollo
+- `pnpm build` — Compila la aplicación para producción
+- `pnpm preview` — Previsualiza el build de producción
+- `pnpm lint` — Linting del código
+- `pnpm format` — Formatea el código con Prettier
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## ⚡ Inicio rápido
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Instala dependencias:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   ```bash
+   pnpm install
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2. Inicia el entorno de desarrollo:
+
+   ```bash
+   pnpm dev
+   ```
+
+3. Accede a [http://localhost:5173](http://localhost:5173)
+
+## 📢 Notas
+
+- Este frontend está pensado para funcionar junto al backend de RollForge.
+- Configura las variables de entorno en `.env` si es necesario.
+- Para desarrollo, asegúrate de que el backend esté corriendo para probar funcionalidades en tiempo real.
+
+---
+Desarrollado con ❤️ para la comunidad rolera.
