@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useMemo, useCallback, useEffect } from 'react';
 
 /**
@@ -27,9 +29,12 @@ export function usePagination(items, itemsPerPage = 10) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Reset a página 1 cuando cambien los items
+  // Reset a página 1 cuando cambien los items y la página actual no sea 1
   useEffect(() => {
-    setCurrentPage(1);
+    if (currentPage !== 1) {
+      setCurrentPage(1);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items.length]);
 
   return {

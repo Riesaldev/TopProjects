@@ -1,58 +1,19 @@
-"use client";
+'use client';
 
-/**
- * @fileoverview Página de exploración de productores locales
- * Página completa con filtros múltiples, ordenamiento, paginación y grid de productores
- */
-
-//importamos los hooks de next
+import { Suspense, useEffect, useCallback, useState, useMemo } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useCallback, useState, useMemo } from 'react';
-//importamos los componentes
 import Header from "@/components/layout/Header";
 import MiniFooter from "@/components/layout/MiniFooter";
 import ProducerCard from "@/components/layout/producers/ProducerCard";
 import ProducerFilters from "@/components/ui/producers/ProducerFilters";
 import Pagination from "@/components/ui/Pagination";
 import InfoAndSorting from "@/components/ui/InfoAndSorting";
-//importamos los datos mockeados
 import producerData from "@/data/producers.json";
-//importamos los hooks
 import { usePagination } from "@/hooks/usePagination";
 import { useProducerSort } from "@/hooks/useProducerSort";
 
-/**
- * Página de productores - Explora productores locales
- * 
- * Página principal para descubrir y conectar con productores del marketplace.
- * 
- * Características:
- * - Filtrado por tipo de producción (ecológica, artesanal, tradicional)
- * - Filtrado por distancia máxima (slider)
- * - Filtrado por valoración mínima (radio buttons)
- * - Ordenamiento por cercanía, valoración, nombre
- * - Paginación con sincronización de URL
- * - Grid responsive de tarjetas de productor
- * 
- * Lógica de filtrado:
- * - Los filtros se aplican con useMemo para optimizar rendimiento
- * - Todos los filtros son opcionales (se pueden combinar)
- * - Cambiar filtros resetea a la primera página
- * 
- * Hooks utilizados:
- * - useState: Gestiona estado de filtros localmente
- * - useMemo: Aplica filtros de forma optimizada
- * - useProducerSort: Maneja ordenamiento de resultados
- * - usePagination: Controla paginación
- * - useSearchParams/useRouter: Sincroniza con URL
- * 
- * @returns {JSX.Element} Página completa de productores
- * 
- * @example
- * // URL: /producers?page=1
- * <ProducersPage />
- */
-export default function ProducersPage () {
+function ProducersPageComponent() {
+  // ...existing code...
   /** Número de productores por página */
   const ITEMS_PER_PAGE = 4;
   const router = useRouter();
@@ -216,5 +177,15 @@ export default function ProducersPage () {
       </main>
       <MiniFooter />
     </>
+  );
+}
+
+
+// Exporta la página envuelta en Suspense para cumplir con Next.js
+export default function ProducersPage() {
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <ProducersPageComponent />
+    </Suspense>
   );
 }

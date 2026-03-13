@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useCallback } from 'react';
 import Header from "@/components/layout/Header";
@@ -47,7 +48,7 @@ import { usePagination } from "@/hooks/usePagination";
  * // URL: /products?page=2
  * <ProductsPage />
  */
-export default function ProductsPage () {
+function ProductsPageComponent () {
   /** Número de productos por página */
   const ITEMS_PER_PAGE = 5;
   const searchParams = useSearchParams();
@@ -180,5 +181,14 @@ export default function ProductsPage () {
       </main>
       <MiniFooter />
     </>
+  );
+}
+
+// Exporta la página envuelta en Suspense para cumplir con Next.js
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <ProductsPageComponent />
+    </Suspense>
   );
 }
