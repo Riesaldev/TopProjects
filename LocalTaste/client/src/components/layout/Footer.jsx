@@ -1,3 +1,5 @@
+
+import Image from 'next/image';
 /**
  * @fileoverview Componente de pie de página principal
  * Footer completo con logo, enlaces de navegación, redes sociales y copyright
@@ -28,9 +30,11 @@ const Footer = ( { } ) => {
             {/* Logo */}
             <div className="flex items-center hover:scale-120 transition-transform duration-300">
               <a href="/" className="flex items-center space-x-2">
-                <img
-                  src="./FarmTractor.svg"
+                <Image
+                  src="/FarmTractor.svg"
                   alt="Logo LocalTaste"
+                  width={32}
+                  height={32}
                   className="w-8 h-8"
                 />
                 <h1 className="text-xl font-bold text-gray-900">LocalTaste</h1>

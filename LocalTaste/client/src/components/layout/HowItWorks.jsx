@@ -1,4 +1,6 @@
 
+import Image from 'next/image';
+
 
 
 export default function HowItWorks () {
@@ -14,7 +16,7 @@ export default function HowItWorks () {
           <div className="flex relative flex-col w-full gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400">
             <div className="w-10 h-10 rounded-full  flex items-center justify-center">
               <span className="flex items-center justify-center bg-green-300/30 rounded-full w-10 h-10">
-                <img src="/SolidStore.svg" alt="Store Icon" className="w-6 h-6" />
+                <Image src="/SolidStore.svg" alt="Store Icon" width={24} height={24} className="w-6 h-6" />
               </span>
             </div>
             <div className="flex flex-col gap-2">
@@ -26,7 +28,7 @@ export default function HowItWorks () {
           <div className="flex relative flex-col w-full gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400">
             <div className="w-10 h-10 rounded-full  flex items-center justify-center">
               <span className="flex items-center justify-center bg-green-300/30 rounded-full w-10 h-10">
-                <img src="/MakiShop.svg" alt="Maki Shop Icon" className="w-6 h-6" />
+                <Image src="/MakiShop.svg" alt="Maki Shop Icon" width={24} height={24} className="w-6 h-6" />
               </span>
             </div>
             <div className="flex flex-col gap-2">
@@ -38,7 +40,7 @@ export default function HowItWorks () {
           <div className="flex relative flex-col w-full gap-4 p-4 rounded-2xl bg-[#e6f9e9]/50 border border-green-300/50 hover:shadow-lg hover:scale-115 transition-all ease-in-out duration-400">
             <div className="w-10 h-10 rounded-full  flex items-center justify-center">
               <span className="flex items-center justify-center bg-green-300/30 rounded-full w-10 h-10">
-                <img src="/LocalShipping.svg" alt="Local Shipping Icon" className="w-6 h-6" />
+                <Image src="/LocalShipping.svg" alt="Local Shipping Icon" width={24} height={24} className="w-6 h-6" />
               </span>
             </div>
             <div className="flex flex-col gap-2">

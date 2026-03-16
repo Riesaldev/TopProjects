@@ -6,6 +6,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 /**
  * Header principal de LocalTaste
@@ -42,14 +44,16 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 gap-2 lg:gap-4">
           {/* Logo */}
           <div className="flex items-center shrink-0 hover:scale-105 transition-transform duration-300">
-            <a href="/" className="flex items-center space-x-2 sm:space-x-3">
-              <img
+            <Link href="/" className="flex items-center space-x-2 sm:space-x-3">
+              <Image
                 src="/FarmTractor.svg"
                 alt="Logo LocalTaste"
+                width={32}
+                height={32}
                 className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12"
               />
               <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-green-950 whitespace-nowrap">LocalTaste</h1>
-            </a>
+            </Link>
           </div>
 
           {/* Navigation and Search - Desktop */}
@@ -59,12 +63,12 @@ const Header = () => {
               <a href="/ourMision" className="text-green-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110 whitespace-nowrap">
                 Nuestra Misión
               </a>
-              <a href="/products" className="text-green-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110 whitespace-nowrap">
+              <Link href="/products" className="text-green-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110 whitespace-nowrap">
                 Productos
-              </a>
-              <a href="/producers" className="text-green-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110 whitespace-nowrap">
+              </Link>
+              <Link href="/producers" className="text-green-700 hover:text-[#2BEE7C] font-medium transition-transform duration-300 hover:scale-110 whitespace-nowrap">
                 Productores
-              </a>
+              </Link>
             </nav>
 
             {/* Search */}
@@ -139,13 +143,13 @@ const Header = () => {
               >
                 Nuestra Misión
               </a>
-              <a
+              <Link
                 href="/products"
                 className="text-gray-700 hover:text-[#2BEE7C] font-medium py-2 px-3 rounded-lg hover:bg-[#2BEE7C]/10 transition-colors"
                 onClick={() => setIsMenuOpen( false )}
               >
                 Productos
-              </a>
+              </Link>
               <a
                 href="/producers"
                 className="text-gray-700 hover:text-[#2BEE7C] font-medium py-2 px-3 rounded-lg hover:bg-[#2BEE7C]/10 transition-colors"

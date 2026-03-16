@@ -49,7 +49,7 @@ export default function ProducerCard ( { producer } ) {
         <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm min-h-6">
           {verified && (
             <>
-              <img src="/verified.svg" alt="Verified Icon" height={20} width={20} />
+              <Image src="/verified.svg" alt="Verified Icon" width={20} height={20} />
             </>
           )}
           Productor Destacado

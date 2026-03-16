@@ -1,6 +1,7 @@
 
 import ProductCard from "../ui/SpotlightCard";
 import products from '../../data/productsMain.json';
+import Image from "next/image";
 
 
 export default function ProductSpotlight () {
@@ -14,7 +15,7 @@ export default function ProductSpotlight () {
           </div>
           <a className="text-[#2BEE7C] font-bold text-lg leading-tight hover:underline flex items-center gap-1" href="#">
             Ver todo
-            <img src="/Arrow.svg" alt="Arrow Right" className="w-4 h-4" />
+            <Image src="/Arrow.svg" alt="Arrow Right" width={16} height={16} className="w-4 h-4" />
           </a>
         </div>
         <div>

@@ -198,7 +198,7 @@ export default function ProductCard ( { product } ) {
         {/* Productor */}
         <p className="text-xs text-[#2BEE7C] font-semibold truncate flex items-center">
           <Image
-            src="/solidStore.svg"
+            src="/SolidStore.svg"
             alt="Tienda"
             width={12}
             height={12}

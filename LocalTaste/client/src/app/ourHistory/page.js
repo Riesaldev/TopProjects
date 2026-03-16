@@ -30,7 +30,7 @@ export default function HistoryPage () {
             <div className="absolute bottom-8 animate-bounce z-10">
               <span className="text-4xl">
                 <Image
-                  src="/arrowB.svg"
+                  src="/ArrowB.svg"
                   alt="Down Arrow"
                   width={32}
                   height={32}
@@ -145,7 +145,9 @@ export default function HistoryPage () {
               <Image alt="Founder" src="/founder.png" width={96} height={96} />
             </div>
             <Image
-              src="/Quotes.svg" width={50} height={50}
+              src="/Quotes.svg"
+              width={50}
+              height={50}
               className="mb-4"
               alt="Quote"
             />

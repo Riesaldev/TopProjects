@@ -43,7 +43,7 @@ export default function MisionPage () {
         {/* Intro Text Section */}
         <section className="w-full max-w-full px-6 py-8 md:py-8 flex flex-col items-center text-center bg-gray-100">
           <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full">
-            <span className="text-3xl bg-gray-200 rounded-full h-12 w-12 items-center justify-center flex"><Image src="/favorite.svg" alt="Favorite icon" width={26} height={26} /></span>
+            <span className="text-3xl bg-gray-200 rounded-full h-12 w-12 items-center justify-center flex"><Image src="/Favorite.svg" alt="Favorite icon" width={26} height={26} /></span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-6">El Corazón de LocalTaste</h2>
           <p className="text-gray-600 text-lg md:text-xl font-normal leading-relaxed max-w-150">
@@ -57,7 +57,8 @@ export default function MisionPage () {
               <Image
                 src="/hero-vis.png"
                 alt="Fresh vegetables in a basket"
-                fill
+                width={1200}
+                height={800}
                 className="object-cover"
               />
             </div>
