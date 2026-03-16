@@ -4,7 +4,7 @@
 export default function Hero () {
   return (
     <section className="w-full px-4 md:px-10 py-6 md:py-10 flex justify-center bg-gray-100">
-      <div className="w-11/12 bg-[url('/Hero2.avif')] bg-cover bg-center rounded-xl">
+      <div className="w-11/12 bg-[url('/hero2.avif')] bg-cover bg-center rounded-xl">
         <div className="rounded-xl overflow-hidden relative min-h-140 flex flex-col items-center md:p-16 text-center bg-green-950/40" data-alt="Fresh vegetables and fruits at a vibrant farmers market" >
           <div className="flex flex-col gap-4 max-w-3xl my-6 animate-fade-in-up  p-6 rounded-lg">
             <h1 className="text-green-500 pb-6 text-4xl md:text-6xl font-black drop-shadow-sm">
