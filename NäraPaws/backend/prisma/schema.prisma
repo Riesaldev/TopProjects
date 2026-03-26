@@ -1,0 +1,159 @@
+
+datasource db {
+  provider = "mysql"
+}
+//genera el cliente
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+enum Role {
+  owner
+  walker
+  both
+  admin
+}
+
+enum Size {
+  small
+  medium
+  large
+}
+
+enum StatusWalk {
+  pending
+  accepted
+  rejected
+  completed
+  canceled
+}
+
+enum Provider {
+  stripe
+  swish
+}
+
+enum StatusPayment {
+  pending
+  paid
+  failed
+  refunded
+}
+
+enum Type {
+  booking
+  payment
+  review
+  system
+
+}
+
+model User {
+  id                String    @id @default(uuid())
+  name              String
+  email             String    @unique
+  phone             String
+  role              Role
+  password          String
+  bankid_verified   Boolean
+  profile_image     String
+  bio               String
+  is_active         Boolean
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @updatedAt
+  dogs              Dog[]
+  walkerProfiles    WalkerProfile[]
+  bookingsOwner     Booking[] @relation("OwnerBookings")
+  bookingsWalker    Booking[] @relation("WalkerBookings")
+  payments          Payment[]
+  reviewsGiven      Review[]  @relation("ReviewerReviews")
+  reviewsReceived   Review[]  @relation("ReviewedReviews")
+  notifications     Notification[]
+}
+
+model Dog {
+  id        String   @id @default(uuid())
+  owner_id  String
+  name      String
+  breed     String
+  age       Int
+  size      Size
+  notes     String
+  image     String
+  is_active Boolean
+
+  owner     User     @relation(fields: [owner_id], references: [id])
+  bookings  Booking[]
+}
+
+model WalkerProfile {
+  id            String   @id @default(uuid())
+  walker_id     String
+  radius_km     Decimal
+  price_per_walk Decimal
+  availability  Json
+  rating        Decimal
+  is_active     Boolean
+
+  walker        User     @relation(fields: [walker_id], references: [id])
+}
+
+model Booking {
+  id         String      @id @default(uuid())
+  owner_id   String
+  walker_id  String
+  dog_id     String
+  status     StatusWalk
+  start_time DateTime
+  end_time   DateTime
+  price      Decimal
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+
+  owner      User        @relation("OwnerBookings", fields: [owner_id], references: [id])
+  walker     User        @relation("WalkerBookings", fields: [walker_id], references: [id])
+  dog        Dog         @relation(fields: [dog_id], references: [id])
+  payments   Payment[]
+  reviews    Review[]
+}
+
+model Payment {
+  id                  String    @id @default(uuid())
+  booking_id          String
+  owner_id            String
+  amount              Decimal
+  provider            Provider
+  provider_payment_id String
+  status              StatusPayment
+  created_at          DateTime    @default(now())
+
+  booking             Booking    @relation(fields: [booking_id], references: [id])
+  owner               User       @relation(fields: [owner_id], references: [id])
+}
+
+model Review {
+  id          String   @id @default(uuid())
+  booking_id  String
+  reviewer_id String
+  reviewed_id String
+  rating      Int
+  comment     String
+  created_at  DateTime    @default(now())
+
+  booking     Booking @relation(fields: [booking_id], references: [id])
+  reviewer    User    @relation("ReviewerReviews", fields: [reviewer_id], references: [id])
+  reviewed    User    @relation("ReviewedReviews", fields: [reviewed_id], references: [id])
+}
+
+model Notification {
+  id          String   @id @default(uuid())
+  user_id     String
+  type        Type
+  title       String
+  message     String
+  is_read     Boolean
+  created_at  DateTime    @default(now())
+
+  user        User    @relation(fields: [user_id], references: [id])
+}

@@ -30,14 +30,37 @@ NäraPaws es una plataforma hiperlocal que conecta **dueños de perros** con **v
 
 ### Backend
 
+
 - **Node.js** con **Express.js**
-- **Prisma**
+- **Prisma** (ORM moderno)
 - **MySQL**
-- **Socket.io**
-- **JWT**
+- **Socket.io** (tiempo real)
+- **JWT** (jsonwebtoken)
 - **Stripe API** o Swish (según mercado) para pagos
 - **BankID API** para verificación
 - **Cloudinary** para imágenes (perros, perfiles)
+- **Helmet.js** (seguridad HTTP)
+- **express-rate-limit** (rate limiting)
+- **Joi** (validación de datos)
+- **cookie-parser** (gestión de cookies)
+- **morgan** (logging de peticiones)
+- **compression** (Gzip)
+- **swagger-ui-express** + **swagger-jsdoc** (documentación de API)
+- **winston** (logging avanzado)
+- **pm2** (monitoreo/clusterización producción)
+- **dotenv** (variables de entorno)
+- **cross-env** (entornos multiplataforma)
+
+### Instalación Backend
+
+Para instalar todas las dependencias necesarias para el backend, ejecuta:
+
+```sh
+pnpm add express cors dotenv mysql2 @prisma/client prisma jsonwebtoken socket.io stripe helmet express-rate-limit cloudinary joi cookie-parser morgan compression cross-env swagger-ui-express swagger-jsdoc winston
+pnpm add -D pm2
+```
+
+Esto asegura un entorno moderno, seguro y escalable, alineado con las mejores prácticas de 2026.
 
 ### Base de Datos y Almacenamiento
 
