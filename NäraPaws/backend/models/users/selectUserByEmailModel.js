@@ -5,7 +5,7 @@ const selectUserByEmailModel = async (email) => {
     try {
     const user = await prisma.user.findUnique({
         where: { email },
-        select: { id: true, name: true, role: true, password: true }
+        select: { id: true, name: true, role: true, password: true, is_active: true, recoveryPassCode: true, recoveryPassCodeExpires: true }
     });
 
     if (!user) {
