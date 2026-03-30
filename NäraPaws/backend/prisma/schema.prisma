@@ -60,6 +60,8 @@ model User {
   profile_image     String
   bio               String
   is_active         Boolean
+  activationToken         String?   
+  activationTokenExpires  DateTime? 
   created_at        DateTime  @default(now())
   updated_at        DateTime  @updatedAt
   dogs              Dog[]
