@@ -1,0 +1,20 @@
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const connectDb = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI! || "");
+    console.log(`Welcome to TradyXP!`);
+    console.log(
+      `MongoDB connected successfully in port ${process.env.MONGO_PORT}`,
+    );
+  } catch (error) {
+    console.log(`UPS! Something went wrong while connecting to MongoDB.`);
+    console.error("MongoDB connection failed:", error);
+    process.exit(1);
+  }
+};
+
+export default connectDb;
