@@ -30,6 +30,9 @@ importers:
       '@types/node':
         specifier: ^25.6.0
         version: 25.6.0
+      prettier:
+        specifier: ^3.8.3
+        version: 3.8.3
       ts-node-dev:
         specifier: ^2.0.0
         version: 2.0.0(@types/node@25.6.0)(typescript@6.0.2)
@@ -649,6 +652,11 @@ packages:
   picomatch@2.3.2:
     resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
     engines: {node: '>=8.6'}
+
+  prettier@3.8.3:
+    resolution: {integrity: sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
@@ -1382,6 +1390,8 @@ snapshots:
   path-to-regexp@8.4.2: {}
 
   picomatch@2.3.2: {}
+
+  prettier@3.8.3: {}
 
   proxy-addr@2.0.7:
     dependencies:
