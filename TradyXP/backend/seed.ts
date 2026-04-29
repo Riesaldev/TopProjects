@@ -14,7 +14,7 @@ const seedUser = async () => {
 
         const newUser = new User({
             username: 'TraderPro_01',
-            balance: 100000, // 100k para empezar
+            balance: 100,
             virtualCurrency: 500, // Regalo de bienvenida
             xp: 0,
             level: 1,
